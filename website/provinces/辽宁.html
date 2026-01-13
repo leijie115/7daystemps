@@ -1,0 +1,552 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="辽宁气温详情 - 实时城市气温数据">
+    <title>辽宁气温排行 - 中国气温排行榜</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            colors: {
+              gray: {
+                750: '#2d3748',
+                850: '#1a202c',
+                950: '#0d1117',
+              }
+            }
+          }
+        }
+      }
+    </script>
+    <style>
+      body {
+        background-color: #0d1117;
+        color: #e2e8f0;
+      }
+      ::-webkit-scrollbar {
+        width: 8px;
+        height: 8px;
+      }
+      ::-webkit-scrollbar-track {
+        background: #0d1117;
+      }
+      ::-webkit-scrollbar-thumb {
+        background: #4a5568;
+        border-radius: 4px;
+      }
+      ::-webkit-scrollbar-thumb:hover {
+        background: #718096;
+      }
+    </style>
+</head>
+<body class="bg-gray-950 text-gray-100">
+    <!-- 头部 -->
+    <div class="w-full p-6 md:p-8">
+        <div class="max-w-7xl mx-auto">
+            <a href="../index.html" class="inline-flex items-center gap-2 text-gray-400 hover:text-white transition-colors mb-4">
+                <span>←</span>
+                <span>返回全国</span>
+            </a>
+            <h1 class="text-4xl md:text-5xl font-black tracking-tighter text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-emerald-400 drop-shadow-sm">
+                辽宁气温详情
+            </h1>
+        </div>
+    </div>
+
+    <main class="max-w-7xl mx-auto px-6 pb-12">
+        <!-- 省份统计卡片 -->
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
+            <div class="bg-gradient-to-br from-red-900/40 to-red-800/20 border border-red-700/50 rounded-2xl p-6 backdrop-blur">
+                <div class="text-4xl mb-2">🔥</div>
+                <div class="text-3xl font-bold text-red-400">-11.1°C</div>
+                <div class="text-sm text-gray-400 mt-1">最高温</div>
+                <div class="text-sm text-gray-300 font-medium">大连</div>
+            </div>
+            <div class="bg-gradient-to-br from-blue-900/40 to-blue-800/20 border border-blue-700/50 rounded-2xl p-6 backdrop-blur">
+                <div class="text-4xl mb-2">❄️</div>
+                <div class="text-3xl font-bold text-blue-400">-30.9°C</div>
+                <div class="text-sm text-gray-400 mt-1">最低温</div>
+                <div class="text-sm text-gray-300 font-medium">法库</div>
+            </div>
+            <div class="bg-gradient-to-br from-purple-900/40 to-purple-800/20 border border-purple-700/50 rounded-2xl p-6 backdrop-blur">
+                <div class="text-4xl mb-2">📊</div>
+                <div class="text-3xl font-bold text-purple-400">-19.4°C</div>
+                <div class="text-sm text-gray-400 mt-1">平均温度</div>
+                <div class="text-sm text-gray-300 font-medium">省内</div>
+            </div>
+        </div>
+
+        <!-- 城市列表 -->
+        <div class="bg-gray-900 border border-gray-800 rounded-2xl p-6 shadow-2xl">
+            <h2 class="text-xl font-bold text-white mb-6">城市气温排行</h2>
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-3">
+                
+                <div class="flex flex-col p-4 rounded-xl border transition-all border-yellow-500/40 bg-gradient-to-br from-yellow-900/30 to-yellow-800/10 hover:scale-105">
+                    <div class="flex items-center justify-between mb-2">
+                        <span class="text-xs text-gray-500 font-medium">#1</span>
+                        <div class="text-xl font-bold" style="color: #8b5cf6">-11.1°</div>
+                    </div>
+                    <div class="text-base font-semibold text-gray-100">大连</div>
+                </div>
+                  
+                <div class="flex flex-col p-4 rounded-xl border transition-all border-gray-400/40 bg-gradient-to-br from-gray-700/30 to-gray-800/10 hover:scale-105">
+                    <div class="flex items-center justify-between mb-2">
+                        <span class="text-xs text-gray-500 font-medium">#2</span>
+                        <div class="text-xl font-bold" style="color: #8b5cf6">-11.6°</div>
+                    </div>
+                    <div class="text-base font-semibold text-gray-100">普兰店</div>
+                </div>
+                  
+                <div class="flex flex-col p-4 rounded-xl border transition-all border-orange-600/40 bg-gradient-to-br from-orange-900/30 to-orange-800/10 hover:scale-105">
+                    <div class="flex items-center justify-between mb-2">
+                        <span class="text-xs text-gray-500 font-medium">#3</span>
+                        <div class="text-xl font-bold" style="color: #8b5cf6">-11.7°</div>
+                    </div>
+                    <div class="text-base font-semibold text-gray-100">长海</div>
+                </div>
+                  
+                <div class="flex flex-col p-4 rounded-xl border transition-all border-gray-800 bg-gray-800/50 hover:bg-gray-800 hover:scale-105">
+                    <div class="flex items-center justify-between mb-2">
+                        <span class="text-xs text-gray-500 font-medium">#4</span>
+                        <div class="text-xl font-bold" style="color: #8b5cf6">-12.4°</div>
+                    </div>
+                    <div class="text-base font-semibold text-gray-100">旅顺</div>
+                </div>
+                  
+                <div class="flex flex-col p-4 rounded-xl border transition-all border-gray-800 bg-gray-800/50 hover:bg-gray-800 hover:scale-105">
+                    <div class="flex items-center justify-between mb-2">
+                        <span class="text-xs text-gray-500 font-medium">#5</span>
+                        <div class="text-xl font-bold" style="color: #8b5cf6">-14.1°</div>
+                    </div>
+                    <div class="text-base font-semibold text-gray-100">熊岳</div>
+                </div>
+                  
+                <div class="flex flex-col p-4 rounded-xl border transition-all border-gray-800 bg-gray-800/50 hover:bg-gray-800 hover:scale-105">
+                    <div class="flex items-center justify-between mb-2">
+                        <span class="text-xs text-gray-500 font-medium">#6</span>
+                        <div class="text-xl font-bold" style="color: #8b5cf6">-14.4°</div>
+                    </div>
+                    <div class="text-base font-semibold text-gray-100">盖州</div>
+                </div>
+                  
+                <div class="flex flex-col p-4 rounded-xl border transition-all border-gray-800 bg-gray-800/50 hover:bg-gray-800 hover:scale-105">
+                    <div class="flex items-center justify-between mb-2">
+                        <span class="text-xs text-gray-500 font-medium">#7</span>
+                        <div class="text-xl font-bold" style="color: #8b5cf6">-14.4°</div>
+                    </div>
+                    <div class="text-base font-semibold text-gray-100">绥中</div>
+                </div>
+                  
+                <div class="flex flex-col p-4 rounded-xl border transition-all border-gray-800 bg-gray-800/50 hover:bg-gray-800 hover:scale-105">
+                    <div class="flex items-center justify-between mb-2">
+                        <span class="text-xs text-gray-500 font-medium">#8</span>
+                        <div class="text-xl font-bold" style="color: #8b5cf6">-15.2°</div>
+                    </div>
+                    <div class="text-base font-semibold text-gray-100">庄河</div>
+                </div>
+                  
+                <div class="flex flex-col p-4 rounded-xl border transition-all border-gray-800 bg-gray-800/50 hover:bg-gray-800 hover:scale-105">
+                    <div class="flex items-center justify-between mb-2">
+                        <span class="text-xs text-gray-500 font-medium">#9</span>
+                        <div class="text-xl font-bold" style="color: #8b5cf6">-15.6°</div>
+                    </div>
+                    <div class="text-base font-semibold text-gray-100">建昌</div>
+                </div>
+                  
+                <div class="flex flex-col p-4 rounded-xl border transition-all border-gray-800 bg-gray-800/50 hover:bg-gray-800 hover:scale-105">
+                    <div class="flex items-center justify-between mb-2">
+                        <span class="text-xs text-gray-500 font-medium">#10</span>
+                        <div class="text-xl font-bold" style="color: #8b5cf6">-15.6°</div>
+                    </div>
+                    <div class="text-base font-semibold text-gray-100">阜新</div>
+                </div>
+                  
+                <div class="flex flex-col p-4 rounded-xl border transition-all border-gray-800 bg-gray-800/50 hover:bg-gray-800 hover:scale-105">
+                    <div class="flex items-center justify-between mb-2">
+                        <span class="text-xs text-gray-500 font-medium">#11</span>
+                        <div class="text-xl font-bold" style="color: #8b5cf6">-15.6°</div>
+                    </div>
+                    <div class="text-base font-semibold text-gray-100">鞍山</div>
+                </div>
+                  
+                <div class="flex flex-col p-4 rounded-xl border transition-all border-gray-800 bg-gray-800/50 hover:bg-gray-800 hover:scale-105">
+                    <div class="flex items-center justify-between mb-2">
+                        <span class="text-xs text-gray-500 font-medium">#12</span>
+                        <div class="text-xl font-bold" style="color: #8b5cf6">-15.8°</div>
+                    </div>
+                    <div class="text-base font-semibold text-gray-100">凌海</div>
+                </div>
+                  
+                <div class="flex flex-col p-4 rounded-xl border transition-all border-gray-800 bg-gray-800/50 hover:bg-gray-800 hover:scale-105">
+                    <div class="flex items-center justify-between mb-2">
+                        <span class="text-xs text-gray-500 font-medium">#13</span>
+                        <div class="text-xl font-bold" style="color: #8b5cf6">-15.8°</div>
+                    </div>
+                    <div class="text-base font-semibold text-gray-100">瓦房店</div>
+                </div>
+                  
+                <div class="flex flex-col p-4 rounded-xl border transition-all border-gray-800 bg-gray-800/50 hover:bg-gray-800 hover:scale-105">
+                    <div class="flex items-center justify-between mb-2">
+                        <span class="text-xs text-gray-500 font-medium">#14</span>
+                        <div class="text-xl font-bold" style="color: #8b5cf6">-15.9°</div>
+                    </div>
+                    <div class="text-base font-semibold text-gray-100">丹东</div>
+                </div>
+                  
+                <div class="flex flex-col p-4 rounded-xl border transition-all border-gray-800 bg-gray-800/50 hover:bg-gray-800 hover:scale-105">
+                    <div class="flex items-center justify-between mb-2">
+                        <span class="text-xs text-gray-500 font-medium">#15</span>
+                        <div class="text-xl font-bold" style="color: #8b5cf6">-15.9°</div>
+                    </div>
+                    <div class="text-base font-semibold text-gray-100">北镇</div>
+                </div>
+                  
+                <div class="flex flex-col p-4 rounded-xl border transition-all border-gray-800 bg-gray-800/50 hover:bg-gray-800 hover:scale-105">
+                    <div class="flex items-center justify-between mb-2">
+                        <span class="text-xs text-gray-500 font-medium">#16</span>
+                        <div class="text-xl font-bold" style="color: #8b5cf6">-15.9°</div>
+                    </div>
+                    <div class="text-base font-semibold text-gray-100">锦州</div>
+                </div>
+                  
+                <div class="flex flex-col p-4 rounded-xl border transition-all border-gray-800 bg-gray-800/50 hover:bg-gray-800 hover:scale-105">
+                    <div class="flex items-center justify-between mb-2">
+                        <span class="text-xs text-gray-500 font-medium">#17</span>
+                        <div class="text-xl font-bold" style="color: #8b5cf6">-16.1°</div>
+                    </div>
+                    <div class="text-base font-semibold text-gray-100">金州</div>
+                </div>
+                  
+                <div class="flex flex-col p-4 rounded-xl border transition-all border-gray-800 bg-gray-800/50 hover:bg-gray-800 hover:scale-105">
+                    <div class="flex items-center justify-between mb-2">
+                        <span class="text-xs text-gray-500 font-medium">#18</span>
+                        <div class="text-xl font-bold" style="color: #8b5cf6">-16.4°</div>
+                    </div>
+                    <div class="text-base font-semibold text-gray-100">喀左</div>
+                </div>
+                  
+                <div class="flex flex-col p-4 rounded-xl border transition-all border-gray-800 bg-gray-800/50 hover:bg-gray-800 hover:scale-105">
+                    <div class="flex items-center justify-between mb-2">
+                        <span class="text-xs text-gray-500 font-medium">#19</span>
+                        <div class="text-xl font-bold" style="color: #8b5cf6">-17°</div>
+                    </div>
+                    <div class="text-base font-semibold text-gray-100">辽阳县</div>
+                </div>
+                  
+                <div class="flex flex-col p-4 rounded-xl border transition-all border-gray-800 bg-gray-800/50 hover:bg-gray-800 hover:scale-105">
+                    <div class="flex items-center justify-between mb-2">
+                        <span class="text-xs text-gray-500 font-medium">#20</span>
+                        <div class="text-xl font-bold" style="color: #8b5cf6">-17.1°</div>
+                    </div>
+                    <div class="text-base font-semibold text-gray-100">清原</div>
+                </div>
+                  
+                <div class="flex flex-col p-4 rounded-xl border transition-all border-gray-800 bg-gray-800/50 hover:bg-gray-800 hover:scale-105">
+                    <div class="flex items-center justify-between mb-2">
+                        <span class="text-xs text-gray-500 font-medium">#21</span>
+                        <div class="text-xl font-bold" style="color: #8b5cf6">-17.3°</div>
+                    </div>
+                    <div class="text-base font-semibold text-gray-100">东港</div>
+                </div>
+                  
+                <div class="flex flex-col p-4 rounded-xl border transition-all border-gray-800 bg-gray-800/50 hover:bg-gray-800 hover:scale-105">
+                    <div class="flex items-center justify-between mb-2">
+                        <span class="text-xs text-gray-500 font-medium">#22</span>
+                        <div class="text-xl font-bold" style="color: #8b5cf6">-17.4°</div>
+                    </div>
+                    <div class="text-base font-semibold text-gray-100">凌源</div>
+                </div>
+                  
+                <div class="flex flex-col p-4 rounded-xl border transition-all border-gray-800 bg-gray-800/50 hover:bg-gray-800 hover:scale-105">
+                    <div class="flex items-center justify-between mb-2">
+                        <span class="text-xs text-gray-500 font-medium">#23</span>
+                        <div class="text-xl font-bold" style="color: #8b5cf6">-17.7°</div>
+                    </div>
+                    <div class="text-base font-semibold text-gray-100">黑山</div>
+                </div>
+                  
+                <div class="flex flex-col p-4 rounded-xl border transition-all border-gray-800 bg-gray-800/50 hover:bg-gray-800 hover:scale-105">
+                    <div class="flex items-center justify-between mb-2">
+                        <span class="text-xs text-gray-500 font-medium">#24</span>
+                        <div class="text-xl font-bold" style="color: #8b5cf6">-18°</div>
+                    </div>
+                    <div class="text-base font-semibold text-gray-100">北票</div>
+                </div>
+                  
+                <div class="flex flex-col p-4 rounded-xl border transition-all border-gray-800 bg-gray-800/50 hover:bg-gray-800 hover:scale-105">
+                    <div class="flex items-center justify-between mb-2">
+                        <span class="text-xs text-gray-500 font-medium">#25</span>
+                        <div class="text-xl font-bold" style="color: #8b5cf6">-18.3°</div>
+                    </div>
+                    <div class="text-base font-semibold text-gray-100">大石桥</div>
+                </div>
+                  
+                <div class="flex flex-col p-4 rounded-xl border transition-all border-gray-800 bg-gray-800/50 hover:bg-gray-800 hover:scale-105">
+                    <div class="flex items-center justify-between mb-2">
+                        <span class="text-xs text-gray-500 font-medium">#26</span>
+                        <div class="text-xl font-bold" style="color: #8b5cf6">-18.3°</div>
+                    </div>
+                    <div class="text-base font-semibold text-gray-100">岫岩</div>
+                </div>
+                  
+                <div class="flex flex-col p-4 rounded-xl border transition-all border-gray-800 bg-gray-800/50 hover:bg-gray-800 hover:scale-105">
+                    <div class="flex items-center justify-between mb-2">
+                        <span class="text-xs text-gray-500 font-medium">#27</span>
+                        <div class="text-xl font-bold" style="color: #8b5cf6">-18.5°</div>
+                    </div>
+                    <div class="text-base font-semibold text-gray-100">义县</div>
+                </div>
+                  
+                <div class="flex flex-col p-4 rounded-xl border transition-all border-gray-800 bg-gray-800/50 hover:bg-gray-800 hover:scale-105">
+                    <div class="flex items-center justify-between mb-2">
+                        <span class="text-xs text-gray-500 font-medium">#28</span>
+                        <div class="text-xl font-bold" style="color: #8b5cf6">-18.5°</div>
+                    </div>
+                    <div class="text-base font-semibold text-gray-100">大洼</div>
+                </div>
+                  
+                <div class="flex flex-col p-4 rounded-xl border transition-all border-gray-800 bg-gray-800/50 hover:bg-gray-800 hover:scale-105">
+                    <div class="flex items-center justify-between mb-2">
+                        <span class="text-xs text-gray-500 font-medium">#29</span>
+                        <div class="text-xl font-bold" style="color: #8b5cf6">-18.6°</div>
+                    </div>
+                    <div class="text-base font-semibold text-gray-100">兴城</div>
+                </div>
+                  
+                <div class="flex flex-col p-4 rounded-xl border transition-all border-gray-800 bg-gray-800/50 hover:bg-gray-800 hover:scale-105">
+                    <div class="flex items-center justify-between mb-2">
+                        <span class="text-xs text-gray-500 font-medium">#30</span>
+                        <div class="text-xl font-bold" style="color: #8b5cf6">-18.6°</div>
+                    </div>
+                    <div class="text-base font-semibold text-gray-100">营口</div>
+                </div>
+                  
+                <div class="flex flex-col p-4 rounded-xl border transition-all border-gray-800 bg-gray-800/50 hover:bg-gray-800 hover:scale-105">
+                    <div class="flex items-center justify-between mb-2">
+                        <span class="text-xs text-gray-500 font-medium">#31</span>
+                        <div class="text-xl font-bold" style="color: #8b5cf6">-19°</div>
+                    </div>
+                    <div class="text-base font-semibold text-gray-100">朝阳</div>
+                </div>
+                  
+                <div class="flex flex-col p-4 rounded-xl border transition-all border-gray-800 bg-gray-800/50 hover:bg-gray-800 hover:scale-105">
+                    <div class="flex items-center justify-between mb-2">
+                        <span class="text-xs text-gray-500 font-medium">#32</span>
+                        <div class="text-xl font-bold" style="color: #8b5cf6">-19°</div>
+                    </div>
+                    <div class="text-base font-semibold text-gray-100">连山区</div>
+                </div>
+                  
+                <div class="flex flex-col p-4 rounded-xl border transition-all border-gray-800 bg-gray-800/50 hover:bg-gray-800 hover:scale-105">
+                    <div class="flex items-center justify-between mb-2">
+                        <span class="text-xs text-gray-500 font-medium">#33</span>
+                        <div class="text-xl font-bold" style="color: #8b5cf6">-19.3°</div>
+                    </div>
+                    <div class="text-base font-semibold text-gray-100">海城</div>
+                </div>
+                  
+                <div class="flex flex-col p-4 rounded-xl border transition-all border-gray-800 bg-gray-800/50 hover:bg-gray-800 hover:scale-105">
+                    <div class="flex items-center justify-between mb-2">
+                        <span class="text-xs text-gray-500 font-medium">#34</span>
+                        <div class="text-xl font-bold" style="color: #8b5cf6">-19.4°</div>
+                    </div>
+                    <div class="text-base font-semibold text-gray-100">盘山</div>
+                </div>
+                  
+                <div class="flex flex-col p-4 rounded-xl border transition-all border-gray-800 bg-gray-800/50 hover:bg-gray-800 hover:scale-105">
+                    <div class="flex items-center justify-between mb-2">
+                        <span class="text-xs text-gray-500 font-medium">#35</span>
+                        <div class="text-xl font-bold" style="color: #8b5cf6">-19.5°</div>
+                    </div>
+                    <div class="text-base font-semibold text-gray-100">凤城</div>
+                </div>
+                  
+                <div class="flex flex-col p-4 rounded-xl border transition-all border-gray-800 bg-gray-800/50 hover:bg-gray-800 hover:scale-105">
+                    <div class="flex items-center justify-between mb-2">
+                        <span class="text-xs text-gray-500 font-medium">#36</span>
+                        <div class="text-xl font-bold" style="color: #8b5cf6">-19.8°</div>
+                    </div>
+                    <div class="text-base font-semibold text-gray-100">辽中</div>
+                </div>
+                  
+                <div class="flex flex-col p-4 rounded-xl border transition-all border-gray-800 bg-gray-800/50 hover:bg-gray-800 hover:scale-105">
+                    <div class="flex items-center justify-between mb-2">
+                        <span class="text-xs text-gray-500 font-medium">#37</span>
+                        <div class="text-xl font-bold" style="color: #8b5cf6">-20°</div>
+                    </div>
+                    <div class="text-base font-semibold text-gray-100">建平</div>
+                </div>
+                  
+                <div class="flex flex-col p-4 rounded-xl border transition-all border-gray-800 bg-gray-800/50 hover:bg-gray-800 hover:scale-105">
+                    <div class="flex items-center justify-between mb-2">
+                        <span class="text-xs text-gray-500 font-medium">#38</span>
+                        <div class="text-xl font-bold" style="color: #8b5cf6">-20.2°</div>
+                    </div>
+                    <div class="text-base font-semibold text-gray-100">灯塔</div>
+                </div>
+                  
+                <div class="flex flex-col p-4 rounded-xl border transition-all border-gray-800 bg-gray-800/50 hover:bg-gray-800 hover:scale-105">
+                    <div class="flex items-center justify-between mb-2">
+                        <span class="text-xs text-gray-500 font-medium">#39</span>
+                        <div class="text-xl font-bold" style="color: #8b5cf6">-20.8°</div>
+                    </div>
+                    <div class="text-base font-semibold text-gray-100">台安</div>
+                </div>
+                  
+                <div class="flex flex-col p-4 rounded-xl border transition-all border-gray-800 bg-gray-800/50 hover:bg-gray-800 hover:scale-105">
+                    <div class="flex items-center justify-between mb-2">
+                        <span class="text-xs text-gray-500 font-medium">#40</span>
+                        <div class="text-xl font-bold" style="color: #8b5cf6">-20.8°</div>
+                    </div>
+                    <div class="text-base font-semibold text-gray-100">彰武</div>
+                </div>
+                  
+                <div class="flex flex-col p-4 rounded-xl border transition-all border-gray-800 bg-gray-800/50 hover:bg-gray-800 hover:scale-105">
+                    <div class="flex items-center justify-between mb-2">
+                        <span class="text-xs text-gray-500 font-medium">#41</span>
+                        <div class="text-xl font-bold" style="color: #8b5cf6">-21.1°</div>
+                    </div>
+                    <div class="text-base font-semibold text-gray-100">本溪</div>
+                </div>
+                  
+                <div class="flex flex-col p-4 rounded-xl border transition-all border-gray-800 bg-gray-800/50 hover:bg-gray-800 hover:scale-105">
+                    <div class="flex items-center justify-between mb-2">
+                        <span class="text-xs text-gray-500 font-medium">#42</span>
+                        <div class="text-xl font-bold" style="color: #8b5cf6">-22.5°</div>
+                    </div>
+                    <div class="text-base font-semibold text-gray-100">康平</div>
+                </div>
+                  
+                <div class="flex flex-col p-4 rounded-xl border transition-all border-gray-800 bg-gray-800/50 hover:bg-gray-800 hover:scale-105">
+                    <div class="flex items-center justify-between mb-2">
+                        <span class="text-xs text-gray-500 font-medium">#43</span>
+                        <div class="text-xl font-bold" style="color: #8b5cf6">-23.2°</div>
+                    </div>
+                    <div class="text-base font-semibold text-gray-100">开原</div>
+                </div>
+                  
+                <div class="flex flex-col p-4 rounded-xl border transition-all border-gray-800 bg-gray-800/50 hover:bg-gray-800 hover:scale-105">
+                    <div class="flex items-center justify-between mb-2">
+                        <span class="text-xs text-gray-500 font-medium">#44</span>
+                        <div class="text-xl font-bold" style="color: #8b5cf6">-23.6°</div>
+                    </div>
+                    <div class="text-base font-semibold text-gray-100">新民</div>
+                </div>
+                  
+                <div class="flex flex-col p-4 rounded-xl border transition-all border-gray-800 bg-gray-800/50 hover:bg-gray-800 hover:scale-105">
+                    <div class="flex items-center justify-between mb-2">
+                        <span class="text-xs text-gray-500 font-medium">#45</span>
+                        <div class="text-xl font-bold" style="color: #8b5cf6">-24.4°</div>
+                    </div>
+                    <div class="text-base font-semibold text-gray-100">沈阳</div>
+                </div>
+                  
+                <div class="flex flex-col p-4 rounded-xl border transition-all border-gray-800 bg-gray-800/50 hover:bg-gray-800 hover:scale-105">
+                    <div class="flex items-center justify-between mb-2">
+                        <span class="text-xs text-gray-500 font-medium">#46</span>
+                        <div class="text-xl font-bold" style="color: #8b5cf6">-24.7°</div>
+                    </div>
+                    <div class="text-base font-semibold text-gray-100">桓仁</div>
+                </div>
+                  
+                <div class="flex flex-col p-4 rounded-xl border transition-all border-gray-800 bg-gray-800/50 hover:bg-gray-800 hover:scale-105">
+                    <div class="flex items-center justify-between mb-2">
+                        <span class="text-xs text-gray-500 font-medium">#47</span>
+                        <div class="text-xl font-bold" style="color: #8b5cf6">-24.8°</div>
+                    </div>
+                    <div class="text-base font-semibold text-gray-100">辽阳</div>
+                </div>
+                  
+                <div class="flex flex-col p-4 rounded-xl border transition-all border-gray-800 bg-gray-800/50 hover:bg-gray-800 hover:scale-105">
+                    <div class="flex items-center justify-between mb-2">
+                        <span class="text-xs text-gray-500 font-medium">#48</span>
+                        <div class="text-xl font-bold" style="color: #8b5cf6">-25.1°</div>
+                    </div>
+                    <div class="text-base font-semibold text-gray-100">宽甸</div>
+                </div>
+                  
+                <div class="flex flex-col p-4 rounded-xl border transition-all border-gray-800 bg-gray-800/50 hover:bg-gray-800 hover:scale-105">
+                    <div class="flex items-center justify-between mb-2">
+                        <span class="text-xs text-gray-500 font-medium">#49</span>
+                        <div class="text-xl font-bold" style="color: #8b5cf6">-25.4°</div>
+                    </div>
+                    <div class="text-base font-semibold text-gray-100">本溪县</div>
+                </div>
+                  
+                <div class="flex flex-col p-4 rounded-xl border transition-all border-gray-800 bg-gray-800/50 hover:bg-gray-800 hover:scale-105">
+                    <div class="flex items-center justify-between mb-2">
+                        <span class="text-xs text-gray-500 font-medium">#50</span>
+                        <div class="text-xl font-bold" style="color: #8b5cf6">-25.9°</div>
+                    </div>
+                    <div class="text-base font-semibold text-gray-100">铁岭</div>
+                </div>
+                  
+                <div class="flex flex-col p-4 rounded-xl border transition-all border-gray-800 bg-gray-800/50 hover:bg-gray-800 hover:scale-105">
+                    <div class="flex items-center justify-between mb-2">
+                        <span class="text-xs text-gray-500 font-medium">#51</span>
+                        <div class="text-xl font-bold" style="color: #8b5cf6">-26.1°</div>
+                    </div>
+                    <div class="text-base font-semibold text-gray-100">西丰</div>
+                </div>
+                  
+                <div class="flex flex-col p-4 rounded-xl border transition-all border-gray-800 bg-gray-800/50 hover:bg-gray-800 hover:scale-105">
+                    <div class="flex items-center justify-between mb-2">
+                        <span class="text-xs text-gray-500 font-medium">#52</span>
+                        <div class="text-xl font-bold" style="color: #8b5cf6">-26.9°</div>
+                    </div>
+                    <div class="text-base font-semibold text-gray-100">新宾</div>
+                </div>
+                  
+                <div class="flex flex-col p-4 rounded-xl border transition-all border-gray-800 bg-gray-800/50 hover:bg-gray-800 hover:scale-105">
+                    <div class="flex items-center justify-between mb-2">
+                        <span class="text-xs text-gray-500 font-medium">#53</span>
+                        <div class="text-xl font-bold" style="color: #8b5cf6">-27.4°</div>
+                    </div>
+                    <div class="text-base font-semibold text-gray-100">抚顺</div>
+                </div>
+                  
+                <div class="flex flex-col p-4 rounded-xl border transition-all border-gray-800 bg-gray-800/50 hover:bg-gray-800 hover:scale-105">
+                    <div class="flex items-center justify-between mb-2">
+                        <span class="text-xs text-gray-500 font-medium">#54</span>
+                        <div class="text-xl font-bold" style="color: #8b5cf6">-27.4°</div>
+                    </div>
+                    <div class="text-base font-semibold text-gray-100">章党</div>
+                </div>
+                  
+                <div class="flex flex-col p-4 rounded-xl border transition-all border-gray-800 bg-gray-800/50 hover:bg-gray-800 hover:scale-105">
+                    <div class="flex items-center justify-between mb-2">
+                        <span class="text-xs text-gray-500 font-medium">#55</span>
+                        <div class="text-xl font-bold" style="color: #8b5cf6">-30°</div>
+                    </div>
+                    <div class="text-base font-semibold text-gray-100">昌图</div>
+                </div>
+                  
+                <div class="flex flex-col p-4 rounded-xl border transition-all border-gray-800 bg-gray-800/50 hover:bg-gray-800 hover:scale-105">
+                    <div class="flex items-center justify-between mb-2">
+                        <span class="text-xs text-gray-500 font-medium">#56</span>
+                        <div class="text-xl font-bold" style="color: #8b5cf6">-30.9°</div>
+                    </div>
+                    <div class="text-base font-semibold text-gray-100">法库</div>
+                </div>
+                  
+            </div>
+
+            <!-- 广告位 -->
+            <div class="mt-6 p-6 min-h-[100px] bg-gray-800/40 border border-gray-700 border-dashed rounded-lg flex flex-col items-center justify-center text-gray-500 text-xs">
+                <span class="uppercase tracking-widest font-semibold mb-1 opacity-50">广告 Ad</span>
+                <div class="text-center opacity-70">Google AdSense Space</div>
+            </div>
+        </div>
+    </main>
+
+    <footer class="bg-gray-900 border-t border-gray-800 text-center py-8 mt-12">
+        <div class="text-sm text-gray-400">
+            <p>数据来源: 中国气象局</p>
+            <p class="mt-2">© 2024 中国气温排行榜</p>
+        </div>
+    </footer>
+</body>
+</html>
