@@ -1,0 +1,317 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="内蒙古气温详情 - 实时城市气温数据">
+    <title>内蒙古气温排行 - 中国气温排行榜</title>
+    <link rel="stylesheet" href="../assets/css/style.css">
+    <script src="https://cdn.jsdelivr.net/npm/echarts@5.4.3/dist/echarts.min.js"></script>
+</head>
+<body>
+    <header class="header">
+        <div class="container">
+            <a href="../index.html" class="back-link">← 返回全国</a>
+            <h1>🌡️ 内蒙古气温详情</h1>
+        </div>
+    </header>
+
+    <main class="main">
+        <div class="container">
+            <!-- 省份统计 -->
+            <div class="stats-cards">
+                <div class="stat-card hot">
+                    <div class="stat-icon">🔥</div>
+                    <div class="stat-value">-13.5°C</div>
+                    <div class="stat-label">最高温</div>
+                    <div class="stat-location">乌审旗</div>
+                </div>
+                <div class="stat-card cold">
+                    <div class="stat-icon">❄️</div>
+                    <div class="stat-value">-31.1°C</div>
+                    <div class="stat-label">最低温</div>
+                    <div class="stat-location">东乌珠穆沁旗</div>
+                </div>
+                <div class="stat-card avg">
+                    <div class="stat-icon">📊</div>
+                    <div class="stat-value">-20.4°C</div>
+                    <div class="stat-label">平均温度</div>
+                    <div class="stat-location">省内</div>
+                </div>
+            </div>
+
+            <!-- 城市列表 -->
+            <div class="city-section">
+                <h2>城市气温排行</h2>
+                <div class="city-grid">
+                    
+                    <div class="city-card">
+                        <div class="city-rank">#1</div>
+                        <div class="city-name">乌审旗</div>
+                        <div class="city-temp cold-temp">-13.5°C</div>
+                    </div>
+                    
+                    <div class="city-card">
+                        <div class="city-rank">#2</div>
+                        <div class="city-name">阿拉善左旗</div>
+                        <div class="city-temp cold-temp">-13.6°C</div>
+                    </div>
+                    
+                    <div class="city-card">
+                        <div class="city-rank">#3</div>
+                        <div class="city-name">乌斯太</div>
+                        <div class="city-temp cold-temp">-14.7°C</div>
+                    </div>
+                    
+                    <div class="city-card">
+                        <div class="city-rank">#4</div>
+                        <div class="city-name">东胜</div>
+                        <div class="city-temp cold-temp">-14.9°C</div>
+                    </div>
+                    
+                    <div class="city-card">
+                        <div class="city-rank">#5</div>
+                        <div class="city-name">阿拉善右旗</div>
+                        <div class="city-temp cold-temp">-14.9°C</div>
+                    </div>
+                    
+                    <div class="city-card">
+                        <div class="city-rank">#6</div>
+                        <div class="city-name">准格尔旗</div>
+                        <div class="city-temp cold-temp">-15.5°C</div>
+                    </div>
+                    
+                    <div class="city-card">
+                        <div class="city-rank">#7</div>
+                        <div class="city-name">吉兰泰</div>
+                        <div class="city-temp cold-temp">-15.9°C</div>
+                    </div>
+                    
+                    <div class="city-card">
+                        <div class="city-rank">#8</div>
+                        <div class="city-name">乌海</div>
+                        <div class="city-temp cold-temp">-16.1°C</div>
+                    </div>
+                    
+                    <div class="city-card">
+                        <div class="city-rank">#9</div>
+                        <div class="city-name">乌拉特前旗</div>
+                        <div class="city-temp cold-temp">-16.4°C</div>
+                    </div>
+                    
+                    <div class="city-card">
+                        <div class="city-rank">#10</div>
+                        <div class="city-name">乌审召</div>
+                        <div class="city-temp cold-temp">-16.5°C</div>
+                    </div>
+                    
+                    <div class="city-card">
+                        <div class="city-rank">#11</div>
+                        <div class="city-name">乌拉特后旗</div>
+                        <div class="city-temp cold-temp">-16.5°C</div>
+                    </div>
+                    
+                    <div class="city-card">
+                        <div class="city-rank">#12</div>
+                        <div class="city-name">呼和浩特</div>
+                        <div class="city-temp cold-temp">-16.5°C</div>
+                    </div>
+                    
+                    <div class="city-card">
+                        <div class="city-rank">#13</div>
+                        <div class="city-name">和林格尔县</div>
+                        <div class="city-temp cold-temp">-16.5°C</div>
+                    </div>
+                    
+                    <div class="city-card">
+                        <div class="city-rank">#14</div>
+                        <div class="city-name">伊金霍洛旗</div>
+                        <div class="city-temp cold-temp">-16.6°C</div>
+                    </div>
+                    
+                    <div class="city-card">
+                        <div class="city-rank">#15</div>
+                        <div class="city-name">康巴什体育中心</div>
+                        <div class="city-temp cold-temp">-18°C</div>
+                    </div>
+                    
+                    <div class="city-card">
+                        <div class="city-rank">#16</div>
+                        <div class="city-name">喀喇沁旗</div>
+                        <div class="city-temp cold-temp">-18.4°C</div>
+                    </div>
+                    
+                    <div class="city-card">
+                        <div class="city-rank">#17</div>
+                        <div class="city-name">五原</div>
+                        <div class="city-temp cold-temp">-18.7°C</div>
+                    </div>
+                    
+                    <div class="city-card">
+                        <div class="city-rank">#18</div>
+                        <div class="city-name">八里罕</div>
+                        <div class="city-temp cold-temp">-18.8°C</div>
+                    </div>
+                    
+                    <div class="city-card">
+                        <div class="city-rank">#19</div>
+                        <div class="city-name">凉城</div>
+                        <div class="city-temp cold-temp">-19.3°C</div>
+                    </div>
+                    
+                    <div class="city-card">
+                        <div class="city-rank">#20</div>
+                        <div class="city-name">丰镇</div>
+                        <div class="city-temp cold-temp">-19.5°C</div>
+                    </div>
+                    
+                    <div class="city-card">
+                        <div class="city-rank">#21</div>
+                        <div class="city-name">临河</div>
+                        <div class="city-temp cold-temp">-19.6°C</div>
+                    </div>
+                    
+                    <div class="city-card">
+                        <div class="city-rank">#22</div>
+                        <div class="city-name">赤峰</div>
+                        <div class="city-temp cold-temp">-19.7°C</div>
+                    </div>
+                    
+                    <div class="city-card">
+                        <div class="city-rank">#23</div>
+                        <div class="city-name">兴和</div>
+                        <div class="city-temp cold-temp">-19.8°C</div>
+                    </div>
+                    
+                    <div class="city-card">
+                        <div class="city-rank">#24</div>
+                        <div class="city-name">乌兰浩特</div>
+                        <div class="city-temp cold-temp">-20.2°C</div>
+                    </div>
+                    
+                    <div class="city-card">
+                        <div class="city-rank">#25</div>
+                        <div class="city-name">卓资</div>
+                        <div class="city-temp cold-temp">-20.6°C</div>
+                    </div>
+                    
+                    <div class="city-card">
+                        <div class="city-rank">#26</div>
+                        <div class="city-name">通辽</div>
+                        <div class="city-temp cold-temp">-21°C</div>
+                    </div>
+                    
+                    <div class="city-card">
+                        <div class="city-rank">#27</div>
+                        <div class="city-name">包头</div>
+                        <div class="city-temp cold-temp">-21.5°C</div>
+                    </div>
+                    
+                    <div class="city-card">
+                        <div class="city-rank">#28</div>
+                        <div class="city-name">集宁</div>
+                        <div class="city-temp cold-temp">-22.1°C</div>
+                    </div>
+                    
+                    <div class="city-card">
+                        <div class="city-rank">#29</div>
+                        <div class="city-name">固阳</div>
+                        <div class="city-temp cold-temp">-22.2°C</div>
+                    </div>
+                    
+                    <div class="city-card">
+                        <div class="city-rank">#30</div>
+                        <div class="city-name">商都</div>
+                        <div class="city-temp cold-temp">-22.6°C</div>
+                    </div>
+                    
+                    <div class="city-card">
+                        <div class="city-rank">#31</div>
+                        <div class="city-name">乌拉特中旗</div>
+                        <div class="city-temp cold-temp">-23.2°C</div>
+                    </div>
+                    
+                    <div class="city-card">
+                        <div class="city-rank">#32</div>
+                        <div class="city-name">伊克乌素</div>
+                        <div class="city-temp cold-temp">-23.4°C</div>
+                    </div>
+                    
+                    <div class="city-card">
+                        <div class="city-rank">#33</div>
+                        <div class="city-name">化德</div>
+                        <div class="city-temp cold-temp">-24.4°C</div>
+                    </div>
+                    
+                    <div class="city-card">
+                        <div class="city-rank">#34</div>
+                        <div class="city-name">巴林右旗</div>
+                        <div class="city-temp cold-temp">-24.4°C</div>
+                    </div>
+                    
+                    <div class="city-card">
+                        <div class="city-rank">#35</div>
+                        <div class="city-name">四子王旗</div>
+                        <div class="city-temp cold-temp">-24.6°C</div>
+                    </div>
+                    
+                    <div class="city-card">
+                        <div class="city-rank">#36</div>
+                        <div class="city-name">克什克腾旗</div>
+                        <div class="city-temp cold-temp">-25.4°C</div>
+                    </div>
+                    
+                    <div class="city-card">
+                        <div class="city-rank">#37</div>
+                        <div class="city-name">乌拉盖</div>
+                        <div class="city-temp cold-temp">-26.5°C</div>
+                    </div>
+                    
+                    <div class="city-card">
+                        <div class="city-rank">#38</div>
+                        <div class="city-name">海拉尔</div>
+                        <div class="city-temp cold-temp">-27.3°C</div>
+                    </div>
+                    
+                    <div class="city-card">
+                        <div class="city-rank">#39</div>
+                        <div class="city-name">二连浩特</div>
+                        <div class="city-temp cold-temp">-27.7°C</div>
+                    </div>
+                    
+                    <div class="city-card">
+                        <div class="city-rank">#40</div>
+                        <div class="city-name">博克图</div>
+                        <div class="city-temp cold-temp">-28.3°C</div>
+                    </div>
+                    
+                    <div class="city-card">
+                        <div class="city-rank">#41</div>
+                        <div class="city-name">锡林浩特</div>
+                        <div class="city-temp cold-temp">-29.9°C</div>
+                    </div>
+                    
+                    <div class="city-card">
+                        <div class="city-rank">#42</div>
+                        <div class="city-name">东乌珠穆沁旗</div>
+                        <div class="city-temp cold-temp">-31.1°C</div>
+                    </div>
+                    
+                </div>
+            </div>
+
+            <!-- Google AdSense 广告位 -->
+            <div class="ad-container">
+                <div class="ad-placeholder">广告位</div>
+            </div>
+        </div>
+    </main>
+
+    <footer class="footer">
+        <div class="container">
+            <p>数据来源: 中国气象局</p>
+            <p>© 2024 中国气温排行榜</p>
+        </div>
+    </footer>
+</body>
+</html>

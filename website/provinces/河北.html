@@ -1,0 +1,929 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="河北气温详情 - 实时城市气温数据">
+    <title>河北气温排行 - 中国气温排行榜</title>
+    <link rel="stylesheet" href="../assets/css/style.css">
+    <script src="https://cdn.jsdelivr.net/npm/echarts@5.4.3/dist/echarts.min.js"></script>
+</head>
+<body>
+    <header class="header">
+        <div class="container">
+            <a href="../index.html" class="back-link">← 返回全国</a>
+            <h1>🌡️ 河北气温详情</h1>
+        </div>
+    </header>
+
+    <main class="main">
+        <div class="container">
+            <!-- 省份统计 -->
+            <div class="stats-cards">
+                <div class="stat-card hot">
+                    <div class="stat-icon">🔥</div>
+                    <div class="stat-value">-3.2°C</div>
+                    <div class="stat-label">最高温</div>
+                    <div class="stat-location">南和</div>
+                </div>
+                <div class="stat-card cold">
+                    <div class="stat-icon">❄️</div>
+                    <div class="stat-value">-30.1°C</div>
+                    <div class="stat-label">最低温</div>
+                    <div class="stat-location">沽源</div>
+                </div>
+                <div class="stat-card avg">
+                    <div class="stat-icon">📊</div>
+                    <div class="stat-value">-10.5°C</div>
+                    <div class="stat-label">平均温度</div>
+                    <div class="stat-location">省内</div>
+                </div>
+            </div>
+
+            <!-- 城市列表 -->
+            <div class="city-section">
+                <h2>城市气温排行</h2>
+                <div class="city-grid">
+                    
+                    <div class="city-card">
+                        <div class="city-rank">#1</div>
+                        <div class="city-name">南和</div>
+                        <div class="city-temp cold-temp">-3.2°C</div>
+                    </div>
+                    
+                    <div class="city-card">
+                        <div class="city-rank">#2</div>
+                        <div class="city-name">磁县</div>
+                        <div class="city-temp cold-temp">-3.3°C</div>
+                    </div>
+                    
+                    <div class="city-card">
+                        <div class="city-rank">#3</div>
+                        <div class="city-name">栾城</div>
+                        <div class="city-temp cold-temp">-4°C</div>
+                    </div>
+                    
+                    <div class="city-card">
+                        <div class="city-rank">#4</div>
+                        <div class="city-name">永年</div>
+                        <div class="city-temp cold-temp">-4.5°C</div>
+                    </div>
+                    
+                    <div class="city-card">
+                        <div class="city-rank">#5</div>
+                        <div class="city-name">峰峰</div>
+                        <div class="city-temp cold-temp">-4.6°C</div>
+                    </div>
+                    
+                    <div class="city-card">
+                        <div class="city-rank">#6</div>
+                        <div class="city-name">正定</div>
+                        <div class="city-temp cold-temp">-4.6°C</div>
+                    </div>
+                    
+                    <div class="city-card">
+                        <div class="city-rank">#7</div>
+                        <div class="city-name">晋州</div>
+                        <div class="city-temp cold-temp">-4.8°C</div>
+                    </div>
+                    
+                    <div class="city-card">
+                        <div class="city-rank">#8</div>
+                        <div class="city-name">石家庄</div>
+                        <div class="city-temp cold-temp">-5°C</div>
+                    </div>
+                    
+                    <div class="city-card">
+                        <div class="city-rank">#9</div>
+                        <div class="city-name">藁城</div>
+                        <div class="city-temp cold-temp">-5°C</div>
+                    </div>
+                    
+                    <div class="city-card">
+                        <div class="city-rank">#10</div>
+                        <div class="city-name">鹿泉</div>
+                        <div class="city-temp cold-temp">-5°C</div>
+                    </div>
+                    
+                    <div class="city-card">
+                        <div class="city-rank">#11</div>
+                        <div class="city-name">宁晋</div>
+                        <div class="city-temp cold-temp">-5.1°C</div>
+                    </div>
+                    
+                    <div class="city-card">
+                        <div class="city-rank">#12</div>
+                        <div class="city-name">武安</div>
+                        <div class="city-temp cold-temp">-5.1°C</div>
+                    </div>
+                    
+                    <div class="city-card">
+                        <div class="city-rank">#13</div>
+                        <div class="city-name">南宫</div>
+                        <div class="city-temp cold-temp">-5.4°C</div>
+                    </div>
+                    
+                    <div class="city-card">
+                        <div class="city-rank">#14</div>
+                        <div class="city-name">柏乡</div>
+                        <div class="city-temp cold-temp">-5.7°C</div>
+                    </div>
+                    
+                    <div class="city-card">
+                        <div class="city-rank">#15</div>
+                        <div class="city-name">平乡</div>
+                        <div class="city-temp cold-temp">-5.8°C</div>
+                    </div>
+                    
+                    <div class="city-card">
+                        <div class="city-rank">#16</div>
+                        <div class="city-name">衡水</div>
+                        <div class="city-temp cold-temp">-5.8°C</div>
+                    </div>
+                    
+                    <div class="city-card">
+                        <div class="city-rank">#17</div>
+                        <div class="city-name">邯郸</div>
+                        <div class="city-temp cold-temp">-5.9°C</div>
+                    </div>
+                    
+                    <div class="city-card">
+                        <div class="city-rank">#18</div>
+                        <div class="city-name">邱县</div>
+                        <div class="city-temp cold-temp">-5.9°C</div>
+                    </div>
+                    
+                    <div class="city-card">
+                        <div class="city-rank">#19</div>
+                        <div class="city-name">魏县</div>
+                        <div class="city-temp cold-temp">-5.9°C</div>
+                    </div>
+                    
+                    <div class="city-card">
+                        <div class="city-rank">#20</div>
+                        <div class="city-name">元氏</div>
+                        <div class="city-temp cold-temp">-6°C</div>
+                    </div>
+                    
+                    <div class="city-card">
+                        <div class="city-rank">#21</div>
+                        <div class="city-name">辛集</div>
+                        <div class="city-temp cold-temp">-6.1°C</div>
+                    </div>
+                    
+                    <div class="city-card">
+                        <div class="city-rank">#22</div>
+                        <div class="city-name">临城</div>
+                        <div class="city-temp cold-temp">-6.2°C</div>
+                    </div>
+                    
+                    <div class="city-card">
+                        <div class="city-rank">#23</div>
+                        <div class="city-name">鸡泽</div>
+                        <div class="city-temp cold-temp">-6.2°C</div>
+                    </div>
+                    
+                    <div class="city-card">
+                        <div class="city-rank">#24</div>
+                        <div class="city-name">临西</div>
+                        <div class="city-temp cold-temp">-6.3°C</div>
+                    </div>
+                    
+                    <div class="city-card">
+                        <div class="city-rank">#25</div>
+                        <div class="city-name">成安</div>
+                        <div class="city-temp cold-temp">-6.3°C</div>
+                    </div>
+                    
+                    <div class="city-card">
+                        <div class="city-rank">#26</div>
+                        <div class="city-name">平山</div>
+                        <div class="city-temp cold-temp">-6.4°C</div>
+                    </div>
+                    
+                    <div class="city-card">
+                        <div class="city-rank">#27</div>
+                        <div class="city-name">赞皇</div>
+                        <div class="city-temp cold-temp">-6.4°C</div>
+                    </div>
+                    
+                    <div class="city-card">
+                        <div class="city-rank">#28</div>
+                        <div class="city-name">定州</div>
+                        <div class="city-temp cold-temp">-6.5°C</div>
+                    </div>
+                    
+                    <div class="city-card">
+                        <div class="city-rank">#29</div>
+                        <div class="city-name">高邑</div>
+                        <div class="city-temp cold-temp">-6.5°C</div>
+                    </div>
+                    
+                    <div class="city-card">
+                        <div class="city-rank">#30</div>
+                        <div class="city-name">深州</div>
+                        <div class="city-temp cold-temp">-6.6°C</div>
+                    </div>
+                    
+                    <div class="city-card">
+                        <div class="city-rank">#31</div>
+                        <div class="city-name">灵寿</div>
+                        <div class="city-temp cold-temp">-6.6°C</div>
+                    </div>
+                    
+                    <div class="city-card">
+                        <div class="city-rank">#32</div>
+                        <div class="city-name">无极</div>
+                        <div class="city-temp cold-temp">-6.7°C</div>
+                    </div>
+                    
+                    <div class="city-card">
+                        <div class="city-rank">#33</div>
+                        <div class="city-name">赵县</div>
+                        <div class="city-temp cold-temp">-6.7°C</div>
+                    </div>
+                    
+                    <div class="city-card">
+                        <div class="city-rank">#34</div>
+                        <div class="city-name">邢台</div>
+                        <div class="city-temp cold-temp">-6.7°C</div>
+                    </div>
+                    
+                    <div class="city-card">
+                        <div class="city-rank">#35</div>
+                        <div class="city-name">任泽</div>
+                        <div class="city-temp cold-temp">-6.8°C</div>
+                    </div>
+                    
+                    <div class="city-card">
+                        <div class="city-rank">#36</div>
+                        <div class="city-name">广平</div>
+                        <div class="city-temp cold-temp">-6.8°C</div>
+                    </div>
+                    
+                    <div class="city-card">
+                        <div class="city-rank">#37</div>
+                        <div class="city-name">巨鹿</div>
+                        <div class="city-temp cold-temp">-6.9°C</div>
+                    </div>
+                    
+                    <div class="city-card">
+                        <div class="city-rank">#38</div>
+                        <div class="city-name">馆陶</div>
+                        <div class="city-temp cold-temp">-7°C</div>
+                    </div>
+                    
+                    <div class="city-card">
+                        <div class="city-rank">#39</div>
+                        <div class="city-name">景县</div>
+                        <div class="city-temp cold-temp">-7.1°C</div>
+                    </div>
+                    
+                    <div class="city-card">
+                        <div class="city-rank">#40</div>
+                        <div class="city-name">肥乡</div>
+                        <div class="city-temp cold-temp">-7.1°C</div>
+                    </div>
+                    
+                    <div class="city-card">
+                        <div class="city-rank">#41</div>
+                        <div class="city-name">行唐</div>
+                        <div class="city-temp cold-temp">-7.1°C</div>
+                    </div>
+                    
+                    <div class="city-card">
+                        <div class="city-rank">#42</div>
+                        <div class="city-name">枣强</div>
+                        <div class="city-temp cold-temp">-7.2°C</div>
+                    </div>
+                    
+                    <div class="city-card">
+                        <div class="city-rank">#43</div>
+                        <div class="city-name">安国</div>
+                        <div class="city-temp cold-temp">-7.4°C</div>
+                    </div>
+                    
+                    <div class="city-card">
+                        <div class="city-rank">#44</div>
+                        <div class="city-name">新乐</div>
+                        <div class="city-temp cold-temp">-7.4°C</div>
+                    </div>
+                    
+                    <div class="city-card">
+                        <div class="city-rank">#45</div>
+                        <div class="city-name">临漳</div>
+                        <div class="city-temp cold-temp">-7.5°C</div>
+                    </div>
+                    
+                    <div class="city-card">
+                        <div class="city-rank">#46</div>
+                        <div class="city-name">唐县</div>
+                        <div class="city-temp cold-temp">-7.5°C</div>
+                    </div>
+                    
+                    <div class="city-card">
+                        <div class="city-rank">#47</div>
+                        <div class="city-name">故城</div>
+                        <div class="city-temp cold-temp">-7.5°C</div>
+                    </div>
+                    
+                    <div class="city-card">
+                        <div class="city-rank">#48</div>
+                        <div class="city-name">深泽</div>
+                        <div class="city-temp cold-temp">-7.5°C</div>
+                    </div>
+                    
+                    <div class="city-card">
+                        <div class="city-rank">#49</div>
+                        <div class="city-name">隆尧</div>
+                        <div class="city-temp cold-temp">-7.5°C</div>
+                    </div>
+                    
+                    <div class="city-card">
+                        <div class="city-rank">#50</div>
+                        <div class="city-name">涉县</div>
+                        <div class="city-temp cold-temp">-7.6°C</div>
+                    </div>
+                    
+                    <div class="city-card">
+                        <div class="city-rank">#51</div>
+                        <div class="city-name">威县</div>
+                        <div class="city-temp cold-temp">-7.7°C</div>
+                    </div>
+                    
+                    <div class="city-card">
+                        <div class="city-rank">#52</div>
+                        <div class="city-name">东光</div>
+                        <div class="city-temp cold-temp">-7.8°C</div>
+                    </div>
+                    
+                    <div class="city-card">
+                        <div class="city-rank">#53</div>
+                        <div class="city-name">新河</div>
+                        <div class="city-temp cold-temp">-7.8°C</div>
+                    </div>
+                    
+                    <div class="city-card">
+                        <div class="city-rank">#54</div>
+                        <div class="city-name">曲周</div>
+                        <div class="city-temp cold-temp">-7.8°C</div>
+                    </div>
+                    
+                    <div class="city-card">
+                        <div class="city-rank">#55</div>
+                        <div class="city-name">望都</div>
+                        <div class="city-temp cold-temp">-7.8°C</div>
+                    </div>
+                    
+                    <div class="city-card">
+                        <div class="city-rank">#56</div>
+                        <div class="city-name">献县</div>
+                        <div class="city-temp cold-temp">-7.8°C</div>
+                    </div>
+                    
+                    <div class="city-card">
+                        <div class="city-rank">#57</div>
+                        <div class="city-name">内丘</div>
+                        <div class="city-temp cold-temp">-8.1°C</div>
+                    </div>
+                    
+                    <div class="city-card">
+                        <div class="city-rank">#58</div>
+                        <div class="city-name">安平</div>
+                        <div class="city-temp cold-temp">-8.1°C</div>
+                    </div>
+                    
+                    <div class="city-card">
+                        <div class="city-rank">#59</div>
+                        <div class="city-name">广宗</div>
+                        <div class="city-temp cold-temp">-8.1°C</div>
+                    </div>
+                    
+                    <div class="city-card">
+                        <div class="city-rank">#60</div>
+                        <div class="city-name">文安</div>
+                        <div class="city-temp cold-temp">-8.3°C</div>
+                    </div>
+                    
+                    <div class="city-card">
+                        <div class="city-rank">#61</div>
+                        <div class="city-name">武强</div>
+                        <div class="city-temp cold-temp">-8.3°C</div>
+                    </div>
+                    
+                    <div class="city-card">
+                        <div class="city-rank">#62</div>
+                        <div class="city-name">武邑</div>
+                        <div class="city-temp cold-temp">-8.3°C</div>
+                    </div>
+                    
+                    <div class="city-card">
+                        <div class="city-rank">#63</div>
+                        <div class="city-name">顺平</div>
+                        <div class="city-temp cold-temp">-8.3°C</div>
+                    </div>
+                    
+                    <div class="city-card">
+                        <div class="city-rank">#64</div>
+                        <div class="city-name">泊头</div>
+                        <div class="city-temp cold-temp">-8.5°C</div>
+                    </div>
+                    
+                    <div class="city-card">
+                        <div class="city-rank">#65</div>
+                        <div class="city-name">大名</div>
+                        <div class="city-temp cold-temp">-8.6°C</div>
+                    </div>
+                    
+                    <div class="city-card">
+                        <div class="city-rank">#66</div>
+                        <div class="city-name">阜城</div>
+                        <div class="city-temp cold-temp">-8.6°C</div>
+                    </div>
+                    
+                    <div class="city-card">
+                        <div class="city-rank">#67</div>
+                        <div class="city-name">井陉</div>
+                        <div class="city-temp cold-temp">-8.7°C</div>
+                    </div>
+                    
+                    <div class="city-card">
+                        <div class="city-rank">#68</div>
+                        <div class="city-name">曲阳</div>
+                        <div class="city-temp cold-temp">-9°C</div>
+                    </div>
+                    
+                    <div class="city-card">
+                        <div class="city-rank">#69</div>
+                        <div class="city-name">盐山</div>
+                        <div class="city-temp cold-temp">-9°C</div>
+                    </div>
+                    
+                    <div class="city-card">
+                        <div class="city-rank">#70</div>
+                        <div class="city-name">吴桥</div>
+                        <div class="city-temp cold-temp">-9.1°C</div>
+                    </div>
+                    
+                    <div class="city-card">
+                        <div class="city-rank">#71</div>
+                        <div class="city-name">高阳</div>
+                        <div class="city-temp cold-temp">-9.1°C</div>
+                    </div>
+                    
+                    <div class="city-card">
+                        <div class="city-rank">#72</div>
+                        <div class="city-name">蠡县</div>
+                        <div class="city-temp cold-temp">-9.2°C</div>
+                    </div>
+                    
+                    <div class="city-card">
+                        <div class="city-rank">#73</div>
+                        <div class="city-name">遵化</div>
+                        <div class="city-temp cold-temp">-9.3°C</div>
+                    </div>
+                    
+                    <div class="city-card">
+                        <div class="city-rank">#74</div>
+                        <div class="city-name">任丘</div>
+                        <div class="city-temp cold-temp">-9.4°C</div>
+                    </div>
+                    
+                    <div class="city-card">
+                        <div class="city-rank">#75</div>
+                        <div class="city-name">冀州</div>
+                        <div class="city-temp cold-temp">-9.4°C</div>
+                    </div>
+                    
+                    <div class="city-card">
+                        <div class="city-rank">#76</div>
+                        <div class="city-name">安新</div>
+                        <div class="city-temp cold-temp">-9.4°C</div>
+                    </div>
+                    
+                    <div class="city-card">
+                        <div class="city-rank">#77</div>
+                        <div class="city-name">清河</div>
+                        <div class="city-temp cold-temp">-9.6°C</div>
+                    </div>
+                    
+                    <div class="city-card">
+                        <div class="city-rank">#78</div>
+                        <div class="city-name">乐亭</div>
+                        <div class="city-temp cold-temp">-9.7°C</div>
+                    </div>
+                    
+                    <div class="city-card">
+                        <div class="city-rank">#79</div>
+                        <div class="city-name">河间</div>
+                        <div class="city-temp cold-temp">-9.7°C</div>
+                    </div>
+                    
+                    <div class="city-card">
+                        <div class="city-rank">#80</div>
+                        <div class="city-name">保定</div>
+                        <div class="city-temp cold-temp">-9.8°C</div>
+                    </div>
+                    
+                    <div class="city-card">
+                        <div class="city-rank">#81</div>
+                        <div class="city-name">饶阳</div>
+                        <div class="city-temp cold-temp">-9.8°C</div>
+                    </div>
+                    
+                    <div class="city-card">
+                        <div class="city-rank">#82</div>
+                        <div class="city-name">南皮</div>
+                        <div class="city-temp cold-temp">-9.9°C</div>
+                    </div>
+                    
+                    <div class="city-card">
+                        <div class="city-rank">#83</div>
+                        <div class="city-name">大城</div>
+                        <div class="city-temp cold-temp">-10.1°C</div>
+                    </div>
+                    
+                    <div class="city-card">
+                        <div class="city-rank">#84</div>
+                        <div class="city-name">满城</div>
+                        <div class="city-temp cold-temp">-10.1°C</div>
+                    </div>
+                    
+                    <div class="city-card">
+                        <div class="city-rank">#85</div>
+                        <div class="city-name">肃宁</div>
+                        <div class="city-temp cold-temp">-10.2°C</div>
+                    </div>
+                    
+                    <div class="city-card">
+                        <div class="city-rank">#86</div>
+                        <div class="city-name">丰润</div>
+                        <div class="city-temp cold-temp">-10.3°C</div>
+                    </div>
+                    
+                    <div class="city-card">
+                        <div class="city-rank">#87</div>
+                        <div class="city-name">阜平</div>
+                        <div class="city-temp cold-temp">-10.4°C</div>
+                    </div>
+                    
+                    <div class="city-card">
+                        <div class="city-rank">#88</div>
+                        <div class="city-name">唐山</div>
+                        <div class="city-temp cold-temp">-10.7°C</div>
+                    </div>
+                    
+                    <div class="city-card">
+                        <div class="city-rank">#89</div>
+                        <div class="city-name">徐水</div>
+                        <div class="city-temp cold-temp">-10.7°C</div>
+                    </div>
+                    
+                    <div class="city-card">
+                        <div class="city-rank">#90</div>
+                        <div class="city-name">曹妃甸零公里</div>
+                        <div class="city-temp cold-temp">-10.7°C</div>
+                    </div>
+                    
+                    <div class="city-card">
+                        <div class="city-rank">#91</div>
+                        <div class="city-name">沙河</div>
+                        <div class="city-temp cold-temp">-10.7°C</div>
+                    </div>
+                    
+                    <div class="city-card">
+                        <div class="city-rank">#92</div>
+                        <div class="city-name">涿州</div>
+                        <div class="city-temp cold-temp">-10.7°C</div>
+                    </div>
+                    
+                    <div class="city-card">
+                        <div class="city-rank">#93</div>
+                        <div class="city-name">渤海新区黄骅</div>
+                        <div class="city-temp cold-temp">-10.8°C</div>
+                    </div>
+                    
+                    <div class="city-card">
+                        <div class="city-rank">#94</div>
+                        <div class="city-name">易县</div>
+                        <div class="city-temp cold-temp">-10.9°C</div>
+                    </div>
+                    
+                    <div class="city-card">
+                        <div class="city-rank">#95</div>
+                        <div class="city-name">容城</div>
+                        <div class="city-temp cold-temp">-11°C</div>
+                    </div>
+                    
+                    <div class="city-card">
+                        <div class="city-rank">#96</div>
+                        <div class="city-name">霸州</div>
+                        <div class="city-temp cold-temp">-11°C</div>
+                    </div>
+                    
+                    <div class="city-card">
+                        <div class="city-rank">#97</div>
+                        <div class="city-name">廊坊</div>
+                        <div class="city-temp cold-temp">-11.1°C</div>
+                    </div>
+                    
+                    <div class="city-card">
+                        <div class="city-rank">#98</div>
+                        <div class="city-name">迁西</div>
+                        <div class="city-temp cold-temp">-11.1°C</div>
+                    </div>
+                    
+                    <div class="city-card">
+                        <div class="city-rank">#99</div>
+                        <div class="city-name">青县</div>
+                        <div class="city-temp cold-temp">-11.1°C</div>
+                    </div>
+                    
+                    <div class="city-card">
+                        <div class="city-rank">#100</div>
+                        <div class="city-name">丰南</div>
+                        <div class="city-temp cold-temp">-11.2°C</div>
+                    </div>
+                    
+                    <div class="city-card">
+                        <div class="city-rank">#101</div>
+                        <div class="city-name">固安</div>
+                        <div class="city-temp cold-temp">-11.3°C</div>
+                    </div>
+                    
+                    <div class="city-card">
+                        <div class="city-rank">#102</div>
+                        <div class="city-name">昌黎</div>
+                        <div class="city-temp cold-temp">-11.3°C</div>
+                    </div>
+                    
+                    <div class="city-card">
+                        <div class="city-rank">#103</div>
+                        <div class="city-name">曹妃甸</div>
+                        <div class="city-temp cold-temp">-11.4°C</div>
+                    </div>
+                    
+                    <div class="city-card">
+                        <div class="city-rank">#104</div>
+                        <div class="city-name">迁安</div>
+                        <div class="city-temp cold-temp">-11.4°C</div>
+                    </div>
+                    
+                    <div class="city-card">
+                        <div class="city-rank">#105</div>
+                        <div class="city-name">雄县</div>
+                        <div class="city-temp cold-temp">-11.4°C</div>
+                    </div>
+                    
+                    <div class="city-card">
+                        <div class="city-rank">#106</div>
+                        <div class="city-name">滦南</div>
+                        <div class="city-temp cold-temp">-11.5°C</div>
+                    </div>
+                    
+                    <div class="city-card">
+                        <div class="city-rank">#107</div>
+                        <div class="city-name">海兴</div>
+                        <div class="city-temp cold-temp">-11.6°C</div>
+                    </div>
+                    
+                    <div class="city-card">
+                        <div class="city-rank">#108</div>
+                        <div class="city-name">玉田</div>
+                        <div class="city-temp cold-temp">-11.6°C</div>
+                    </div>
+                    
+                    <div class="city-card">
+                        <div class="city-rank">#109</div>
+                        <div class="city-name">三河</div>
+                        <div class="city-temp cold-temp">-11.7°C</div>
+                    </div>
+                    
+                    <div class="city-card">
+                        <div class="city-rank">#110</div>
+                        <div class="city-name">抚宁</div>
+                        <div class="city-temp cold-temp">-11.7°C</div>
+                    </div>
+                    
+                    <div class="city-card">
+                        <div class="city-rank">#111</div>
+                        <div class="city-name">永清</div>
+                        <div class="city-temp cold-temp">-11.8°C</div>
+                    </div>
+                    
+                    <div class="city-card">
+                        <div class="city-rank">#112</div>
+                        <div class="city-name">香河</div>
+                        <div class="city-temp cold-temp">-11.8°C</div>
+                    </div>
+                    
+                    <div class="city-card">
+                        <div class="city-rank">#113</div>
+                        <div class="city-name">高碑店</div>
+                        <div class="city-temp cold-temp">-11.8°C</div>
+                    </div>
+                    
+                    <div class="city-card">
+                        <div class="city-rank">#114</div>
+                        <div class="city-name">孟村</div>
+                        <div class="city-temp cold-temp">-12°C</div>
+                    </div>
+                    
+                    <div class="city-card">
+                        <div class="city-rank">#115</div>
+                        <div class="city-name">秦皇岛</div>
+                        <div class="city-temp cold-temp">-12.2°C</div>
+                    </div>
+                    
+                    <div class="city-card">
+                        <div class="city-rank">#116</div>
+                        <div class="city-name">卢龙</div>
+                        <div class="city-temp cold-temp">-12.6°C</div>
+                    </div>
+                    
+                    <div class="city-card">
+                        <div class="city-rank">#117</div>
+                        <div class="city-name">滦州</div>
+                        <div class="city-temp cold-temp">-12.8°C</div>
+                    </div>
+                    
+                    <div class="city-card">
+                        <div class="city-rank">#118</div>
+                        <div class="city-name">大厂</div>
+                        <div class="city-temp cold-temp">-12.9°C</div>
+                    </div>
+                    
+                    <div class="city-card">
+                        <div class="city-rank">#119</div>
+                        <div class="city-name">沧州</div>
+                        <div class="city-temp cold-temp">-13.2°C</div>
+                    </div>
+                    
+                    <div class="city-card">
+                        <div class="city-rank">#120</div>
+                        <div class="city-name">涿鹿</div>
+                        <div class="city-temp cold-temp">-13.5°C</div>
+                    </div>
+                    
+                    <div class="city-card">
+                        <div class="city-rank">#121</div>
+                        <div class="city-name">宽城</div>
+                        <div class="city-temp cold-temp">-14.3°C</div>
+                    </div>
+                    
+                    <div class="city-card">
+                        <div class="city-rank">#122</div>
+                        <div class="city-name">怀来</div>
+                        <div class="city-temp cold-temp">-14.3°C</div>
+                    </div>
+                    
+                    <div class="city-card">
+                        <div class="city-rank">#123</div>
+                        <div class="city-name">青龙</div>
+                        <div class="city-temp cold-temp">-14.6°C</div>
+                    </div>
+                    
+                    <div class="city-card">
+                        <div class="city-rank">#124</div>
+                        <div class="city-name">涞源</div>
+                        <div class="city-temp cold-temp">-14.8°C</div>
+                    </div>
+                    
+                    <div class="city-card">
+                        <div class="city-rank">#125</div>
+                        <div class="city-name">承德</div>
+                        <div class="city-temp cold-temp">-15.4°C</div>
+                    </div>
+                    
+                    <div class="city-card">
+                        <div class="city-rank">#126</div>
+                        <div class="city-name">平泉</div>
+                        <div class="city-temp cold-temp">-16.3°C</div>
+                    </div>
+                    
+                    <div class="city-card">
+                        <div class="city-rank">#127</div>
+                        <div class="city-name">万全</div>
+                        <div class="city-temp cold-temp">-16.6°C</div>
+                    </div>
+                    
+                    <div class="city-card">
+                        <div class="city-rank">#128</div>
+                        <div class="city-name">阳原</div>
+                        <div class="city-temp cold-temp">-17.3°C</div>
+                    </div>
+                    
+                    <div class="city-card">
+                        <div class="city-rank">#129</div>
+                        <div class="city-name">承德县</div>
+                        <div class="city-temp cold-temp">-17.9°C</div>
+                    </div>
+                    
+                    <div class="city-card">
+                        <div class="city-rank">#130</div>
+                        <div class="city-name">宣化</div>
+                        <div class="city-temp cold-temp">-19°C</div>
+                    </div>
+                    
+                    <div class="city-card">
+                        <div class="city-rank">#131</div>
+                        <div class="city-name">隆化</div>
+                        <div class="city-temp cold-temp">-19.9°C</div>
+                    </div>
+                    
+                    <div class="city-card">
+                        <div class="city-rank">#132</div>
+                        <div class="city-name">怀安</div>
+                        <div class="city-temp cold-temp">-20.2°C</div>
+                    </div>
+                    
+                    <div class="city-card">
+                        <div class="city-rank">#133</div>
+                        <div class="city-name">丰宁</div>
+                        <div class="city-temp cold-temp">-20.5°C</div>
+                    </div>
+                    
+                    <div class="city-card">
+                        <div class="city-rank">#134</div>
+                        <div class="city-name">兴隆</div>
+                        <div class="city-temp cold-temp">-20.8°C</div>
+                    </div>
+                    
+                    <div class="city-card">
+                        <div class="city-rank">#135</div>
+                        <div class="city-name">张家口</div>
+                        <div class="city-temp cold-temp">-20.8°C</div>
+                    </div>
+                    
+                    <div class="city-card">
+                        <div class="city-rank">#136</div>
+                        <div class="city-name">滦平</div>
+                        <div class="city-temp cold-temp">-21.3°C</div>
+                    </div>
+                    
+                    <div class="city-card">
+                        <div class="city-rank">#137</div>
+                        <div class="city-name">围场</div>
+                        <div class="city-temp cold-temp">-22.8°C</div>
+                    </div>
+                    
+                    <div class="city-card">
+                        <div class="city-rank">#138</div>
+                        <div class="city-name">蔚县</div>
+                        <div class="city-temp cold-temp">-22.9°C</div>
+                    </div>
+                    
+                    <div class="city-card">
+                        <div class="city-rank">#139</div>
+                        <div class="city-name">赤城</div>
+                        <div class="city-temp cold-temp">-22.9°C</div>
+                    </div>
+                    
+                    <div class="city-card">
+                        <div class="city-rank">#140</div>
+                        <div class="city-name">崇礼</div>
+                        <div class="city-temp cold-temp">-25.4°C</div>
+                    </div>
+                    
+                    <div class="city-card">
+                        <div class="city-rank">#141</div>
+                        <div class="city-name">张北</div>
+                        <div class="city-temp cold-temp">-25.5°C</div>
+                    </div>
+                    
+                    <div class="city-card">
+                        <div class="city-rank">#142</div>
+                        <div class="city-name">尚义</div>
+                        <div class="city-temp cold-temp">-26.7°C</div>
+                    </div>
+                    
+                    <div class="city-card">
+                        <div class="city-rank">#143</div>
+                        <div class="city-name">康保</div>
+                        <div class="city-temp cold-temp">-29.7°C</div>
+                    </div>
+                    
+                    <div class="city-card">
+                        <div class="city-rank">#144</div>
+                        <div class="city-name">沽源</div>
+                        <div class="city-temp cold-temp">-30.1°C</div>
+                    </div>
+                    
+                </div>
+            </div>
+
+            <!-- Google AdSense 广告位 -->
+            <div class="ad-container">
+                <div class="ad-placeholder">广告位</div>
+            </div>
+        </div>
+    </main>
+
+    <footer class="footer">
+        <div class="container">
+            <p>数据来源: 中国气象局</p>
+            <p>© 2024 中国气温排行榜</p>
+        </div>
+    </footer>
+</body>
+</html>

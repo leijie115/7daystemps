@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="中国气温排行榜 - 实时展示全国各省市气温数据，支持省份详情查看">
+    <meta name="keywords" content="中国气温,温度排行,天气,气温地图,实时温度">
+    <title>中国气温排行榜 - 全国实时气温数据</title>
+    <link rel="stylesheet" href="assets/css/style.css">
+    <script src="https://cdn.jsdelivr.net/npm/echarts@5.4.3/dist/echarts.min.js"></script>
+</head>
+<body>
+    <header class="header">
+        <div class="container">
+            <h1>🌡️ 中国气温排行榜</h1>
+            <p class="subtitle">实时全国各省市气温数据</p>
+        </div>
+    </header>
+
+    <main class="main">
+        <div class="container">
+            <!-- 更新时间 -->
+            <div class="update-time">
+                最后更新: 2026/1/13 15:00:01
+            </div>
+
+            <!-- 温度统计 -->
+            <div class="stats-cards">
+                <div class="stat-card hot">
+                    <div class="stat-icon">🔥</div>
+                    <div class="stat-value">-5°C</div>
+                    <div class="stat-label">最高温</div>
+                    <div class="stat-location">河北</div>
+                </div>
+                <div class="stat-card cold">
+                    <div class="stat-icon">❄️</div>
+                    <div class="stat-value">-22.1°C</div>
+                    <div class="stat-label">最低温</div>
+                    <div class="stat-location">内蒙古</div>
+                </div>
+                <div class="stat-card avg">
+                    <div class="stat-icon">📊</div>
+                    <div class="stat-value">-9.6°C</div>
+                    <div class="stat-label">平均温度</div>
+                    <div class="stat-location">全国</div>
+                </div>
+            </div>
+
+            <!-- 地图容器 -->
+            <div class="map-section">
+                <h2>全国气温分布图</h2>
+                <div id="china-map" class="map-container"></div>
+                <div class="map-legend">
+                    <div class="legend-title">温度范围</div>
+                    <div class="legend-gradient"></div>
+                    <div class="legend-labels">
+                        <span>-22.1°C</span>
+                        <span>-5°C</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 排行榜 -->
+            <div class="ranking-section">
+                <div class="ranking-tabs">
+                    <button class="tab-btn active" data-type="hot">🔥 最热排行</button>
+                    <button class="tab-btn" data-type="cold">❄️ 最冷排行</button>
+                </div>
+
+                <div class="ranking-list" id="hot-ranking">
+                    
+                    <a href="provinces/%E6%B2%B3%E5%8C%97.html" class="ranking-item">
+                        <div class="ranking-number top-three">1</div>
+                        <div class="ranking-province">河北</div>
+                        <div class="ranking-temp hot-temp">-5°C</div>
+                    </a>
+                    
+                    <a href="provinces/%E5%B1%B1%E8%A5%BF.html" class="ranking-item">
+                        <div class="ranking-number top-three">2</div>
+                        <div class="ranking-province">山西</div>
+                        <div class="ranking-temp hot-temp">-5.8°C</div>
+                    </a>
+                    
+                    <a href="provinces/%E5%8C%97%E4%BA%AC.html" class="ranking-item">
+                        <div class="ranking-number top-three">3</div>
+                        <div class="ranking-province">北京</div>
+                        <div class="ranking-temp hot-temp">-7°C</div>
+                    </a>
+                    
+                    <a href="provinces/%E5%A4%A9%E6%B4%A5.html" class="ranking-item">
+                        <div class="ranking-number ">4</div>
+                        <div class="ranking-province">天津</div>
+                        <div class="ranking-temp hot-temp">-8.1°C</div>
+                    </a>
+                    
+                    <a href="provinces/%E5%86%85%E8%92%99%E5%8F%A4.html" class="ranking-item">
+                        <div class="ranking-number ">5</div>
+                        <div class="ranking-province">内蒙古</div>
+                        <div class="ranking-temp hot-temp">-22.1°C</div>
+                    </a>
+                    
+                </div>
+
+                <div class="ranking-list hidden" id="cold-ranking">
+                    
+                    <a href="provinces/%E5%86%85%E8%92%99%E5%8F%A4.html" class="ranking-item">
+                        <div class="ranking-number top-three">1</div>
+                        <div class="ranking-province">内蒙古</div>
+                        <div class="ranking-temp cold-temp">-22.1°C</div>
+                    </a>
+                    
+                    <a href="provinces/%E5%A4%A9%E6%B4%A5.html" class="ranking-item">
+                        <div class="ranking-number top-three">2</div>
+                        <div class="ranking-province">天津</div>
+                        <div class="ranking-temp cold-temp">-8.1°C</div>
+                    </a>
+                    
+                    <a href="provinces/%E5%8C%97%E4%BA%AC.html" class="ranking-item">
+                        <div class="ranking-number top-three">3</div>
+                        <div class="ranking-province">北京</div>
+                        <div class="ranking-temp cold-temp">-7°C</div>
+                    </a>
+                    
+                    <a href="provinces/%E5%B1%B1%E8%A5%BF.html" class="ranking-item">
+                        <div class="ranking-number ">4</div>
+                        <div class="ranking-province">山西</div>
+                        <div class="ranking-temp cold-temp">-5.8°C</div>
+                    </a>
+                    
+                    <a href="provinces/%E6%B2%B3%E5%8C%97.html" class="ranking-item">
+                        <div class="ranking-number ">5</div>
+                        <div class="ranking-province">河北</div>
+                        <div class="ranking-temp cold-temp">-5°C</div>
+                    </a>
+                    
+                </div>
+            </div>
+
+            <!-- Google AdSense 广告位 -->
+            <div class="ad-container">
+                <!-- 在这里插入 Google AdSense 代码 -->
+                <div class="ad-placeholder">广告位</div>
+            </div>
+        </div>
+    </main>
+
+    <footer class="footer">
+        <div class="container">
+            <p>数据来源: 中国气象局</p>
+            <p>© 2024 中国气温排行榜 - 每小时自动更新</p>
+        </div>
+    </footer>
+
+    <script src="assets/js/main.js"></script>
+    <script>
+        // 地图数据
+        const mapData = [{"name":"河北","value":-5},{"name":"山西","value":-5.8},{"name":"北京","value":-7},{"name":"天津","value":-8.1},{"name":"内蒙古","value":-22.1}];
+        const minTemp = -22.1;
+        const maxTemp = -5;
+
+        initChinaMap(mapData, minTemp, maxTemp);
+    </script>
+</body>
+</html>
