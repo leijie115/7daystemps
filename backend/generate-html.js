@@ -30,8 +30,8 @@ function getProvinceConfig(provinceName) {
   const cleanName = provinceName.replace(/(省|市|自治区|特别行政区|壮族|回族|维吾尔)$/g, '');
 
   return PROVINCES_DATA.find(p => {
-    const pCleanName = p.name.replace(/(省|市|自治区|特别行政区|壮族|回族|维吾尔)$/g, '');
-    return p.name === provinceName || pCleanName === cleanName || p.name.includes(cleanName);
+    const pCleanName = p.zh_name.replace(/(省|市|自治区|特别行政区|壮族|回族|维吾尔)$/g, '');
+    return p.zh_name === provinceName || pCleanName === cleanName || p.zh_name.includes(cleanName) || p.full_name === provinceName;
   });
 }
 
@@ -55,6 +55,7 @@ async function getProvinceTemperatures() {
       temperature: parseFloat(row.latest_temp.toFixed(1)),
       adcode: config ? config.adcode : null,
       enName: config ? config.en_name : row.province,
+      fullName: config ? config.full_name : row.province,
       code: config ? config.code : null,
       cities: config ? config.cities : []
     };
@@ -470,26 +471,34 @@ async function generateIndex(provinceData, forecastData) {
             const chartDom = document.getElementById('main-map');
             const myChart = echarts.init(chartDom);
 
-            // 省份数据
+            // 省份数据 - 直接使用provinces.js中的full_name
             const data = ${JSON.stringify(provinceData.map(item => ({
-              name: item.province,
+              name: item.fullName || item.province,
               value: item.temperature
             })))};
 
             try {
                 const res = await fetch('https://geo.datav.aliyun.com/areas_v3/bound/100000_full.json');
                 const geoJson = await res.json();
+
+                // 调试：输出地图中的省份名称
+                console.log('地图GeoJSON中的省份名称:', geoJson.features.map(f => f.properties.name));
+
                 echarts.registerMap('china', geoJson);
             } catch(e) {
                 console.error('Map Load Error', e);
                 return;
             }
 
-            // 创建省份名称到温度的映射
+            // 创建省份名称到温度的映射（使用标准化名称）
             const tempMap = {};
             data.forEach(item => {
                 tempMap[item.name] = item.value;
             });
+
+            // 调试输出
+            console.log('地图数据:', data);
+            console.log('温度映射:', tempMap);
 
             myChart.setOption({
                 backgroundColor: 'transparent',
@@ -519,6 +528,7 @@ async function generateIndex(provinceData, forecastData) {
                     label: {
                         show: true,
                         fontSize: 10,
+                        color: '#ffffff',
                         textBorderColor: '#111827',
                         textBorderWidth: 2,
                         formatter: (params) => {
@@ -527,13 +537,6 @@ async function generateIndex(provinceData, forecastData) {
                                 return \`\${params.name}\\n\${temp}°\`;
                             }
                             return params.name;
-                        },
-                        color: (params) => {
-                            const temp = tempMap[params.name];
-                            if (temp !== undefined) {
-                                return getColorForTemp(temp);
-                            }
-                            return '#e5e7eb';
                         }
                     },
                     itemStyle: { areaColor: '#1f2937', borderColor: '#111', borderWidth: 1 },
@@ -542,19 +545,13 @@ async function generateIndex(provinceData, forecastData) {
                         label: {
                             show: true,
                             fontSize: 12,
+                            color: '#ffffff',
                             formatter: (params) => {
                                 const temp = tempMap[params.name];
                                 if (temp !== undefined) {
                                     return \`\${params.name}\\n\${temp}°C\`;
                                 }
                                 return params.name;
-                            },
-                            color: (params) => {
-                                const temp = tempMap[params.name];
-                                if (temp !== undefined) {
-                                    return getColorForTemp(temp);
-                                }
-                                return '#fff';
                             }
                         }
                     }
