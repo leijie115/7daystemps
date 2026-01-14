@@ -62,10 +62,10 @@ async function getProvinceTemperaturesByDate(date = new Date()) {
   const endOfDay = new Date(date);
   endOfDay.setHours(23, 59, 59, 999);
 
-  // 查询该日期内每个省份所有城市的温度和风速
-  // 获取最高温、最低温、最大风速
+  // 查询该日期内每个省份所有城市的温度、风速和天气描述
+  // 获取最高温、最低温、最大风速、最新天气描述
   const query = `
-    SELECT MAX(temperature) as max_temp, MIN(temperature) as min_temp, MAX(windSpeed) as max_wind
+    SELECT MAX(temperature) as max_temp, MIN(temperature) as min_temp, MAX(windSpeed) as max_wind, LAST(weatherDesc) as weather_desc
     FROM weather
     WHERE time >= '${startOfDay.toISOString()}' AND time <= '${endOfDay.toISOString()}'
     GROUP BY province
@@ -82,6 +82,7 @@ async function getProvinceTemperaturesByDate(date = new Date()) {
       maxTemp: row.max_temp ? parseFloat(row.max_temp.toFixed(1)) : null,
       minTemp: row.min_temp ? parseFloat(row.min_temp.toFixed(1)) : null,
       windSpeed: getWindSpeed(row.max_wind),
+      weatherDesc: row.weather_desc || '未知',
       adcode: config ? config.adcode : null,
       enName: config ? config.en_name : row.province,
       fullName: config ? config.full_name : row.province,
@@ -370,7 +371,7 @@ async function generateIndex(provinceData, forecastData) {
                                 <div>
                                     <h3 data-role="title" class="font-semibold text-slate-700 dark:text-gray-300 text-sm md:text-base">${item.province}</h3>
                                     <div class="text-xs text-slate-500 dark:text-gray-500 flex gap-2 items-center mt-0.5">
-                                        <span>晴</span><span class="w-1 h-1 rounded-full bg-slate-400 dark:bg-gray-600"></span><span>风速: ${item.windSpeed || '0'} m/s</span>
+                                        <span>${item.weatherDesc || '未知'}</span><span class="w-1 h-1 rounded-full bg-slate-400 dark:bg-gray-600"></span><span>风速: ${item.windSpeed || '0'} m/s</span>
                                     </div>
                                 </div>
                             </div>

@@ -28,7 +28,8 @@ const influx = new Influx.InfluxDB({
         pressure: Influx.FieldType.FLOAT,
         humidity: Influx.FieldType.STRING,
         cloudCover: Influx.FieldType.STRING,
-        weatherCode: Influx.FieldType.STRING
+        weatherCode: Influx.FieldType.STRING,
+        weatherDesc: Influx.FieldType.STRING
       },
       tags: [
         'province',
@@ -165,6 +166,37 @@ function extractDayDates(html, baseDate) {
 }
 
 /**
+ * 从 dayList 提取天气代码和中文描述的映射关系
+ */
+function extractWeatherCodeMapping(html) {
+  const $ = cheerio.load(html);
+  const weatherCodeMap = {};
+
+  // 遍历每一天的数据
+  $('#dayList .day').each((_, element) => {
+    const dayItems = $(element).find('.day-item');
+
+    // 白天天气: 第2个是图标(weatherCode), 第3个是中文描述
+    const dayIcon = dayItems.eq(1).find('img').attr('src');
+    const dayDesc = dayItems.eq(2).text().trim();
+    const dayCodeMatch = dayIcon && dayIcon.match(/w(\d+)\.png/);
+    if (dayCodeMatch && dayDesc) {
+      weatherCodeMap[dayCodeMatch[1]] = dayDesc;
+    }
+
+    // 夜间天气: 第7个是图标(weatherCode), 第8个是中文描述
+    const nightIcon = dayItems.eq(6).find('img').attr('src');
+    const nightDesc = dayItems.eq(7).text().trim();
+    const nightCodeMatch = nightIcon && nightIcon.match(/w(\d+)\.png/);
+    if (nightCodeMatch && nightDesc) {
+      weatherCodeMap[nightCodeMatch[1]] = nightDesc;
+    }
+  });
+
+  return weatherCodeMap;
+}
+
+/**
  * 解析HTML中的天气数据
  */
 function parseWeatherData(html, stationId, cityName, provinceName) {
@@ -178,6 +210,10 @@ function parseWeatherData(html, stationId, cityName, provinceName) {
   // 提取每天的日期
   const dayDates = extractDayDates(html, baseDate);
   console.log(`  解析到 ${dayDates.length} 天的日期信息`);
+
+  // 提取天气代码和中文描述的映射关系
+  const weatherCodeMap = extractWeatherCodeMapping(html);
+  console.log(`  天气代码映射: ${JSON.stringify(weatherCodeMap)}`);
 
   // 解析7天的逐小时天气数据
   for (let day = 0; day < 7; day++) {
@@ -250,11 +286,13 @@ function parseWeatherData(html, stationId, cityName, provinceName) {
 
     // 组合数据
     for (let i = 0; i < times.length; i++) {
+      const weatherCode = weatherIcons[i] || '0';
       weatherData.push({
         day: day,
         dayDate: dayDates[day] || null,
         time: times[i],
-        weatherCode: weatherIcons[i] || '0',
+        weatherCode: weatherCode,
+        weatherDesc: weatherCodeMap[weatherCode] || '未知',
         temperature: temps[i] || 0,
         precipitation: precipitations[i] || '',
         windSpeed: windSpeeds[i] || '',
@@ -332,7 +370,8 @@ async function fetchCityWeather(stationId, cityName, provinceName) {
           pressure: processWeatherValue(data.pressure, 'pressure'),
           humidity: processWeatherValue(data.humidity, 'humidity'),
           cloudCover: processWeatherValue(data.cloudCover, 'cloudCover'),
-          weatherCode: data.weatherCode  // 移到 fields 中，这样相同时间的数据会被覆盖
+          weatherCode: data.weatherCode,
+          weatherDesc: data.weatherDesc
         },
         timestamp: dataTime
       });
