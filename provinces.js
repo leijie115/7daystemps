@@ -4,10 +4,10 @@
  * 更新时间: 2026-01-13
  */
 
+
 module.exports = [
   {
-    "name": "Beijing",
-    "zh_name": "北京",
+    "name": "北京",
     "full_name": "北京市",
     "en_name": "Beijing",
     "code": "ABJ",
@@ -76,8 +76,7 @@ module.exports = [
     ]
   },
   {
-    "name": "Tianjin",
-    "zh_name": "天津",
+    "name": "天津",
     "full_name": "天津市",
     "en_name": "Tianjin",
     "code": "ATJ",
@@ -130,8 +129,7 @@ module.exports = [
     ]
   },
   {
-    "name": "Hebei",
-    "zh_name": "河北",
+    "name": "河北",
     "full_name": "河北省",
     "en_name": "Hebei",
     "code": "AHE",
@@ -716,8 +714,7 @@ module.exports = [
     ]
   },
   {
-    "name": "Shanxi",
-    "zh_name": "山西",
+    "name": "山西",
     "full_name": "山西省",
     "en_name": "Shanxi",
     "code": "ASX",
@@ -1162,8 +1159,7 @@ module.exports = [
     ]
   },
   {
-    "name": "Neimenggu",
-    "zh_name": "内蒙古",
+    "name": "内蒙古",
     "full_name": "内蒙古自治区",
     "en_name": "Inner Mongolia",
     "code": "ANM",
@@ -1652,8 +1648,7 @@ module.exports = [
     ]
   },
   {
-    "name": "Liaoning",
-    "zh_name": "辽宁",
+    "name": "辽宁",
     "full_name": "辽宁省",
     "en_name": "Liaoning",
     "code": "ALN",
@@ -1886,8 +1881,7 @@ module.exports = [
     ]
   },
   {
-    "name": "Jilin",
-    "zh_name": "吉林",
+    "name": "吉林",
     "full_name": "吉林省",
     "en_name": "Jilin",
     "code": "AJL",
@@ -2096,8 +2090,7 @@ module.exports = [
     ]
   },
   {
-    "name": "Heilongjiang",
-    "zh_name": "黑龙江",
+    "name": "黑龙江",
     "full_name": "黑龙江省",
     "en_name": "Heilongjiang",
     "code": "AHL",
@@ -2438,8 +2431,7 @@ module.exports = [
     ]
   },
   {
-    "name": "Shanghai",
-    "zh_name": "上海",
+    "name": "上海",
     "full_name": "上海市",
     "en_name": "Shanghai",
     "code": "ASH",
@@ -2488,8 +2480,7 @@ module.exports = [
     ]
   },
   {
-    "name": "Jiangsu",
-    "zh_name": "江苏",
+    "name": "江苏",
     "full_name": "江苏省",
     "en_name": "Jiangsu",
     "code": "AJS",
@@ -2770,8 +2761,7 @@ module.exports = [
     ]
   },
   {
-    "name": "Zhejiang",
-    "zh_name": "浙江",
+    "name": "浙江",
     "full_name": "浙江省",
     "en_name": "Zhejiang",
     "code": "AZJ",
@@ -3128,8 +3118,7 @@ module.exports = [
     ]
   },
   {
-    "name": "Anhui",
-    "zh_name": "安徽",
+    "name": "安徽",
     "full_name": "安徽省",
     "en_name": "Anhui",
     "code": "AAH",
@@ -3458,8 +3447,7 @@ module.exports = [
     ]
   },
   {
-    "name": "Fujian",
-    "zh_name": "福建",
+    "name": "福建",
     "full_name": "福建省",
     "en_name": "Fujian",
     "code": "AFJ",
@@ -3744,8 +3732,7 @@ module.exports = [
     ]
   },
   {
-    "name": "Jiangxi",
-    "zh_name": "江西",
+    "name": "江西",
     "full_name": "江西省",
     "en_name": "Jiangxi",
     "code": "AJX",
@@ -4126,8 +4113,7 @@ module.exports = [
     ]
   },
   {
-    "name": "Shandong",
-    "zh_name": "山东",
+    "name": "山东",
     "full_name": "山东省",
     "en_name": "Shandong",
     "code": "ASD",
@@ -4624,8 +4610,7 @@ module.exports = [
     ]
   },
   {
-    "name": "Henan",
-    "zh_name": "河南",
+    "name": "河南",
     "full_name": "河南省",
     "en_name": "Henan",
     "code": "AHA",
@@ -5110,8 +5095,7 @@ module.exports = [
     ]
   },
   {
-    "name": "Hubei",
-    "zh_name": "湖北",
+    "name": "湖北",
     "full_name": "湖北省",
     "en_name": "Hubei",
     "code": "AHB",
@@ -5448,8 +5432,7 @@ module.exports = [
     ]
   },
   {
-    "name": "Hunan",
-    "zh_name": "湖南",
+    "name": "湖南",
     "full_name": "湖南省",
     "en_name": "Hunan",
     "code": "AHN",
@@ -5858,8 +5841,7 @@ module.exports = [
     ]
   },
   {
-    "name": "Guangdong",
-    "zh_name": "广东",
+    "name": "广东",
     "full_name": "广东省",
     "en_name": "Guangdong",
     "code": "AGD",
@@ -6212,8 +6194,7 @@ module.exports = [
     ]
   },
   {
-    "name": "Guangxi",
-    "zh_name": "广西",
+    "name": "广西",
     "full_name": "广西壮族自治区",
     "en_name": "Guangxi",
     "code": "AGX",
@@ -6586,8 +6567,7 @@ module.exports = [
     ]
   },
   {
-    "name": "Hainan",
-    "zh_name": "海南",
+    "name": "海南",
     "full_name": "海南省",
     "en_name": "Hainan",
     "code": "AHI",
@@ -6684,8 +6664,7 @@ module.exports = [
     ]
   },
   {
-    "name": "Chongqing",
-    "zh_name": "重庆",
+    "name": "重庆",
     "full_name": "重庆市",
     "en_name": "Chongqing",
     "code": "ACQ",
@@ -6830,8 +6809,7 @@ module.exports = [
     ]
   },
   {
-    "name": "Sichuan",
-    "zh_name": "四川",
+    "name": "四川",
     "full_name": "四川省",
     "en_name": "Sichuan",
     "code": "ASC",
@@ -7492,8 +7470,7 @@ module.exports = [
     ]
   },
   {
-    "name": "Guizhou",
-    "zh_name": "贵州",
+    "name": "贵州",
     "full_name": "贵州省",
     "en_name": "Guizhou",
     "code": "AGZ",
@@ -7838,8 +7815,7 @@ module.exports = [
     ]
   },
   {
-    "name": "Yunnan",
-    "zh_name": "云南",
+    "name": "云南",
     "full_name": "云南省",
     "en_name": "Yunnan",
     "code": "AYN",
@@ -8348,8 +8324,7 @@ module.exports = [
     ]
   },
   {
-    "name": "Xizang",
-    "zh_name": "西藏",
+    "name": "西藏",
     "full_name": "西藏自治区",
     "en_name": "Tibet",
     "code": "AXZ",
@@ -8654,8 +8629,7 @@ module.exports = [
     ]
   },
   {
-    "name": "Shaanxi",
-    "zh_name": "陕西",
+    "name": "陕西",
     "full_name": "陕西省",
     "en_name": "Shaanxi",
     "code": "ASN",
@@ -9060,8 +9034,7 @@ module.exports = [
     ]
   },
   {
-    "name": "Gansu",
-    "zh_name": "甘肃",
+    "name": "甘肃",
     "full_name": "甘肃省",
     "en_name": "Gansu",
     "code": "AGS",
@@ -9386,8 +9359,7 @@ module.exports = [
     ]
   },
   {
-    "name": "Qinghai",
-    "zh_name": "青海",
+    "name": "青海",
     "full_name": "青海省",
     "en_name": "Qinghai",
     "code": "AQH",
@@ -9564,8 +9536,7 @@ module.exports = [
     ]
   },
   {
-    "name": "Ningxia",
-    "zh_name": "宁夏",
+    "name": "宁夏",
     "full_name": "宁夏回族自治区",
     "en_name": "Ningxia",
     "code": "ANX",
@@ -9654,8 +9625,7 @@ module.exports = [
     ]
   },
   {
-    "name": "Xinjiang",
-    "zh_name": "新疆",
+    "name": "新疆",
     "full_name": "新疆维吾尔自治区",
     "en_name": "Xinjiang",
     "code": "AXJ",
@@ -10048,8 +10018,7 @@ module.exports = [
     ]
   },
   {
-    "name": "Xianggang",
-    "zh_name": "香港",
+    "name": "香港",
     "full_name": "香港特别行政区",
     "en_name": "Hong Kong",
     "code": "AXG",
@@ -10062,8 +10031,7 @@ module.exports = [
     ]
   },
   {
-    "name": "Aomen",
-    "zh_name": "澳门",
+    "name": "澳门",
     "full_name": "澳门特别行政区",
     "en_name": "Macau",
     "code": "AAM",
@@ -10076,8 +10044,7 @@ module.exports = [
     ]
   },
   {
-    "name": "Taiwan",
-    "zh_name": "台湾",
+    "name": "台湾",
     "full_name": "台湾省",
     "en_name": "Taiwan",
     "code": "ATW",
@@ -10097,4 +10064,4 @@ module.exports = [
       }
     ]
   }
-];
+]

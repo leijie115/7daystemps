@@ -30,19 +30,44 @@ function getProvinceConfig(provinceName) {
   const cleanName = provinceName.replace(/(省|市|自治区|特别行政区|壮族|回族|维吾尔)$/g, '');
 
   return PROVINCES_DATA.find(p => {
-    const pCleanName = p.zh_name.replace(/(省|市|自治区|特别行政区|壮族|回族|维吾尔)$/g, '');
-    return p.zh_name === provinceName || pCleanName === cleanName || p.zh_name.includes(cleanName) || p.full_name === provinceName;
+    const pCleanName = p.name.replace(/(省|市|自治区|特别行政区|壮族|回族|维吾尔)$/g, '');
+    return p.name === provinceName || pCleanName === cleanName || p.name.includes(cleanName) || p.full_name === provinceName;
   });
 }
 
 /**
- * 获取所有省份的最新温度数据
+ * 获取风速值（直接返回数据库中的值，已包含单位）
  */
-async function getProvinceTemperatures() {
+function getWindSpeed(windSpeedValue) {
+  return windSpeedValue || '0';
+}
+
+/**
+ * 获取指定日期所有省份的温度数据
+ * @param {Date} date - 查询日期，默认为今天
+ * @returns {Promise<Array>} 省份温度数据数组
+ *
+ * 逻辑：
+ * 1. 查询该日期内所有城市的温度数据
+ * 2. 按省份分组，获取每个省份所有城市中的：
+ *    - 最高温度（作为该省份的代表温度）
+ *    - 最低温度
+ *    - 最大风速
+ */
+async function getProvinceTemperaturesByDate(date = new Date()) {
+  // 获取日期的开始和结束时间
+  const startOfDay = new Date(date);
+  startOfDay.setHours(0, 0, 0, 0);
+
+  const endOfDay = new Date(date);
+  endOfDay.setHours(23, 59, 59, 999);
+
+  // 查询该日期内每个省份所有城市的温度和风速
+  // 获取最高温、最低温、最大风速
   const query = `
-    SELECT LAST(temperature) as latest_temp
+    SELECT MAX(temperature) as max_temp, MIN(temperature) as min_temp, MAX(windSpeed) as max_wind
     FROM weather
-    WHERE time > now() - 24h
+    WHERE time >= '${startOfDay.toISOString()}' AND time <= '${endOfDay.toISOString()}'
     GROUP BY province
   `;
 
@@ -50,16 +75,27 @@ async function getProvinceTemperatures() {
 
   return results.map(row => {
     const config = getProvinceConfig(row.province);
+
     return {
       province: row.province,
-      temperature: parseFloat(row.latest_temp.toFixed(1)),
+      temperature: row.max_temp ? parseFloat(row.max_temp.toFixed(1)) : null,
+      maxTemp: row.max_temp ? parseFloat(row.max_temp.toFixed(1)) : null,
+      minTemp: row.min_temp ? parseFloat(row.min_temp.toFixed(1)) : null,
+      windSpeed: getWindSpeed(row.max_wind),
       adcode: config ? config.adcode : null,
       enName: config ? config.en_name : row.province,
       fullName: config ? config.full_name : row.province,
       code: config ? config.code : null,
       cities: config ? config.cities : []
     };
-  }).sort((a, b) => b.temperature - a.temperature);
+  }).sort((a, b) => (b.temperature || -999) - (a.temperature || -999));
+}
+
+/**
+ * 获取所有省份今天的温度数据（兼容旧接口）
+ */
+async function getProvinceTemperatures() {
+  return await getProvinceTemperaturesByDate(new Date());
 }
 
 /**
@@ -83,56 +119,35 @@ async function getCityTemperatures(province) {
 
 /**
  * 获取所有省份未来7天的预报数据
+ * 使用getProvinceTemperaturesByDate函数逐天查询
  */
 async function getAllProvincesForecast() {
-  const query = `
-    SELECT MAX(temperature) as max_temp, MIN(temperature) as min_temp
-    FROM weather
-    WHERE time >= now() AND time < now() + 7d
-    GROUP BY time(1d), province
-    ORDER BY time ASC
-  `;
-
-  const results = await influx.query(query);
-
-  // 按省份组织数据
+  const dayNames = ['今天', '周一', '周二', '周三', '周四', '周五', '周六', '周日'];
   const forecastByProvince = {};
 
-  results.forEach(row => {
-    const province = row.province;
-    if (!forecastByProvince[province]) {
-      forecastByProvince[province] = [];
-    }
+  // 逐天查询未来7天的数据
+  for (let i = 0; i < 7; i++) {
+    const date = new Date();
+    date.setDate(date.getDate() + i);
 
-    forecastByProvince[province].push({
-      max_temp: row.max_temp ? parseFloat(row.max_temp.toFixed(1)) : null,
-      min_temp: row.min_temp ? parseFloat(row.min_temp.toFixed(1)) : null,
-      time: row.time
-    });
-  });
+    // 使用统一的函数获取该日期所有省份的数据
+    const dayData = await getProvinceTemperaturesByDate(date);
 
-  // 转换为7天格式
-  const dayNames = ['今天', '周一', '周二', '周三', '周四', '周五', '周六', '周日'];
-  const formattedForecasts = {};
+    // 组织数据到各个省份
+    dayData.forEach(provinceData => {
+      if (!forecastByProvince[provinceData.province]) {
+        forecastByProvince[provinceData.province] = [];
+      }
 
-  Object.keys(forecastByProvince).forEach(province => {
-    const forecast = [];
-    for (let i = 0; i < 7; i++) {
-      const date = new Date();
-      date.setDate(date.getDate() + i);
-
-      const dayData = forecastByProvince[province][i];
-
-      forecast.push({
+      forecastByProvince[provinceData.province].push({
         dayName: i === 0 ? '今天' : dayNames[date.getDay()],
-        high: dayData && dayData.max_temp !== null ? dayData.max_temp : null,
-        low: dayData && dayData.min_temp !== null ? dayData.min_temp : null
+        high: provinceData.maxTemp,
+        low: provinceData.minTemp
       });
-    }
-    formattedForecasts[province] = forecast;
-  });
+    });
+  }
 
-  return formattedForecasts;
+  return forecastByProvince;
 }
 
 /**
@@ -249,9 +264,6 @@ async function generateIndex(provinceData, forecastData) {
 
                         <!-- 温度图例 -->
                         <div class="flex flex-col gap-1 items-end p-2 rounded-lg bg-gray-900/60 backdrop-blur-md border border-gray-700/50 shadow-xl">
-                            <div class="text-[10px] text-gray-400 font-semibold mb-1 uppercase tracking-wider w-full text-right px-1">
-                                Temp Scale
-                            </div>
                             <div class="flex flex-col gap-1">
                                 ${[
                                   { label: '>35°C', color: '#ef4444' },
@@ -302,7 +314,7 @@ async function generateIndex(provinceData, forecastData) {
             <div class="p-6 border-b border-gray-800 bg-gray-900/95 backdrop-blur z-10 sticky top-0">
                 <div class="flex items-center justify-between mb-4">
                     <div>
-                        <h2 class="text-xl font-bold text-white tracking-tight">全国 排行</h2>
+                        <h2 class="text-xl font-bold text-white tracking-tight">排行</h2>
                         <span class="text-xs text-gray-500">${provinceData.length} 地区</span>
                     </div>
                 </div>
@@ -347,7 +359,7 @@ async function generateIndex(provinceData, forecastData) {
                                 <div>
                                     <h3 data-role="title" class="font-semibold text-gray-300 text-sm md:text-base">${item.province}</h3>
                                     <div class="text-xs text-gray-500 flex gap-2 items-center mt-0.5">
-                                        <span>晴</span><span class="w-1 h-1 rounded-full bg-gray-600"></span><span>风速: ${Math.floor(Math.random() * 20)} km/h</span>
+                                        <span>晴</span><span class="w-1 h-1 rounded-full bg-gray-600"></span><span>风速: ${item.windSpeed || '0'} m/s</span>
                                     </div>
                                 </div>
                             </div>

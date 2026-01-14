@@ -22,10 +22,10 @@ const influx = new Influx.InfluxDB({
       measurement: 'weather',
       fields: {
         temperature: Influx.FieldType.FLOAT,
-        precipitation: Influx.FieldType.STRING,
-        windSpeed: Influx.FieldType.STRING,
+        precipitation: Influx.FieldType.FLOAT,
+        windSpeed: Influx.FieldType.FLOAT,
         windDirection: Influx.FieldType.STRING,
-        pressure: Influx.FieldType.STRING,
+        pressure: Influx.FieldType.FLOAT,
         humidity: Influx.FieldType.STRING,
         cloudCover: Influx.FieldType.STRING,
         weatherCode: Influx.FieldType.STRING
@@ -42,6 +42,48 @@ const influx = new Influx.InfluxDB({
 // 延迟函数
 function delay(ms) {
   return new Promise(resolve => setTimeout(resolve, ms));
+}
+
+/**
+ * 处理数据，去掉单位
+ * 单位说明：
+ * - temperature: ℃
+ * - precipitation: mm (无降水时为0)
+ * - windSpeed: m/s
+ * - pressure: hPa
+ * - humidity: %
+ * - cloudCover: %
+ */
+function processWeatherValue(value, type) {
+  if (!value || value === '') return null;
+
+  const trimmed = value.trim();
+
+  switch(type) {
+    case 'pressure':
+      // 845.1hPa -> 845.1
+      return parseFloat(trimmed.replace('hPa', '')) || null;
+
+    case 'precipitation':
+      // "无降水" -> 0
+      // "0.3mm" -> 0.3
+      if (trimmed === '无降水' || trimmed === '无' || trimmed === '-') {
+        return 0;
+      }
+      return parseFloat(trimmed.replace('mm', '')) || 0;
+
+    case 'windSpeed':
+      // "2.5m/s" -> 2.5
+      return parseFloat(trimmed.replace('m/s', '')) || null;
+
+    case 'humidity':
+    case 'cloudCover':
+      // "65%" -> 65
+      return parseFloat(trimmed.replace('%', '')) || null;
+
+    default:
+      return trimmed;
+  }
 }
 
 /**
@@ -284,12 +326,12 @@ async function fetchCityWeather(stationId, cityName, provinceName) {
         },
         fields: {
           temperature: data.temperature,
-          precipitation: data.precipitation,
-          windSpeed: data.windSpeed,
+          precipitation: processWeatherValue(data.precipitation, 'precipitation'),
+          windSpeed: processWeatherValue(data.windSpeed, 'windSpeed'),
           windDirection: data.windDirection,
-          pressure: data.pressure,
-          humidity: data.humidity,
-          cloudCover: data.cloudCover,
+          pressure: processWeatherValue(data.pressure, 'pressure'),
+          humidity: processWeatherValue(data.humidity, 'humidity'),
+          cloudCover: processWeatherValue(data.cloudCover, 'cloudCover'),
           weatherCode: data.weatherCode  // 移到 fields 中，这样相同时间的数据会被覆盖
         },
         timestamp: dataTime
