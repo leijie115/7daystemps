@@ -165,6 +165,111 @@ function getColorForTemp(temp) {
 }
 
 /**
+ * 多语言配置对象
+ */
+const i18n = {
+  zh: {
+    title: '中国气温排行榜 - 全国实时气温数据',
+    description: '中国气温排行榜 - {date}全国各省市气温数据',
+    keywords: '中国气温,温度排行,天气,气温地图,实时温度',
+    mainHeading: '中国气温排行',
+    tempScale: 'Temp Scale',
+    rankingTitle: '全国 排行',
+    regions: '地区',
+    sortHot: '高温',
+    sortCold: '低温',
+    wind: '风速',
+    unknown: '未知',
+    today: '今天',
+    monday: '周一',
+    tuesday: '周二',
+    wednesday: '周三',
+    thursday: '周四',
+    friday: '周五',
+    saturday: '周六',
+    sunday: '周日',
+    tempUnit: '°C',
+    windUnit: 'm/s'
+  },
+  en: {
+    title: 'China Temperature Rankings - Real-time Temperature Data',
+    description: 'China Temperature Rankings - {date} Temperature data of provinces and cities across China',
+    keywords: 'China temperature,temperature rankings,weather,temperature map,real-time temperature',
+    mainHeading: 'China Temp Rankings',
+    tempScale: 'Temp Scale',
+    rankingTitle: 'National Rankings',
+    regions: 'Regions',
+    sortHot: 'Hot',
+    sortCold: 'Cold',
+    wind: 'Wind',
+    unknown: 'Unknown',
+    today: 'Today',
+    monday: 'Mon',
+    tuesday: 'Tue',
+    wednesday: 'Wed',
+    thursday: 'Thu',
+    friday: 'Fri',
+    saturday: 'Sat',
+    sunday: 'Sun',
+    tempUnit: '°C',
+    windUnit: 'm/s'
+  }
+};
+
+/**
+ * 天气描述中英文对照表
+ */
+const weatherDescMap = {
+  '晴': 'Sunny',
+  '多云': 'Cloudy',
+  '阴': 'Overcast',
+  '阵雨': 'Shower',
+  '雷阵雨': 'Thunderstorm',
+  '雷阵雨伴有冰雹': 'Thunderstorm with Hail',
+  '雨夹雪': 'Sleet',
+  '小雨': 'Light Rain',
+  '中雨': 'Moderate Rain',
+  '大雨': 'Heavy Rain',
+  '暴雨': 'Storm',
+  '大暴雨': 'Heavy Storm',
+  '特大暴雨': 'Severe Storm',
+  '阵雪': 'Snow Shower',
+  '小雪': 'Light Snow',
+  '中雪': 'Moderate Snow',
+  '大雪': 'Heavy Snow',
+  '暴雪': 'Snowstorm',
+  '雾': 'Fog',
+  '冻雨': 'Freezing Rain',
+  '沙尘暴': 'Sandstorm',
+  '小雨-中雨': 'Light to Moderate Rain',
+  '中雨-大雨': 'Moderate to Heavy Rain',
+  '大雨-暴雨': 'Heavy Rain to Storm',
+  '暴雨-大暴雨': 'Storm to Heavy Storm',
+  '大暴雨-特大暴雨': 'Heavy Storm to Severe Storm',
+  '小雪-中雪': 'Light to Moderate Snow',
+  '中雪-大雪': 'Moderate to Heavy Snow',
+  '大雪-暴雪': 'Heavy Snow to Snowstorm',
+  '浮尘': 'Dust',
+  '扬沙': 'Sand',
+  '强沙尘暴': 'Severe Sandstorm',
+  '霾': 'Haze',
+  '未知': 'Unknown'
+};
+
+/**
+ * 翻译天气描述
+ * @param {string} weatherDesc - 中文天气描述
+ * @param {string} lang - 目标语言 ('zh' | 'en')
+ * @returns {string} 翻译后的天气描述
+ */
+function translateWeatherDesc(weatherDesc, lang) {
+  if (lang === 'zh') {
+    return weatherDesc;
+  }
+  return weatherDescMap[weatherDesc] || weatherDesc;
+}
+
+/**
  * 生成单个日期的HTML页面
  * @param {number} dayIndex - 天数索引 (0=今天, 1=明天, ...)
  * @param {Array} allForecastData - 包含7天数据的数组
@@ -199,13 +304,130 @@ async function generateDayPage(dayIndex, allForecastData, forecastData) {
   const descriptionDate = dayIndex === 0 ? '实时' : dateFormatted;
 
   const html = `<!DOCTYPE html>
-<html lang="zh-CN" class="dark">
+<html lang="en" class="dark">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="中国气温排行榜 - ${descriptionDate}全国各省市气温数据">
-    <meta name="keywords" content="中国气温,温度排行,天气,气温地图,实时温度,${dateFormatted}">
-    <title>中国气温排行榜 - 全国实时气温数据${titleSuffix}</title>
+    <meta name="description" content="China Temperature Rankings - ${descriptionDate} Temperature data across China">
+    <meta name="keywords" content="China temperature,temperature rankings,weather,temperature map,real-time temperature,${dateFormatted}">
+    <title>China Temperature Rankings - Real-time Temperature Data${titleSuffix}</title>
+    <script>
+      // 多语言配置
+      window.i18n = ${JSON.stringify(i18n)};
+
+      // 省份名称映射（fullName -> 中英文）
+      // 使用完整的provinces.js数据,确保覆盖所有省份
+      window.provinceNameMap = ${JSON.stringify(
+        (() => {
+          const map = {};
+
+          // 首先添加provinces.js中的所有省份
+          PROVINCES_DATA.forEach(p => {
+            const entry = {
+              zh: p.name,
+              en: p.en_name,
+              fullName: p.full_name
+            };
+
+            // 添加全称映射
+            map[p.full_name] = entry;
+
+            // 添加简称映射
+            if (p.name !== p.full_name) {
+              map[p.name] = entry;
+            }
+
+            // 添加去除后缀的映射
+            const cleanName = p.name.replace(/(省|市)$/g, '');
+            if (cleanName !== p.name) {
+              map[cleanName] = entry;
+            }
+          });
+
+          // 然后用当前数据覆盖（如果有的话）
+          provinceData.forEach(item => {
+            const fullName = item.fullName || item.province;
+            const entry = {
+              zh: item.province,
+              en: item.enName || item.province,
+              fullName: fullName
+            };
+
+            map[fullName] = entry;
+            map[item.province] = entry;
+
+            // 也添加去除后缀的版本
+            const cleanName = item.province.replace(/(省|市)$/g, '');
+            if (cleanName !== item.province) {
+              map[cleanName] = entry;
+            }
+          });
+
+          return map;
+        })()
+      )};
+
+      // 天气描述中英文对照表
+      window.weatherDescMap = ${JSON.stringify(weatherDescMap)};
+
+      // 翻译天气描述
+      window.translateWeatherDesc = function(weatherDesc, lang) {
+        if (lang === 'zh') {
+          return weatherDesc;
+        }
+        return window.weatherDescMap[weatherDesc] || weatherDesc;
+      };
+
+      // 获取省份显示名称（支持模糊匹配）
+      window.getProvinceName = function(geoName, lang) {
+        // 精确匹配
+        if (window.provinceNameMap[geoName]) {
+          return window.provinceNameMap[geoName][lang];
+        }
+
+        // 模糊匹配：移除常见后缀
+        const cleanName = geoName.replace(/(省|市|自治区|特别行政区|壮族|回族|维吾尔|蒙古族)$/g, '');
+
+        // 尝试查找匹配的省份
+        for (const [key, value] of Object.entries(window.provinceNameMap)) {
+          const cleanKey = key.replace(/(省|市|自治区|特别行政区|壮族|回族|维吾尔|蒙古族)$/g, '');
+
+          // 精确匹配清理后的名称
+          if (cleanKey === cleanName) {
+            return value[lang];
+          }
+
+          // 包含匹配（两个方向都试）
+          if (cleanKey.includes(cleanName) && cleanName.length >= 2) {
+            return value[lang];
+          }
+          if (cleanName.includes(cleanKey) && cleanKey.length >= 2) {
+            return value[lang];
+          }
+        }
+
+        // 如果还是找不到,尝试更激进的匹配
+        // 处理特殊情况: "内蒙古" vs "内蒙古自治区"
+        const specialCases = {
+          '内蒙古': '内蒙古自治区',
+          '广西': '广西壮族自治区',
+          '西藏': '西藏自治区',
+          '宁夏': '宁夏回族自治区',
+          '新疆': '新疆维吾尔自治区',
+          '香港': '香港特别行政区',
+          '澳门': '澳门特别行政区'
+        };
+
+        const normalized = specialCases[cleanName] || cleanName;
+        if (window.provinceNameMap[normalized]) {
+          return window.provinceNameMap[normalized][lang];
+        }
+
+        // 如果完全找不到,返回原始名称
+        console.warn('未找到省份映射:', geoName);
+        return geoName;
+      };
+    </script>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdn.jsdelivr.net/npm/echarts@5.4.3/dist/echarts.min.js"></script>
     <script>
@@ -268,8 +490,8 @@ async function generateDayPage(dayIndex, allForecastData, forecastData) {
             <div class="absolute top-0 left-0 w-full p-6 z-10 pointer-events-none">
                 <div class="flex justify-between items-start">
                     <div>
-                        <h1 class="text-3xl font-black tracking-tighter text-transparent bg-clip-text bg-gradient-to-r from-blue-500 to-emerald-500 drop-shadow-sm font-sans">
-                            中国气温排行
+                        <h1 id="main-heading" class="text-3xl font-black tracking-tighter text-transparent bg-clip-text bg-gradient-to-r from-blue-500 to-emerald-500 drop-shadow-sm font-sans">
+                            China Temp Rankings
                         </h1>
                     </div>
 
@@ -284,14 +506,14 @@ async function generateDayPage(dayIndex, allForecastData, forecastData) {
 
                             <!-- 语言切换 -->
                             <div class="flex bg-white/80 dark:bg-gray-800/80 backdrop-blur rounded-lg border border-slate-200 dark:border-gray-700 p-1">
-                                <a href="index.html" class="px-2 py-0.5 text-xs font-bold rounded bg-blue-600 text-white cursor-default">CN</a>
-                                <a href="index_en.html" class="px-2 py-0.5 text-xs font-bold rounded text-slate-500 dark:text-gray-400 hover:text-slate-900 dark:hover:text-white transition-colors">EN</a>
+                                <button onclick="switchLanguage('en')" id="lang-en" class="px-2 py-0.5 text-xs font-bold rounded bg-blue-600 text-white cursor-pointer">EN</button>
+                                <button onclick="switchLanguage('zh')" id="lang-zh" class="px-2 py-0.5 text-xs font-bold rounded text-slate-500 dark:text-gray-400 hover:text-slate-900 dark:hover:text-white transition-colors cursor-pointer">CN</button>
                             </div>
                         </div>
 
                         <!-- 温度图例 -->
                         <div class="flex flex-col gap-1 items-end p-2 rounded-lg bg-white/80 dark:bg-gray-900/60 backdrop-blur-md border border-slate-200 dark:border-gray-700/50 shadow-xl transition-colors duration-300">
-                            <div class="text-[10px] text-slate-500 dark:text-gray-400 font-semibold mb-1 uppercase tracking-wider w-full text-right px-1">Temp Scale</div>
+                            <div id="temp-scale-label" class="text-[10px] text-slate-500 dark:text-gray-400 font-semibold mb-1 uppercase tracking-wider w-full text-right px-1">Temp Scale</div>
                             <div class="flex flex-col gap-1">
                                 ${[
                                   { label: '>35°C', color: '#ef4444' },
@@ -321,10 +543,12 @@ async function generateDayPage(dayIndex, allForecastData, forecastData) {
             <!-- 底部覆盖层：日期选择器 (DaySelector) -->
             <div class="absolute bottom-6 left-1/2 -translate-x-1/2 z-10 flex gap-1.5 md:gap-2 p-1.5 bg-white/80 dark:bg-gray-900/80 backdrop-blur-md rounded-2xl border border-slate-200 dark:border-gray-700/50 shadow-2xl shadow-slate-300/50 dark:shadow-black/50 max-w-[95%] overflow-x-auto no-scrollbar pointer-events-auto transition-colors duration-300">
                 ${Array.from({length: 7}, (_, i) => {
-                  const days = ['今天', '周一', '周二', '周三', '周四', '周五', '周六', '周日'];
+                  const daysZh = ['今天', '周一', '周二', '周三', '周四', '周五', '周六', '周日'];
+                  const daysEn = ['Today', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
                   const date = new Date();
                   date.setDate(date.getDate() + i);
-                  const dayName = i === 0 ? '今天' : days[date.getDay()];
+                  const dayNameZh = i === 0 ? '今天' : daysZh[date.getDay()];
+                  const dayNameEn = i === 0 ? 'Today' : daysEn[date.getDay()];
                   const dateStr = date.toISOString().slice(0, 10).replace(/-/g, '');
                   const isActive = i === dayIndex;
 
@@ -346,7 +570,7 @@ async function generateDayPage(dayIndex, allForecastData, forecastData) {
 
                   return `
                   <a href="${href}" ${targetAttr} class="relative px-3 md:px-4 py-2 rounded-xl text-xs font-bold transition-all duration-300 whitespace-nowrap flex flex-col items-center justify-center gap-0.5 ${activeClass}">
-                      <span>${dayName}</span>
+                      <span class="day-label" data-day-zh="${dayNameZh}" data-day-en="${dayNameEn}">${dayNameEn}</span>
                       ${indicator}
                   </a>
                   `;
@@ -361,9 +585,9 @@ async function generateDayPage(dayIndex, allForecastData, forecastData) {
             <div class="p-6 border-b border-slate-200 dark:border-gray-800 bg-white/95 dark:bg-gray-900/95 backdrop-blur z-10 sticky top-0 transition-colors duration-300">
                 <div class="flex items-center justify-between mb-4">
                     <div class="flex flex-col">
-                        <h2 class="text-xl font-bold text-slate-900 dark:text-white tracking-tight">全国 排行</h2>
+                        <h2 id="ranking-title" class="text-xl font-bold text-slate-900 dark:text-white tracking-tight">National Rankings</h2>
                         <div class="flex items-center gap-2 mt-1">
-                            <span class="text-xs text-slate-500 dark:text-gray-500">${provinceData.length} 地区</span>
+                            <span class="text-xs text-slate-500 dark:text-gray-500">${provinceData.length} <span id="regions-label">Regions</span></span>
                         </div>
                     </div>
                 </div>
@@ -371,10 +595,10 @@ async function generateDayPage(dayIndex, allForecastData, forecastData) {
                 <!-- 排序控制 -->
                 <div class="flex p-1 bg-slate-100 dark:bg-gray-800 rounded-lg border border-slate-200 dark:border-gray-700">
                     <button onclick="sortList('desc')" id="btn-hot" class="flex-1 flex items-center justify-center gap-2 py-1.5 text-xs font-medium rounded-md transition-all bg-red-500/10 text-red-600 dark:text-red-400 shadow-sm ring-1 ring-red-500/50">
-                        高温
+                        Hot
                     </button>
                     <button onclick="sortList('asc')" id="btn-cold" class="flex-1 flex items-center justify-center gap-2 py-1.5 text-xs font-medium rounded-md transition-all text-slate-400 dark:text-gray-400 hover:text-slate-600 dark:hover:text-gray-200">
-                        低温
+                        Cold
                     </button>
                 </div>
             </div>
@@ -406,9 +630,9 @@ async function generateDayPage(dayIndex, allForecastData, forecastData) {
                                     ${index + 1}
                                 </span>
                                 <div>
-                                    <h3 data-role="title" class="font-semibold text-slate-700 dark:text-gray-300 text-sm md:text-base">${item.province}</h3>
+                                    <h3 data-role="title" data-province-zh="${item.province}" data-province-en="${item.enName || item.province}" class="font-semibold text-slate-700 dark:text-gray-300 text-sm md:text-base">${item.enName || item.province}</h3>
                                     <div class="text-xs text-slate-500 dark:text-gray-500 flex gap-2 items-center mt-0.5">
-                                        <span>${item.weatherDesc || '未知'}</span><span class="w-1 h-1 rounded-full bg-slate-400 dark:bg-gray-600"></span><span>风速: ${item.windSpeed || '0'} m/s</span>
+                                        <span class="weather-desc" data-weather-zh="${item.weatherDesc || '未知'}" data-weather-en="${translateWeatherDesc(item.weatherDesc || '未知', 'en')}">${translateWeatherDesc(item.weatherDesc || '未知', 'en')}</span><span class="w-1 h-1 rounded-full bg-slate-400 dark:bg-gray-600"></span><span class="wind-label">Wind</span>: ${item.windSpeed || '0'} m/s</span>
                                     </div>
                                 </div>
                             </div>
@@ -437,10 +661,16 @@ async function generateDayPage(dayIndex, allForecastData, forecastData) {
                                   const barHeight = hasData ? Math.max(10, Math.min(100, tempRange * 2)) : 20;
                                   const barColor = hasData ? getColorForTemp(day.high) : '#4b5563';
 
+                                  // 获取中英文星期
+                                  const daysZh = ['今天', '周一', '周二', '周三', '周四', '周五', '周六', '周日'];
+                                  const daysEn = ['Today', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
+                                  const dayNameIndex = daysZh.indexOf(day.dayName);
+                                  const dayNameEn = dayNameIndex >= 0 ? daysEn[dayNameIndex] : day.dayName;
+
                                   return `
                                 <div class="flex flex-col items-center group/day">
-                                    <span class="text-[9px] font-medium mb-1 ${idx === dayIndex ? 'text-blue-500' : 'text-slate-500 dark:text-gray-500'}">
-                                        ${day.dayName}
+                                    <span class="forecast-day-label text-[9px] font-medium mb-1 ${idx === dayIndex ? 'text-blue-500' : 'text-slate-500 dark:text-gray-500'}" data-day-zh="${day.dayName}" data-day-en="${dayNameEn}">
+                                        ${dayNameEn}
                                     </span>
                                     <div class="w-full bg-slate-200 dark:bg-gray-800/50 rounded-full h-20 relative w-1.5 md:w-2 mx-auto ring-1 ring-black/5 dark:ring-white/5">
                                         <div class="absolute w-full rounded-full opacity-80" style="bottom: ${bottomPos}%; height: ${barHeight}%; background-color: ${barColor};"></div>
@@ -465,7 +695,94 @@ async function generateDayPage(dayIndex, allForecastData, forecastData) {
 
     <script>
         let currentTheme = 'dark'; // 'light' | 'dark'
+        let currentLang = 'en'; // 'en' | 'zh' - 默认英文
         let tempMapData = {}; // 全局温度映射
+
+        // 初始化语言设置
+        function initLanguage() {
+            const savedLang = localStorage.getItem('preferredLanguage') || 'en';
+            currentLang = savedLang;
+            updateLanguageUI(savedLang);
+        }
+
+        // 切换语言
+        function switchLanguage(lang) {
+            if (lang === currentLang) return;
+
+            currentLang = lang;
+            localStorage.setItem('preferredLanguage', lang);
+            updateLanguageUI(lang);
+        }
+
+        // 更新UI语言
+        function updateLanguageUI(lang) {
+            const t = window.i18n[lang];
+
+            // 更新HTML lang属性
+            document.documentElement.lang = lang === 'zh' ? 'zh-CN' : 'en';
+
+            // 更新按钮状态
+            const langEn = document.getElementById('lang-en');
+            const langZh = document.getElementById('lang-zh');
+            const activeClass = 'px-2 py-0.5 text-xs font-bold rounded bg-blue-600 text-white cursor-pointer';
+            const inactiveClass = 'px-2 py-0.5 text-xs font-bold rounded text-slate-500 dark:text-gray-400 hover:text-slate-900 dark:hover:text-white transition-colors cursor-pointer';
+
+            if (lang === 'en') {
+                langEn.className = activeClass;
+                langZh.className = inactiveClass;
+            } else {
+                langEn.className = inactiveClass;
+                langZh.className = activeClass;
+            }
+
+            // 更新页面标题和meta
+            document.title = t.title;
+            document.querySelector('meta[name="description"]').content = t.description;
+
+            // 更新主标题
+            document.getElementById('main-heading').textContent = t.mainHeading;
+
+            // 更新温度图例标签
+            document.getElementById('temp-scale-label').textContent = t.tempScale;
+
+            // 更新排行榜标题
+            document.getElementById('ranking-title').textContent = t.rankingTitle;
+            document.getElementById('regions-label').textContent = t.regions;
+
+            // 更新排序按钮
+            document.getElementById('btn-hot').textContent = t.sortHot;
+            document.getElementById('btn-cold').textContent = t.sortCold;
+
+            // 更新省份名称
+            document.querySelectorAll('[data-province-zh]').forEach(el => {
+                el.textContent = lang === 'zh' ? el.dataset.provinceZh : el.dataset.provinceEn;
+            });
+
+            // 更新日期标签
+            document.querySelectorAll('.day-label').forEach(el => {
+                el.textContent = lang === 'zh' ? el.dataset.dayZh : el.dataset.dayEn;
+            });
+
+            // 更新预报日期标签
+            document.querySelectorAll('.forecast-day-label').forEach(el => {
+                el.textContent = lang === 'zh' ? el.dataset.dayZh : el.dataset.dayEn;
+            });
+
+            // 更新天气描述
+            document.querySelectorAll('.weather-desc').forEach(el => {
+                el.textContent = lang === 'zh' ? el.dataset.weatherZh : el.dataset.weatherEn;
+            });
+
+            // 更新风速标签
+            document.querySelectorAll('.wind-label').forEach(el => {
+                el.textContent = t.wind;
+            });
+
+            // 重绘地图（更新省份名称和主题）
+            if (window.myMapChart) {
+                updateMapOption(window.myMapChart);
+            }
+        }
 
         // 排名样式配置
         const RANK_STYLES = {
@@ -570,9 +887,11 @@ async function generateDayPage(dayIndex, allForecastData, forecastData) {
                     borderColor: tooltipBorder,
                     textStyle: { color: tooltipText },
                     formatter: (p) => {
+                        const displayName = window.getProvinceName(p.name, currentLang);
                         const temp = p.value || 0;
                         const color = getColorForTemp(temp);
-                        return \`<div class="font-bold text-sm mb-1">\${p.name}</div><div class="text-xs">温度: <span class="font-bold" style="color: \${color}">\${temp}°C</span></div>\`;
+                        const tempLabel = currentLang === 'zh' ? '温度' : 'Temperature';
+                        return \`<div class="font-bold text-sm mb-1">\${displayName}</div><div class="text-xs">\${tempLabel}: <span class="font-bold" style="color: \${color}">\${temp}°C</span></div>\`;
                     }
                 },
                 geo: {
@@ -583,11 +902,13 @@ async function generateDayPage(dayIndex, allForecastData, forecastData) {
                         textBorderColor: isDark ? '#111827' : '#f8fafc',
                         textBorderWidth: 2,
                         formatter: (params) => {
+                            const displayName = window.getProvinceName(params.name, currentLang);
                             const temp = tempMapData[params.name];
+
                             if (temp !== undefined) {
-                                return \`\${params.name}\\n\${temp}°\`;
+                                return \`\${displayName}\\n\${temp}°\`;
                             }
-                            return params.name;
+                            return displayName;
                         }
                     },
                     itemStyle: { areaColor: areaColor, borderColor: borderColor },
@@ -597,11 +918,13 @@ async function generateDayPage(dayIndex, allForecastData, forecastData) {
                             color: emphasisLabelColor,
                             fontSize: 12,
                             formatter: (params) => {
+                                const displayName = window.getProvinceName(params.name, currentLang);
                                 const temp = tempMapData[params.name];
+
                                 if (temp !== undefined) {
-                                    return \`\${params.name}\\n\${temp}°C\`;
+                                    return \`\${displayName}\\n\${temp}°C\`;
                                 }
-                                return params.name;
+                                return displayName;
                             }
                         },
                         itemStyle: { areaColor: hoverColor, shadowColor: shadowColor, shadowBlur: 10 }
@@ -724,6 +1047,9 @@ async function generateDayPage(dayIndex, allForecastData, forecastData) {
 
         // 页面加载完成后初始化
         document.addEventListener('DOMContentLoaded', () => {
+            // 初始化语言
+            initLanguage();
+
             // 初始化主题图标显示
             if(!document.documentElement.classList.contains('dark')) {
                 document.getElementById('icon-sun').classList.add('hidden');
