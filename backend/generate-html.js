@@ -180,7 +180,7 @@ async function generateIndex(provinceData, forecastData) {
   const maxTemp = Math.max(...temps);
 
   const html = `<!DOCTYPE html>
-<html lang="zh-CN">
+<html lang="zh-CN" class="dark">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -191,6 +191,7 @@ async function generateIndex(provinceData, forecastData) {
     <script src="https://cdn.jsdelivr.net/npm/echarts@5.4.3/dist/echarts.min.js"></script>
     <script>
       tailwind.config = {
+        darkMode: 'class',
         theme: {
           extend: {
             colors: {
@@ -206,8 +207,6 @@ async function generateIndex(provinceData, forecastData) {
     </script>
     <style>
       body {
-        background-color: #0d1117;
-        color: #e2e8f0;
         margin: 0;
         overflow: hidden;
       }
@@ -242,7 +241,7 @@ async function generateIndex(provinceData, forecastData) {
       }
     </style>
 </head>
-<body class="flex flex-col md:flex-row h-screen w-screen overflow-hidden bg-[#0d1117] text-white font-sans">
+<body class="flex flex-col md:flex-row h-screen w-screen overflow-hidden bg-slate-50 dark:bg-[#0d1117] text-slate-900 dark:text-white font-sans transition-colors duration-300">
 
     <!-- 左侧：地图可视化区域 -->
         <div class="relative flex-1 h-[50vh] md:h-full flex flex-col">
@@ -250,20 +249,30 @@ async function generateIndex(provinceData, forecastData) {
             <div class="absolute top-0 left-0 w-full p-6 z-10 pointer-events-none">
                 <div class="flex justify-between items-start">
                     <div>
-                        <h1 class="text-3xl font-black tracking-tighter text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-emerald-400 drop-shadow-sm font-sans">
+                        <h1 class="text-3xl font-black tracking-tighter text-transparent bg-clip-text bg-gradient-to-r from-blue-500 to-emerald-500 drop-shadow-sm font-sans">
                             中国气温排行
                         </h1>
                     </div>
 
                     <div class="pointer-events-auto flex flex-col items-end gap-2">
-                        <!-- 语言切换 -->
-                        <div class="flex bg-gray-800/80 backdrop-blur rounded-lg border border-gray-700 p-1">
-                            <a href="index.html" class="px-2 py-0.5 text-xs font-bold rounded bg-blue-600 text-white cursor-default">CN</a>
-                            <a href="index_en.html" class="px-2 py-0.5 text-xs font-bold rounded text-gray-400 hover:text-white transition-colors">EN</a>
+                        <div class="flex gap-2">
+                            <!-- Theme Toggle -->
+                            <button onclick="toggleTheme()" id="theme-btn" class="p-1.5 rounded-lg bg-white/80 dark:bg-gray-800/80 backdrop-blur border border-slate-200 dark:border-gray-700 text-slate-600 dark:text-gray-300 hover:text-blue-500 dark:hover:text-blue-400 transition-colors shadow-sm cursor-pointer">
+                                <!-- Icons are swapped by JS -->
+                                <svg id="icon-sun" class="w-4 h-4 hidden" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z" /></svg>
+                                <svg id="icon-moon" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z" /></svg>
+                            </button>
+
+                            <!-- 语言切换 -->
+                            <div class="flex bg-white/80 dark:bg-gray-800/80 backdrop-blur rounded-lg border border-slate-200 dark:border-gray-700 p-1">
+                                <a href="index.html" class="px-2 py-0.5 text-xs font-bold rounded bg-blue-600 text-white cursor-default">CN</a>
+                                <a href="index_en.html" class="px-2 py-0.5 text-xs font-bold rounded text-slate-500 dark:text-gray-400 hover:text-slate-900 dark:hover:text-white transition-colors">EN</a>
+                            </div>
                         </div>
 
                         <!-- 温度图例 -->
-                        <div class="flex flex-col gap-1 items-end p-2 rounded-lg bg-gray-900/60 backdrop-blur-md border border-gray-700/50 shadow-xl">
+                        <div class="flex flex-col gap-1 items-end p-2 rounded-lg bg-white/80 dark:bg-gray-900/60 backdrop-blur-md border border-slate-200 dark:border-gray-700/50 shadow-xl transition-colors duration-300">
+                            <div class="text-[10px] text-slate-500 dark:text-gray-400 font-semibold mb-1 uppercase tracking-wider w-full text-right px-1">Temp Scale</div>
                             <div class="flex flex-col gap-1">
                                 ${[
                                   { label: '>35°C', color: '#ef4444' },
@@ -275,8 +284,8 @@ async function generateIndex(provinceData, forecastData) {
                                   { label: '<-10°C', color: '#6366f1' },
                                 ].map(step => `
                                 <div class="flex items-center gap-2 justify-end group">
-                                    <span class="text-[10px] text-gray-400 font-medium group-hover:text-gray-200">${step.label}</span>
-                                    <div class="w-8 h-1.5 rounded-full shadow-[0_0_8px_rgba(0,0,0,0.3)] transition-all group-hover:w-10 bg-[${step.color}]"></div>
+                                    <span class="text-[10px] text-slate-500 dark:text-gray-400 font-medium group-hover:text-slate-800 dark:group-hover:text-gray-200">${step.label}</span>
+                                    <div class="w-8 h-1.5 rounded-full shadow-[0_0_8px_rgba(0,0,0,0.1)] dark:shadow-[0_0_8px_rgba(0,0,0,0.3)] transition-all group-hover:w-10 bg-[${step.color}]"></div>
                                 </div>
                                 `).join('')}
                             </div>
@@ -291,14 +300,14 @@ async function generateIndex(provinceData, forecastData) {
             </div>
 
             <!-- 底部覆盖层：日期选择器 (DaySelector) -->
-            <div class="absolute bottom-6 left-1/2 -translate-x-1/2 z-10 flex gap-1.5 md:gap-2 p-1.5 bg-gray-900/80 backdrop-blur-md rounded-2xl border border-gray-700/50 shadow-2xl shadow-black/50 max-w-[95%] overflow-x-auto no-scrollbar pointer-events-auto">
+            <div class="absolute bottom-6 left-1/2 -translate-x-1/2 z-10 flex gap-1.5 md:gap-2 p-1.5 bg-white/80 dark:bg-gray-900/80 backdrop-blur-md rounded-2xl border border-slate-200 dark:border-gray-700/50 shadow-2xl shadow-slate-300/50 dark:shadow-black/50 max-w-[95%] overflow-x-auto no-scrollbar pointer-events-auto transition-colors duration-300">
                 ${Array.from({length: 7}, (_, i) => {
                   const days = ['今天', '周一', '周二', '周三', '周四', '周五', '周六', '周日'];
                   const date = new Date();
                   date.setDate(date.getDate() + i);
                   const dayName = i === 0 ? '今天' : days[date.getDay()];
                   return `
-                  <a href="#" class="relative px-3 md:px-4 py-2 rounded-xl text-xs font-bold transition-all duration-300 whitespace-nowrap flex flex-col items-center justify-center gap-0.5 ${i === 0 ? 'bg-gradient-to-br from-blue-500 to-blue-600 text-white shadow-lg shadow-blue-500/25 ring-1 ring-white/10' : 'text-gray-400 hover:text-gray-200 hover:bg-white/5'}">
+                  <a href="#" class="relative px-3 md:px-4 py-2 rounded-xl text-xs font-bold transition-all duration-300 whitespace-nowrap flex flex-col items-center justify-center gap-0.5 ${i === 0 ? 'bg-gradient-to-br from-blue-500 to-blue-600 text-white shadow-lg shadow-blue-500/25 ring-1 ring-white/20' : 'text-slate-500 dark:text-gray-400 hover:text-slate-800 dark:hover:text-gray-200 hover:bg-slate-100 dark:hover:bg-white/5'}">
                       <span>${dayName}</span>
                       ${i === 0 ? '<span class="w-1 h-1 bg-white rounded-full opacity-50 absolute bottom-1"></span>' : ''}
                   </a>
@@ -309,22 +318,24 @@ async function generateIndex(provinceData, forecastData) {
 
         <!-- 右侧：排行榜面板 (RankingPanel) -->
         <div class="w-full md:w-[400px] h-[50vh] md:h-full z-20">
-            <div class="flex flex-col h-full bg-gray-900 border-l border-gray-700 shadow-2xl relative">
+            <div class="flex flex-col h-full bg-white dark:bg-gray-900 border-l border-slate-200 dark:border-gray-700 shadow-2xl relative transition-colors duration-300">
             <!-- 面板头部 -->
-            <div class="p-6 border-b border-gray-800 bg-gray-900/95 backdrop-blur z-10 sticky top-0">
+            <div class="p-6 border-b border-slate-200 dark:border-gray-800 bg-white/95 dark:bg-gray-900/95 backdrop-blur z-10 sticky top-0 transition-colors duration-300">
                 <div class="flex items-center justify-between mb-4">
-                    <div>
-                        <h2 class="text-xl font-bold text-white tracking-tight">排行</h2>
-                        <span class="text-xs text-gray-500">${provinceData.length} 地区</span>
+                    <div class="flex flex-col">
+                        <h2 class="text-xl font-bold text-slate-900 dark:text-white tracking-tight">全国 排行</h2>
+                        <div class="flex items-center gap-2 mt-1">
+                            <span class="text-xs text-slate-500 dark:text-gray-500">${provinceData.length} 地区</span>
+                        </div>
                     </div>
                 </div>
 
                 <!-- 排序控制 -->
-                <div class="flex p-1 bg-gray-800 rounded-lg border border-gray-700">
-                    <button onclick="sortList('desc')" id="btn-hot" class="flex-1 flex items-center justify-center gap-2 py-1.5 text-xs font-medium rounded-md transition-all bg-red-500/10 text-red-400 shadow-sm ring-1 ring-red-500/50">
+                <div class="flex p-1 bg-slate-100 dark:bg-gray-800 rounded-lg border border-slate-200 dark:border-gray-700">
+                    <button onclick="sortList('desc')" id="btn-hot" class="flex-1 flex items-center justify-center gap-2 py-1.5 text-xs font-medium rounded-md transition-all bg-red-500/10 text-red-600 dark:text-red-400 shadow-sm ring-1 ring-red-500/50">
                         高温
                     </button>
-                    <button onclick="sortList('asc')" id="btn-cold" class="flex-1 flex items-center justify-center gap-2 py-1.5 text-xs font-medium rounded-md transition-all text-gray-400 hover:text-gray-200">
+                    <button onclick="sortList('asc')" id="btn-cold" class="flex-1 flex items-center justify-center gap-2 py-1.5 text-xs font-medium rounded-md transition-all text-slate-400 dark:text-gray-400 hover:text-slate-600 dark:hover:text-gray-200">
                         低温
                     </button>
                 </div>
@@ -349,17 +360,17 @@ async function generateIndex(provinceData, forecastData) {
                   }
 
                       return `
-                    <div class="ranking-item group flex flex-col p-3 rounded-xl transition-all duration-300 border cursor-pointer select-none border-gray-800 bg-gray-800 hover:bg-gray-750"
+                    <div class="ranking-item group flex flex-col p-3 rounded-xl transition-all duration-300 border cursor-pointer select-none border-slate-200 dark:border-gray-800 bg-white dark:bg-gray-800 hover:bg-slate-50 dark:hover:bg-gray-750"
                          data-temp="${item.temperature}" onclick="toggleExpand(this)">
                         <div class="flex items-center justify-between">
                             <div class="flex items-center gap-4">
-                                <span data-role="badge" class="flex justify-center items-center w-7 h-7 rounded-lg text-sm font-bold shadow-sm bg-gray-700 text-gray-400">
+                                <span data-role="badge" class="flex justify-center items-center w-7 h-7 rounded-lg text-sm font-bold shadow-sm bg-slate-200 dark:bg-gray-700 text-slate-500 dark:text-gray-400">
                                     ${index + 1}
                                 </span>
                                 <div>
-                                    <h3 data-role="title" class="font-semibold text-gray-300 text-sm md:text-base">${item.province}</h3>
-                                    <div class="text-xs text-gray-500 flex gap-2 items-center mt-0.5">
-                                        <span>晴</span><span class="w-1 h-1 rounded-full bg-gray-600"></span><span>风速: ${item.windSpeed || '0'} m/s</span>
+                                    <h3 data-role="title" class="font-semibold text-slate-700 dark:text-gray-300 text-sm md:text-base">${item.province}</h3>
+                                    <div class="text-xs text-slate-500 dark:text-gray-500 flex gap-2 items-center mt-0.5">
+                                        <span>晴</span><span class="w-1 h-1 rounded-full bg-slate-400 dark:bg-gray-600"></span><span>风速: ${item.windSpeed || '0'} m/s</span>
                                     </div>
                                 </div>
                             </div>
@@ -370,8 +381,8 @@ async function generateIndex(provinceData, forecastData) {
                                     </div>
                                 </div>
                                 <!-- 箭头 -->
-                                <div class="arrow-icon p-1 rounded-full hover:bg-white/5 transition-transform duration-300">
-                                    <svg class="w-4 h-4 text-gray-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <div class="arrow-icon p-1 rounded-full hover:bg-black/5 dark:hover:bg-white/5 transition-transform duration-300">
+                                    <svg class="w-4 h-4 text-slate-400 dark:text-gray-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
                                     </svg>
                                 </div>
@@ -379,9 +390,9 @@ async function generateIndex(provinceData, forecastData) {
                         </div>
 
                         <!-- 详情 (7天预报) -->
-                        <div class="details-container mt-3 pt-3 border-t border-gray-700/50">
+                        <div class="details-container mt-3 pt-3 border-t border-slate-200 dark:border-gray-700/50">
                             <div class="flex justify-between items-center mb-2">
-                                <h4 class="text-[10px] font-bold text-gray-400 uppercase tracking-widest">未来7天预报</h4>
+                                <h4 class="text-[10px] font-bold text-slate-400 dark:text-gray-400 uppercase tracking-widest">未来7天预报</h4>
                             </div>
                             <div class="grid grid-cols-7 gap-1">
                                 ${forecast.map((day, idx) => {
@@ -393,15 +404,15 @@ async function generateIndex(provinceData, forecastData) {
 
                                   return `
                                 <div class="flex flex-col items-center group/day">
-                                    <span class="text-[9px] font-medium mb-1 ${idx === 0 ? 'text-blue-400' : 'text-gray-500'}">
+                                    <span class="text-[9px] font-medium mb-1 ${idx === 0 ? 'text-blue-500' : 'text-slate-500 dark:text-gray-500'}">
                                         ${day.dayName}
                                     </span>
-                                    <div class="bg-gray-800/50 rounded-full h-20 relative w-1.5 md:w-2 mx-auto ring-1 ring-white/5">
+                                    <div class="w-full bg-slate-200 dark:bg-gray-800/50 rounded-full h-20 relative w-1.5 md:w-2 mx-auto ring-1 ring-black/5 dark:ring-white/5">
                                         <div class="absolute w-full rounded-full opacity-80" style="bottom: ${bottomPos}%; height: ${barHeight}%; background-color: ${barColor};"></div>
                                     </div>
                                     <div class="flex flex-col items-center mt-1.5 gap-0.5">
-                                        <span class="text-[10px] font-bold text-gray-300 leading-none">${hasData ? day.high + '°' : '--'}</span>
-                                        <span class="text-[9px] text-gray-600 leading-none">${hasData ? day.low + '°' : '--'}</span>
+                                        <span class="text-[10px] font-bold text-slate-700 dark:text-gray-300 leading-none">${hasData ? day.high + '°' : '--'}</span>
+                                        <span class="text-[9px] text-slate-500 dark:text-gray-600 leading-none">${hasData ? day.low + '°' : '--'}</span>
                                     </div>
                                 </div>
                                 `;
@@ -418,27 +429,30 @@ async function generateIndex(provinceData, forecastData) {
 
 
     <script>
+        let currentTheme = 'dark'; // 'light' | 'dark'
+        let tempMapData = {}; // 全局温度映射
+
         // 排名样式配置
         const RANK_STYLES = {
             1: {
-                container: "border-yellow-500/40 bg-gradient-to-r from-yellow-900/20 to-transparent",
-                badge: "bg-yellow-500 text-black shadow-[0_0_10px_rgba(234,179,8,0.5)]",
-                title: "text-yellow-100"
+                container: "border-yellow-500/50 bg-gradient-to-r from-yellow-500/10 to-transparent dark:from-yellow-900/20",
+                badge: "bg-yellow-500 text-black shadow-[0_0_10px_rgba(234,179,8,0.4)]",
+                title: "text-yellow-700 dark:text-yellow-100"
             },
             2: {
-                container: "border-gray-400/40 bg-gradient-to-r from-gray-700/20 to-transparent",
-                badge: "bg-gray-300 text-black shadow-[0_0_10px_rgba(209,213,219,0.5)]",
-                title: "text-gray-100"
+                container: "border-slate-400/50 dark:border-gray-400/40 bg-gradient-to-r from-slate-500/10 to-transparent dark:from-gray-700/20",
+                badge: "bg-slate-300 dark:bg-gray-300 text-black shadow-[0_0_10px_rgba(209,213,219,0.4)]",
+                title: "text-slate-700 dark:text-gray-100"
             },
             3: {
-                container: "border-orange-600/40 bg-gradient-to-r from-orange-900/20 to-transparent",
-                badge: "bg-orange-600 text-white shadow-[0_0_10px_rgba(234,88,12,0.5)]",
-                title: "text-orange-100"
+                container: "border-orange-500/50 dark:border-orange-600/40 bg-gradient-to-r from-orange-500/10 to-transparent dark:from-orange-900/20",
+                badge: "bg-orange-500 dark:bg-orange-600 text-white shadow-[0_0_10px_rgba(234,88,12,0.4)]",
+                title: "text-orange-700 dark:text-orange-100"
             },
             default: {
-                container: "border-gray-800 bg-gray-800 hover:bg-gray-750",
-                badge: "bg-gray-700 text-gray-400",
-                title: "text-gray-300"
+                container: "border-slate-200 dark:border-gray-800 bg-white dark:bg-gray-800 hover:bg-slate-50 dark:hover:bg-gray-750",
+                badge: "bg-slate-200 dark:bg-gray-700 text-slate-500 dark:text-gray-400",
+                title: "text-slate-700 dark:text-gray-300"
             }
         };
 
@@ -451,6 +465,30 @@ async function generateIndex(provinceData, forecastData) {
             if (temp >= 0) return '#06b6d4';
             if (temp >= -10) return '#3b82f6';
             return '#6366f1';
+        }
+
+        // 主题切换逻辑
+        function toggleTheme() {
+            const html = document.documentElement;
+            const sunIcon = document.getElementById('icon-sun');
+            const moonIcon = document.getElementById('icon-moon');
+
+            if (html.classList.contains('dark')) {
+                html.classList.remove('dark');
+                currentTheme = 'light';
+                sunIcon.classList.add('hidden');
+                moonIcon.classList.remove('hidden');
+            } else {
+                html.classList.add('dark');
+                currentTheme = 'dark';
+                sunIcon.classList.remove('hidden');
+                moonIcon.classList.add('hidden');
+            }
+
+            // 重绘地图以适应新配色
+            if(window.myMapChart) {
+                updateMapOption(window.myMapChart);
+            }
         }
 
         // 应用排名样式
@@ -478,10 +516,69 @@ async function generateIndex(provinceData, forecastData) {
             tempEl.style.color = getColorForTemp(tempVal);
         }
 
+        // 更新地图主题配色
+        function updateMapOption(chart) {
+            const isDark = document.documentElement.classList.contains('dark');
+            const areaColor = isDark ? '#1f2937' : '#e2e8f0';
+            const borderColor = isDark ? '#111' : '#cbd5e1';
+            const hoverColor = isDark ? '#4b5563' : '#94a3b8';
+            const labelColor = isDark ? '#e5e7eb' : '#334155';
+            const emphasisLabelColor = isDark ? '#fff' : '#0f172a';
+            const shadowColor = isDark ? 'rgba(0, 0, 0, 0.5)' : 'rgba(0, 0, 0, 0.1)';
+            const tooltipBg = isDark ? 'rgba(23, 23, 26, 0.95)' : 'rgba(255, 255, 255, 0.95)';
+            const tooltipText = isDark ? '#e5e7eb' : '#1e293b';
+            const tooltipBorder = isDark ? '#374151' : '#e2e8f0';
+
+            chart.setOption({
+                tooltip: {
+                    backgroundColor: tooltipBg,
+                    borderColor: tooltipBorder,
+                    textStyle: { color: tooltipText },
+                    formatter: (p) => {
+                        const temp = p.value || 0;
+                        const color = getColorForTemp(temp);
+                        return \`<div class="font-bold text-sm mb-1">\${p.name}</div><div class="text-xs">温度: <span class="font-bold" style="color: \${color}">\${temp}°C</span></div>\`;
+                    }
+                },
+                geo: {
+                    label: {
+                        show: true,
+                        fontSize: 10,
+                        color: labelColor,
+                        textBorderColor: isDark ? '#111827' : '#f8fafc',
+                        textBorderWidth: 2,
+                        formatter: (params) => {
+                            const temp = tempMapData[params.name];
+                            if (temp !== undefined) {
+                                return \`\${params.name}\\n\${temp}°\`;
+                            }
+                            return params.name;
+                        }
+                    },
+                    itemStyle: { areaColor: areaColor, borderColor: borderColor },
+                    emphasis: {
+                        label: {
+                            show: true,
+                            color: emphasisLabelColor,
+                            fontSize: 12,
+                            formatter: (params) => {
+                                const temp = tempMapData[params.name];
+                                if (temp !== undefined) {
+                                    return \`\${params.name}\\n\${temp}°C\`;
+                                }
+                                return params.name;
+                            }
+                        },
+                        itemStyle: { areaColor: hoverColor, shadowColor: shadowColor, shadowBlur: 10 }
+                    }
+                }
+            });
+        }
+
         // 1. 初始化地图
         const initMap = async () => {
             const chartDom = document.getElementById('main-map');
-            const myChart = echarts.init(chartDom);
+            window.myMapChart = echarts.init(chartDom);
 
             // 省份数据 - 直接使用provinces.js中的full_name
             const data = ${JSON.stringify(provinceData.map(item => ({
@@ -503,28 +600,20 @@ async function generateIndex(provinceData, forecastData) {
             }
 
             // 创建省份名称到温度的映射（使用标准化名称）
-            const tempMap = {};
             data.forEach(item => {
-                tempMap[item.name] = item.value;
+                tempMapData[item.name] = item.value;
             });
 
             // 调试输出
             console.log('地图数据:', data);
-            console.log('温度映射:', tempMap);
+            console.log('温度映射:', tempMapData);
 
-            myChart.setOption({
+            window.myMapChart.setOption({
                 backgroundColor: 'transparent',
                 tooltip: {
                     trigger: 'item',
-                    backgroundColor: 'rgba(23, 23, 26, 0.95)',
-                    borderColor: '#374151',
                     borderWidth: 1,
-                    textStyle: { color: '#e5e7eb', fontSize: 12 },
-                    formatter: (p) => {
-                        const temp = p.value || 0;
-                        const color = getColorForTemp(temp);
-                        return \`<div class="font-bold text-sm mb-1">\${p.name}</div><div class="text-xs">温度: <span class="font-bold" style="color: \${color}">\${temp}°C</span></div>\`;
-                    }
+                    textStyle: { fontSize: 12 }
                 },
                 visualMap: {
                     show: false,
@@ -537,45 +626,19 @@ async function generateIndex(provinceData, forecastData) {
                     roam: true,
                     top: '18%',
                     zoom: 1.2,
-                    label: {
-                        show: true,
-                        fontSize: 10,
-                        color: '#ffffff',
-                        textBorderColor: '#111827',
-                        textBorderWidth: 2,
-                        formatter: (params) => {
-                            const temp = tempMap[params.name];
-                            if (temp !== undefined) {
-                                return \`\${params.name}\\n\${temp}°\`;
-                            }
-                            return params.name;
-                        }
-                    },
-                    itemStyle: { areaColor: '#1f2937', borderColor: '#111', borderWidth: 1 },
-                    emphasis: {
-                        itemStyle: { areaColor: '#4b5563', shadowBlur: 10 },
-                        label: {
-                            show: true,
-                            fontSize: 12,
-                            color: '#ffffff',
-                            formatter: (params) => {
-                                const temp = tempMap[params.name];
-                                if (temp !== undefined) {
-                                    return \`\${params.name}\\n\${temp}°C\`;
-                                }
-                                return params.name;
-                            }
-                        }
-                    }
+                    itemStyle: { borderWidth: 1 }
                 },
                 series: [{ type: 'map', geoIndex: 0, data: data }]
             });
 
-            myChart.on('click', function(params) {
+            // 应用正确的主题颜色
+            updateMapOption(window.myMapChart);
+
+            window.myMapChart.on('click', function(params) {
                 alert('跳转到: province_' + params.name + '.html');
             });
 
-            window.addEventListener('resize', () => myChart.resize());
+            window.addEventListener('resize', () => window.myMapChart.resize());
         };
 
         // 2. UI 交互: 展开详情
@@ -584,16 +647,13 @@ async function generateIndex(provinceData, forecastData) {
             const arrow = el.querySelector('.arrow-icon');
 
             if (details.classList.contains('open')) {
-                details.classList.remove('open');
-                details.classList.remove('fade-in');
-                arrow.classList.remove('rotate-180', 'bg-white/10');
-                el.classList.remove('ring-1', 'ring-gray-500', 'bg-gray-800');
-                if(!el.className.includes('from-')) el.classList.remove('bg-gray-800');
+                details.classList.remove('open', 'fade-in');
+                arrow.classList.remove('rotate-180', 'bg-black/5', 'dark:bg-white/10');
+                el.classList.remove('ring-1', 'ring-slate-400', 'dark:ring-gray-500');
             } else {
                 details.classList.add('open', 'fade-in');
-                arrow.classList.add('rotate-180', 'bg-white/10');
-                el.classList.add('ring-1', 'ring-gray-500');
-                if(!el.className.includes('bg-gray-800')) el.classList.add('bg-gray-800');
+                arrow.classList.add('rotate-180', 'bg-black/5', 'dark:bg-white/10');
+                el.classList.add('ring-1', 'ring-slate-400', 'dark:ring-gray-500');
             }
         }
 
@@ -604,12 +664,16 @@ async function generateIndex(provinceData, forecastData) {
             const btnHot = document.getElementById('btn-hot');
             const btnCold = document.getElementById('btn-cold');
 
+            const activeClass = "flex-1 flex items-center justify-center gap-2 py-1.5 text-xs font-medium rounded-md transition-all bg-blue-500/10 text-blue-600 dark:text-blue-400 shadow-sm ring-1 ring-blue-500/50";
+            const hotActiveClass = "flex-1 flex items-center justify-center gap-2 py-1.5 text-xs font-medium rounded-md transition-all bg-red-500/10 text-red-600 dark:text-red-400 shadow-sm ring-1 ring-red-500/50";
+            const inactiveClass = "flex-1 flex items-center justify-center gap-2 py-1.5 text-xs font-medium rounded-md transition-all text-slate-400 dark:text-gray-400 hover:text-slate-600 dark:hover:text-gray-200";
+
             if(order === 'desc') {
-                btnHot.className = "flex-1 flex items-center justify-center gap-2 py-1.5 text-xs font-medium rounded-md transition-all bg-red-500/10 text-red-400 shadow-sm ring-1 ring-red-500/50";
-                btnCold.className = "flex-1 flex items-center justify-center gap-2 py-1.5 text-xs font-medium rounded-md transition-all text-gray-400 hover:text-gray-200";
+                btnHot.className = hotActiveClass;
+                btnCold.className = inactiveClass;
             } else {
-                btnHot.className = "flex-1 flex items-center justify-center gap-2 py-1.5 text-xs font-medium rounded-md transition-all text-gray-400 hover:text-gray-200";
-                btnCold.className = "flex-1 flex items-center justify-center gap-2 py-1.5 text-xs font-medium rounded-md transition-all bg-blue-500/10 text-blue-400 shadow-sm ring-1 ring-blue-500/50";
+                btnHot.className = inactiveClass;
+                btnCold.className = activeClass;
             }
 
             items.sort((a, b) => {
@@ -625,6 +689,15 @@ async function generateIndex(provinceData, forecastData) {
 
         // 页面加载完成后初始化
         document.addEventListener('DOMContentLoaded', () => {
+            // 初始化主题图标显示
+            if(!document.documentElement.classList.contains('dark')) {
+                document.getElementById('icon-sun').classList.add('hidden');
+                document.getElementById('icon-moon').classList.remove('hidden');
+            } else {
+                document.getElementById('icon-sun').classList.remove('hidden');
+                document.getElementById('icon-moon').classList.add('hidden');
+            }
+
             // 初始化排名样式
             const items = document.querySelectorAll('.ranking-item');
             items.forEach((item, index) => {
