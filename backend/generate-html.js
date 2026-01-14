@@ -165,14 +165,27 @@ function getColorForTemp(temp) {
 }
 
 /**
- * 生成主页HTML
+ * 生成单个日期的HTML页面
+ * @param {number} dayIndex - 天数索引 (0=今天, 1=明天, ...)
+ * @param {Array} allForecastData - 包含7天数据的数组
+ * @param {Object} forecastData - 7天预报数据
  */
-async function generateIndex(provinceData, forecastData) {
+async function generateDayPage(dayIndex, allForecastData, forecastData) {
+  const provinceData = allForecastData[dayIndex];
+
   // 检查数据是否为空
   if (!provinceData || provinceData.length === 0) {
-    console.warn('⚠️  省份数据为空，跳过主页生成');
+    console.warn(`⚠️  第${dayIndex}天数据为空，跳过生成`);
     return;
   }
+
+  // 计算日期和文件路径
+  const targetDate = new Date();
+  targetDate.setDate(targetDate.getDate() + dayIndex);
+  const dateStr = targetDate.toISOString().slice(0, 10).replace(/-/g, '');
+
+  // 文件路径: 今天是 index.html, 其他天是 YYYYMMDD/index.html
+  const filePath = dayIndex === 0 ? 'index.html' : `${dateStr}/index.html`;
 
   const lastUpdate = new Date().toLocaleString('zh-CN', { timeZone: 'Asia/Shanghai' });
 
@@ -180,14 +193,19 @@ async function generateIndex(provinceData, forecastData) {
   const minTemp = Math.min(...temps);
   const maxTemp = Math.max(...temps);
 
+  // 生成标题和描述(包含日期信息)
+  const dateFormatted = targetDate.toLocaleDateString('zh-CN', { year: 'numeric', month: 'long', day: 'numeric' });
+  const titleSuffix = dayIndex === 0 ? '' : ` - ${dateFormatted}`;
+  const descriptionDate = dayIndex === 0 ? '实时' : dateFormatted;
+
   const html = `<!DOCTYPE html>
 <html lang="zh-CN" class="dark">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="中国气温排行榜 - 实时展示全国各省市气温数据">
-    <meta name="keywords" content="中国气温,温度排行,天气,气温地图,实时温度">
-    <title>中国气温排行榜 - 全国实时气温数据</title>
+    <meta name="description" content="中国气温排行榜 - ${descriptionDate}全国各省市气温数据">
+    <meta name="keywords" content="中国气温,温度排行,天气,气温地图,实时温度,${dateFormatted}">
+    <title>中国气温排行榜 - 全国实时气温数据${titleSuffix}</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdn.jsdelivr.net/npm/echarts@5.4.3/dist/echarts.min.js"></script>
     <script>
@@ -307,10 +325,29 @@ async function generateIndex(provinceData, forecastData) {
                   const date = new Date();
                   date.setDate(date.getDate() + i);
                   const dayName = i === 0 ? '今天' : days[date.getDay()];
+                  const dateStr = date.toISOString().slice(0, 10).replace(/-/g, '');
+                  const isActive = i === dayIndex;
+
+                  // 链接路径: 今天是 index.html, 其他天是 YYYYMMDD/index.html
+                  let href;
+                  if (isActive) {
+                    href = '#';
+                  } else if (i === 0) {
+                    // 如果当前不是首页,链接回首页需要根据当前位置调整
+                    href = dayIndex === 0 ? 'index.html' : '../index.html';
+                  } else {
+                    // 链接到其他日期页面
+                    href = dayIndex === 0 ? dateStr + '/index.html' : '../' + dateStr + '/index.html';
+                  }
+
+                  const targetAttr = isActive ? '' : 'target="_blank"';
+                  const activeClass = isActive ? 'bg-gradient-to-br from-blue-500 to-blue-600 text-white shadow-lg shadow-blue-500/25 ring-1 ring-white/20' : 'text-slate-500 dark:text-gray-400 hover:text-slate-800 dark:hover:text-gray-200 hover:bg-slate-100 dark:hover:bg-white/5';
+                  const indicator = isActive ? '<span class="w-1 h-1 bg-white rounded-full opacity-50 absolute bottom-1"></span>' : '';
+
                   return `
-                  <a href="#" class="relative px-3 md:px-4 py-2 rounded-xl text-xs font-bold transition-all duration-300 whitespace-nowrap flex flex-col items-center justify-center gap-0.5 ${i === 0 ? 'bg-gradient-to-br from-blue-500 to-blue-600 text-white shadow-lg shadow-blue-500/25 ring-1 ring-white/20' : 'text-slate-500 dark:text-gray-400 hover:text-slate-800 dark:hover:text-gray-200 hover:bg-slate-100 dark:hover:bg-white/5'}">
+                  <a href="${href}" ${targetAttr} class="relative px-3 md:px-4 py-2 rounded-xl text-xs font-bold transition-all duration-300 whitespace-nowrap flex flex-col items-center justify-center gap-0.5 ${activeClass}">
                       <span>${dayName}</span>
-                      ${i === 0 ? '<span class="w-1 h-1 bg-white rounded-full opacity-50 absolute bottom-1"></span>' : ''}
+                      ${indicator}
                   </a>
                   `;
                 }).join('')}
@@ -392,9 +429,6 @@ async function generateIndex(provinceData, forecastData) {
 
                         <!-- 详情 (7天预报) -->
                         <div class="details-container mt-3 pt-3 border-t border-slate-200 dark:border-gray-700/50">
-                            <div class="flex justify-between items-center mb-2">
-                                <h4 class="text-[10px] font-bold text-slate-400 dark:text-gray-400 uppercase tracking-widest">未来7天预报</h4>
-                            </div>
                             <div class="grid grid-cols-7 gap-1">
                                 ${forecast.map((day, idx) => {
                                   const hasData = day.high !== null && day.low !== null;
@@ -405,7 +439,7 @@ async function generateIndex(provinceData, forecastData) {
 
                                   return `
                                 <div class="flex flex-col items-center group/day">
-                                    <span class="text-[9px] font-medium mb-1 ${idx === 0 ? 'text-blue-500' : 'text-slate-500 dark:text-gray-500'}">
+                                    <span class="text-[9px] font-medium mb-1 ${idx === dayIndex ? 'text-blue-500' : 'text-slate-500 dark:text-gray-500'}">
                                         ${day.dayName}
                                     </span>
                                     <div class="w-full bg-slate-200 dark:bg-gray-800/50 rounded-full h-20 relative w-1.5 md:w-2 mx-auto ring-1 ring-black/5 dark:ring-white/5">
@@ -712,171 +746,35 @@ async function generateIndex(provinceData, forecastData) {
 </body>
 </html>`;
 
-  fs.writeFileSync(path.join(OUTPUT_DIR, 'index.html'), html, 'utf8');
-  console.log('✅ 主页生成完成');
+  // 确保目录存在
+  const fullPath = path.join(OUTPUT_DIR, filePath);
+  const dir = path.dirname(fullPath);
+  if (!fs.existsSync(dir)) {
+    fs.mkdirSync(dir, { recursive: true });
+  }
+
+  fs.writeFileSync(fullPath, html, 'utf8');
+  console.log(`✅ ${filePath} 生成完成`);
 }
 
 /**
- * 生成省份详情页
+ * 生成所有日期的主页
  */
-async function generateProvincePages(provinceData) {
-  if (!provinceData || provinceData.length === 0) {
-    console.warn('⚠️  省份数据为空，跳过省份页生成');
-    return;
+async function generateAllIndexPages(allForecastData, forecastData) {
+  console.log('🏠 生成所有日期页面...');
+
+  // 确保输出目录存在
+  if (!fs.existsSync(OUTPUT_DIR)) {
+    fs.mkdirSync(OUTPUT_DIR, { recursive: true });
   }
 
-  for (const province of provinceData) {
-    const cities = await getCityTemperatures(province.province);
-
-    // 检查城市数据
-    if (!cities || cities.length === 0) {
-      console.warn(`⚠️  ${province.province} 没有城市数据，跳过`);
-      continue;
-    }
-
-    const temps = cities.map(c => c.temperature);
-    const minTemp = Math.min(...temps);
-    const maxTemp = Math.max(...temps);
-
-    const html = `<!DOCTYPE html>
-<html lang="zh-CN">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="${province.province}气温详情 - 实时城市气温数据">
-    <title>${province.province}气温排行 - 中国气温排行榜</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <script>
-      tailwind.config = {
-        theme: {
-          extend: {
-            colors: {
-              gray: {
-                750: '#2d3748',
-                850: '#1a202c',
-                950: '#0d1117',
-              }
-            }
-          }
-        }
-      }
-    </script>
-    <style>
-      body {
-        background-color: #0d1117;
-        color: #e2e8f0;
-      }
-      ::-webkit-scrollbar {
-        width: 8px;
-        height: 8px;
-      }
-      ::-webkit-scrollbar-track {
-        background: #0d1117;
-      }
-      ::-webkit-scrollbar-thumb {
-        background: #4a5568;
-        border-radius: 4px;
-      }
-      ::-webkit-scrollbar-thumb:hover {
-        background: #718096;
-      }
-    </style>
-</head>
-<body class="bg-gray-950 text-gray-100">
-    <!-- 头部 -->
-    <div class="w-full p-6 md:p-8">
-        <div class="max-w-7xl mx-auto">
-            <a href="../index.html" class="inline-flex items-center gap-2 text-gray-400 hover:text-white transition-colors mb-4">
-                <span>←</span>
-                <span>返回全国</span>
-            </a>
-            <h1 class="text-4xl md:text-5xl font-black tracking-tighter text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-emerald-400 drop-shadow-sm">
-                ${province.province}气温详情
-            </h1>
-        </div>
-    </div>
-
-    <main class="max-w-7xl mx-auto px-6 pb-12">
-        <!-- 省份统计卡片 -->
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
-            <div class="bg-gradient-to-br from-red-900/40 to-red-800/20 border border-red-700/50 rounded-2xl p-6 backdrop-blur">
-                <div class="text-4xl mb-2">🔥</div>
-                <div class="text-3xl font-bold text-red-400">${maxTemp}°C</div>
-                <div class="text-sm text-gray-400 mt-1">最高温</div>
-                <div class="text-sm text-gray-300 font-medium">${cities[0].city}</div>
-            </div>
-            <div class="bg-gradient-to-br from-blue-900/40 to-blue-800/20 border border-blue-700/50 rounded-2xl p-6 backdrop-blur">
-                <div class="text-4xl mb-2">❄️</div>
-                <div class="text-3xl font-bold text-blue-400">${minTemp}°C</div>
-                <div class="text-sm text-gray-400 mt-1">最低温</div>
-                <div class="text-sm text-gray-300 font-medium">${cities[cities.length - 1].city}</div>
-            </div>
-            <div class="bg-gradient-to-br from-purple-900/40 to-purple-800/20 border border-purple-700/50 rounded-2xl p-6 backdrop-blur">
-                <div class="text-4xl mb-2">📊</div>
-                <div class="text-3xl font-bold text-purple-400">${(temps.reduce((a, b) => a + b, 0) / temps.length).toFixed(1)}°C</div>
-                <div class="text-sm text-gray-400 mt-1">平均温度</div>
-                <div class="text-sm text-gray-300 font-medium">省内</div>
-            </div>
-        </div>
-
-        <!-- 城市列表 -->
-        <div class="bg-gray-900 border border-gray-800 rounded-2xl p-6 shadow-2xl">
-            <h2 class="text-xl font-bold text-white mb-6">城市气温排行</h2>
-            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-3">
-                ${cities.map((city, index) => {
-                  const getRankStyle = (idx) => {
-                    if (idx === 0) return 'border-yellow-500/40 bg-gradient-to-br from-yellow-900/30 to-yellow-800/10';
-                    if (idx === 1) return 'border-gray-400/40 bg-gradient-to-br from-gray-700/30 to-gray-800/10';
-                    if (idx === 2) return 'border-orange-600/40 bg-gradient-to-br from-orange-900/30 to-orange-800/10';
-                    return 'border-gray-800 bg-gray-800/50 hover:bg-gray-800';
-                  };
-                  const getTempColor = (temp) => {
-                    if (temp >= 35) return '#dc2626';
-                    if (temp >= 30) return '#ea580c';
-                    if (temp >= 25) return '#f59e0b';
-                    if (temp >= 20) return '#84cc16';
-                    if (temp >= 15) return '#22c55e';
-                    if (temp >= 10) return '#14b8a6';
-                    if (temp >= 5) return '#06b6d4';
-                    if (temp >= 0) return '#0ea5e9';
-                    if (temp >= -5) return '#3b82f6';
-                    if (temp >= -10) return '#6366f1';
-                    return '#8b5cf6';
-                  };
-                  return `
-                <div class="flex flex-col p-4 rounded-xl border transition-all ${getRankStyle(index)} hover:scale-105">
-                    <div class="flex items-center justify-between mb-2">
-                        <span class="text-xs text-gray-500 font-medium">#${index + 1}</span>
-                        <div class="text-xl font-bold" style="color: ${getTempColor(city.temperature)}">${city.temperature}°</div>
-                    </div>
-                    <div class="text-base font-semibold text-gray-100">${city.city}</div>
-                </div>
-                  `;
-                }).join('')}
-            </div>
-
-            <!-- 广告位 -->
-            <div class="mt-6 p-6 min-h-[100px] bg-gray-800/40 border border-gray-700 border-dashed rounded-lg flex flex-col items-center justify-center text-gray-500 text-xs">
-                <span class="uppercase tracking-widest font-semibold mb-1 opacity-50">广告 Ad</span>
-                <div class="text-center opacity-70">Google AdSense Space</div>
-            </div>
-        </div>
-    </main>
-
-    <footer class="bg-gray-900 border-t border-gray-800 text-center py-8 mt-12">
-        <div class="text-sm text-gray-400">
-            <p>数据来源: 中国气象局</p>
-            <p class="mt-2">© 2024 中国气温排行榜</p>
-        </div>
-    </footer>
-</body>
-</html>`;
-
-    const filename = `${province.province}.html`;
-    fs.writeFileSync(path.join(OUTPUT_DIR, 'provinces', filename), html, 'utf8');
-    console.log(`✅ ${province.province} 页面生成完成`);
+  for (let i = 0; i < 7; i++) {
+    await generateDayPage(i, allForecastData, forecastData);
   }
+
+  console.log('✅ 所有日期页面生成完成');
 }
+
 
 /**
  * 主函数
@@ -885,23 +783,25 @@ async function main() {
   try {
     console.log('开始生成静态网站...\n');
 
-    // 获取省份数据
-    console.log('📊 获取省份温度数据...');
-    const provinceData = await getProvinceTemperatures();
-    console.log(`✅ 获取到 ${provinceData.length} 个省份数据\n`);
+    // 获取未来7天每一天的省份数据
+    console.log('📊 获取7天省份温度数据...');
+    const allForecastData = [];
+    for (let i = 0; i < 7; i++) {
+      const date = new Date();
+      date.setDate(date.getDate() + i);
+      const dayData = await getProvinceTemperaturesByDate(date);
+      allForecastData.push(dayData);
+      console.log(`  ✓ 第${i}天 (${date.toLocaleDateString('zh-CN')}): ${dayData.length} 个省份`);
+    }
+    console.log(`✅ 获取到7天数据\n`);
 
-    // 获取所有省份的7天预报数据
-    console.log('📅 获取7天预报数据...');
+    // 获取所有省份的7天预报数据（用于排行榜的7天趋势图）
+    console.log('📅 获取7天预报趋势数据...');
     const forecastData = await getAllProvincesForecast();
     console.log(`✅ 获取到 ${Object.keys(forecastData).length} 个省份的预报数据\n`);
 
-    // 生成主页
-    console.log('🏠 生成主页...');
-    await generateIndex(provinceData, forecastData);
-
-    // 生成省份详情页
-    console.log('\n📄 生成省份详情页...');
-    await generateProvincePages(provinceData);
+    // 生成所有日期的主页
+    await generateAllIndexPages(allForecastData, forecastData);
 
     console.log('\n✨ 所有页面生成完成！');
     console.log(`📁 输出目录: ${OUTPUT_DIR}`);
