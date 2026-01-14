@@ -1,2185 +1,579 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
-<html>
- <head> 
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0"> 
-  <meta http-equiv="Content-Type" content="text/html;charset=UTF-8"> 
-  <meta http-equiv="X-UA-Compatible" content="IE=edge"> 
-  <meta name="description" content="中国气象局提供权威的天气预报、气象预警、卫星云图、雷达图等专业服务产品"> 
-  <meta name="keywords" content="中国气象局、气象局、天气、天气预报、气候、气象、气候、气候变化、预警"> 
-  <link rel="shortcut icon" href="/assets/favicon.ico"> 
-  <meta name="viewport" content="width=device-width, initial-scale=1"> 
-  <link rel="stylesheet" type="text/css" href="//at.alicdn.com/t/font_1145929_t7e3a52mhxh.css"> 
-  <link rel="stylesheet" type="text/css" href="/assets/lib/mCustomScrollbar/jquery.mCustomScrollbar.min.css"> 
-  <link rel="stylesheet" href="/assets/lib/bootstrap-3.3.7-dist/css/bootstrap.min.css"> 
-  <link rel="stylesheet" type="text/css" href="/assets/cma/css/pub.css?v=20251231130045"> 
-  <script type="text/javascript" src="/assets/lib/jquery-1.9.1.min.js"></script> 
-  <!--[if lt IE 9]>
-　<script src="https://cdn.bootcss.com/html5shiv/3.7.2/html5shiv.min.js"></script>
-  <script src="https://cdn.bootcss.com/respond.js/1.4.2/respond.js"></script>
-  <script src="/static/bootstrap-slider/html5shiv.min.js"></script>
-<![endif]--> 
-  <meta http-equiv="X-UA-Compatible" content="IE=edge,Chrome=1"> 
-  <meta http-equiv="X-UA-Compatible" content="IE=9"> 
-  <script>
-var _hmt = _hmt || [];
-(function() {
-  var hm = document.createElement("script");
-  hm.src = "https://hm.baidu.com/hm.js?c758855eca53e5d78186936566552a13";
-  var s = document.getElementsByTagName("script")[0]; 
-  s.parentNode.insertBefore(hm, s);
-})();
-</script> 
-  <script>
-	var ctx = '/web';
-</script> 
-  <title>中国气象局-天气预报-城市预报</title> 
-  <link href="/assets/lib/leaflet/leaflet.css" rel="stylesheet" type="text/css"> 
-  <link rel="stylesheet" href="/assets/lib/leaflet-sidebar/src/L.Control.Sidebar.css"> 
- </head> 
- <body> 
-  <nav class="navbar navbar-default top-navbar" style="margin-bottom:0;"> 
-   <div class="container"> 
-    <div class="collapse navbar-collapse" style="padding:0;"> 
-     <ul class="nav navbar-nav"> 
-      <li class="active_"><a href="http://www.cma.gov.cn">主站首页</a></li> 
-      <li class="active_"><a href="http://www.cma.gov.cn/2011zwxx/2011zbmgk/">领导主站</a></li> 
-      <li class="active_"><a href="http://www.cma.gov.cn/2011zwxx/2011zbmgk/">部门概况</a></li> 
-      <li class="active_"><a href="http://www.cma.gov.cn/2011xwzx/2011xqxxw/">新闻资讯</a></li> 
-      <li class="active_"><a href="http://zwgk.cma.gov.cn/zfxxgk/gkzn/">信息公开</a></li> 
-      <li class="active_"><a href="http://www.cma.gov.cn">服务办事</a></li> 
-      <li class="active_"><a href="/web">天气预报</a></li> 
-     </ul> 
-    </div> 
-   </div> 
-  </nav> 
-  <nav id="header" class="navbar" style="margin-bottom:0;"> 
-   <div class="container"> 
-    <div class="collapse navbar-collapse"> 
-     <ul class="nav navbar-nav"> 
-      <li class="active"><a href="//weather.cma.cn" style="background-color: #fff;"><img src="/assets/cmalogo.png"></a></li> 
-     </ul> 
-     <form class="navbar-form navbar-right" style="margin-top:15px;"> 
-      <div class="searchForm"> 
-       <input type="text" id="searchInput" placeholder="输入城市名称查询天气" autocomplete="off" class="ac_input"> 
-       <i class="iconfont icon-search"></i> 
-       <div id="selectCityDiv" style="display: none;"> 
-        <ul class="nav nav-tabs tab2 tabrank tabflag" role="tablist"> 
-         <li class="active"><a class="tabflag" href="#gn" data-toggle="tab" aria-expanded="true">国内</a></li> 
-         <li class=""><a class="tabflag" href="#gw" data-toggle="tab" aria-expanded="false">国外</a></li> 
-        </ul> 
-        <div class="tab-content" style="overflow: hidden; border-top:1px solid #ddd; padding:4px;"> 
-         <div class="tab-pane active" id="gn" style="padding:0 15px;"> 
-          <div class="row citylist"> 
-           <div class="col-xs-2 city">
-            <a href="/web/weather/S1003.html">成都</a>
-           </div> 
-           <div class="col-xs-2 city">
-            <a href="/web/weather/54511.html">北京</a>
-           </div> 
-           <div class="col-xs-2 city">
-            <a href="/web/weather/58238.html">南京</a>
-           </div> 
-           <div class="col-xs-2 city">
-            <a href="/web/weather/59431.html">南宁</a>
-           </div> 
-           <div class="col-xs-2 city">
-            <a href="/web/weather/58606.html">南昌</a>
-           </div> 
-           <div class="col-xs-2 city">
-            <a href="/web/weather/58321.html">合肥</a>
-           </div> 
-           <div class="col-xs-2 city">
-            <a href="/web/weather/50953.html">哈尔滨</a>
-           </div> 
-           <div class="col-xs-2 city">
-            <a href="/web/weather/59287.html">广州</a>
-           </div> 
-           <div class="col-xs-2 city">
-            <a href="/web/weather/58367.html">徐家汇</a>
-           </div> 
-           <div class="col-xs-2 city">
-            <a href="/web/weather/55591.html">拉萨</a>
-           </div> 
-           <div class="col-xs-2 city">
-            <a href="/web/weather/56778.html">昆明</a>
-           </div> 
-           <div class="col-xs-2 city">
-            <a href="/web/weather/58457.html">杭州</a>
-           </div> 
-           <div class="col-xs-2 city">
-            <a href="/web/weather/57494.html">武汉</a>
-           </div> 
-           <div class="col-xs-2 city">
-            <a href="/web/weather/54342.html">沈阳</a>
-           </div> 
-           <div class="col-xs-2 city">
-            <a href="/web/weather/57516.html">沙坪坝</a>
-           </div> 
-           <div class="col-xs-2 city">
-            <a href="/web/weather/54823.html">济南</a>
-           </div> 
-           <div class="col-xs-2 city">
-            <a href="/web/weather/59758.html">海口</a>
-           </div> 
-           <div class="col-xs-2 city">
-            <a href="/web/weather/59493.html">深圳</a>
-           </div> 
-           <div class="col-xs-2 city">
-            <a href="/web/weather/53698-sjz.html">石家庄</a>
-           </div> 
-           <div class="col-xs-2 city">
-            <a href="/web/weather/58847.html">福州</a>
-           </div> 
-           <div class="col-xs-2 city">
-            <a href="/web/weather/59287-lg.html">萝岗</a>
-           </div> 
-           <div class="col-xs-2 city">
-            <a href="/web/weather/52866.html">西宁</a>
-           </div> 
-           <div class="col-xs-2 city">
-            <a href="/web/weather/V8870.html">西安</a>
-           </div> 
-           <div class="col-xs-2 city">
-            <a href="/web/weather/57816.html">贵阳</a>
-           </div> 
-           <div class="col-xs-2 city">
-            <a href="/web/weather/57083.html">郑州</a>
-           </div> 
-           <div class="col-xs-2 city">
-            <a href="/web/weather/53614.html">银川</a>
-           </div> 
-           <div class="col-xs-2 city">
-            <a href="/web/weather/54161.html">长春</a>
-           </div> 
-           <div class="col-xs-2 city">
-            <a href="/web/weather/57679.html">长沙黄花</a>
-           </div> 
-           <div class="col-xs-2 city">
-            <a href="/web/weather/53698.html">鹿泉</a>
-           </div> 
-           <div class="col-xs-2 city">
-            <a href="/web/weather/51463.html">乌鲁木齐</a>
-           </div> 
-           <div class="col-xs-2 city">
-            <a href="/web/weather/52889.html">兰州</a>
-           </div> 
-           <div class="col-xs-2 city">
-            <a href="/web/weather/54517.html">黑牛城</a>
-           </div> 
-           <div class="col-xs-2 city">
-            <a href="/web/weather/45005.html">香港天文台</a>
-           </div> 
-           <div class="col-xs-2 city">
-            <a href="/web/weather/45011.html">大潭山</a>
-           </div> 
-           <div class="col-xs-2 city">
-            <a href="/web/weather/45011B.html">澳门</a>
-           </div> 
-           <div class="col-xs-2 city">
-            <a href="/web/weather/58968.html">台北</a>
-           </div> 
-          </div> 
-         </div> 
-         <div class="tab-pane" id="gw" style="padding:0 15px;"> 
-          <div class="row citylist"> 
-           <div class="col-xs-3 city">
-            <a href="/web/weather/062721.html">喀土穆</a>
-           </div> 
-           <div class="col-xs-3 city">
-            <a href="/web/weather/003772.html">伦敦</a>
-           </div> 
-           <div class="col-xs-3 city">
-            <a href="/web/weather/068816.html">开普敦</a>
-           </div> 
-           <div class="col-xs-3 city">
-            <a href="/web/weather/061641.html">达喀尔</a>
-           </div> 
-           <div class="col-xs-3 city">
-            <a href="/web/weather/G05021.html">弗里敦</a>
-           </div> 
-           <div class="col-xs-3 city">
-            <a href="/web/weather/065563.html">亚穆苏克罗</a>
-           </div> 
-           <div class="col-xs-3 city">
-            <a href="/web/weather/063260.html">摩加迪沙</a>
-           </div> 
-           <div class="col-xs-3 city">
-            <a href="/web/weather/064950.html">雅温得</a>
-           </div> 
-           <div class="col-xs-3 city">
-            <a href="/web/weather/G05020.html">朱巴</a>
-           </div> 
-           <div class="col-xs-3 city">
-            <a href="/web/weather/063980.html">维多利亚</a>
-           </div> 
-           <div class="col-xs-3 city">
-            <a href="/web/weather/061832.html">科纳克里</a>
-           </div> 
-           <div class="col-xs-3 city">
-            <a href="/web/weather/065472.html">阿克拉</a>
-           </div> 
-           <div class="col-xs-3 city">
-            <a href="/web/weather/067665.html">卢萨卡</a>
-           </div> 
-           <div class="col-xs-3 city">
-            <a href="/web/weather/067341.html">马普托</a>
-           </div> 
-           <div class="col-xs-3 city">
-            <a href="/web/weather/064500.html">利伯维尔</a>
-           </div> 
-           <div class="col-xs-3 city">
-            <a href="/web/weather/G05019.html">温得和克</a>
-           </div> 
-           <div class="col-xs-3 city">
-            <a href="/web/weather/061442.html">努瓦克肖特</a>
-           </div> 
-           <div class="col-xs-3 city">
-            <a href="/web/weather/G05025.html">罗安达</a>
-           </div> 
-           <div class="col-xs-3 city">
-            <a href="/web/weather/063125.html">吉布提市</a>
-           </div> 
-           <div class="col-xs-3 city">
-            <a href="/web/weather/063450.html">亚的斯亚贝巴</a>
-           </div> 
-           <div class="col-xs-3 city">
-            <a href="/web/weather/063740.html">内罗毕</a>
-           </div> 
-           <div class="col-xs-3 city">
-            <a href="/web/weather/065125.html">阿布贾</a>
-           </div> 
-           <div class="col-xs-3 city">
-            <a href="/web/weather/064700.html">恩贾梅纳</a>
-           </div> 
-           <div class="col-xs-3 city">
-            <a href="/web/weather/G05024.html">布拉柴维尔</a>
-           </div> 
-           <div class="col-xs-3 city">
-            <a href="/web/weather/067775.html">哈拉雷</a>
-           </div> 
-           <div class="col-xs-3 city">
-            <a href="/web/weather/060390.html">阿尔及尔</a>
-           </div> 
-           <div class="col-xs-3 city">
-            <a href="/web/weather/G05018.html">多多马</a>
-           </div> 
-           <div class="col-xs-3 city">
-            <a href="/web/weather/063894.html">达累斯萨拉姆</a>
-           </div> 
-           <div class="col-xs-3 city">
-            <a href="/web/weather/064390.html">布琼布拉</a>
-           </div> 
-           <div class="col-xs-3 city">
-            <a href="/web/weather/008589.html">普拉亚</a>
-           </div> 
-           <div class="col-xs-3 city">
-            <a href="/web/weather/063705.html">坎帕拉</a>
-           </div> 
-           <div class="col-xs-3 city">
-            <a href="/web/weather/G05017.html">班珠尔</a>
-           </div> 
-           <div class="col-xs-3 city">
-            <a href="/web/weather/065387.html">洛美</a>
-           </div> 
-           <div class="col-xs-3 city">
-            <a href="/web/weather/064387.html">基加利</a>
-           </div> 
-           <div class="col-xs-3 city">
-            <a href="/web/weather/060135.html">拉巴特</a>
-           </div> 
-           <div class="col-xs-3 city">
-            <a href="/web/weather/067083.html">塔那那利佛</a>
-           </div> 
-           <div class="col-xs-3 city">
-            <a href="/web/weather/060715.html">突尼斯市</a>
-           </div> 
-           <div class="col-xs-3 city">
-            <a href="/web/weather/040103.html">的黎波里</a>
-           </div> 
-           <div class="col-xs-3 city">
-            <a href="/web/weather/062010.html">的黎波里</a>
-           </div> 
-           <div class="col-xs-3 city">
-            <a href="/web/weather/062366.html">开罗</a>
-           </div> 
-           <div class="col-xs-3 city">
-            <a href="/web/weather/064810.html">马拉博</a>
-           </div> 
-           <div class="col-xs-3 city">
-            <a href="/web/weather/G05009.html">蒙罗维亚</a>
-           </div> 
-           <div class="col-xs-3 city">
-            <a href="/web/weather/061291.html">巴马科</a>
-           </div> 
-           <div class="col-xs-3 city">
-            <a href="/web/weather/047108.html">首尔</a>
-           </div> 
-           <div class="col-xs-3 city">
-            <a href="/web/weather/044292.html">乌兰巴托</a>
-           </div> 
-           <div class="col-xs-3 city">
-            <a href="/web/weather/048698.html">新加坡市</a>
-           </div> 
-           <div class="col-xs-3 city">
-            <a href="/web/weather/097390.html">帝力</a>
-           </div> 
-           <div class="col-xs-3 city">
-            <a href="/web/weather/048647.html">吉隆坡</a>
-           </div> 
-           <div class="col-xs-3 city">
-            <a href="/web/weather/048074.html">内比都</a>
-           </div> 
-           <div class="col-xs-3 city">
-            <a href="/web/weather/048991.html">金边</a>
-           </div> 
-           <div class="col-xs-3 city">
-            <a href="/web/weather/048820.html">河内</a>
-           </div> 
-           <div class="col-xs-3 city">
-            <a href="/web/weather/048940.html">万象</a>
-           </div> 
-           <div class="col-xs-3 city">
-            <a href="/web/weather/096315.html">斯里巴加湾市</a>
-           </div> 
-           <div class="col-xs-3 city">
-            <a href="/web/weather/041571.html">伊斯兰堡</a>
-           </div> 
-           <div class="col-xs-3 city">
-            <a href="/web/weather/043466.html">科伦坡</a>
-           </div> 
-           <div class="col-xs-3 city">
-            <a href="/web/weather/041923.html">达卡</a>
-           </div> 
-           <div class="col-xs-3 city">
-            <a href="/web/weather/044454.html">加德满都</a>
-           </div> 
-           <div class="col-xs-3 city">
-            <a href="/web/weather/043555.html">马累</a>
-           </div> 
-           <div class="col-xs-3 city">
-            <a href="/web/weather/041217.html">阿布扎比</a>
-           </div> 
-           <div class="col-xs-3 city">
-            <a href="/web/weather/040582.html">科威特城</a>
-           </div> 
-           <div class="col-xs-3 city">
-            <a href="/web/weather/017130.html">安卡拉</a>
-           </div> 
-           <div class="col-xs-3 city">
-            <a href="/web/weather/041170.html">多哈</a>
-           </div> 
-           <div class="col-xs-3 city">
-            <a href="/web/weather/041256.html">马斯喀特</a>
-           </div> 
-           <div class="col-xs-3 city">
-            <a href="/web/weather/040100.html">贝鲁特</a>
-           </div> 
-           <div class="col-xs-3 city">
-            <a href="/web/weather/040438.html">利雅得</a>
-           </div> 
-           <div class="col-xs-3 city">
-            <a href="/web/weather/041150.html">麦纳麦</a>
-           </div> 
-           <div class="col-xs-3 city">
-            <a href="/web/weather/040754.html">德黑兰</a>
-           </div> 
-           <div class="col-xs-3 city">
-            <a href="/web/weather/040650.html">巴格达</a>
-           </div> 
-           <div class="col-xs-3 city">
-            <a href="/web/weather/040948.html">喀布尔</a>
-           </div> 
-           <div class="col-xs-3 city">
-            <a href="/web/weather/037864.html">巴库</a>
-           </div> 
-           <div class="col-xs-3 city">
-            <a href="/web/weather/037545.html">第比利斯</a>
-           </div> 
-           <div class="col-xs-3 city">
-            <a href="/web/weather/037788.html">埃里温</a>
-           </div> 
-           <div class="col-xs-3 city">
-            <a href="/web/weather/035188.html">阿斯塔纳</a>
-           </div> 
-           <div class="col-xs-3 city">
-            <a href="/web/weather/038353.html">比什凯克</a>
-           </div> 
-           <div class="col-xs-3 city">
-            <a href="/web/weather/038836.html">杜尚别</a>
-           </div> 
-           <div class="col-xs-3 city">
-            <a href="/web/weather/038457.html">塔什干</a>
-           </div> 
-           <div class="col-xs-3 city">
-            <a href="/web/weather/048455.html">曼谷</a>
-           </div> 
-           <div class="col-xs-3 city">
-            <a href="/web/weather/096741.html">雅加达</a>
-           </div> 
-           <div class="col-xs-3 city">
-            <a href="/web/weather/098425.html">马尼拉</a>
-           </div> 
-           <div class="col-xs-3 city">
-            <a href="/web/weather/041404.html">萨那</a>
-           </div> 
-           <div class="col-xs-3 city">
-            <a href="/web/weather/G05010.html">尼科西亚</a>
-           </div> 
-           <div class="col-xs-3 city">
-            <a href="/web/weather/027612.html">莫斯科</a>
-           </div> 
-           <div class="col-xs-3 city">
-            <a href="/web/weather/011035.html">维也纳</a>
-           </div> 
-           <div class="col-xs-3 city">
-            <a href="/web/weather/016716.html">雅典</a>
-           </div> 
-           <div class="col-xs-3 city">
-            <a href="/web/weather/012375.html">华沙</a>
-           </div> 
-           <div class="col-xs-3 city">
-            <a href="/web/weather/013274.html">贝尔格莱德</a>
-           </div> 
-           <div class="col-xs-3 city">
-            <a href="/web/weather/011520.html">布拉格</a>
-           </div> 
-           <div class="col-xs-3 city">
-            <a href="/web/weather/015614.html">索非亚</a>
-           </div> 
-           <div class="col-xs-3 city">
-            <a href="/web/weather/011816.html">布拉迪斯拉发</a>
-           </div> 
-           <div class="col-xs-3 city">
-            <a href="/web/weather/013615.html">地拉那</a>
-           </div> 
-           <div class="col-xs-3 city">
-            <a href="/web/weather/014240.html">萨格勒布</a>
-           </div> 
-           <div class="col-xs-3 city">
-            <a href="/web/weather/014654.html">萨拉热窝</a>
-           </div> 
-           <div class="col-xs-3 city">
-            <a href="/web/weather/013462.html">波德戈里察</a>
-           </div> 
-           <div class="col-xs-3 city">
-            <a href="/web/weather/026038.html">塔林</a>
-           </div> 
-           <div class="col-xs-3 city">
-            <a href="/web/weather/026730.html">维尔纽斯</a>
-           </div> 
-           <div class="col-xs-3 city">
-            <a href="/web/weather/014014.html">卢布尔雅那</a>
-           </div> 
-           <div class="col-xs-3 city">
-            <a href="/web/weather/012843.html">布达佩斯</a>
-           </div> 
-           <div class="col-xs-3 city">
-            <a href="/web/weather/013586.html">斯科普里</a>
-           </div> 
-           <div class="col-xs-3 city">
-            <a href="/web/weather/015420.html">布加勒斯特</a>
-           </div> 
-           <div class="col-xs-3 city">
-            <a href="/web/weather/026422.html">里加</a>
-           </div> 
-           <div class="col-xs-3 city">
-            <a href="/web/weather/033345.html">基辅</a>
-           </div> 
-           <div class="col-xs-3 city">
-            <a href="/web/weather/026850.html">明斯克</a>
-           </div> 
-           <div class="col-xs-3 city">
-            <a href="/web/weather/033815.html">基希讷乌</a>
-           </div> 
-           <div class="col-xs-3 city">
-            <a href="/web/weather/G05005.html">瓦莱塔</a>
-           </div> 
-           <div class="col-xs-3 city">
-            <a href="/web/weather/008535.html">里斯本</a>
-           </div> 
-           <div class="col-xs-3 city">
-            <a href="/web/weather/G05011.html">卢森堡</a>
-           </div> 
-           <div class="col-xs-3 city">
-            <a href="/web/weather/093439.html">惠灵顿</a>
-           </div> 
-           <div class="col-xs-3 city">
-            <a href="/web/weather/094035.html">莫尔斯比港</a>
-           </div> 
-           <div class="col-xs-3 city">
-            <a href="/web/weather/G05007.html">阿皮亚</a>
-           </div> 
-           <div class="col-xs-3 city">
-            <a href="/web/weather/G05022.html">阿洛菲</a>
-           </div> 
-           <div class="col-xs-3 city">
-            <a href="/web/weather/G05004.html">苏瓦</a>
-           </div> 
-           <div class="col-xs-3 city">
-            <a href="/web/weather/G05014.html">帕利基尔</a>
-           </div> 
-           <div class="col-xs-3 city">
-            <a href="/web/weather/G05013.html">阿瓦鲁阿</a>
-           </div> 
-           <div class="col-xs-3 city">
-            <a href="/web/weather/G05003.html">努库阿洛法</a>
-           </div> 
-           <div class="col-xs-3 city">
-            <a href="/web/weather/G05012.html">维拉港</a>
-           </div> 
-           <div class="col-xs-3 city">
-            <a href="/web/weather/085574.html">圣地亚哥</a>
-           </div> 
-           <div class="col-xs-3 city">
-            <a href="/web/weather/G05023.html">乔治敦</a>
-           </div> 
-           <div class="col-xs-3 city">
-            <a href="/web/weather/006240.html">阿姆斯特丹</a>
-           </div> 
-           <div class="col-xs-3 city">
-            <a href="/web/weather/086580.html">蒙得维的亚</a>
-           </div> 
-           <div class="col-xs-3 city">
-            <a href="/web/weather/080415.html">加拉加斯</a>
-           </div> 
-           <div class="col-xs-3 city">
-            <a href="/web/weather/G05016.html">帕拉马里博</a>
-           </div> 
-           <div class="col-xs-3 city">
-            <a href="/web/weather/G84071.html">基多</a>
-           </div> 
-           <div class="col-xs-3 city">
-            <a href="/web/weather/084628.html">利马</a>
-           </div> 
-           <div class="col-xs-3 city">
-            <a href="/web/weather/078762.html">圣何塞</a>
-           </div> 
-           <div class="col-xs-3 city">
-            <a href="/web/weather/078806.html">巴拿马城</a>
-           </div> 
-           <div class="col-xs-3 city">
-            <a href="/web/weather/G05015.html">圣萨尔瓦多</a>
-           </div> 
-           <div class="col-xs-3 city">
-            <a href="/web/weather/G05006.html">圣多明各</a>
-           </div> 
-           <div class="col-xs-3 city">
-            <a href="/web/weather/078970.html">西班牙港</a>
-           </div> 
-           <div class="col-xs-3 city">
-            <a href="/web/weather/078862.html">圣约翰</a>
-           </div> 
-           <div class="col-xs-3 city">
-            <a href="/web/weather/G05026.html">罗索</a>
-           </div> 
-           <div class="col-xs-3 city">
-            <a href="/web/weather/G05008.html">圣乔治</a>
-           </div> 
-           <div class="col-xs-3 city">
-            <a href="/web/weather/G05002.html">布里奇顿</a>
-           </div> 
-           <div class="col-xs-3 city">
-            <a href="/web/weather/078224.html">哈瓦那</a>
-           </div> 
-           <div class="col-xs-3 city">
-            <a href="/web/weather/G05001.html">金斯敦</a>
-           </div> 
-           <div class="col-xs-3 city">
-            <a href="/web/weather/047662.html">东京</a>
-           </div> 
-           <div class="col-xs-3 city">
-            <a href="/web/weather/072405.html">华盛顿</a>
-           </div> 
-           <div class="col-xs-3 city">
-            <a href="/web/weather/006180.html">哥本哈根</a>
-           </div> 
-           <div class="col-xs-3 city">
-            <a href="/web/weather/094926.html">堪培拉</a>
-           </div> 
-           <div class="col-xs-3 city">
-            <a href="/web/weather/076680.html">墨西哥城</a>
-           </div> 
-           <div class="col-xs-3 city">
-            <a href="/web/weather/040080.html">大马士革</a>
-           </div> 
-           <div class="col-xs-3 city">
-            <a href="/web/weather/﻿001492.html">奥斯陆</a>
-           </div> 
-           <div class="col-xs-3 city">
-            <a href="/web/weather/040270.html">安曼</a>
-           </div> 
-           <div class="col-xs-3 city">
-            <a href="/web/weather/061052.html">尼亚美</a>
-           </div> 
-           <div class="col-xs-3 city">
-            <a href="/web/weather/083377.html">巴西利亚</a>
-           </div> 
-           <div class="col-xs-3 city">
-            <a href="/web/weather/007149.html">巴黎</a>
-           </div> 
-           <div class="col-xs-3 city">
-            <a href="/web/weather/087582.html">布宜诺斯艾利斯</a>
-           </div> 
-           <div class="col-xs-3 city">
-            <a href="/web/weather/006451.html">布鲁塞尔</a>
-           </div> 
-           <div class="col-xs-3 city">
-            <a href="/web/weather/047058.html">平壤</a>
-           </div> 
-           <div class="col-xs-3 city">
-            <a href="/web/weather/042299.html">廷布</a>
-           </div> 
-           <div class="col-xs-3 city">
-            <a href="/web/weather/076405.html">拉巴斯</a>
-           </div> 
-           <div class="col-xs-3 city">
-            <a href="/web/weather/002464.html">斯德哥尔摩</a>
-           </div> 
-           <div class="col-xs-3 city">
-            <a href="/web/weather/042182.html">新德里</a>
-           </div> 
-           <div class="col-xs-3 city">
-            <a href="/web/weather/010385.html">柏林</a>
-           </div> 
-           <div class="col-xs-3 city">
-            <a href="/web/weather/065344.html">波多诺伏</a>
-           </div> 
-           <div class="col-xs-3 city">
-            <a href="/web/weather/071628.html">渥太华</a>
-           </div> 
-           <div class="col-xs-3 city">
-            <a href="/web/weather/064650.html">班吉</a>
-           </div> 
-           <div class="col-xs-3 city">
-            <a href="/web/weather/065503.html">瓦加杜古</a>
-           </div> 
-           <div class="col-xs-3 city">
-            <a href="/web/weather/016242.html">罗马</a>
-           </div> 
-           <div class="col-xs-3 city">
-            <a href="/web/weather/040183.html">耶路撒冷</a>
-           </div> 
-           <div class="col-xs-3 city">
-            <a href="/web/weather/067001.html">莫罗尼</a>
-           </div> 
-           <div class="col-xs-3 city">
-            <a href="/web/weather/002974.html">赫尔辛基</a>
-           </div> 
-           <div class="col-xs-3 city">
-            <a href="/web/weather/061990.html">路易港</a>
-           </div> 
-           <div class="col-xs-3 city">
-            <a href="/web/weather/064210.html">金沙萨</a>
-           </div> 
-           <div class="col-xs-3 city">
-            <a href="/web/weather/038880.html">阿什哈巴德</a>
-           </div> 
-           <div class="col-xs-3 city">
-            <a href="/web/weather/008221.html">马德里</a>
-           </div> 
-          </div> 
-         </div> 
-        </div> 
-       </div> 
-      </div> 
-     </form> 
-    </div> 
-   </div> 
-  </nav> 
-  <nav class="navbar navbar-default cma-navbar" style="margin-bottom:10px;"> 
-   <div class="container"> 
-    <a href="/" target="_self" style="width:12.5%;">首页</a> 
-    <a href="/web/channel-2b0863600e144b13807e606f928b1266.html" target="_self" style="width:12.5%;">天气实况</a> 
-    <a href="/web/channel-380.html" target="_self" style="width:12.5%;">气象公报</a> 
-    <a href="/web/alarm/map.html" target="_self" style="width:12.5%;">气象预警</a> 
-    <a href="/web/weather/map.html" target="_self" style="width:12.5%;">城市预报</a> 
-    <a href="http://www.cma.gov.cn" target="_blank" style="width:12.5%;">天气资讯</a> 
-    <a href="http://www.cma.gov.cn/2011xwzx/2011xztbd/" target="_blank" style="width:12.5%;">气象专题</a> 
-    <a href="http://www.cma.gov.cn/kppd/index.html" target="_blank" style="width:12.5%;">气象科普</a> 
-   </div> 
-  </nav> 
-  <div class="container"> 
-   <ol class="breadcrumb mybreadcrumb" id="breadcrumb"> 
-    <li><span class="glyphicon glyphicon-home myglyphicon-home" aria-hidden="true"></span> <a href="/">首页</a></li> 
-    <li><a href="/web/text/area.html">国内</a></li> 
-    <li><a href="/web/text/XN/ASC.html">四川</a></li> 
-    <li class="active">成都</li> 
-   </ol> 
-   <div class="row"> 
-    <div class="col-xs-12"> 
-     <div class="city_real" style=""> 
-      <div class="row"> 
-       <div class="col-xs-8" id="cityPosition"> 
-        <i class="iconfont icon-weizhi pull-left"></i> 
-        <div class="dropdown pull-left"> 
-         <button type="button" data-toggle="dropdown"><span>国内</span> <span class="caret"></span></button> 
-         <ul class="dropdown-menu type-select" style="max-height:270px;overflow-y: scroll;">
-          <li data-value="0">国内</li>
-          <li data-value="1">国外</li>
-         </ul> 
-        </div> 
-        <div class="pull-left split-line">
-         |
-        </div> 
-        <div class="dropdown pull-left"> 
-         <button type="button" data-toggle="dropdown"><span>四川</span> <span class="caret"></span></button> 
-         <ul class="dropdown-menu province-select" style="max-height:270px;overflow-y: scroll;">
-          <li data-value="ABJ">北京市</li>
-          <li data-value="ATJ">天津市</li>
-          <li data-value="AHE">河北省</li>
-          <li data-value="ASX">山西省</li>
-          <li data-value="ANM">内蒙古自治区</li>
-          <li data-value="ALN">辽宁省</li>
-          <li data-value="AJL">吉林省</li>
-          <li data-value="AHL">黑龙江省</li>
-          <li data-value="ASH">上海市</li>
-          <li data-value="AJS">江苏省</li>
-          <li data-value="AZJ">浙江省</li>
-          <li data-value="AAH">安徽省</li>
-          <li data-value="AFJ">福建省</li>
-          <li data-value="AJX">江西省</li>
-          <li data-value="ASD">山东省</li>
-          <li data-value="AHA">河南省</li>
-          <li data-value="AHB">湖北省</li>
-          <li data-value="AHN">湖南省</li>
-          <li data-value="AGD">广东省</li>
-          <li data-value="AGX">广西壮族自治区</li>
-          <li data-value="AHI">海南省</li>
-          <li data-value="ACQ">重庆市</li>
-          <li data-value="ASC">四川省</li>
-          <li data-value="AGZ">贵州省</li>
-          <li data-value="AYN">云南省</li>
-          <li data-value="AXZ">西藏自治区</li>
-          <li data-value="ASN">陕西省</li>
-          <li data-value="AGS">甘肃省</li>
-          <li data-value="AQH">青海省</li>
-          <li data-value="ANX">宁夏回族自治区</li>
-          <li data-value="AXJ">新疆维吾尔自治区</li>
-          <li data-value="AXG">香港特别行政区</li>
-          <li data-value="AAM">澳门特别行政区</li>
-          <li data-value="ATW">台湾省</li>
-         </ul> 
-        </div> 
-        <div class="pull-left split-line">
-         |
-        </div> 
-        <div class="dropdown pull-left"> 
-         <button type="button" data-toggle="dropdown">成都 <span class="caret"></span></button> 
-         <ul class="dropdown-menu station-select" style="max-height:270px;overflow-y: scroll;">
-          <li><a href="/web/weather/56388.html">五通桥</a></li>
-          <li><a href="/web/weather/S4241.html">仪陇新政</a></li>
-          <li><a href="/web/weather/S0554.html">会理城区</a></li>
-          <li><a href="/web/weather/S4492.html">前锋</a></li>
-          <li><a href="/web/weather/S4655.html">华蓥</a></li>
-          <li><a href="/web/weather/57403.html">大英</a></li>
-          <li><a href="/web/weather/S5702.html">宜宾</a></li>
-          <li><a href="/web/weather/S6409.html">宝兴</a></li>
-          <li><a href="/web/weather/S1933.html">德阳</a></li>
-          <li><a href="/web/weather/S1003.html">成都</a></li>
-          <li><a href="/web/weather/S5031.html">泸州</a></li>
-          <li><a href="/web/weather/56386.html">乐山</a></li>
-          <li><a href="/web/weather/57503.html">内江</a></li>
-          <li><a href="/web/weather/57411.html">南充</a></li>
-          <li><a href="/web/weather/56385.html">峨眉山</a></li>
-          <li><a href="/web/weather/57313.html">巴中</a></li>
-          <li><a href="/web/weather/57206.html">广元</a></li>
-          <li><a href="/web/weather/57415.html">广安区</a></li>
-          <li><a href="/web/weather/56666.html">攀枝花</a></li>
-          <li><a href="/web/weather/57508.html">泸县</a></li>
-          <li><a href="/web/weather/56146.html">甘孜</a></li>
-          <li><a href="/web/weather/56391.html">眉山</a></li>
-          <li><a href="/web/weather/56196.html">绵阳</a></li>
-          <li><a href="/web/weather/56198.html">罗江</a></li>
-          <li><a href="/web/weather/56396.html">自贡</a></li>
-          <li><a href="/web/weather/56571.html">西昌</a></li>
-          <li><a href="/web/weather/56298.html">资阳</a></li>
-          <li><a href="/web/weather/57328.html">达川</a></li>
-          <li><a href="/web/weather/57405.html">遂宁</a></li>
-          <li><a href="/web/weather/56171.html">阿坝</a></li>
-          <li><a href="/web/weather/56287.html">雅安</a></li>
-          <li><a href="/web/weather/57237.html">万源</a></li>
-          <li><a href="/web/weather/57307.html">三台</a></li>
-          <li><a href="/web/weather/56199.html">中江</a></li>
-          <li><a href="/web/weather/56263.html">丹巴</a></li>
-          <li><a href="/web/weather/56381.html">丹棱</a></li>
-          <li><a href="/web/weather/57407.html">乐至</a></li>
-          <li><a href="/web/weather/56097.html">九寨沟</a></li>
-          <li><a href="/web/weather/56462.html">九龙</a></li>
-          <li><a href="/web/weather/56443.html">乡城</a></li>
-          <li><a href="/web/weather/56390.html">井研</a></li>
-          <li><a href="/web/weather/56197.html">什邡</a></li>
-          <li><a href="/web/weather/56674.html">仁和</a></li>
-          <li><a href="/web/weather/56297.html">仁寿</a></li>
-          <li><a href="/web/weather/56675.html">会东</a></li>
-          <li><a href="/web/weather/56496.html">兴文</a></li>
-          <li><a href="/web/weather/56474.html">冕宁</a></li>
-          <li><a href="/web/weather/57208.html">剑阁</a></li>
-          <li><a href="/web/weather/56194.html">北川</a></li>
-          <li><a href="/web/weather/57216.html">南江</a></li>
-          <li><a href="/web/weather/56493.html">南溪</a></li>
-          <li><a href="/web/weather/57314.html">南部</a></li>
-          <li><a href="/web/weather/56288.html">双流</a></li>
-          <li><a href="/web/weather/56491.html">叙州</a></li>
-          <li><a href="/web/weather/57608.html">叙永</a></li>
-          <li><a href="/web/weather/57605.html">古蔺</a></li>
-          <li><a href="/web/weather/57603.html">合江</a></li>
-          <li><a href="/web/weather/56280.html">名山</a></li>
-          <li><a href="/web/weather/56478.html">喜德</a></li>
-          <li><a href="/web/weather/56164.html">壤塘</a></li>
-          <li><a href="/web/weather/57420.html">大竹</a></li>
-          <li><a href="/web/weather/56285.html">大邑</a></li>
-          <li><a href="/web/weather/56278.html">天全</a></li>
-          <li><a href="/web/weather/56382.html">夹江</a></li>
-          <li><a href="/web/weather/56395.html">威远</a></li>
-          <li><a href="/web/weather/56578.html">宁南</a></li>
-          <li><a href="/web/weather/57408.html">安岳</a></li>
-          <li><a href="/web/weather/56190.html">安州</a></li>
-          <li><a href="/web/weather/57326.html">宣汉</a></li>
-          <li><a href="/web/weather/56399.html">富顺</a></li>
-          <li><a href="/web/weather/57401.html">射洪</a></li>
-          <li><a href="/web/weather/56178.html">小金</a></li>
-          <li><a href="/web/weather/56494.html">屏山</a></li>
-          <li><a href="/web/weather/57414.html">岳池</a></li>
-          <li><a href="/web/weather/56384.html">峨眉</a></li>
-          <li><a href="/web/weather/56387.html">峨边</a></li>
-          <li><a href="/web/weather/56181.html">崇州</a></li>
-          <li><a href="/web/weather/56247.html">巴塘</a></li>
-          <li><a href="/web/weather/56580.html">布拖</a></li>
-          <li><a href="/web/weather/57324.html">平昌</a></li>
-          <li><a href="/web/weather/56193.html">平武</a></li>
-          <li><a href="/web/weather/56291.html">广汉</a></li>
-          <li><a href="/web/weather/56374.html">康定</a></li>
-          <li><a href="/web/weather/57329.html">开江</a></li>
-          <li><a href="/web/weather/56289.html">彭山</a></li>
-          <li><a href="/web/weather/56189.html">彭州</a></li>
-          <li><a href="/web/weather/56441.html">得荣</a></li>
-          <li><a href="/web/weather/56569.html">德昌</a></li>
-          <li><a href="/web/weather/56144.html">德格</a></li>
-          <li><a href="/web/weather/56276.html">新津</a></li>
-          <li><a href="/web/weather/56290.html">新都</a></li>
-          <li><a href="/web/weather/56251.html">新龙</a></li>
-          <li><a href="/web/weather/57217.html">旺苍</a></li>
-          <li><a href="/web/weather/56479.html">昭觉</a></li>
-          <li><a href="/web/weather/56575.html">普格</a></li>
-          <li><a href="/web/weather/56459.html">木里</a></li>
-          <li><a href="/web/weather/56182.html">松潘</a></li>
-          <li><a href="/web/weather/57304.html">梓潼</a></li>
-          <li><a href="/web/weather/57417.html">武胜</a></li>
-          <li><a href="/web/weather/56376.html">汉源</a></li>
-          <li><a href="/web/weather/57600.html">江安</a></li>
-          <li><a href="/web/weather/56195.html">江油</a></li>
-          <li><a href="/web/weather/56183.html">汶川</a></li>
-          <li><a href="/web/weather/56490.html">沐川</a></li>
-          <li><a href="/web/weather/56371.html">泸定</a></li>
-          <li><a href="/web/weather/56380.html">洪雅</a></li>
-          <li><a href="/web/weather/57413.html">渠县</a></li>
-          <li><a href="/web/weather/56187.html">温江</a></li>
-          <li><a href="/web/weather/56158.html">炉霍</a></li>
-          <li><a href="/web/weather/56389.html">犍为</a></li>
-          <li><a href="/web/weather/56499.html">珙县</a></li>
-          <li><a href="/web/weather/56184.html">理县</a></li>
-          <li><a href="/web/weather/56257.html">理塘</a></li>
-          <li><a href="/web/weather/56473.html">甘洛</a></li>
-          <li><a href="/web/weather/56147.html">白玉</a></li>
-          <li><a href="/web/weather/57308.html">盐亭</a></li>
-          <li><a href="/web/weather/56565.html">盐源</a></li>
-          <li><a href="/web/weather/56665.html">盐边</a></li>
-          <li><a href="/web/weather/56378.html">石棉</a></li>
-          <li><a href="/web/weather/56038.html">石渠</a></li>
-          <li><a href="/web/weather/56357.html">稻城</a></li>
-          <li><a href="/web/weather/56498.html">筠连</a></li>
-          <li><a href="/web/weather/56295.html">简阳</a></li>
-          <li><a href="/web/weather/56670.html">米易</a></li>
-          <li><a href="/web/weather/56173.html">红原</a></li>
-          <li><a href="/web/weather/57604.html">纳溪</a></li>
-          <li><a href="/web/weather/56186.html">绵竹</a></li>
-          <li><a href="/web/weather/56487.html">美姑</a></li>
-          <li><a href="/web/weather/56152.html">色达</a></li>
-          <li><a href="/web/weather/56279.html">芦山</a></li>
-          <li><a href="/web/weather/57303.html">苍溪</a></li>
-          <li><a href="/web/weather/56079.html">若尔盖</a></li>
-          <li><a href="/web/weather/56180.html">茂县</a></li>
-          <li><a href="/web/weather/56394.html">荣县</a></li>
-          <li><a href="/web/weather/56373.html">荥经</a></li>
-          <li><a href="/web/weather/57318.html">营山</a></li>
-          <li><a href="/web/weather/56281.html">蒲江</a></li>
-          <li><a href="/web/weather/57317.html">蓬安</a></li>
-          <li><a href="/web/weather/57402.html">蓬溪</a></li>
-          <li><a href="/web/weather/57309.html">西充</a></li>
-          <li><a href="/web/weather/56393.html">资中</a></li>
-          <li><a href="/web/weather/56475.html">越西</a></li>
-          <li><a href="/web/weather/57320.html">通江</a></li>
-          <li><a href="/web/weather/56167.html">道孚</a></li>
-          <li><a href="/web/weather/56284.html">邛崃</a></li>
-          <li><a href="/web/weather/57416.html">邻水</a></li>
-          <li><a href="/web/weather/56272.html">郫都</a></li>
-          <li><a href="/web/weather/56188.html">都江堰</a></li>
-          <li><a href="/web/weather/56296.html">金堂</a></li>
-          <li><a href="/web/weather/56168.html">金川</a></li>
-          <li><a href="/web/weather/56584.html">金阳</a></li>
-          <li><a href="/web/weather/56593.html">长宁</a></li>
-          <li><a href="/web/weather/57306.html">阆中</a></li>
-          <li><a href="/web/weather/57507.html">隆昌</a></li>
-          <li><a href="/web/weather/56267.html">雅江</a></li>
-          <li><a href="/web/weather/56485.html">雷波</a></li>
-          <li><a href="/web/weather/57204.html">青川</a></li>
-          <li><a href="/web/weather/56383.html">青神</a></li>
-          <li><a href="/web/weather/56172.html">马尔康</a></li>
-          <li><a href="/web/weather/56480.html">马边</a></li>
-          <li><a href="/web/weather/56592.html">高县</a></li>
-          <li><a href="/web/weather/56185.html">黑水</a></li>
-          <li><a href="/web/weather/56286.html">龙泉驿</a></li>
-         </ul> 
-        </div> 
-       </div> 
-       <div class="col-xs-4 text-right " id="pubtime">
-        更新
-       </div> 
-      </div> 
-      <div id="city_real_temp" class=""> 
-       <span id="temperature">&nbsp;</span> 
-      </div> 
-      <ul class="real_item "> 
-       <li><i class="iconfont icon-qiya"></i> <span id="pressure">&nbsp;</span></li> 
-       <li><i class="iconfont icon-humidity"></i> <span id="humidity">&nbsp;</span></li> 
-       <li><i class="iconfont icon-jiangshuiliang"></i> <span id="precipitation">&nbsp;</span></li> 
-       <li><i class="iconfont icon-Windpower"></i> <span id="wind">&nbsp;</span></li> 
-      </ul> 
-     </div> 
-    </div> 
-   </div> 
-   <div class="row mt15"> 
-    <div class="col-xs-9"> 
-     <div class="hp"> 
-      <div class="hd">
-       7天天气预报（2025/12/31 12:00发布）
-      </div> 
-      <div id="dayList" class="row hb days " style="padding-bottom:0;"> 
-       <div class="pull-left day actived"> 
-        <div class="day-item">
-         星期三
-         <br>12/31
-        </div> 
-        <div class="day-item dayicon">
-         <img src="/static/img/w/icon/w2.png">
-        </div> 
-        <div class="day-item">
-         阴
-        </div> 
-        <div class="day-item">
-         无持续风向
-        </div> 
-        <div class="day-item">
-         微风
-        </div> 
-        <div class="day-item bardiv">
-         <div class="bar" style="top:0px; bottom:0px;">
-          <div class="high">
-           13℃
-          </div>
-          <div class="low">
-           6℃
-          </div>
-         </div>
-        </div> 
-        <div class="day-item nighticon">
-         <img src="/static/img/w/icon/w2.png">
-        </div> 
-        <div class="day-item">
-         阴
-        </div> 
-        <div class="day-item">
-         无持续风向
-        </div> 
-        <div class="day-item">
-         微风
-        </div> 
-       </div> 
-       <div class="pull-left day "> 
-        <div class="day-item">
-         星期四
-         <br>01/01
-        </div> 
-        <div class="day-item dayicon">
-         <img src="/static/img/w/icon/w2.png">
-        </div> 
-        <div class="day-item">
-         阴
-        </div> 
-        <div class="day-item">
-         无持续风向
-        </div> 
-        <div class="day-item">
-         微风
-        </div> 
-        <div class="day-item bardiv">
-         <div class="bar" style="top:5px; bottom:1px;">
-          <div class="high">
-           8℃
-          </div>
-          <div class="low">
-           5℃
-          </div>
-         </div>
-        </div> 
-        <div class="day-item nighticon">
-         <img src="/static/img/w/icon/w7.png">
-        </div> 
-        <div class="day-item">
-         小雨
-        </div> 
-        <div class="day-item">
-         无持续风向
-        </div> 
-        <div class="day-item">
-         微风
-        </div> 
-       </div> 
-       <div class="pull-left day "> 
-        <div class="day-item">
-         星期五
-         <br>01/02
-        </div> 
-        <div class="day-item dayicon">
-         <img src="/static/img/w/icon/w7.png">
-        </div> 
-        <div class="day-item">
-         小雨
-        </div> 
-        <div class="day-item">
-         无持续风向
-        </div> 
-        <div class="day-item">
-         微风
-        </div> 
-        <div class="day-item bardiv">
-         <div class="bar" style="top:7px; bottom:2px;">
-          <div class="high">
-           6℃
-          </div>
-          <div class="low">
-           4℃
-          </div>
-         </div>
-        </div> 
-        <div class="day-item nighticon">
-         <img src="/static/img/w/icon/w7.png">
-        </div> 
-        <div class="day-item">
-         小雨
-        </div> 
-        <div class="day-item">
-         无持续风向
-        </div> 
-        <div class="day-item">
-         微风
-        </div> 
-       </div> 
-       <div class="pull-left day "> 
-        <div class="day-item">
-         星期六
-         <br>01/03
-        </div> 
-        <div class="day-item dayicon">
-         <img src="/static/img/w/icon/w7.png">
-        </div> 
-        <div class="day-item">
-         小雨
-        </div> 
-        <div class="day-item">
-         无持续风向
-        </div> 
-        <div class="day-item">
-         微风
-        </div> 
-        <div class="day-item bardiv">
-         <div class="bar" style="top:7px; bottom:2px;">
-          <div class="high">
-           6℃
-          </div>
-          <div class="low">
-           4℃
-          </div>
-         </div>
-        </div> 
-        <div class="day-item nighticon">
-         <img src="/static/img/w/icon/w7.png">
-        </div> 
-        <div class="day-item">
-         小雨
-        </div> 
-        <div class="day-item">
-         无持续风向
-        </div> 
-        <div class="day-item">
-         微风
-        </div> 
-       </div> 
-       <div class="pull-left day "> 
-        <div class="day-item">
-         星期日
-         <br>01/04
-        </div> 
-        <div class="day-item dayicon">
-         <img src="/static/img/w/icon/w2.png">
-        </div> 
-        <div class="day-item">
-         阴
-        </div> 
-        <div class="day-item">
-         无持续风向
-        </div> 
-        <div class="day-item">
-         微风
-        </div> 
-        <div class="day-item bardiv">
-         <div class="bar" style="top:2px; bottom:2px;">
-          <div class="high">
-           11℃
-          </div>
-          <div class="low">
-           4℃
-          </div>
-         </div>
-        </div> 
-        <div class="day-item nighticon">
-         <img src="/static/img/w/icon/w1.png">
-        </div> 
-        <div class="day-item">
-         多云
-        </div> 
-        <div class="day-item">
-         无持续风向
-        </div> 
-        <div class="day-item">
-         微风
-        </div> 
-       </div> 
-       <div class="pull-left day "> 
-        <div class="day-item">
-         星期一
-         <br>01/05
-        </div> 
-        <div class="day-item dayicon">
-         <img src="/static/img/w/icon/w1.png">
-        </div> 
-        <div class="day-item">
-         多云
-        </div> 
-        <div class="day-item">
-         无持续风向
-        </div> 
-        <div class="day-item">
-         微风
-        </div> 
-        <div class="day-item bardiv">
-         <div class="bar" style="top:2px; bottom:1px;">
-          <div class="high">
-           11℃
-          </div>
-          <div class="low">
-           5℃
-          </div>
-         </div>
-        </div> 
-        <div class="day-item nighticon">
-         <img src="/static/img/w/icon/w1.png">
-        </div> 
-        <div class="day-item">
-         多云
-        </div> 
-        <div class="day-item">
-         无持续风向
-        </div> 
-        <div class="day-item">
-         微风
-        </div> 
-       </div> 
-       <div class="pull-left day "> 
-        <div class="day-item">
-         星期二
-         <br>01/06
-        </div> 
-        <div class="day-item dayicon">
-         <img src="/static/img/w/icon/w1.png">
-        </div> 
-        <div class="day-item">
-         多云
-        </div> 
-        <div class="day-item">
-         无持续风向
-        </div> 
-        <div class="day-item">
-         微风
-        </div> 
-        <div class="day-item bardiv">
-         <div class="bar" style="top:1px; bottom:1px;">
-          <div class="high">
-           12℃
-          </div>
-          <div class="low">
-           5℃
-          </div>
-         </div>
-        </div> 
-        <div class="day-item nighticon">
-         <img src="/static/img/w/icon/w1.png">
-        </div> 
-        <div class="day-item">
-         多云
-        </div> 
-        <div class="day-item">
-         无持续风向
-        </div> 
-        <div class="day-item">
-         微风
-        </div> 
-       </div> 
-      </div> 
-      <div class="mt15"> 
-       <table class="hour-table" id="hourTable_0" style=""> 
-        <tbody>
-         <tr> 
-          <td style="background-color:#eee;"><i class="iconfont icon-time"></i> 时间</td> 
-          <td>14:00</td> 
-          <td>17:00</td> 
-          <td>20:00</td> 
-          <td>23:00</td> 
-          <td>02:00</td> 
-          <td>05:00</td> 
-          <td>08:00</td> 
-          <td>11:00</td> 
-         </tr> 
-         <tr> 
-          <td style="background-color:#eee;"><i class="iconfont icon-tianqi"></i> 天气</td> 
-          <td class="wicon"><img src="/static/img/w/icon/w2.png"></td> 
-          <td class="wicon"><img src="/static/img/w/icon/w2.png"></td> 
-          <td class="wicon"><img src="/static/img/w/icon/w2.png"></td> 
-          <td class="wicon"><img src="/static/img/w/icon/w2.png"></td> 
-          <td class="wicon"><img src="/static/img/w/icon/w2.png"></td> 
-          <td class="wicon"><img src="/static/img/w/icon/w2.png"></td> 
-          <td class="wicon"><img src="/static/img/w/icon/w2.png"></td> 
-          <td class="wicon"><img src="/static/img/w/icon/w2.png"></td> 
-         </tr> 
-         <tr> 
-          <td style="background-color:#eee;"><i class="iconfont icon-temp"></i> 气温</td> 
-          <td>13.1℃</td> 
-          <td>11.7℃</td> 
-          <td>10.2℃</td> 
-          <td>10℃</td> 
-          <td>9℃</td> 
-          <td>8.4℃</td> 
-          <td>6.9℃</td> 
-          <td>7.5℃</td> 
-         </tr> 
-         <tr> 
-          <td style="background-color:#eee;"><i class="iconfont icon-raindrops"></i> 降水</td> 
-          <td>无降水</td> 
-          <td>无降水</td> 
-          <td>无降水</td> 
-          <td>无降水</td> 
-          <td>无降水</td> 
-          <td>无降水</td> 
-          <td>无降水</td> 
-          <td>无降水</td> 
-         </tr> 
-         <tr> 
-          <td style="background-color:#eee;"><i class="iconfont icon-Windpower"></i> 风速</td> 
-          <td>2.7m/s</td> 
-          <td>3.3m/s</td> 
-          <td>2.5m/s</td> 
-          <td>2.3m/s</td> 
-          <td>3.3m/s</td> 
-          <td>2m/s</td> 
-          <td>1.9m/s</td> 
-          <td>3.3m/s</td> 
-         </tr> 
-         <tr> 
-          <td style="background-color:#eee;"><i class="iconfont icon-fengxiang"></i> 风向</td> 
-          <td>东北风</td> 
-          <td>东北风</td> 
-          <td>东北风</td> 
-          <td>东北风</td> 
-          <td>东北风</td> 
-          <td>东北风</td> 
-          <td>东北风</td> 
-          <td>东北风</td> 
-         </tr> 
-         <tr> 
-          <td style="background-color:#eee;"><i class="iconfont icon-qiya"></i> 气压</td> 
-          <td>964.3hPa</td> 
-          <td>965.1hPa</td> 
-          <td>968.1hPa</td> 
-          <td>970.2hPa</td> 
-          <td>969.8hPa</td> 
-          <td>969.5hPa</td> 
-          <td>970.7hPa</td> 
-          <td>972.8hPa</td> 
-         </tr> 
-         <tr> 
-          <td style="background-color:#eee;"><i class="iconfont icon-humidity"></i> 湿度</td> 
-          <td>75.4%</td> 
-          <td>78.6%</td> 
-          <td>85.2%</td> 
-          <td>89%</td> 
-          <td>90.4%</td> 
-          <td>91.3%</td> 
-          <td>75.1%</td> 
-          <td>66.1%</td> 
-         </tr> 
-         <tr> 
-          <td style="background-color:#eee;"><i class="iconfont icon-yunliang_huabanfuben"></i> 云量</td> 
-          <td>87%</td> 
-          <td>95.5%</td> 
-          <td>96.3%</td> 
-          <td>94.3%</td> 
-          <td>90.3%</td> 
-          <td>90.1%</td> 
-          <td>87.6%</td> 
-          <td>87.1%</td> 
-         </tr> 
-        </tbody>
-       </table> 
-       <table class="hour-table" id="hourTable_1" style="display:none;"> 
-        <tbody>
-         <tr> 
-          <td style="background-color:#eee;"><i class="iconfont icon-time"></i> 时间</td> 
-          <td>08:00</td> 
-          <td>11:00</td> 
-          <td>14:00</td> 
-          <td>17:00</td> 
-          <td>20:00</td> 
-          <td>23:00</td> 
-          <td>02:00</td> 
-          <td>05:00</td> 
-         </tr> 
-         <tr> 
-          <td style="background-color:#eee;"><i class="iconfont icon-tianqi"></i> 天气</td> 
-          <td class="wicon"><img src="/static/img/w/icon/w2.png"></td> 
-          <td class="wicon"><img src="/static/img/w/icon/w2.png"></td> 
-          <td class="wicon"><img src="/static/img/w/icon/w2.png"></td> 
-          <td class="wicon"><img src="/static/img/w/icon/w2.png"></td> 
-          <td class="wicon"><img src="/static/img/w/icon/w2.png"></td> 
-          <td class="wicon"><img src="/static/img/w/icon/w7.png"></td> 
-          <td class="wicon"><img src="/static/img/w/icon/w7.png"></td> 
-          <td class="wicon"><img src="/static/img/w/icon/w7.png"></td> 
-         </tr> 
-         <tr> 
-          <td style="background-color:#eee;"><i class="iconfont icon-temp"></i> 气温</td> 
-          <td>6.9℃</td> 
-          <td>7.5℃</td> 
-          <td>8.3℃</td> 
-          <td>8.1℃</td> 
-          <td>6.9℃</td> 
-          <td>6.1℃</td> 
-          <td>6.1℃</td> 
-          <td>5.9℃</td> 
-         </tr> 
-         <tr> 
-          <td style="background-color:#eee;"><i class="iconfont icon-raindrops"></i> 降水</td> 
-          <td>无降水</td> 
-          <td>无降水</td> 
-          <td>无降水</td> 
-          <td>无降水</td> 
-          <td>无降水</td> 
-          <td>0.2mm</td> 
-          <td>0.2mm</td> 
-          <td>0.4mm</td> 
-         </tr> 
-         <tr> 
-          <td style="background-color:#eee;"><i class="iconfont icon-Windpower"></i> 风速</td> 
-          <td>1.9m/s</td> 
-          <td>3.3m/s</td> 
-          <td>3.1m/s</td> 
-          <td>3m/s</td> 
-          <td>2.6m/s</td> 
-          <td>3.3m/s</td> 
-          <td>3.2m/s</td> 
-          <td>3.3m/s</td> 
-         </tr> 
-         <tr> 
-          <td style="background-color:#eee;"><i class="iconfont icon-fengxiang"></i> 风向</td> 
-          <td>东北风</td> 
-          <td>东北风</td> 
-          <td>东北风</td> 
-          <td>东北风</td> 
-          <td>东北风</td> 
-          <td>西北风</td> 
-          <td>西北风</td> 
-          <td>西北风</td> 
-         </tr> 
-         <tr> 
-          <td style="background-color:#eee;"><i class="iconfont icon-qiya"></i> 气压</td> 
-          <td>970.7hPa</td> 
-          <td>972.8hPa</td> 
-          <td>970.6hPa</td> 
-          <td>970.7hPa</td> 
-          <td>973hPa</td> 
-          <td>973.7hPa</td> 
-          <td>973.2hPa</td> 
-          <td>972.9hPa</td> 
-         </tr> 
-         <tr> 
-          <td style="background-color:#eee;"><i class="iconfont icon-humidity"></i> 湿度</td> 
-          <td>75.1%</td> 
-          <td>66.1%</td> 
-          <td>74.7%</td> 
-          <td>75.1%</td> 
-          <td>76.5%</td> 
-          <td>82.6%</td> 
-          <td>90%</td> 
-          <td>93.7%</td> 
-         </tr> 
-         <tr> 
-          <td style="background-color:#eee;"><i class="iconfont icon-yunliang_huabanfuben"></i> 云量</td> 
-          <td>87.6%</td> 
-          <td>87.1%</td> 
-          <td>82.9%</td> 
-          <td>86.8%</td> 
-          <td>84.4%</td> 
-          <td>88%</td> 
-          <td>86.9%</td> 
-          <td>82.9%</td> 
-         </tr> 
-        </tbody>
-       </table> 
-       <table class="hour-table" id="hourTable_2" style="display:none;"> 
-        <tbody>
-         <tr> 
-          <td style="background-color:#eee;"><i class="iconfont icon-time"></i> 时间</td> 
-          <td>08:00</td> 
-          <td>11:00</td> 
-          <td>14:00</td> 
-          <td>17:00</td> 
-          <td>20:00</td> 
-          <td>23:00</td> 
-          <td>02:00</td> 
-          <td>05:00</td> 
-         </tr> 
-         <tr> 
-          <td style="background-color:#eee;"><i class="iconfont icon-tianqi"></i> 天气</td> 
-          <td class="wicon"><img src="/static/img/w/icon/w7.png"></td> 
-          <td class="wicon"><img src="/static/img/w/icon/w7.png"></td> 
-          <td class="wicon"><img src="/static/img/w/icon/w7.png"></td> 
-          <td class="wicon"><img src="/static/img/w/icon/w1.png"></td> 
-          <td class="wicon"><img src="/static/img/w/icon/w7.png"></td> 
-          <td class="wicon"><img src="/static/img/w/icon/w7.png"></td> 
-          <td class="wicon"><img src="/static/img/w/icon/w7.png"></td> 
-          <td class="wicon"><img src="/static/img/w/icon/w7.png"></td> 
-         </tr> 
-         <tr> 
-          <td style="background-color:#eee;"><i class="iconfont icon-temp"></i> 气温</td> 
-          <td>5.4℃</td> 
-          <td>5.3℃</td> 
-          <td>5.9℃</td> 
-          <td>4.5℃</td> 
-          <td>5.9℃</td> 
-          <td>6.3℃</td> 
-          <td>6.6℃</td> 
-          <td>6.2℃</td> 
-         </tr> 
-         <tr> 
-          <td style="background-color:#eee;"><i class="iconfont icon-raindrops"></i> 降水</td> 
-          <td>0.2mm</td> 
-          <td>0.2mm</td> 
-          <td>0.1mm</td> 
-          <td>无降水</td> 
-          <td>0.1mm</td> 
-          <td>0.3mm</td> 
-          <td>0.1mm</td> 
-          <td>0.1mm</td> 
-         </tr> 
-         <tr> 
-          <td style="background-color:#eee;"><i class="iconfont icon-Windpower"></i> 风速</td> 
-          <td>3.2m/s</td> 
-          <td>3m/s</td> 
-          <td>3m/s</td> 
-          <td>3.3m/s</td> 
-          <td>3m/s</td> 
-          <td>2.8m/s</td> 
-          <td>2.7m/s</td> 
-          <td>3.3m/s</td> 
-         </tr> 
-         <tr> 
-          <td style="background-color:#eee;"><i class="iconfont icon-fengxiang"></i> 风向</td> 
-          <td>东北风</td> 
-          <td>东北风</td> 
-          <td>东北风</td> 
-          <td>东北风</td> 
-          <td>东北风</td> 
-          <td>东北风</td> 
-          <td>东北风</td> 
-          <td>东北风</td> 
-         </tr> 
-         <tr> 
-          <td style="background-color:#eee;"><i class="iconfont icon-qiya"></i> 气压</td> 
-          <td>974.1hPa</td> 
-          <td>975.9hPa</td> 
-          <td>971.9hPa</td> 
-          <td>971hPa</td> 
-          <td>972.3hPa</td> 
-          <td>972.3hPa</td> 
-          <td>970.6hPa</td> 
-          <td>969.2hPa</td> 
-         </tr> 
-         <tr> 
-          <td style="background-color:#eee;"><i class="iconfont icon-humidity"></i> 湿度</td> 
-          <td>93.8%</td> 
-          <td>90.9%</td> 
-          <td>86.8%</td> 
-          <td>93.4%</td> 
-          <td>93.5%</td> 
-          <td>98.2%</td> 
-          <td>98.7%</td> 
-          <td>98.7%</td> 
-         </tr> 
-         <tr> 
-          <td style="background-color:#eee;"><i class="iconfont icon-yunliang_huabanfuben"></i> 云量</td> 
-          <td>77.9%</td> 
-          <td>73.7%</td> 
-          <td>68.3%</td> 
-          <td>69.8%</td> 
-          <td>75.2%</td> 
-          <td>81.3%</td> 
-          <td>90.4%</td> 
-          <td>86.6%</td> 
-         </tr> 
-        </tbody>
-       </table> 
-       <table class="hour-table" id="hourTable_3" style="display:none;"> 
-        <tbody>
-         <tr> 
-          <td style="background-color:#eee;"><i class="iconfont icon-time"></i> 时间</td> 
-          <td>08:00</td> 
-          <td>11:00</td> 
-          <td>14:00</td> 
-          <td>17:00</td> 
-          <td>20:00</td> 
-          <td>23:00</td> 
-          <td>02:00</td> 
-          <td>05:00</td> 
-         </tr> 
-         <tr> 
-          <td style="background-color:#eee;"><i class="iconfont icon-tianqi"></i> 天气</td> 
-          <td class="wicon"><img src="/static/img/w/icon/w7.png"></td> 
-          <td class="wicon"><img src="/static/img/w/icon/w7.png"></td> 
-          <td class="wicon"><img src="/static/img/w/icon/w7.png"></td> 
-          <td class="wicon"><img src="/static/img/w/icon/w7.png"></td> 
-          <td class="wicon"><img src="/static/img/w/icon/w7.png"></td> 
-          <td class="wicon"><img src="/static/img/w/icon/w7.png"></td> 
-          <td class="wicon"><img src="/static/img/w/icon/w7.png"></td> 
-          <td class="wicon"><img src="/static/img/w/icon/w1.png"></td> 
-         </tr> 
-         <tr> 
-          <td style="background-color:#eee;"><i class="iconfont icon-temp"></i> 气温</td> 
-          <td>5℃</td> 
-          <td>5.8℃</td> 
-          <td>5.6℃</td> 
-          <td>5.8℃</td> 
-          <td>6.1℃</td> 
-          <td>5℃</td> 
-          <td>4.9℃</td> 
-          <td>4.8℃</td> 
-         </tr> 
-         <tr> 
-          <td style="background-color:#eee;"><i class="iconfont icon-raindrops"></i> 降水</td> 
-          <td>0.1mm</td> 
-          <td>0.4mm</td> 
-          <td>0.3mm</td> 
-          <td>0.4mm</td> 
-          <td>0.1mm</td> 
-          <td>0.1mm</td> 
-          <td>0.1mm</td> 
-          <td>无降水</td> 
-         </tr> 
-         <tr> 
-          <td style="background-color:#eee;"><i class="iconfont icon-Windpower"></i> 风速</td> 
-          <td>3.1m/s</td> 
-          <td>3.2m/s</td> 
-          <td>3.3m/s</td> 
-          <td>3.3m/s</td> 
-          <td>3.2m/s</td> 
-          <td>3.3m/s</td> 
-          <td>3.2m/s</td> 
-          <td>2.9m/s</td> 
-         </tr> 
-         <tr> 
-          <td style="background-color:#eee;"><i class="iconfont icon-fengxiang"></i> 风向</td> 
-          <td>西北风</td> 
-          <td>东北风</td> 
-          <td>东北风</td> 
-          <td>东北风</td> 
-          <td>东北风</td> 
-          <td>东北风</td> 
-          <td>西北风</td> 
-          <td>西南风</td> 
-         </tr> 
-         <tr> 
-          <td style="background-color:#eee;"><i class="iconfont icon-qiya"></i> 气压</td> 
-          <td>969.7hPa</td> 
-          <td>970.7hPa</td> 
-          <td>967.3hPa</td> 
-          <td>967.1hPa</td> 
-          <td>970.1hPa</td> 
-          <td>971.6hPa</td> 
-          <td>971.4hPa</td> 
-          <td>971hPa</td> 
-         </tr> 
-         <tr> 
-          <td style="background-color:#eee;"><i class="iconfont icon-humidity"></i> 湿度</td> 
-          <td>98.7%</td> 
-          <td>88.7%</td> 
-          <td>95.9%</td> 
-          <td>96.5%</td> 
-          <td>97.1%</td> 
-          <td>100%</td> 
-          <td>99.6%</td> 
-          <td>93.3%</td> 
-         </tr> 
-         <tr> 
-          <td style="background-color:#eee;"><i class="iconfont icon-yunliang_huabanfuben"></i> 云量</td> 
-          <td>82.1%</td> 
-          <td>82.3%</td> 
-          <td>81.9%</td> 
-          <td>86.9%</td> 
-          <td>79.9%</td> 
-          <td>71.9%</td> 
-          <td>65%</td> 
-          <td>63.1%</td> 
-         </tr> 
-        </tbody>
-       </table> 
-       <table class="hour-table" id="hourTable_4" style="display:none;"> 
-        <tbody>
-         <tr> 
-          <td style="background-color:#eee;"><i class="iconfont icon-time"></i> 时间</td> 
-          <td>08:00</td> 
-          <td>11:00</td> 
-          <td>14:00</td> 
-          <td>17:00</td> 
-          <td>20:00</td> 
-          <td>23:00</td> 
-          <td>02:00</td> 
-          <td>05:00</td> 
-         </tr> 
-         <tr> 
-          <td style="background-color:#eee;"><i class="iconfont icon-tianqi"></i> 天气</td> 
-          <td class="wicon"><img src="/static/img/w/icon/w1.png"></td> 
-          <td class="wicon"><img src="/static/img/w/icon/w2.png"></td> 
-          <td class="wicon"><img src="/static/img/w/icon/w2.png"></td> 
-          <td class="wicon"><img src="/static/img/w/icon/w2.png"></td> 
-          <td class="wicon"><img src="/static/img/w/icon/w2.png"></td> 
-          <td class="wicon"><img src="/static/img/w/icon/w1.png"></td> 
-          <td class="wicon"><img src="/static/img/w/icon/w1.png"></td> 
-          <td class="wicon"><img src="/static/img/w/icon/w1.png"></td> 
-         </tr> 
-         <tr> 
-          <td style="background-color:#eee;"><i class="iconfont icon-temp"></i> 气温</td> 
-          <td>5.9℃</td> 
-          <td>8.8℃</td> 
-          <td>10.7℃</td> 
-          <td>11.1℃</td> 
-          <td>7.9℃</td> 
-          <td>6.1℃</td> 
-          <td>5.9℃</td> 
-          <td>4.7℃</td> 
-         </tr> 
-         <tr> 
-          <td style="background-color:#eee;"><i class="iconfont icon-raindrops"></i> 降水</td> 
-          <td>无降水</td> 
-          <td>无降水</td> 
-          <td>无降水</td> 
-          <td>无降水</td> 
-          <td>无降水</td> 
-          <td>无降水</td> 
-          <td>无降水</td> 
-          <td>无降水</td> 
-         </tr> 
-         <tr> 
-          <td style="background-color:#eee;"><i class="iconfont icon-Windpower"></i> 风速</td> 
-          <td>3.3m/s</td> 
-          <td>3m/s</td> 
-          <td>3.2m/s</td> 
-          <td>3.3m/s</td> 
-          <td>2.9m/s</td> 
-          <td>3.3m/s</td> 
-          <td>3.3m/s</td> 
-          <td>3.1m/s</td> 
-         </tr> 
-         <tr> 
-          <td style="background-color:#eee;"><i class="iconfont icon-fengxiang"></i> 风向</td> 
-          <td>西南风</td> 
-          <td>西南风</td> 
-          <td>东北风</td> 
-          <td>东北风</td> 
-          <td>东北风</td> 
-          <td>东北风</td> 
-          <td>东北风</td> 
-          <td>东北风</td> 
-         </tr> 
-         <tr> 
-          <td style="background-color:#eee;"><i class="iconfont icon-qiya"></i> 气压</td> 
-          <td>972.3hPa</td> 
-          <td>974.4hPa</td> 
-          <td>971hPa</td> 
-          <td>970.4hPa</td> 
-          <td>972.7hPa</td> 
-          <td>972.6hPa</td> 
-          <td>972.5hPa</td> 
-          <td>972.2hPa</td> 
-         </tr> 
-         <tr> 
-          <td style="background-color:#eee;"><i class="iconfont icon-humidity"></i> 湿度</td> 
-          <td>89.7%</td> 
-          <td>60.7%</td> 
-          <td>70.8%</td> 
-          <td>77%</td> 
-          <td>93%</td> 
-          <td>94.8%</td> 
-          <td>91.4%</td> 
-          <td>79.2%</td> 
-         </tr> 
-         <tr> 
-          <td style="background-color:#eee;"><i class="iconfont icon-yunliang_huabanfuben"></i> 云量</td> 
-          <td>78.8%</td> 
-          <td>80%</td> 
-          <td>80%</td> 
-          <td>80%</td> 
-          <td>80%</td> 
-          <td>65.5%</td> 
-          <td>65.9%</td> 
-          <td>39.7%</td> 
-         </tr> 
-        </tbody>
-       </table> 
-       <table class="hour-table" id="hourTable_5" style="display:none;"> 
-        <tbody>
-         <tr> 
-          <td style="background-color:#eee;"><i class="iconfont icon-time"></i> 时间</td> 
-          <td>08:00</td> 
-          <td>11:00</td> 
-          <td>14:00</td> 
-          <td>17:00</td> 
-          <td>20:00</td> 
-          <td>23:00</td> 
-          <td>02:00</td> 
-          <td>05:00</td> 
-         </tr> 
-         <tr> 
-          <td style="background-color:#eee;"><i class="iconfont icon-tianqi"></i> 天气</td> 
-          <td class="wicon"><img src="/static/img/w/icon/w1.png"></td> 
-          <td class="wicon"><img src="/static/img/w/icon/w1.png"></td> 
-          <td class="wicon"><img src="/static/img/w/icon/w1.png"></td> 
-          <td class="wicon"><img src="/static/img/w/icon/w1.png"></td> 
-          <td class="wicon"><img src="/static/img/w/icon/w1.png"></td> 
-          <td class="wicon"><img src="/static/img/w/icon/w1.png"></td> 
-          <td class="wicon"><img src="/static/img/w/icon/w1.png"></td> 
-          <td class="wicon"><img src="/static/img/w/icon/w1.png"></td> 
-         </tr> 
-         <tr> 
-          <td style="background-color:#eee;"><i class="iconfont icon-temp"></i> 气温</td> 
-          <td>5.1℃</td> 
-          <td>9.6℃</td> 
-          <td>10.4℃</td> 
-          <td>11.4℃</td> 
-          <td>8.8℃</td> 
-          <td>6.2℃</td> 
-          <td>5.6℃</td> 
-          <td>5.4℃</td> 
-         </tr> 
-         <tr> 
-          <td style="background-color:#eee;"><i class="iconfont icon-raindrops"></i> 降水</td> 
-          <td>无降水</td> 
-          <td>无降水</td> 
-          <td>无降水</td> 
-          <td>无降水</td> 
-          <td>无降水</td> 
-          <td>无降水</td> 
-          <td>无降水</td> 
-          <td>无降水</td> 
-         </tr> 
-         <tr> 
-          <td style="background-color:#eee;"><i class="iconfont icon-Windpower"></i> 风速</td> 
-          <td>3.1m/s</td> 
-          <td>3.3m/s</td> 
-          <td>3m/s</td> 
-          <td>3m/s</td> 
-          <td>2.4m/s</td> 
-          <td>2.2m/s</td> 
-          <td>2.5m/s</td> 
-          <td>3.3m/s</td> 
-         </tr> 
-         <tr> 
-          <td style="background-color:#eee;"><i class="iconfont icon-fengxiang"></i> 风向</td> 
-          <td>东北风</td> 
-          <td>东南风</td> 
-          <td>东南风</td> 
-          <td>东南风</td> 
-          <td>西南风</td> 
-          <td>西南风</td> 
-          <td>西南风</td> 
-          <td>西南风</td> 
-         </tr> 
-         <tr> 
-          <td style="background-color:#eee;"><i class="iconfont icon-qiya"></i> 气压</td> 
-          <td>972hPa</td> 
-          <td>970.8hPa</td> 
-          <td>969.5hPa</td> 
-          <td>970.2hPa</td> 
-          <td>970.9hPa</td> 
-          <td>971.2hPa</td> 
-          <td>971.4hPa</td> 
-          <td>971.8hPa</td> 
-         </tr> 
-         <tr> 
-          <td style="background-color:#eee;"><i class="iconfont icon-humidity"></i> 湿度</td> 
-          <td>69.7%</td> 
-          <td>52.8%</td> 
-          <td>67.5%</td> 
-          <td>70.5%</td> 
-          <td>88.4%</td> 
-          <td>91.4%</td> 
-          <td>90%</td> 
-          <td>77.3%</td> 
-         </tr> 
-         <tr> 
-          <td style="background-color:#eee;"><i class="iconfont icon-yunliang_huabanfuben"></i> 云量</td> 
-          <td>13.5%</td> 
-          <td>14.3%</td> 
-          <td>15.1%</td> 
-          <td>14.5%</td> 
-          <td>13.9%</td> 
-          <td>31.1%</td> 
-          <td>48.3%</td> 
-          <td>56.4%</td> 
-         </tr> 
-        </tbody>
-       </table> 
-       <table class="hour-table" id="hourTable_6" style="display:none;"> 
-        <tbody>
-         <tr> 
-          <td style="background-color:#eee;"><i class="iconfont icon-time"></i> 时间</td> 
-          <td>08:00</td> 
-          <td>11:00</td> 
-          <td>14:00</td> 
-          <td>17:00</td> 
-          <td>20:00</td> 
-          <td>23:00</td> 
-          <td>02:00</td> 
-          <td>05:00</td> 
-         </tr> 
-         <tr> 
-          <td style="background-color:#eee;"><i class="iconfont icon-tianqi"></i> 天气</td> 
-          <td class="wicon"><img src="/static/img/w/icon/w1.png"></td> 
-          <td class="wicon"><img src="/static/img/w/icon/w1.png"></td> 
-          <td class="wicon"><img src="/static/img/w/icon/w1.png"></td> 
-          <td class="wicon"><img src="/static/img/w/icon/w1.png"></td> 
-          <td class="wicon"><img src="/static/img/w/icon/w1.png"></td> 
-          <td class="wicon"><img src="/static/img/w/icon/w1.png"></td> 
-          <td class="wicon"><img src="/static/img/w/icon/w1.png"></td> 
-          <td class="wicon"><img src="/static/img/w/icon/w1.png"></td> 
-         </tr> 
-         <tr> 
-          <td style="background-color:#eee;"><i class="iconfont icon-temp"></i> 气温</td> 
-          <td>5.3℃</td> 
-          <td>11.7℃</td> 
-          <td>12.7℃</td> 
-          <td>12.7℃</td> 
-          <td>9.8℃</td> 
-          <td>8.2℃</td> 
-          <td>7.6℃</td> 
-          <td>5.5℃</td> 
-         </tr> 
-         <tr> 
-          <td style="background-color:#eee;"><i class="iconfont icon-raindrops"></i> 降水</td> 
-          <td>无降水</td> 
-          <td>无降水</td> 
-          <td>无降水</td> 
-          <td>无降水</td> 
-          <td>无降水</td> 
-          <td>无降水</td> 
-          <td>无降水</td> 
-          <td>无降水</td> 
-         </tr> 
-         <tr> 
-          <td style="background-color:#eee;"><i class="iconfont icon-Windpower"></i> 风速</td> 
-          <td>2.2m/s</td> 
-          <td>2.5m/s</td> 
-          <td>2.5m/s</td> 
-          <td>3.3m/s</td> 
-          <td>1.8m/s</td> 
-          <td>3.2m/s</td> 
-          <td>3.3m/s</td> 
-          <td>3m/s</td> 
-         </tr> 
-         <tr> 
-          <td style="background-color:#eee;"><i class="iconfont icon-fengxiang"></i> 风向</td> 
-          <td>西南风</td> 
-          <td>西南风</td> 
-          <td>西南风</td> 
-          <td>东北风</td> 
-          <td>东北风</td> 
-          <td>西北风</td> 
-          <td>西北风</td> 
-          <td>西北风</td> 
-         </tr> 
-         <tr> 
-          <td style="background-color:#eee;"><i class="iconfont icon-qiya"></i> 气压</td> 
-          <td>972.1hPa</td> 
-          <td>971hPa</td> 
-          <td>970hPa</td> 
-          <td>971.1hPa</td> 
-          <td>972.2hPa</td> 
-          <td>972.8hPa</td> 
-          <td>973.4hPa</td> 
-          <td>974.1hPa</td> 
-         </tr> 
-         <tr> 
-          <td style="background-color:#eee;"><i class="iconfont icon-humidity"></i> 湿度</td> 
-          <td>66%</td> 
-          <td>54.5%</td> 
-          <td>68%</td> 
-          <td>70.1%</td> 
-          <td>95.8%</td> 
-          <td>96.4%</td> 
-          <td>92.3%</td> 
-          <td>80.9%</td> 
-         </tr> 
-         <tr> 
-          <td style="background-color:#eee;"><i class="iconfont icon-yunliang_huabanfuben"></i> 云量</td> 
-          <td>64.5%</td> 
-          <td>59.3%</td> 
-          <td>54.2%</td> 
-          <td>52.9%</td> 
-          <td>51.6%</td> 
-          <td>46.6%</td> 
-          <td>41.7%</td> 
-          <td>55.4%</td> 
-         </tr> 
-        </tbody>
-       </table> 
-      </div> 
-     </div> 
-     <div class="hp mt15" style="display:none;"> 
-      <div class="hd">
-       气候背景
-      </div> 
-      <div id="myChart" class="row hb" style="height:500px;"></div> 
-     </div> 
-    </div> 
-    <div class="col-xs-3"> 
-     <!--卫星云图 start--> 
-     <div class="hp"> 
-      <div class="hd">
-       卫星云图
-      </div> 
-      <div class="row hb" style="padding:0;"> 
-       <a href="/web/channel-d3236549863e453aab0ccc4027105bad.html" class="product"><img src="https://weather.cma.cn/file/2024/03/04/SEVP_NSMC_WXBL_FY4A_ETCC_ACHN_LNO_PY_20240304234500000.JPG?v=1709597087175"></a> 
-      </div> 
-     </div> 
-     <!--卫星云图 end--> 
-     <!--雷达图 start--> 
-     <div class="hp mt15"> 
-      <div class="hd">
-       降水预报
-      </div> 
-      <div class="row hb" style="padding:0;"> 
-       <a href="/web/channel-339.html" class="product"><img src="https://weather.cma.cn/file/2025/12/31/SEVP_NMC_STFC_SFER_ER24_ACHN_L88_P9_20251231070002400.jpg?v=1767149242482"></a> 
-      </div> 
-     </div> 
-     <!--雷达图 end--> 
-     <!--天气资讯 start--> 
-     <div class="hp mt15"> 
-      <div class="hd">
-       天气资讯
-      </div> 
-      <div class="row hb"> 
-       <a href="http://www.cma.gov.cn/2011xwzx/2011xqxxw/2011xzytq/202512/t20251231_7520495.html" title="中东部有雨雪天气 冷空气将影响中东部地区" class="newitem" target="_blank">中东部有雨雪天气 冷空气将影响中东部地区</a> 
-       <a href="http://www.cma.gov.cn/2011xwzx/2011xqxxw/2011xzytq/202512/t20251230_7517509.html" title="冷空气将影响中东部地区 中东部将有一次雨雪过程" class="newitem" target="_blank">冷空气将影响中东部地区 中东部将有一次雨雪过程</a> 
-       <a href="http://www.cma.gov.cn/2011xwzx/2011xqxxw/2011xzytq/202512/t20251229_7515186.html" title="未来一周冷空气活动频繁 中东部将有一次雨雪过程" class="newitem" target="_blank">未来一周冷空气活动频繁 中东部将有一次雨雪过程</a> 
-       <a href="http://www.cma.gov.cn/2011xwzx/2011xqxxw/2011xzytq/202512/t20251228_7515057.html" title="中央气象台：冷空气将影响北方部分地区 中东部将有一次雨雪过程" class="newitem" target="_blank">中央气象台：冷空气将影响北方部分地区 中东部将有一次雨雪过程</a> 
-       <a href="http://www.cma.gov.cn/2011xwzx/2011xqxxw/2011xzytq/202512/t20251227_7514897.html" title="28日起冷空气将影响北方部分地区" class="newitem" target="_blank">28日起冷空气将影响北方部分地区</a> 
-       <a href="http://www.cma.gov.cn/2011xwzx/2011xqxxw/2011xzytq/202512/t20251226_7512699.html" title="未来三天全国大部天气晴好 东部和南部海区有大风" class="newitem" target="_blank">未来三天全国大部天气晴好 东部和南部海区有大风</a> 
-       <a href="http://www.cma.gov.cn/2011xwzx/2011xqxxw/2011xzytq/202512/t20251225_7510952.html" title="冷空气继续影响我国 东部和南部海区有大风" class="newitem" target="_blank">冷空气继续影响我国 东部和南部海区有大风</a> 
-       <a href="http://www.cma.gov.cn/2011xwzx/2011xqxxw/2011xzytq/202512/t20251224_7509155.html" title="冷空气持续影响我国 海区先后有大风 南方大部有弱雨" class="newitem" target="_blank">冷空气持续影响我国 海区先后有大风 南方大部有弱雨</a> 
-       <a href="http://www.cma.gov.cn/2011xwzx/2011xqxxw/2011xzytq/202512/t20251223_7507323.html" title="冷空气继续影响我国 中东部有较大范围弱雨雪天气" class="newitem" target="_blank">冷空气继续影响我国 中东部有较大范围弱雨雪天气</a> 
-       <a href="http://www.cma.gov.cn/2011xwzx/2011xqxxw/2011xzytq/202512/t20251222_7505379.html" title="新一轮冷空气将影响我国 新疆西部等地有明显降雪" class="newitem" target="_blank">新一轮冷空气将影响我国 新疆西部等地有明显降雪</a> 
-      </div> 
-     </div> 
-     <!--天气资讯 end--> 
-     <div id="jingdian" class="hp mt15" style="display:none;"> 
-      <div class="hd">
-       周边景点
-      </div> 
-      <div class="row hb" id="jingdianWrap"> 
-      </div> 
-     </div> 
-    </div> 
-   </div> 
-  </div> 
-  <div class="footer"> 
-   <div class="container clearfix" style="padding: 20px 0;"> 
-    <div class="f_left clearfix"> 
-     <div class="dcs">
-      <a href="http://bszs.conac.cn/sitename?method=show&amp;id=10C5A3062A721232E053022819AC4A2F" target="_blank"><img src="/assets/ydyl/img/blue_error.png"></a>
-     </div> 
-     <div class="content"> 
-      <p>中国气象报社 版权所有</p> 
-      <p>地址：北京市海淀区中关村南大街46号</p> 
-      <p>邮政编码：100081</p> 
-      <p>京ICP备05004897号 京公网安备11040102700146号</p> 
-     </div> 
-    </div> 
-    <div class="f_right"> 
-     <div class="footer-header">
-      相关链接
-     </div> 
-     <ul class="links clearfix"> 
-      <li><a href="https://www.yidaiyilu.gov.cn" target="_blank">中国一带一路网</a></li> 
-      <li><a href="http://www.typhoon.org.cn" target="_blank">中国台风网</a></li> 
-      <li><a href="#" target="_blank">中国新闻网</a></li> 
-      <li><a href="http://www.people.com.cn" target="_blank">人民网</a></li> 
-      <li><a href="http://www.cma.gov.cn" target="_blank">中国气象网</a></li> 
-      <li><a href="https://public.wmo.int/zh-hans" target="_blank">世界气象组织</a></li> 
-      <li><a href="http://www.gov.cn" target="_blank">中国政府网</a></li> 
-      <li><a href="http://www.xinhuanet.com" target="_blank">新华网</a></li> 
-     </ul> 
-    </div> 
-   </div> 
-  </div> 
-  <script src="/assets/lib/jquery.cookie.js" type="text/javascript"></script> 
-  <script src="/assets/lib/mCustomScrollbar/jquery.mCustomScrollbar.min.js" type="text/javascript"></script> 
-  <script src="/assets/lib/jquery.autocomplete.js" type="text/javascript"></script> 
-  <script src="/assets/lib/bootstrap-hover-dropdown.min.js" type="text/javascript"></script> 
-  <script src="/assets/lib/bootstrap-3.3.7-dist/js/bootstrap.min.js"></script> 
-  <script src="/assets/lib/echarts.min.js" type="text/javascript"></script> 
-  <script>
-	$(function(){
-		$('.dropdown-toggle').dropdownHover();
-		
-		$("#searchInput").autocomplete('/api/autocomplete', {
-			width: 345,
-			max: 10,
-			scroll: true,
-			scrollHeight: 400,
-			matchCase:true,
-			parse:function(rows){
-				var parsed = [];
-				for (var i=0; i < rows.data.length; i++) {
-					var row = rows.data[i];
-					if (row) {
-						parsed[parsed.length] = {
-							data: row,
-							value: row.split('|')[0]
-						};
-					}
-				}
-				return parsed;
-			},
-			focusEvent:function(input, event){
-				var v = $(input).val();
-				if(v == ''){
-					$('#selectCityDiv').show();
-				} else {
-					$('#selectCityDiv').hide();
-				}
-			},
-			formatItem: function(row) {
-				$('#selectCityDiv').hide();
-				var arr = row.split('|');
-				return '<div class="row-fluid"><div class="pull-left">' + arr[1] + '</div><div class="pull-right">' + arr[3] + '</div></div>';
-			}
-		}).result(function(event, row, formatted) {
-			var arr = row.split('|');
-			$("#searchInput").val(arr[1]);
-			window.location.href = '/web/weather/' + arr[0] + '.html';
-		});
-		
-		$(document).click(function(e){
-			var obj = $(e.srcElement || e.target);
-			var c = obj.attr('class') || null;
-			var id = obj.attr('id') || null;
-			console.log(c)
-			console.log(id)
-			if((c != null && c.indexOf('tabflag') > -1) || (id != null && (id == 'selectCityDiv' || id == 'searchInput'))) {
-				return true;
-			} else {
-				$('#selectCityDiv').hide();
-			}
-		});
-	});
-</script> 
-  <script id="_trs_ta_js" src="//ta.trs.cn/c/js/ta.js?mpid=6252" async defer></script> 
-  <script type="text/javascript" src="/assets/lib/mCustomScrollbar/jquery.mCustomScrollbar.min.js"></script> 
-  <script type="text/javascript" src="/assets/lib/echarts.min.js"></script> 
-  <script type="text/javascript" src="/assets/ydyl/js/weather.js"></script> 
-  <script type="text/javascript" src="/assets/lib/leaflet/leaflet.js"></script> 
-  <script type="text/javascript" src="/assets/lib/leaflet-sidebar/src/L.Control.Sidebar.js"></script> 
-  <script type="text/javascript" src="/assets/cma/js/alarmMap.js?v=20251231130045"></script> 
-  <script type="text/javascript" src="/assets/cma/js/weather.js?v=20251231130045"></script> 
-  <script>
-		$(function() {
-			// 点击逐日预报时，在下方显示对应的精细化预报
-			$('#dayList > div.day').click(function(){
-				$('#hourTable_' + $(this).index()).show().siblings().hide();
-				$(this).addClass('actived').siblings().removeClass('actived');
-			});
-			
-			CMA.init();
-			
-			// 显示站点天气实况
-			CMA.getNow('S1003');
-			
-			$("#hourValues").mCustomScrollbar({
-				theme:"dark-3",
-			    horizontalScroll:true
-			});
-			
-			// 显示站点气候背景
-			$.getJSON('/api/climate',{stationid: 'S1003'}, function(ret) {
-				if(ret.data.length == 0) {
-					return;
-				}
-				$('#myChart').parent().show();
-				$('#climateWrap').show();
-				var xAxisData = [];
-				var maxTempData = [];
-				var minTempData = [];
-				var rainfallData = [];
-				var dateb = ret.data.beginYear;
-				var datee = ret.data.endYear;
-				for(var i = 0; i < ret.data.data.length; i++){
-					var d = ret.data.data[i];
-					xAxisData.push(d.month + '月');
-					maxTempData.push(d.maxTemp);
-					minTempData.push(d.minTemp);
-					rainfallData.push(d.rainfall >= 9999 ? null : d.rainfall);
-				}
-				Weather.initChart('成都)', dateb, datee, maxTempData, minTempData, rainfallData, xAxisData);
-			});
-			
-			$.getJSON('/api/jingdian/weather?pcode=ASC', function(res){
-				var html = [];
-				for(var i = 0; i < res.data.length; i++){
-					var d = res.data[i];
-					
-					html.push('<a href="/web/weather/' + d.location.stationId + '.html" class="report-item" style="margin-bottom:5px;">');
-					html.push('	<div style="color:#1261ad; padding-bottom:5px; font-weight:bold;">' + d.location.name + '</div>');
-					html.push('	<div class="row">');
-					html.push('	    <div class="col-xs-8">' + (d.weather.dayText == d.weather.nightText ? d.weather.dayText : (d.weather.dayText + '转' + d.weather.nightText)) + '</div>');
-					html.push('	    <div class="col-xs-4">' + (d.weather.high + '/' + d.weather.low) + '℃</div>');
-					html.push('	</div>');
-					html.push('</a>');
-				}
-				
-				if(res.data.length > 0) {
-					$('#jingdianWrap').html(html.join(''));
-					$('#jingdian').show();
-				}
-				
-			});
-		});
-	</script>  
-  <input type="hidden" name="页面生成时间" value="2025-12-31 13:00:45">
- </body>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Maker Score Dashboard (Standalone)</title>
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            colors: {
+              slate: { 850: '#1e293b' }
+            },
+            fontFamily: {
+              sans: ['Inter', 'system-ui', 'sans-serif'],
+            }
+          }
+        }
+      }
+    </script>
+    
+    <!-- Alpine.js -->
+    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.13.3/dist/cdn.min.js"></script>
+    
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+
+    <style>
+      @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+      body { font-family: 'Inter', sans-serif; background-color: #f1f5f9; }
+      [x-cloak] { display: none !important; }
+      
+      /* Custom Scrollbar */
+      ::-webkit-scrollbar { width: 8px; height: 8px; }
+      ::-webkit-scrollbar-track { background: #f1f5f9; }
+      ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 4px; }
+      ::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
+    </style>
+<script type="importmap">
+{
+  "imports": {
+    "react": "https://esm.sh/react@^19.2.3",
+    "react-dom/": "https://esm.sh/react-dom@^19.2.3/",
+    "react/": "https://esm.sh/react@^19.2.3/",
+    "lucide-react": "https://esm.sh/lucide-react@^0.562.0"
+  }
+}
+</script>
+</head>
+<body class="bg-slate-100 text-slate-900 pb-12" x-data="dashboard()">
+
+    <!-- Navbar -->
+    <nav class="bg-white border-b border-slate-200 sticky top-0 z-30 shadow-sm">
+        <div class="max-w-[1600px] mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between h-16">
+                <div class="flex items-center gap-3">
+                    <div class="bg-blue-600 p-2 rounded-lg">
+                        <i data-lucide="activity" class="h-6 w-6 text-white"></i>
+                    </div>
+                    <div>
+                        <h1 class="text-xl font-bold text-slate-900 tracking-tight">Maker Score</h1>
+                        <p class="text-xs text-slate-500 hidden sm:block">
+                            Last updated: <span x-text="lastUpdated"></span>
+                        </p>
+                    </div>
+                </div>
+                
+                <div class="flex items-center gap-3">
+                    <button @click="showBlockModal = true" class="bg-white border border-slate-300 text-slate-700 hover:bg-slate-50 shadow-sm text-xs px-2.5 py-1.5 rounded-lg inline-flex items-center font-medium transition-all">
+                        <i data-lucide="shield-alert" class="w-4 h-4 text-red-500 mr-2"></i>
+                        Block List 
+                        <span class="ml-1.5 bg-slate-100 text-slate-600 px-1.5 py-0.5 rounded-full text-xs font-bold" x-text="blockedList.length"></span>
+                    </button>
+                    
+                    <button @click="showFakeModal = true" class="bg-white border border-slate-300 text-slate-700 hover:bg-slate-50 shadow-sm text-xs px-2.5 py-1.5 rounded-lg inline-flex items-center font-medium transition-all">
+                        <i data-lucide="database" class="w-4 h-4 text-orange-500 mr-2"></i>
+                        Fake Data 
+                        <span class="ml-1.5 bg-slate-100 text-slate-600 px-1.5 py-0.5 rounded-full text-xs font-bold" x-text="fakeList.length"></span>
+                    </button>
+
+                    <button @click="loadData()" :disabled="isLoading" class="bg-transparent hover:bg-slate-100 text-slate-600 p-2 rounded-lg transition-all" title="Refresh Data">
+                        <i data-lucide="refresh-cw" class="w-4 h-4" :class="{ 'animate-spin': isLoading }"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="max-w-[1600px] mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        
+        <!-- Loading State -->
+        <div x-show="isFirstLoad" class="min-h-[50vh] flex flex-col items-center justify-center space-y-4">
+            <div class="relative">
+                <div class="w-12 h-12 rounded-full border-4 border-slate-200"></div>
+                <div class="absolute top-0 left-0 w-12 h-12 rounded-full border-4 border-blue-500 border-t-transparent animate-spin"></div>
+            </div>
+            <p class="text-slate-500 font-medium animate-pulse">Loading Dashboard Data...</p>
+        </div>
+
+        <!-- Table Card -->
+        <div x-show="!isFirstLoad" x-cloak class="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden">
+            <div class="overflow-x-auto">
+                <table class="min-w-full divide-y divide-slate-200">
+                    <thead>
+                        <tr class="bg-slate-800">
+                            <!-- Exchange Filter Column (Fixed text color) -->
+                            <th class="px-4 py-3 text-left w-48 sticky left-0 z-20 bg-slate-800 border-r border-slate-700">
+                                <div class="relative inline-block text-left" x-data="{ open: false }" @click.outside="open = false">
+                                    <button 
+                                        @click="open = !open"
+                                        class="flex items-center gap-1.5 px-2 py-1 rounded hover:bg-blue-700/50 transition-colors text-white text-xs font-semibold uppercase tracking-wider"
+                                        :class="{ 'bg-blue-800': open }"
+                                    >
+                                        <span>Exchange</span>
+                                        <i data-lucide="filter" class="w-3.5 h-3.5"></i>
+                                    </button>
+
+                                    <div 
+                                        x-show="open"
+                                        x-transition.opacity.duration.150ms
+                                        class="absolute z-50 left-0 mt-2 w-56 origin-top-left bg-white rounded-lg shadow-xl ring-1 ring-black/5 focus:outline-none overflow-hidden flex flex-col max-h-96"
+                                        style="display: none;"
+                                    >
+                                        <div class="p-2 border-b border-slate-100 bg-slate-50 sticky top-0">
+                                            <div @click="toggleAllExchanges()" class="flex items-center px-2 py-1.5 rounded cursor-pointer hover:bg-slate-200 transition-colors">
+                                                <div class="w-4 h-4 rounded border flex items-center justify-center mr-2" 
+                                                     :class="allExchangesSelected ? 'bg-blue-600 border-blue-600' : 'border-slate-300 bg-white'">
+                                                    <template x-if="allExchangesSelected">
+                                                        <i data-lucide="check" class="w-3 h-3 text-white"></i>
+                                                    </template>
+                                                </div>
+                                                <span class="text-sm font-medium text-slate-700">Select All</span>
+                                            </div>
+                                        </div>
+                                        <div class="overflow-y-auto p-1">
+                                            <template x-for="ex in availableExchanges" :key="ex">
+                                                <div @click="toggleExchange(ex)" class="flex items-center px-2 py-1.5 rounded cursor-pointer hover:bg-slate-100 transition-colors">
+                                                    <div class="w-4 h-4 rounded border flex items-center justify-center mr-2"
+                                                         :class="selectedExchanges.includes(ex) ? 'bg-blue-600 border-blue-600' : 'border-slate-300 bg-white'">
+                                                        <template x-if="selectedExchanges.includes(ex)">
+                                                            <i data-lucide="check" class="w-3 h-3 text-white"></i>
+                                                        </template>
+                                                    </div>
+                                                    <span class="text-sm text-slate-600 truncate" x-text="ex"></span>
+                                                </div>
+                                            </template>
+                                        </div>
+                                    </div>
+                                </div>
+                            </th>
+                            
+                            <!-- Sortable Headers -->
+                            <template x-for="col in columns" :key="col.key">
+                                <th @click="sortBy(col.key)" 
+                                    class="px-4 py-3 text-left text-xs font-semibold text-white uppercase tracking-wider cursor-pointer hover:bg-blue-700 transition-colors select-none group"
+                                    :class="col.className || ''">
+                                    <div class="flex items-center gap-1">
+                                        <span x-text="col.label"></span>
+                                        <!-- Active Sort Icon -->
+                                        <template x-if="sortCol === col.key">
+                                            <span class="text-white">
+                                                <i :data-lucide="sortDesc ? 'arrow-down' : 'arrow-up'" class="w-4 h-4"></i>
+                                            </span>
+                                        </template>
+                                        <!-- Hover Hint Icon (only if not sorted) -->
+                                        <template x-if="sortCol !== col.key">
+                                            <span class="opacity-0 group-hover:opacity-100 transition-opacity text-blue-300">
+                                                <i data-lucide="arrow-down" class="w-4 h-4"></i>
+                                            </span>
+                                        </template>
+                                    </div>
+                                </th>
+                            </template>
+
+                            <th class="px-4 py-3 text-left text-xs font-semibold text-white uppercase tracking-wider">Bot Account</th>
+                            <th class="px-4 py-3 text-right text-xs font-semibold text-white uppercase tracking-wider">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody class="bg-white divide-y divide-slate-200">
+                        <template x-if="sortedData.length === 0">
+                            <tr>
+                                <td colspan="12" class="px-6 py-12 text-center text-slate-500">
+                                    No data matches your filter.
+                                </td>
+                            </tr>
+                        </template>
+                        
+                        <template x-for="(item, idx) in sortedData" :key="item.exchange_name + item.coin_name">
+                            <tr class="hover:bg-slate-50 transition-colors group">
+                                <!-- Sticky First Col -->
+                                <td class="px-4 py-3 whitespace-nowrap sticky left-0 bg-white group-hover:bg-slate-50 border-r border-slate-100 z-10">
+                                    <div class="flex flex-col">
+                                        <a href="#" @click.prevent="openExchangeUrl(item)" class="text-sm font-semibold text-blue-600 hover:text-blue-800 hover:underline mb-1" x-text="item.exchange_name"></a>
+                                        <!-- Mobile View -->
+                                        <div class="md:hidden flex flex-col gap-1 text-xs text-slate-500">
+                                            <span class="flex items-center gap-1">
+                                                <span class="font-medium text-slate-700" x-text="item.time_period + 'm'"></span>
+                                                <span class="text-slate-300">|</span>
+                                                <a :href="item.publicRecordUrl" target="_blank" class="hover:text-blue-600" x-text="item.coin_name"></a>
+                                            </span>
+                                            <span class="text-slate-400">Upd: <span x-text="item.updated"></span>m ago</span>
+                                        </div>
+                                    </div>
+                                </td>
+
+                                <td class="px-4 py-3 whitespace-nowrap text-sm text-slate-600 hidden md:table-cell">
+                                    <span class="bg-slate-100 text-slate-700 px-2 py-1 rounded text-xs font-medium border border-slate-200" x-text="item.time_period + 'm'"></span>
+                                </td>
+
+                                <td class="px-4 py-3 whitespace-nowrap text-sm font-medium text-slate-900 hidden md:table-cell">
+                                    <a :href="item.publicRecordUrl" target="_blank" class="flex items-center gap-1 hover:text-blue-600">
+                                        <span x-text="item.coin_name"></span>
+                                        <i data-lucide="external-link" class="w-3 h-3 text-slate-400"></i>
+                                    </a>
+                                </td>
+
+                                <td class="px-4 py-3 whitespace-nowrap text-sm text-slate-700 font-medium tabular-nums" x-text="item.s"></td>
+                                <td class="px-4 py-3 whitespace-nowrap text-sm text-slate-700 tabular-nums" x-text="item.r"></td>
+                                <td class="px-4 py-3 whitespace-nowrap text-sm text-slate-700 tabular-nums" x-text="item.v"></td>
+                                <td class="px-4 py-3 whitespace-nowrap text-sm text-slate-700 tabular-nums" x-text="item.round"></td>
+                                
+                                <td class="px-4 py-3 whitespace-nowrap text-sm text-slate-600 tabular-nums hidden lg:table-cell" x-text="item.timeUniformity"></td>
+                                <td class="px-4 py-3 whitespace-nowrap text-sm text-slate-600 tabular-nums hidden lg:table-cell" x-text="item.tradeUniformity"></td>
+
+                                <td class="px-4 py-3 whitespace-nowrap text-sm hidden sm:table-cell">
+                                    <span class="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium" 
+                                          :class="item.updated < 10 ? 'bg-green-100 text-green-800' : 'bg-slate-100 text-slate-800'"
+                                          x-text="item.updated + 'm'">
+                                    </span>
+                                </td>
+
+                                <td class="px-4 py-3 whitespace-nowrap">
+                                    <template x-if="item.hasRunningBot && item.botsInfo.length > 0">
+                                        <div class="flex flex-wrap gap-2">
+                                            <template x-for="bot in item.botsInfo" :key="bot.bot">
+                                                <a :href="bot.url" target="_blank" class="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-green-50 text-green-700 border border-green-200 hover:bg-green-100 transition-colors">
+                                                    <i data-lucide="bot" class="w-3 h-3 mr-1"></i>
+                                                    <span x-text="bot.account"></span>
+                                                </a>
+                                            </template>
+                                        </div>
+                                    </template>
+                                    <template x-if="!item.hasRunningBot">
+                                        <span class="text-slate-300 text-xs">-</span>
+                                    </template>
+                                </td>
+
+                                <td class="px-4 py-3 whitespace-nowrap text-right">
+                                    <div class="flex items-center justify-end gap-2">
+                                        <button @click="handleAction('block', item)" 
+                                                class="bg-red-50 hover:bg-red-100 text-red-600 border border-red-200 p-1.5 rounded-lg transition-colors"
+                                                :class="{ 'opacity-50 cursor-not-allowed': isActionLoading(item, 'block') }"
+                                                title="Block Item">
+                                            <i :data-lucide="isActionLoading(item, 'block') ? 'loader-2' : 'ban'" 
+                                               class="w-4 h-4" 
+                                               :class="{ 'animate-spin': isActionLoading(item, 'block') }"></i>
+                                        </button>
+                                        <button @click="handleAction('fake', item)" 
+                                                class="bg-white border border-orange-200 text-orange-600 hover:bg-orange-50 p-1.5 rounded-lg transition-colors"
+                                                :class="{ 'opacity-50 cursor-not-allowed': isActionLoading(item, 'fake') }"
+                                                title="Add Fake Data">
+                                            <i :data-lucide="isActionLoading(item, 'fake') ? 'loader-2' : 'file-plus'"
+                                               class="w-4 h-4"
+                                               :class="{ 'animate-spin': isActionLoading(item, 'fake') }"></i>
+                                        </button>
+                                    </div>
+                                </td>
+                            </tr>
+                        </template>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </main>
+
+    <!-- Block Modal -->
+    <div x-show="showBlockModal" x-cloak class="relative z-50">
+        <div class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm transition-opacity" @click="showBlockModal = false"></div>
+        <div class="fixed inset-0 flex items-center justify-center p-4 sm:p-6 pointer-events-none">
+            <div class="pointer-events-auto relative w-full max-w-2xl max-h-[85vh] flex flex-col bg-white rounded-xl shadow-2xl animate-in zoom-in-95 duration-200">
+                <div class="flex items-center justify-between px-6 py-4 border-b border-slate-100">
+                    <h3 class="text-lg font-semibold text-slate-800">Blocked Items</h3>
+                    <button @click="showBlockModal = false" class="p-2 text-slate-400 hover:text-slate-600 hover:bg-slate-100 rounded-full transition-colors">
+                        <i data-lucide="x" class="w-5 h-5"></i>
+                    </button>
+                </div>
+                <div class="flex-1 overflow-y-auto p-6">
+                    <template x-if="blockedList.length === 0">
+                        <div class="text-center py-8 text-slate-500">No blocked items.</div>
+                    </template>
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-3" x-show="blockedList.length > 0">
+                        <template x-for="item in blockedList" :key="item.exchange_name + item.coin_name">
+                            <div class="flex items-center justify-between p-3 bg-red-50 border border-red-100 rounded-lg group hover:border-red-200 transition-colors">
+                                <div class="flex flex-col">
+                                    <span class="font-medium text-slate-800 text-sm" x-text="item.exchange_name"></span>
+                                    <span class="text-xs text-slate-500" x-text="item.coin_name"></span>
+                                </div>
+                                <button @click="handleAction('unblock', item)" class="p-1.5 bg-white text-red-500 rounded-md border border-red-100 shadow-sm hover:bg-red-500 hover:text-white transition-all">
+                                    <i :data-lucide="isActionLoading(item, 'unblock') ? 'loader-2' : 'trash-2'"
+                                       class="w-4 h-4"
+                                       :class="{ 'animate-spin': isActionLoading(item, 'unblock') }"></i>
+                                </button>
+                            </div>
+                        </template>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Fake Modal -->
+    <div x-show="showFakeModal" x-cloak class="relative z-50">
+        <div class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm transition-opacity" @click="showFakeModal = false"></div>
+        <div class="fixed inset-0 flex items-center justify-center p-4 sm:p-6 pointer-events-none">
+            <div class="pointer-events-auto relative w-full max-w-2xl max-h-[85vh] flex flex-col bg-white rounded-xl shadow-2xl animate-in zoom-in-95 duration-200">
+                <div class="flex items-center justify-between px-6 py-4 border-b border-slate-100">
+                    <h3 class="text-lg font-semibold text-slate-800">Fake Data Entries</h3>
+                    <button @click="showFakeModal = false" class="p-2 text-slate-400 hover:text-slate-600 hover:bg-slate-100 rounded-full transition-colors">
+                        <i data-lucide="x" class="w-5 h-5"></i>
+                    </button>
+                </div>
+                <div class="flex-1 overflow-y-auto p-6">
+                    <template x-if="fakeList.length === 0">
+                        <div class="text-center py-8 text-slate-500">No fake data entries.</div>
+                    </template>
+                    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3" x-show="fakeList.length > 0">
+                        <template x-for="item in fakeList" :key="item.exchange_name + item.coin_name">
+                            <div class="p-3 bg-orange-50 border border-orange-100 rounded-lg">
+                                <div class="flex items-center gap-2 mb-1">
+                                    <div class="w-2 h-2 rounded-full bg-orange-400"></div>
+                                    <span class="font-medium text-slate-800 text-sm" x-text="item.exchange_name"></span>
+                                </div>
+                                <span class="text-xs text-slate-500 font-mono bg-white px-1.5 py-0.5 rounded border border-orange-100" x-text="item.coin_name"></span>
+                            </div>
+                        </template>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // MOCK DATA GENERATOR
+        const MOCK_DATA = [
+          { exchange_name: 'Binance', coin_name: 'BTC_USDT', time_period: '15', s: 98.5, r: 12.4, v: 4500000, round: 124, timeUniformity: 0.95, tradeUniformity: 0.88, updated: 2, is_fake_data: 0, is_block: 0, hasRunningBot: true, botsInfo: [{ bot: 'b1', account: 'MainBot', url: '#' }], publicRecordUrl: 'https://www.binance.com/en/trade/BTC_USDT' },
+          { exchange_name: 'OKX', coin_name: 'ETH_USDT', time_period: '5', s: 92.1, r: 8.5, v: 1200000, round: 89, timeUniformity: 0.91, tradeUniformity: 0.82, updated: 5, is_fake_data: 0, is_block: 0, hasRunningBot: false, botsInfo: [], publicRecordUrl: 'https://www.okx.com/trade-spot/eth-usdt' },
+          { exchange_name: 'Bybit', coin_name: 'SOL_USDT', time_period: '60', s: 85.4, r: 15.2, v: 890000, round: 45, timeUniformity: 0.78, tradeUniformity: 0.65, updated: 12, is_fake_data: 0, is_block: 0, hasRunningBot: true, botsInfo: [{ bot: 'b2', account: 'SolBot', url: '#' }], publicRecordUrl: 'https://www.bybit.com/trade/usdt/SOLUSDT' },
+          { exchange_name: 'KuCoin', coin_name: 'DOGE_USDT', time_period: '15', s: 45.2, r: 2.1, v: 150000, round: 12, timeUniformity: 0.45, tradeUniformity: 0.30, updated: 25, is_fake_data: 0, is_block: 0, hasRunningBot: false, botsInfo: [], publicRecordUrl: 'https://www.kucoin.com/trade/DOGE-USDT' },
+          { exchange_name: 'Binance', coin_name: 'XRP_USDT', time_period: '5', s: 76.8, r: 5.4, v: 320000, round: 67, timeUniformity: 0.82, tradeUniformity: 0.75, updated: 1, is_fake_data: 0, is_block: 0, hasRunningBot: false, botsInfo: [], publicRecordUrl: 'https://www.binance.com/en/trade/XRP_USDT' },
+          { exchange_name: 'Gate.io', coin_name: 'PEPE_USDT', time_period: '15', s: 88.9, r: 25.4, v: 560000, round: 112, timeUniformity: 0.89, tradeUniformity: 0.85, updated: 3, is_fake_data: 1, is_block: 0, hasRunningBot: false, botsInfo: [], publicRecordUrl: 'https://www.gate.io/trade/PEPE_USDT' },
+          { exchange_name: 'Bitget', coin_name: 'ARB_USDT', time_period: '30', s: 65.4, r: 10.1, v: 420000, round: 56, timeUniformity: 0.70, tradeUniformity: 0.60, updated: 8, is_fake_data: 0, is_block: 0, hasRunningBot: true, botsInfo: [{ bot: 'b3', account: 'ArbBot', url: '#' }], publicRecordUrl: 'https://www.bitget.com/spot/ARBUSDT' },
+          { exchange_name: 'HTX', coin_name: 'TRX_USDT', time_period: '5', s: 32.1, r: 1.5, v: 210000, round: 34, timeUniformity: 0.99, tradeUniformity: 0.20, updated: 4, is_fake_data: 0, is_block: 1, hasRunningBot: false, botsInfo: [], publicRecordUrl: 'https://www.htx.com/trade/trx_usdt' }
+        ];
+
+        document.addEventListener('alpine:init', () => {
+            Alpine.data('dashboard', () => ({
+                // Data State
+                rawItems: [],
+                blockedList: [],
+                fakeList: [],
+                
+                // UI State
+                availableExchanges: [],
+                selectedExchanges: [],
+                
+                sortCol: 'r',
+                sortDesc: true,
+                
+                isLoading: false,
+                isFirstLoad: true,
+                lastUpdated: new Date().toLocaleTimeString(),
+                
+                actionLoadingKeys: new Set(),
+                
+                showBlockModal: false,
+                showFakeModal: false,
+
+                // Column Config
+                columns: [
+                    { key: 'time_period', label: 'Period', className: 'hidden md:table-cell' },
+                    { key: 'coin_name', label: 'Pair', className: 'hidden md:table-cell' },
+                    { key: 's', label: 'Score' },
+                    { key: 'r', label: 'Reward' },
+                    { key: 'v', label: 'Volume' },
+                    { key: 'round', label: 'Round' },
+                    { key: 'timeUniformity', label: 'Time Unif.', className: 'hidden lg:table-cell' },
+                    { key: 'tradeUniformity', label: 'Trade Unif.', className: 'hidden lg:table-cell' },
+                    { key: 'updated', label: 'Updated', className: 'hidden sm:table-cell' }
+                ],
+
+                async init() {
+                    // Initial load
+                    await this.loadData();
+                    this.isFirstLoad = false;
+
+                    // Refresh icons after DOM updates
+                    this.$watch('rawItems', () => this.$nextTick(() => lucide.createIcons()));
+                    this.$watch('blockedList', () => this.$nextTick(() => lucide.createIcons()));
+                    this.$watch('fakeList', () => this.$nextTick(() => lucide.createIcons()));
+                    
+                    // Polling
+                    setInterval(() => this.loadData(true), 100000);
+                },
+
+                async loadData(silent = false) {
+                    if (!silent && !this.isFirstLoad) this.isLoading = true;
+                    
+                    // Simulate API Delay
+                    await new Promise(r => setTimeout(r, 600));
+
+                    const normal = [];
+                    const blocked = [];
+                    const fake = [];
+                    const exchanges = new Set();
+
+                    // Clone Mock Data to simulate fetch
+                    // In a real app, this is where fetch() would happen
+                    const fetchedData = JSON.parse(JSON.stringify(MOCK_DATA));
+
+                    fetchedData.forEach(item => {
+                        if (item.is_fake_data === 1) fake.push(item);
+                        else if (item.is_block === 1) blocked.push(item);
+                        else {
+                            normal.push(item);
+                            exchanges.add(item.exchange_name);
+                        }
+                    });
+
+                    this.rawItems = normal;
+                    this.blockedList = blocked;
+                    this.fakeList = fake;
+                    this.lastUpdated = new Date().toLocaleTimeString();
+
+                    // Update exchanges
+                    const exchangeList = Array.from(exchanges).sort();
+                    this.availableExchanges = exchangeList;
+                    
+                    // Initial Select All
+                    if (this.isFirstLoad) {
+                        this.selectedExchanges = [...exchangeList];
+                    }
+
+                    this.isLoading = false;
+                    this.$nextTick(() => lucide.createIcons());
+                },
+
+                get sortedData() {
+                    return this.rawItems
+                        .filter(i => this.selectedExchanges.includes(i.exchange_name))
+                        .sort((a, b) => {
+                            let valA = a[this.sortCol];
+                            let valB = b[this.sortCol];
+
+                            if (valA === null) valA = '';
+                            if (valB === null) valB = '';
+
+                            const aNum = parseFloat(valA);
+                            const bNum = parseFloat(valB);
+
+                            if (!isNaN(aNum) && !isNaN(bNum)) {
+                                return this.sortDesc ? bNum - aNum : aNum - bNum;
+                            }
+
+                            const aStr = String(valA).toLowerCase();
+                            const bStr = String(valB).toLowerCase();
+                            
+                            if (aStr < bStr) return this.sortDesc ? 1 : -1;
+                            if (aStr > bStr) return this.sortDesc ? -1 : 1;
+                            return 0;
+                        });
+                },
+
+                get allExchangesSelected() {
+                    return this.availableExchanges.length > 0 && 
+                           this.selectedExchanges.length === this.availableExchanges.length;
+                },
+
+                sortBy(col) {
+                    if (this.sortCol === col) {
+                        this.sortDesc = !this.sortDesc;
+                    } else {
+                        this.sortCol = col;
+                        this.sortDesc = true;
+                    }
+                    this.$nextTick(() => lucide.createIcons());
+                },
+
+                toggleExchange(ex) {
+                    if (this.selectedExchanges.includes(ex)) {
+                        this.selectedExchanges = this.selectedExchanges.filter(e => e !== ex);
+                    } else {
+                        this.selectedExchanges.push(ex);
+                    }
+                },
+
+                toggleAllExchanges() {
+                    if (this.allExchangesSelected) {
+                        this.selectedExchanges = [];
+                    } else {
+                        this.selectedExchanges = [...this.availableExchanges];
+                    }
+                },
+
+                async handleAction(type, item) {
+                    const key = type + item.exchange_name + item.coin_name;
+                    if (this.actionLoadingKeys.has(key)) return;
+                    
+                    this.actionLoadingKeys.add(key);
+                    // Force refresh for reactivity on Set
+                    this.actionLoadingKeys = new Set(this.actionLoadingKeys); 
+
+                    // Mock API Call
+                    await new Promise(r => setTimeout(r, 400));
+                    
+                    // Modify Local State (Simulating Backend Update)
+                    const targetRef = MOCK_DATA.find(i => i.exchange_name === item.exchange_name && i.coin_name === item.coin_name);
+                    
+                    if (targetRef) {
+                        if (type === 'block') targetRef.is_block = 1;
+                        if (type === 'fake') targetRef.is_fake_data = 1;
+                        if (type === 'unblock') targetRef.is_block = 0;
+                    }
+
+                    // Reload
+                    await this.loadData(true);
+                    
+                    if (type === 'unblock' && this.blockedList.length === 0) {
+                        this.showBlockModal = false;
+                    }
+
+                    this.actionLoadingKeys.delete(key);
+                    this.actionLoadingKeys = new Set(this.actionLoadingKeys);
+                },
+
+                isActionLoading(item, type) {
+                    return this.actionLoadingKeys.has(type + item.exchange_name + item.coin_name);
+                },
+
+                openExchangeUrl(item) {
+                    // Complex logic ported from React component
+                    const coinsWithoutBot = this.rawItems
+                        .filter(i => i.exchange_name === item.exchange_name && !i.hasRunningBot)
+                        .map(i => i.coin_name.split('_')[0]);
+                    
+                    const uniqueCoins = [...new Set(coinsWithoutBot)];
+                    let baseUrl = item.publicRecordUrl;
+
+                    if (uniqueCoins.length === 0) {
+                        if (baseUrl.includes('from=')) {
+                            baseUrl = baseUrl.replace(/from=[^&]+/, 'from=now-5m');
+                        } else {
+                            const separator = baseUrl.includes('?') ? '&' : '?';
+                            baseUrl = baseUrl + separator + 'from=now-5m';
+                        }
+                        window.open(baseUrl, '_blank');
+                        return;
+                    }
+
+                    baseUrl = baseUrl.replace(/&var-currency=[^&]*/g, '');
+                    if (baseUrl.includes('from=')) {
+                        baseUrl = baseUrl.replace(/from=[^&]+/, 'from=now-5m');
+                    } else {
+                        const separator = baseUrl.includes('?') ? '&' : '?';
+                        baseUrl = baseUrl + separator + 'from=now-5m';
+                    }
+
+                    const currencyParams = uniqueCoins.map(coin => `&var-currency=${coin}`).join('');
+                    const enhancedUrl = baseUrl + currencyParams;
+                    window.open(enhancedUrl, '_blank');
+                }
+            }))
+        })
+    </script>
+</body>
 </html>
