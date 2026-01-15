@@ -8997,7 +8997,6 @@
 
     function updateMapOption(chart) {
         const isDark = document.documentElement.classList.contains('dark');
-        const areaColor = isDark ? '#1f2937' : '#e2e8f0';
         const borderColor = isDark ? '#111' : '#cbd5e1';
         const hoverColor = isDark ? '#4b5563' : '#94a3b8';
         const labelColor = isDark ? '#e5e7eb' : '#334155';
@@ -9013,44 +9012,38 @@
                 borderColor: tooltipBorder,
                 textStyle: { color: tooltipText },
                 formatter: (p) => {
-                    const temp = p.value || 0;
-                    const color = getColorForTemp(temp);
+                    // 从tempMapData获取温度值，支持多种后缀格式
+                    let temp = tempMapData[p.name];
+                    if (temp === undefined) {
+                        temp = p.value;
+                    }
                     const tempLabel = currentLang === 'zh' ? '温度' : 'Temperature';
+                    if (temp === undefined || temp === null || isNaN(temp)) {
+                        return `<div class="font-bold text-sm mb-1">${p.name}</div><div class="text-xs">${tempLabel}: <span class="font-bold">-</span></div>`;
+                    }
+                    const color = getColorForTemp(temp);
                     return `<div class="font-bold text-sm mb-1">${p.name}</div><div class="text-xs">${tempLabel}: <span class="font-bold" style="color: ${color}">${temp}°C</span></div>`;
                 }
             },
-            geo: {
-                label: {
-                    show: true,
-                    fontSize: 10,
-                    color: labelColor,
-                    textBorderColor: isDark ? '#111827' : '#f8fafc',
-                    textBorderWidth: 2,
-                    formatter: (params) => {
-                        const temp = tempMapData[params.name];
-                        if (temp !== undefined) {
-                            return `${params.name}\n${temp}°`;
-                        }
-                        return params.name;
-                    }
+            series: [{
+                itemStyle: {
+                    borderColor: borderColor
                 },
-                itemStyle: { areaColor: areaColor, borderColor: borderColor },
+                label: {
+                    color: labelColor,
+                    textBorderColor: isDark ? '#111827' : '#f8fafc'
+                },
                 emphasis: {
                     label: {
-                        show: true,
-                        color: emphasisLabelColor,
-                        fontSize: 12,
-                        formatter: (params) => {
-                            const temp = tempMapData[params.name];
-                            if (temp !== undefined) {
-                                return `${params.name}\n${temp}°C`;
-                            }
-                            return params.name;
-                        }
+                        color: emphasisLabelColor
                     },
-                    itemStyle: { areaColor: hoverColor, shadowColor: shadowColor, shadowBlur: 10 }
+                    itemStyle: {
+                        areaColor: hoverColor,
+                        shadowColor: shadowColor,
+                        shadowBlur: 10
+                    }
                 }
-            }
+            }]
         });
     }
 
@@ -9058,7 +9051,7 @@
         const chartDom = document.getElementById('main-map');
         window.myMapChart = echarts.init(chartDom);
 
-        const data = [{"name":"昆山","value":21.1},{"name":"苏州","value":20.9},{"name":"仪征","value":20.8},{"name":"吴江","value":20.8},{"name":"扬州","value":20.8},{"name":"江都","value":20.8},{"name":"太仓","value":20.7},{"name":"张家港","value":20.7},{"name":"常熟","value":20.6},{"name":"溧阳","value":20.5},{"name":"南京","value":20.2},{"name":"江宁","value":20.2},{"name":"靖江","value":20.1},{"name":"无锡","value":19.8},{"name":"江阴","value":19.8},{"name":"盱眙","value":19.8},{"name":"高邮","value":19.8},{"name":"丹阳","value":19.7},{"name":"扬中","value":19.7},{"name":"南通","value":19.5},{"name":"泰兴","value":19.5},{"name":"金湖","value":19.5},{"name":"镇江","value":19.5},{"name":"宝应","value":19.3},{"name":"常州","value":19.3},{"name":"六合","value":19.2},{"name":"句容","value":19.2},{"name":"浦口","value":19.2},{"name":"溧水","value":19.2},{"name":"高淳","value":19.2},{"name":"启东","value":19.1},{"name":"海门","value":19},{"name":"兴化","value":18.8},{"name":"姜堰","value":18.8},{"name":"泰州","value":18.8},{"name":"通州","value":18.8},{"name":"金坛区","value":18.8},{"name":"如东","value":18.7},{"name":"如皋","value":18.5},{"name":"宜兴","value":18.4},{"name":"海安","value":18.2},{"name":"东台","value":17.3},{"name":"大丰","value":17.1},{"name":"洪泽","value":16.8},{"name":"建湖","value":16.6},{"name":"盐城","value":16.6},{"name":"淮安区","value":16.5},{"name":"泗洪","value":16.1},{"name":"淮阴","value":15.8},{"name":"阜宁","value":15.8},{"name":"睢宁","value":15.7},{"name":"涟水","value":15.2},{"name":"滨海","value":14.8},{"name":"泗阳","value":14.7},{"name":"射阳","value":14.4},{"name":"响水","value":14.1},{"name":"宿迁","value":14.1},{"name":"沭阳","value":13.6},{"name":"灌云","value":13.6},{"name":"灌南","value":13.6},{"name":"东海","value":13.3},{"name":"徐州","value":13.3},{"name":"新沂","value":13.3},{"name":"连云港","value":13.3},{"name":"沛县","value":13.1},{"name":"邳州","value":13},{"name":"丰县","value":12.3},{"name":"赣榆","value":12.3}];
+        const data = [{"name":"昆山","shortName":"昆山","value":21.1,"itemStyle":{"areaColor":"#eab308"}},{"name":"苏州市","shortName":"苏州","value":20.9,"itemStyle":{"areaColor":"#eab308"}},{"name":"仪征","shortName":"仪征","value":20.8,"itemStyle":{"areaColor":"#eab308"}},{"name":"吴江","shortName":"吴江","value":20.8,"itemStyle":{"areaColor":"#eab308"}},{"name":"扬州市","shortName":"扬州","value":20.8,"itemStyle":{"areaColor":"#eab308"}},{"name":"江都","shortName":"江都","value":20.8,"itemStyle":{"areaColor":"#eab308"}},{"name":"太仓","shortName":"太仓","value":20.7,"itemStyle":{"areaColor":"#eab308"}},{"name":"张家港","shortName":"张家港","value":20.7,"itemStyle":{"areaColor":"#eab308"}},{"name":"常熟","shortName":"常熟","value":20.6,"itemStyle":{"areaColor":"#eab308"}},{"name":"溧阳","shortName":"溧阳","value":20.5,"itemStyle":{"areaColor":"#eab308"}},{"name":"南京市","shortName":"南京","value":20.2,"itemStyle":{"areaColor":"#eab308"}},{"name":"江宁","shortName":"江宁","value":20.2,"itemStyle":{"areaColor":"#eab308"}},{"name":"靖江","shortName":"靖江","value":20.1,"itemStyle":{"areaColor":"#eab308"}},{"name":"无锡市","shortName":"无锡","value":19.8,"itemStyle":{"areaColor":"#10b981"}},{"name":"江阴","shortName":"江阴","value":19.8,"itemStyle":{"areaColor":"#10b981"}},{"name":"盱眙","shortName":"盱眙","value":19.8,"itemStyle":{"areaColor":"#10b981"}},{"name":"高邮","shortName":"高邮","value":19.8,"itemStyle":{"areaColor":"#10b981"}},{"name":"丹阳","shortName":"丹阳","value":19.7,"itemStyle":{"areaColor":"#10b981"}},{"name":"扬中","shortName":"扬中","value":19.7,"itemStyle":{"areaColor":"#10b981"}},{"name":"南通市","shortName":"南通","value":19.5,"itemStyle":{"areaColor":"#10b981"}},{"name":"泰兴","shortName":"泰兴","value":19.5,"itemStyle":{"areaColor":"#10b981"}},{"name":"金湖","shortName":"金湖","value":19.5,"itemStyle":{"areaColor":"#10b981"}},{"name":"镇江市","shortName":"镇江","value":19.5,"itemStyle":{"areaColor":"#10b981"}},{"name":"宝应","shortName":"宝应","value":19.3,"itemStyle":{"areaColor":"#10b981"}},{"name":"常州市","shortName":"常州","value":19.3,"itemStyle":{"areaColor":"#10b981"}},{"name":"六合","shortName":"六合","value":19.2,"itemStyle":{"areaColor":"#10b981"}},{"name":"句容","shortName":"句容","value":19.2,"itemStyle":{"areaColor":"#10b981"}},{"name":"浦口","shortName":"浦口","value":19.2,"itemStyle":{"areaColor":"#10b981"}},{"name":"溧水","shortName":"溧水","value":19.2,"itemStyle":{"areaColor":"#10b981"}},{"name":"高淳","shortName":"高淳","value":19.2,"itemStyle":{"areaColor":"#10b981"}},{"name":"启东","shortName":"启东","value":19.1,"itemStyle":{"areaColor":"#10b981"}},{"name":"海门","shortName":"海门","value":19,"itemStyle":{"areaColor":"#10b981"}},{"name":"兴化","shortName":"兴化","value":18.8,"itemStyle":{"areaColor":"#10b981"}},{"name":"姜堰","shortName":"姜堰","value":18.8,"itemStyle":{"areaColor":"#10b981"}},{"name":"泰州市","shortName":"泰州","value":18.8,"itemStyle":{"areaColor":"#10b981"}},{"name":"通州","shortName":"通州","value":18.8,"itemStyle":{"areaColor":"#10b981"}},{"name":"金坛区","shortName":"金坛区","value":18.8,"itemStyle":{"areaColor":"#10b981"}},{"name":"如东","shortName":"如东","value":18.7,"itemStyle":{"areaColor":"#10b981"}},{"name":"如皋","shortName":"如皋","value":18.5,"itemStyle":{"areaColor":"#10b981"}},{"name":"宜兴","shortName":"宜兴","value":18.4,"itemStyle":{"areaColor":"#10b981"}},{"name":"海安","shortName":"海安","value":18.2,"itemStyle":{"areaColor":"#10b981"}},{"name":"东台","shortName":"东台","value":17.3,"itemStyle":{"areaColor":"#10b981"}},{"name":"大丰","shortName":"大丰","value":17.1,"itemStyle":{"areaColor":"#10b981"}},{"name":"洪泽","shortName":"洪泽","value":16.8,"itemStyle":{"areaColor":"#10b981"}},{"name":"建湖","shortName":"建湖","value":16.6,"itemStyle":{"areaColor":"#10b981"}},{"name":"盐城市","shortName":"盐城","value":16.6,"itemStyle":{"areaColor":"#10b981"}},{"name":"淮安区","shortName":"淮安区","value":16.5,"itemStyle":{"areaColor":"#10b981"}},{"name":"泗洪","shortName":"泗洪","value":16.1,"itemStyle":{"areaColor":"#10b981"}},{"name":"淮阴","shortName":"淮阴","value":15.8,"itemStyle":{"areaColor":"#10b981"}},{"name":"阜宁","shortName":"阜宁","value":15.8,"itemStyle":{"areaColor":"#10b981"}},{"name":"睢宁","shortName":"睢宁","value":15.7,"itemStyle":{"areaColor":"#10b981"}},{"name":"涟水","shortName":"涟水","value":15.2,"itemStyle":{"areaColor":"#10b981"}},{"name":"滨海","shortName":"滨海","value":14.8,"itemStyle":{"areaColor":"#10b981"}},{"name":"泗阳","shortName":"泗阳","value":14.7,"itemStyle":{"areaColor":"#10b981"}},{"name":"射阳","shortName":"射阳","value":14.4,"itemStyle":{"areaColor":"#10b981"}},{"name":"响水","shortName":"响水","value":14.1,"itemStyle":{"areaColor":"#10b981"}},{"name":"宿迁市","shortName":"宿迁","value":14.1,"itemStyle":{"areaColor":"#10b981"}},{"name":"沭阳","shortName":"沭阳","value":13.6,"itemStyle":{"areaColor":"#10b981"}},{"name":"灌云","shortName":"灌云","value":13.6,"itemStyle":{"areaColor":"#10b981"}},{"name":"灌南","shortName":"灌南","value":13.6,"itemStyle":{"areaColor":"#10b981"}},{"name":"东海","shortName":"东海","value":13.3,"itemStyle":{"areaColor":"#10b981"}},{"name":"徐州市","shortName":"徐州","value":13.3,"itemStyle":{"areaColor":"#10b981"}},{"name":"新沂","shortName":"新沂","value":13.3,"itemStyle":{"areaColor":"#10b981"}},{"name":"连云港市","shortName":"连云港","value":13.3,"itemStyle":{"areaColor":"#10b981"}},{"name":"沛县","shortName":"沛县","value":13.1,"itemStyle":{"areaColor":"#10b981"}},{"name":"邳州","shortName":"邳州","value":13,"itemStyle":{"areaColor":"#10b981"}},{"name":"丰县","shortName":"丰县","value":12.3,"itemStyle":{"areaColor":"#10b981"}},{"name":"赣榆","shortName":"赣榆","value":12.3,"itemStyle":{"areaColor":"#10b981"}}];
 
         try {
             // 加载省份地图
@@ -9072,6 +9065,7 @@
 
         data.forEach(item => {
             tempMapData[item.name] = item.value;
+            tempMapData[item.shortName] = item.value;
         });
 
         window.myMapChart.setOption({
@@ -9085,16 +9079,56 @@
                 show: false,
                 min: -15,
                 max: 40,
-                inRange: { color: ['#6366f1', '#3b82f6', '#06b6d4', '#10b981', '#eab308', '#f97316', '#ef4444'] }
+                inRange: {
+                    color: ['#6366f1', '#3b82f6', '#06b6d4', '#10b981', '#eab308', '#f97316', '#ef4444']
+                },
+                calculable: false
             },
-            geo: {
+            series: [{
+                type: 'map',
                 map: 'province',
                 roam: true,
                 top: '18%',
                 zoom: 1.2,
-                itemStyle: { borderWidth: 1 }
-            },
-            series: [{ type: 'map', geoIndex: 0, data: data }]
+                label: {
+                    show: true,
+                    fontSize: 10,
+                    color: '#e5e7eb',
+                    textBorderColor: '#111827',
+                    textBorderWidth: 2,
+                    formatter: (params) => {
+                        const temp = tempMapData[params.name];
+                        if (temp !== undefined && temp !== null && !isNaN(temp)) {
+                            return `${params.name}\n${temp}°`;
+                        }
+                        return `${params.name}\n-`;
+                    }
+                },
+                itemStyle: {
+                    borderWidth: 1,
+                    borderColor: '#111'
+                },
+                emphasis: {
+                    label: {
+                        show: true,
+                        color: '#fff',
+                        fontSize: 12,
+                        formatter: (params) => {
+                            const temp = tempMapData[params.name];
+                            if (temp !== undefined && temp !== null && !isNaN(temp)) {
+                                return `${params.name}\n${temp}°C`;
+                            }
+                            return `${params.name}\n-`;
+                        }
+                    },
+                    itemStyle: {
+                        areaColor: '#4b5563',
+                        shadowColor: 'rgba(0, 0, 0, 0.5)',
+                        shadowBlur: 10
+                    }
+                },
+                data: data
+            }]
         });
 
         updateMapOption(window.myMapChart);

@@ -12553,7 +12553,6 @@
 
     function updateMapOption(chart) {
         const isDark = document.documentElement.classList.contains('dark');
-        const areaColor = isDark ? '#1f2937' : '#e2e8f0';
         const borderColor = isDark ? '#111' : '#cbd5e1';
         const hoverColor = isDark ? '#4b5563' : '#94a3b8';
         const labelColor = isDark ? '#e5e7eb' : '#334155';
@@ -12569,44 +12568,38 @@
                 borderColor: tooltipBorder,
                 textStyle: { color: tooltipText },
                 formatter: (p) => {
-                    const temp = p.value || 0;
-                    const color = getColorForTemp(temp);
+                    // 从tempMapData获取温度值，支持多种后缀格式
+                    let temp = tempMapData[p.name];
+                    if (temp === undefined) {
+                        temp = p.value;
+                    }
                     const tempLabel = currentLang === 'zh' ? '温度' : 'Temperature';
+                    if (temp === undefined || temp === null || isNaN(temp)) {
+                        return `<div class="font-bold text-sm mb-1">${p.name}</div><div class="text-xs">${tempLabel}: <span class="font-bold">-</span></div>`;
+                    }
+                    const color = getColorForTemp(temp);
                     return `<div class="font-bold text-sm mb-1">${p.name}</div><div class="text-xs">${tempLabel}: <span class="font-bold" style="color: ${color}">${temp}°C</span></div>`;
                 }
             },
-            geo: {
-                label: {
-                    show: true,
-                    fontSize: 10,
-                    color: labelColor,
-                    textBorderColor: isDark ? '#111827' : '#f8fafc',
-                    textBorderWidth: 2,
-                    formatter: (params) => {
-                        const temp = tempMapData[params.name];
-                        if (temp !== undefined) {
-                            return `${params.name}\n${temp}°`;
-                        }
-                        return params.name;
-                    }
+            series: [{
+                itemStyle: {
+                    borderColor: borderColor
                 },
-                itemStyle: { areaColor: areaColor, borderColor: borderColor },
+                label: {
+                    color: labelColor,
+                    textBorderColor: isDark ? '#111827' : '#f8fafc'
+                },
                 emphasis: {
                     label: {
-                        show: true,
-                        color: emphasisLabelColor,
-                        fontSize: 12,
-                        formatter: (params) => {
-                            const temp = tempMapData[params.name];
-                            if (temp !== undefined) {
-                                return `${params.name}\n${temp}°C`;
-                            }
-                            return params.name;
-                        }
+                        color: emphasisLabelColor
                     },
-                    itemStyle: { areaColor: hoverColor, shadowColor: shadowColor, shadowBlur: 10 }
+                    itemStyle: {
+                        areaColor: hoverColor,
+                        shadowColor: shadowColor,
+                        shadowBlur: 10
+                    }
                 }
-            }
+            }]
         });
     }
 
@@ -12614,7 +12607,7 @@
         const chartDom = document.getElementById('main-map');
         window.myMapChart = echarts.init(chartDom);
 
-        const data = [{"name":"于田","value":22.5},{"name":"策勒","value":22.4},{"name":"民丰","value":22.2},{"name":"和田","value":20.1},{"name":"洛浦","value":19.6},{"name":"泽普","value":19.2},{"name":"岳普湖","value":16},{"name":"叶城","value":15.9},{"name":"喀什","value":15.2},{"name":"墨玉","value":14.9},{"name":"阿图什","value":14.6},{"name":"皮山","value":12.7},{"name":"麦盖提","value":12.6},{"name":"阿合奇","value":12.2},{"name":"伽师","value":11.8},{"name":"乌恰","value":11.1},{"name":"阿克陶","value":10.1},{"name":"且末","value":9.8},{"name":"塔中","value":9.8},{"name":"巴楚","value":8.9},{"name":"莎车","value":8.1},{"name":"阿拉尔","value":7.8},{"name":"柯坪","value":7.7},{"name":"巩留","value":7.2},{"name":"新和","value":6.8},{"name":"若羌","value":6.8},{"name":"沙雅","value":6.7},{"name":"英吉沙","value":6.5},{"name":"乌什","value":6},{"name":"尼勒克","value":5.9},{"name":"尉犁","value":5.8},{"name":"轮台","value":5.7},{"name":"阿瓦提","value":5.7},{"name":"伊宁","value":5.1},{"name":"温宿","value":5},{"name":"阿克苏","value":5},{"name":"库车","value":4.8},{"name":"新源","value":4.6},{"name":"霍城","value":4.5},{"name":"库尔勒","value":4.1},{"name":"伊宁县","value":3.4},{"name":"铁干里克","value":3.2},{"name":"察布查尔","value":3.1},{"name":"焉耆","value":3},{"name":"拜城","value":2.3},{"name":"霍尔果斯","value":2.1},{"name":"博湖","value":2},{"name":"和硕","value":2},{"name":"巴仑台","value":1.7},{"name":"昭苏","value":1.7},{"name":"和静","value":0.9},{"name":"特克斯","value":0.8},{"name":"哈密","value":0.2},{"name":"托克逊","value":-0.2},{"name":"塔什库尔干","value":-0.9},{"name":"乌鲁木齐牧试站","value":-1.1},{"name":"伊吾","value":-1.3},{"name":"小渠子","value":-1.6},{"name":"吐鲁番","value":-2.1},{"name":"鄯善","value":-2.1},{"name":"温泉","value":-2.3},{"name":"克拉玛依","value":-2.5},{"name":"塔城","value":-2.7},{"name":"木垒","value":-2.9},{"name":"吉木萨尔","value":-3},{"name":"昌吉","value":-3.2},{"name":"莫索湾","value":-4.3},{"name":"达坂城","value":-4.3},{"name":"乌鲁木齐","value":-4.6},{"name":"奇台","value":-4.6},{"name":"额敏","value":-4.8},{"name":"天池","value":-5},{"name":"乌苏","value":-5.2},{"name":"阿拉山口","value":-5.2},{"name":"博乐","value":-5.4},{"name":"呼图壁","value":-5.4},{"name":"托里","value":-5.5},{"name":"沙湾","value":-5.5},{"name":"精河","value":-5.5},{"name":"玛纳斯","value":-5.8},{"name":"阜康","value":-5.8},{"name":"米东区","value":-6.5},{"name":"裕民","value":-6.5},{"name":"石河子","value":-6.6},{"name":"炮台","value":-7.7},{"name":"巴里坤","value":-7.9},{"name":"福海","value":-8.2},{"name":"蔡家湖","value":-9.5},{"name":"和布克赛尔","value":-9.7},{"name":"巴音布鲁克","value":-9.9},{"name":"布尔津","value":-10.2},{"name":"吉木乃","value":-11.2},{"name":"富蕴","value":-11.2},{"name":"青河","value":-13},{"name":"阿勒泰","value":-13.1},{"name":"哈巴河","value":-14.1}];
+        const data = [{"name":"于田","shortName":"于田","value":22.5,"itemStyle":{"areaColor":"#eab308"}},{"name":"策勒","shortName":"策勒","value":22.4,"itemStyle":{"areaColor":"#eab308"}},{"name":"民丰","shortName":"民丰","value":22.2,"itemStyle":{"areaColor":"#eab308"}},{"name":"和田","shortName":"和田","value":20.1,"itemStyle":{"areaColor":"#eab308"}},{"name":"洛浦","shortName":"洛浦","value":19.6,"itemStyle":{"areaColor":"#10b981"}},{"name":"泽普","shortName":"泽普","value":19.2,"itemStyle":{"areaColor":"#10b981"}},{"name":"岳普湖","shortName":"岳普湖","value":16,"itemStyle":{"areaColor":"#10b981"}},{"name":"叶城","shortName":"叶城","value":15.9,"itemStyle":{"areaColor":"#10b981"}},{"name":"喀什","shortName":"喀什","value":15.2,"itemStyle":{"areaColor":"#10b981"}},{"name":"墨玉","shortName":"墨玉","value":14.9,"itemStyle":{"areaColor":"#10b981"}},{"name":"阿图什","shortName":"阿图什","value":14.6,"itemStyle":{"areaColor":"#10b981"}},{"name":"皮山","shortName":"皮山","value":12.7,"itemStyle":{"areaColor":"#10b981"}},{"name":"麦盖提","shortName":"麦盖提","value":12.6,"itemStyle":{"areaColor":"#10b981"}},{"name":"阿合奇","shortName":"阿合奇","value":12.2,"itemStyle":{"areaColor":"#10b981"}},{"name":"伽师","shortName":"伽师","value":11.8,"itemStyle":{"areaColor":"#10b981"}},{"name":"乌恰","shortName":"乌恰","value":11.1,"itemStyle":{"areaColor":"#10b981"}},{"name":"阿克陶","shortName":"阿克陶","value":10.1,"itemStyle":{"areaColor":"#10b981"}},{"name":"且末","shortName":"且末","value":9.8,"itemStyle":{"areaColor":"#06b6d4"}},{"name":"塔中","shortName":"塔中","value":9.8,"itemStyle":{"areaColor":"#06b6d4"}},{"name":"巴楚","shortName":"巴楚","value":8.9,"itemStyle":{"areaColor":"#06b6d4"}},{"name":"莎车","shortName":"莎车","value":8.1,"itemStyle":{"areaColor":"#06b6d4"}},{"name":"阿拉尔市","shortName":"阿拉尔","value":7.8,"itemStyle":{"areaColor":"#06b6d4"}},{"name":"柯坪","shortName":"柯坪","value":7.7,"itemStyle":{"areaColor":"#06b6d4"}},{"name":"巩留","shortName":"巩留","value":7.2,"itemStyle":{"areaColor":"#06b6d4"}},{"name":"新和","shortName":"新和","value":6.8,"itemStyle":{"areaColor":"#06b6d4"}},{"name":"若羌","shortName":"若羌","value":6.8,"itemStyle":{"areaColor":"#06b6d4"}},{"name":"沙雅","shortName":"沙雅","value":6.7,"itemStyle":{"areaColor":"#06b6d4"}},{"name":"英吉沙","shortName":"英吉沙","value":6.5,"itemStyle":{"areaColor":"#06b6d4"}},{"name":"乌什","shortName":"乌什","value":6,"itemStyle":{"areaColor":"#06b6d4"}},{"name":"尼勒克","shortName":"尼勒克","value":5.9,"itemStyle":{"areaColor":"#06b6d4"}},{"name":"尉犁","shortName":"尉犁","value":5.8,"itemStyle":{"areaColor":"#06b6d4"}},{"name":"轮台","shortName":"轮台","value":5.7,"itemStyle":{"areaColor":"#06b6d4"}},{"name":"阿瓦提","shortName":"阿瓦提","value":5.7,"itemStyle":{"areaColor":"#06b6d4"}},{"name":"伊宁","shortName":"伊宁","value":5.1,"itemStyle":{"areaColor":"#06b6d4"}},{"name":"温宿","shortName":"温宿","value":5,"itemStyle":{"areaColor":"#06b6d4"}},{"name":"阿克苏","shortName":"阿克苏","value":5,"itemStyle":{"areaColor":"#06b6d4"}},{"name":"库车","shortName":"库车","value":4.8,"itemStyle":{"areaColor":"#06b6d4"}},{"name":"新源","shortName":"新源","value":4.6,"itemStyle":{"areaColor":"#06b6d4"}},{"name":"霍城","shortName":"霍城","value":4.5,"itemStyle":{"areaColor":"#06b6d4"}},{"name":"库尔勒","shortName":"库尔勒","value":4.1,"itemStyle":{"areaColor":"#06b6d4"}},{"name":"伊宁县","shortName":"伊宁县","value":3.4,"itemStyle":{"areaColor":"#06b6d4"}},{"name":"铁干里克","shortName":"铁干里克","value":3.2,"itemStyle":{"areaColor":"#06b6d4"}},{"name":"察布查尔","shortName":"察布查尔","value":3.1,"itemStyle":{"areaColor":"#06b6d4"}},{"name":"焉耆","shortName":"焉耆","value":3,"itemStyle":{"areaColor":"#06b6d4"}},{"name":"拜城","shortName":"拜城","value":2.3,"itemStyle":{"areaColor":"#06b6d4"}},{"name":"霍尔果斯","shortName":"霍尔果斯","value":2.1,"itemStyle":{"areaColor":"#06b6d4"}},{"name":"博湖","shortName":"博湖","value":2,"itemStyle":{"areaColor":"#06b6d4"}},{"name":"和硕","shortName":"和硕","value":2,"itemStyle":{"areaColor":"#06b6d4"}},{"name":"巴仑台","shortName":"巴仑台","value":1.7,"itemStyle":{"areaColor":"#06b6d4"}},{"name":"昭苏","shortName":"昭苏","value":1.7,"itemStyle":{"areaColor":"#06b6d4"}},{"name":"和静","shortName":"和静","value":0.9,"itemStyle":{"areaColor":"#06b6d4"}},{"name":"特克斯","shortName":"特克斯","value":0.8,"itemStyle":{"areaColor":"#06b6d4"}},{"name":"哈密市","shortName":"哈密","value":0.2,"itemStyle":{"areaColor":"#06b6d4"}},{"name":"托克逊","shortName":"托克逊","value":-0.2,"itemStyle":{"areaColor":"#3b82f6"}},{"name":"塔什库尔干","shortName":"塔什库尔干","value":-0.9,"itemStyle":{"areaColor":"#3b82f6"}},{"name":"乌鲁木齐牧试站","shortName":"乌鲁木齐牧试站","value":-1.1,"itemStyle":{"areaColor":"#3b82f6"}},{"name":"伊吾","shortName":"伊吾","value":-1.3,"itemStyle":{"areaColor":"#3b82f6"}},{"name":"小渠子","shortName":"小渠子","value":-1.6,"itemStyle":{"areaColor":"#3b82f6"}},{"name":"吐鲁番市","shortName":"吐鲁番","value":-2.1,"itemStyle":{"areaColor":"#3b82f6"}},{"name":"鄯善","shortName":"鄯善","value":-2.1,"itemStyle":{"areaColor":"#3b82f6"}},{"name":"温泉","shortName":"温泉","value":-2.3,"itemStyle":{"areaColor":"#3b82f6"}},{"name":"克拉玛依市","shortName":"克拉玛依","value":-2.5,"itemStyle":{"areaColor":"#3b82f6"}},{"name":"塔城","shortName":"塔城","value":-2.7,"itemStyle":{"areaColor":"#3b82f6"}},{"name":"木垒","shortName":"木垒","value":-2.9,"itemStyle":{"areaColor":"#3b82f6"}},{"name":"吉木萨尔","shortName":"吉木萨尔","value":-3,"itemStyle":{"areaColor":"#3b82f6"}},{"name":"昌吉","shortName":"昌吉","value":-3.2,"itemStyle":{"areaColor":"#3b82f6"}},{"name":"莫索湾","shortName":"莫索湾","value":-4.3,"itemStyle":{"areaColor":"#3b82f6"}},{"name":"达坂城","shortName":"达坂城","value":-4.3,"itemStyle":{"areaColor":"#3b82f6"}},{"name":"乌鲁木齐市","shortName":"乌鲁木齐","value":-4.6,"itemStyle":{"areaColor":"#3b82f6"}},{"name":"奇台","shortName":"奇台","value":-4.6,"itemStyle":{"areaColor":"#3b82f6"}},{"name":"额敏","shortName":"额敏","value":-4.8,"itemStyle":{"areaColor":"#3b82f6"}},{"name":"天池","shortName":"天池","value":-5,"itemStyle":{"areaColor":"#3b82f6"}},{"name":"乌苏","shortName":"乌苏","value":-5.2,"itemStyle":{"areaColor":"#3b82f6"}},{"name":"阿拉山口","shortName":"阿拉山口","value":-5.2,"itemStyle":{"areaColor":"#3b82f6"}},{"name":"博乐","shortName":"博乐","value":-5.4,"itemStyle":{"areaColor":"#3b82f6"}},{"name":"呼图壁","shortName":"呼图壁","value":-5.4,"itemStyle":{"areaColor":"#3b82f6"}},{"name":"托里","shortName":"托里","value":-5.5,"itemStyle":{"areaColor":"#3b82f6"}},{"name":"沙湾","shortName":"沙湾","value":-5.5,"itemStyle":{"areaColor":"#3b82f6"}},{"name":"精河","shortName":"精河","value":-5.5,"itemStyle":{"areaColor":"#3b82f6"}},{"name":"玛纳斯","shortName":"玛纳斯","value":-5.8,"itemStyle":{"areaColor":"#3b82f6"}},{"name":"阜康","shortName":"阜康","value":-5.8,"itemStyle":{"areaColor":"#3b82f6"}},{"name":"米东区","shortName":"米东区","value":-6.5,"itemStyle":{"areaColor":"#3b82f6"}},{"name":"裕民","shortName":"裕民","value":-6.5,"itemStyle":{"areaColor":"#3b82f6"}},{"name":"石河子市","shortName":"石河子","value":-6.6,"itemStyle":{"areaColor":"#3b82f6"}},{"name":"炮台","shortName":"炮台","value":-7.7,"itemStyle":{"areaColor":"#3b82f6"}},{"name":"巴里坤","shortName":"巴里坤","value":-7.9,"itemStyle":{"areaColor":"#3b82f6"}},{"name":"福海","shortName":"福海","value":-8.2,"itemStyle":{"areaColor":"#3b82f6"}},{"name":"蔡家湖","shortName":"蔡家湖","value":-9.5,"itemStyle":{"areaColor":"#3b82f6"}},{"name":"和布克赛尔","shortName":"和布克赛尔","value":-9.7,"itemStyle":{"areaColor":"#3b82f6"}},{"name":"巴音布鲁克","shortName":"巴音布鲁克","value":-9.9,"itemStyle":{"areaColor":"#3b82f6"}},{"name":"布尔津","shortName":"布尔津","value":-10.2,"itemStyle":{"areaColor":"#6366f1"}},{"name":"吉木乃","shortName":"吉木乃","value":-11.2,"itemStyle":{"areaColor":"#6366f1"}},{"name":"富蕴","shortName":"富蕴","value":-11.2,"itemStyle":{"areaColor":"#6366f1"}},{"name":"青河","shortName":"青河","value":-13,"itemStyle":{"areaColor":"#6366f1"}},{"name":"阿勒泰","shortName":"阿勒泰","value":-13.1,"itemStyle":{"areaColor":"#6366f1"}},{"name":"哈巴河","shortName":"哈巴河","value":-14.1,"itemStyle":{"areaColor":"#6366f1"}}];
 
         try {
             // 加载省份地图
@@ -12628,6 +12621,7 @@
 
         data.forEach(item => {
             tempMapData[item.name] = item.value;
+            tempMapData[item.shortName] = item.value;
         });
 
         window.myMapChart.setOption({
@@ -12641,16 +12635,56 @@
                 show: false,
                 min: -15,
                 max: 40,
-                inRange: { color: ['#6366f1', '#3b82f6', '#06b6d4', '#10b981', '#eab308', '#f97316', '#ef4444'] }
+                inRange: {
+                    color: ['#6366f1', '#3b82f6', '#06b6d4', '#10b981', '#eab308', '#f97316', '#ef4444']
+                },
+                calculable: false
             },
-            geo: {
+            series: [{
+                type: 'map',
                 map: 'province',
                 roam: true,
                 top: '18%',
                 zoom: 1.2,
-                itemStyle: { borderWidth: 1 }
-            },
-            series: [{ type: 'map', geoIndex: 0, data: data }]
+                label: {
+                    show: true,
+                    fontSize: 10,
+                    color: '#e5e7eb',
+                    textBorderColor: '#111827',
+                    textBorderWidth: 2,
+                    formatter: (params) => {
+                        const temp = tempMapData[params.name];
+                        if (temp !== undefined && temp !== null && !isNaN(temp)) {
+                            return `${params.name}\n${temp}°`;
+                        }
+                        return `${params.name}\n-`;
+                    }
+                },
+                itemStyle: {
+                    borderWidth: 1,
+                    borderColor: '#111'
+                },
+                emphasis: {
+                    label: {
+                        show: true,
+                        color: '#fff',
+                        fontSize: 12,
+                        formatter: (params) => {
+                            const temp = tempMapData[params.name];
+                            if (temp !== undefined && temp !== null && !isNaN(temp)) {
+                                return `${params.name}\n${temp}°C`;
+                            }
+                            return `${params.name}\n-`;
+                        }
+                    },
+                    itemStyle: {
+                        areaColor: '#4b5563',
+                        shadowColor: 'rgba(0, 0, 0, 0.5)',
+                        shadowBlur: 10
+                    }
+                },
+                data: data
+            }]
         });
 
         updateMapOption(window.myMapChart);

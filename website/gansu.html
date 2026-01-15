@@ -10394,7 +10394,6 @@
 
     function updateMapOption(chart) {
         const isDark = document.documentElement.classList.contains('dark');
-        const areaColor = isDark ? '#1f2937' : '#e2e8f0';
         const borderColor = isDark ? '#111' : '#cbd5e1';
         const hoverColor = isDark ? '#4b5563' : '#94a3b8';
         const labelColor = isDark ? '#e5e7eb' : '#334155';
@@ -10410,44 +10409,38 @@
                 borderColor: tooltipBorder,
                 textStyle: { color: tooltipText },
                 formatter: (p) => {
-                    const temp = p.value || 0;
-                    const color = getColorForTemp(temp);
+                    // 从tempMapData获取温度值，支持多种后缀格式
+                    let temp = tempMapData[p.name];
+                    if (temp === undefined) {
+                        temp = p.value;
+                    }
                     const tempLabel = currentLang === 'zh' ? '温度' : 'Temperature';
+                    if (temp === undefined || temp === null || isNaN(temp)) {
+                        return `<div class="font-bold text-sm mb-1">${p.name}</div><div class="text-xs">${tempLabel}: <span class="font-bold">-</span></div>`;
+                    }
+                    const color = getColorForTemp(temp);
                     return `<div class="font-bold text-sm mb-1">${p.name}</div><div class="text-xs">${tempLabel}: <span class="font-bold" style="color: ${color}">${temp}°C</span></div>`;
                 }
             },
-            geo: {
-                label: {
-                    show: true,
-                    fontSize: 10,
-                    color: labelColor,
-                    textBorderColor: isDark ? '#111827' : '#f8fafc',
-                    textBorderWidth: 2,
-                    formatter: (params) => {
-                        const temp = tempMapData[params.name];
-                        if (temp !== undefined) {
-                            return `${params.name}\n${temp}°`;
-                        }
-                        return params.name;
-                    }
+            series: [{
+                itemStyle: {
+                    borderColor: borderColor
                 },
-                itemStyle: { areaColor: areaColor, borderColor: borderColor },
+                label: {
+                    color: labelColor,
+                    textBorderColor: isDark ? '#111827' : '#f8fafc'
+                },
                 emphasis: {
                     label: {
-                        show: true,
-                        color: emphasisLabelColor,
-                        fontSize: 12,
-                        formatter: (params) => {
-                            const temp = tempMapData[params.name];
-                            if (temp !== undefined) {
-                                return `${params.name}\n${temp}°C`;
-                            }
-                            return params.name;
-                        }
+                        color: emphasisLabelColor
                     },
-                    itemStyle: { areaColor: hoverColor, shadowColor: shadowColor, shadowBlur: 10 }
+                    itemStyle: {
+                        areaColor: hoverColor,
+                        shadowColor: shadowColor,
+                        shadowBlur: 10
+                    }
                 }
-            }
+            }]
         });
     }
 
@@ -10455,7 +10448,7 @@
         const chartDom = document.getElementById('main-map');
         window.myMapChart = echarts.init(chartDom);
 
-        const data = [{"name":"麦积","value":16.6},{"name":"灵台","value":16},{"name":"华亭","value":15.8},{"name":"崇信","value":15.6},{"name":"武都","value":15.5},{"name":"文县","value":15.4},{"name":"秦安","value":14.6},{"name":"舟曲","value":13.7},{"name":"成县","value":13.3},{"name":"崆峒","value":13.1},{"name":"泾川","value":13},{"name":"宕昌","value":12.8},{"name":"甘谷","value":12.6},{"name":"安定","value":12.4},{"name":"会宁","value":12.3},{"name":"两当","value":12.2},{"name":"清水","value":12.1},{"name":"天水","value":12},{"name":"徽县","value":12},{"name":"庄浪","value":11.9},{"name":"礼县","value":11.8},{"name":"张家川","value":11.7},{"name":"渭源","value":11},{"name":"环县","value":11},{"name":"漳县","value":10.9},{"name":"西和","value":10.8},{"name":"武山","value":10.5},{"name":"迭部","value":10.5},{"name":"陇西","value":10.2},{"name":"通渭","value":10},{"name":"兰州","value":9.8},{"name":"康县","value":9.8},{"name":"张掖","value":9.8},{"name":"武威","value":9.8},{"name":"永靖","value":9.8},{"name":"临潭","value":9.6},{"name":"金昌","value":9.6},{"name":"华池","value":9.5},{"name":"临洮","value":9.4},{"name":"卓尼","value":9.3},{"name":"白银","value":9.3},{"name":"靖远","value":9.2},{"name":"肃北","value":9.1},{"name":"天祝","value":8.8},{"name":"民勤","value":8.8},{"name":"临夏","value":8.7},{"name":"榆中","value":8.6},{"name":"正宁","value":8.5},{"name":"岷县","value":8.4},{"name":"和政","value":8.3},{"name":"夏河","value":8.3},{"name":"敦煌","value":8.2},{"name":"镇原","value":8},{"name":"静宁","value":7.9},{"name":"东乡","value":7.8},{"name":"古浪","value":7.8},{"name":"永登","value":7.8},{"name":"皋兰","value":7.8},{"name":"合作","value":7.7},{"name":"广河","value":7.5},{"name":"嘉峪关","value":7.3},{"name":"景泰","value":7.2},{"name":"庆城","value":7.1},{"name":"康乐","value":6.8},{"name":"金塔","value":6.5},{"name":"碌曲","value":6.3},{"name":"宁县","value":6},{"name":"瓜州","value":5.6},{"name":"永昌","value":5.5},{"name":"玉门","value":5.5},{"name":"西峰","value":5.2},{"name":"临泽","value":5.1},{"name":"合水","value":4.7},{"name":"高台","value":4.5},{"name":"山丹","value":3.8},{"name":"肃南","value":3.1},{"name":"酒泉","value":2.9},{"name":"玛曲","value":1.8},{"name":"民乐","value":1.5}];
+        const data = [{"name":"麦积","shortName":"麦积","value":16.6,"itemStyle":{"areaColor":"#10b981"}},{"name":"灵台","shortName":"灵台","value":16,"itemStyle":{"areaColor":"#10b981"}},{"name":"华亭","shortName":"华亭","value":15.8,"itemStyle":{"areaColor":"#10b981"}},{"name":"崇信","shortName":"崇信","value":15.6,"itemStyle":{"areaColor":"#10b981"}},{"name":"武都","shortName":"武都","value":15.5,"itemStyle":{"areaColor":"#10b981"}},{"name":"文县","shortName":"文县","value":15.4,"itemStyle":{"areaColor":"#10b981"}},{"name":"秦安","shortName":"秦安","value":14.6,"itemStyle":{"areaColor":"#10b981"}},{"name":"舟曲","shortName":"舟曲","value":13.7,"itemStyle":{"areaColor":"#10b981"}},{"name":"成县","shortName":"成县","value":13.3,"itemStyle":{"areaColor":"#10b981"}},{"name":"崆峒","shortName":"崆峒","value":13.1,"itemStyle":{"areaColor":"#10b981"}},{"name":"泾川","shortName":"泾川","value":13,"itemStyle":{"areaColor":"#10b981"}},{"name":"宕昌","shortName":"宕昌","value":12.8,"itemStyle":{"areaColor":"#10b981"}},{"name":"甘谷","shortName":"甘谷","value":12.6,"itemStyle":{"areaColor":"#10b981"}},{"name":"安定","shortName":"安定","value":12.4,"itemStyle":{"areaColor":"#10b981"}},{"name":"会宁","shortName":"会宁","value":12.3,"itemStyle":{"areaColor":"#10b981"}},{"name":"两当","shortName":"两当","value":12.2,"itemStyle":{"areaColor":"#10b981"}},{"name":"清水","shortName":"清水","value":12.1,"itemStyle":{"areaColor":"#10b981"}},{"name":"天水市","shortName":"天水","value":12,"itemStyle":{"areaColor":"#10b981"}},{"name":"徽县","shortName":"徽县","value":12,"itemStyle":{"areaColor":"#10b981"}},{"name":"庄浪","shortName":"庄浪","value":11.9,"itemStyle":{"areaColor":"#10b981"}},{"name":"礼县","shortName":"礼县","value":11.8,"itemStyle":{"areaColor":"#10b981"}},{"name":"张家川","shortName":"张家川","value":11.7,"itemStyle":{"areaColor":"#10b981"}},{"name":"渭源","shortName":"渭源","value":11,"itemStyle":{"areaColor":"#10b981"}},{"name":"环县","shortName":"环县","value":11,"itemStyle":{"areaColor":"#10b981"}},{"name":"漳县","shortName":"漳县","value":10.9,"itemStyle":{"areaColor":"#10b981"}},{"name":"西和","shortName":"西和","value":10.8,"itemStyle":{"areaColor":"#10b981"}},{"name":"武山","shortName":"武山","value":10.5,"itemStyle":{"areaColor":"#10b981"}},{"name":"迭部","shortName":"迭部","value":10.5,"itemStyle":{"areaColor":"#10b981"}},{"name":"陇西","shortName":"陇西","value":10.2,"itemStyle":{"areaColor":"#10b981"}},{"name":"通渭","shortName":"通渭","value":10,"itemStyle":{"areaColor":"#10b981"}},{"name":"兰州市","shortName":"兰州","value":9.8,"itemStyle":{"areaColor":"#06b6d4"}},{"name":"康县","shortName":"康县","value":9.8,"itemStyle":{"areaColor":"#06b6d4"}},{"name":"张掖市","shortName":"张掖","value":9.8,"itemStyle":{"areaColor":"#06b6d4"}},{"name":"武威市","shortName":"武威","value":9.8,"itemStyle":{"areaColor":"#06b6d4"}},{"name":"永靖","shortName":"永靖","value":9.8,"itemStyle":{"areaColor":"#06b6d4"}},{"name":"临潭","shortName":"临潭","value":9.6,"itemStyle":{"areaColor":"#06b6d4"}},{"name":"金昌市","shortName":"金昌","value":9.6,"itemStyle":{"areaColor":"#06b6d4"}},{"name":"华池","shortName":"华池","value":9.5,"itemStyle":{"areaColor":"#06b6d4"}},{"name":"临洮","shortName":"临洮","value":9.4,"itemStyle":{"areaColor":"#06b6d4"}},{"name":"卓尼","shortName":"卓尼","value":9.3,"itemStyle":{"areaColor":"#06b6d4"}},{"name":"白银市","shortName":"白银","value":9.3,"itemStyle":{"areaColor":"#06b6d4"}},{"name":"靖远","shortName":"靖远","value":9.2,"itemStyle":{"areaColor":"#06b6d4"}},{"name":"肃北","shortName":"肃北","value":9.1,"itemStyle":{"areaColor":"#06b6d4"}},{"name":"天祝","shortName":"天祝","value":8.8,"itemStyle":{"areaColor":"#06b6d4"}},{"name":"民勤","shortName":"民勤","value":8.8,"itemStyle":{"areaColor":"#06b6d4"}},{"name":"临夏","shortName":"临夏","value":8.7,"itemStyle":{"areaColor":"#06b6d4"}},{"name":"榆中","shortName":"榆中","value":8.6,"itemStyle":{"areaColor":"#06b6d4"}},{"name":"正宁","shortName":"正宁","value":8.5,"itemStyle":{"areaColor":"#06b6d4"}},{"name":"岷县","shortName":"岷县","value":8.4,"itemStyle":{"areaColor":"#06b6d4"}},{"name":"和政","shortName":"和政","value":8.3,"itemStyle":{"areaColor":"#06b6d4"}},{"name":"夏河","shortName":"夏河","value":8.3,"itemStyle":{"areaColor":"#06b6d4"}},{"name":"敦煌","shortName":"敦煌","value":8.2,"itemStyle":{"areaColor":"#06b6d4"}},{"name":"镇原","shortName":"镇原","value":8,"itemStyle":{"areaColor":"#06b6d4"}},{"name":"静宁","shortName":"静宁","value":7.9,"itemStyle":{"areaColor":"#06b6d4"}},{"name":"东乡","shortName":"东乡","value":7.8,"itemStyle":{"areaColor":"#06b6d4"}},{"name":"古浪","shortName":"古浪","value":7.8,"itemStyle":{"areaColor":"#06b6d4"}},{"name":"永登","shortName":"永登","value":7.8,"itemStyle":{"areaColor":"#06b6d4"}},{"name":"皋兰","shortName":"皋兰","value":7.8,"itemStyle":{"areaColor":"#06b6d4"}},{"name":"合作","shortName":"合作","value":7.7,"itemStyle":{"areaColor":"#06b6d4"}},{"name":"广河","shortName":"广河","value":7.5,"itemStyle":{"areaColor":"#06b6d4"}},{"name":"嘉峪关市","shortName":"嘉峪关","value":7.3,"itemStyle":{"areaColor":"#06b6d4"}},{"name":"景泰","shortName":"景泰","value":7.2,"itemStyle":{"areaColor":"#06b6d4"}},{"name":"庆城","shortName":"庆城","value":7.1,"itemStyle":{"areaColor":"#06b6d4"}},{"name":"康乐","shortName":"康乐","value":6.8,"itemStyle":{"areaColor":"#06b6d4"}},{"name":"金塔","shortName":"金塔","value":6.5,"itemStyle":{"areaColor":"#06b6d4"}},{"name":"碌曲","shortName":"碌曲","value":6.3,"itemStyle":{"areaColor":"#06b6d4"}},{"name":"宁县","shortName":"宁县","value":6,"itemStyle":{"areaColor":"#06b6d4"}},{"name":"瓜州","shortName":"瓜州","value":5.6,"itemStyle":{"areaColor":"#06b6d4"}},{"name":"永昌","shortName":"永昌","value":5.5,"itemStyle":{"areaColor":"#06b6d4"}},{"name":"玉门","shortName":"玉门","value":5.5,"itemStyle":{"areaColor":"#06b6d4"}},{"name":"西峰","shortName":"西峰","value":5.2,"itemStyle":{"areaColor":"#06b6d4"}},{"name":"临泽","shortName":"临泽","value":5.1,"itemStyle":{"areaColor":"#06b6d4"}},{"name":"合水","shortName":"合水","value":4.7,"itemStyle":{"areaColor":"#06b6d4"}},{"name":"高台","shortName":"高台","value":4.5,"itemStyle":{"areaColor":"#06b6d4"}},{"name":"山丹","shortName":"山丹","value":3.8,"itemStyle":{"areaColor":"#06b6d4"}},{"name":"肃南","shortName":"肃南","value":3.1,"itemStyle":{"areaColor":"#06b6d4"}},{"name":"酒泉市","shortName":"酒泉","value":2.9,"itemStyle":{"areaColor":"#06b6d4"}},{"name":"玛曲","shortName":"玛曲","value":1.8,"itemStyle":{"areaColor":"#06b6d4"}},{"name":"民乐","shortName":"民乐","value":1.5,"itemStyle":{"areaColor":"#06b6d4"}}];
 
         try {
             // 加载省份地图
@@ -10469,6 +10462,7 @@
 
         data.forEach(item => {
             tempMapData[item.name] = item.value;
+            tempMapData[item.shortName] = item.value;
         });
 
         window.myMapChart.setOption({
@@ -10482,16 +10476,56 @@
                 show: false,
                 min: -15,
                 max: 40,
-                inRange: { color: ['#6366f1', '#3b82f6', '#06b6d4', '#10b981', '#eab308', '#f97316', '#ef4444'] }
+                inRange: {
+                    color: ['#6366f1', '#3b82f6', '#06b6d4', '#10b981', '#eab308', '#f97316', '#ef4444']
+                },
+                calculable: false
             },
-            geo: {
+            series: [{
+                type: 'map',
                 map: 'province',
                 roam: true,
                 top: '18%',
                 zoom: 1.2,
-                itemStyle: { borderWidth: 1 }
-            },
-            series: [{ type: 'map', geoIndex: 0, data: data }]
+                label: {
+                    show: true,
+                    fontSize: 10,
+                    color: '#e5e7eb',
+                    textBorderColor: '#111827',
+                    textBorderWidth: 2,
+                    formatter: (params) => {
+                        const temp = tempMapData[params.name];
+                        if (temp !== undefined && temp !== null && !isNaN(temp)) {
+                            return `${params.name}\n${temp}°`;
+                        }
+                        return `${params.name}\n-`;
+                    }
+                },
+                itemStyle: {
+                    borderWidth: 1,
+                    borderColor: '#111'
+                },
+                emphasis: {
+                    label: {
+                        show: true,
+                        color: '#fff',
+                        fontSize: 12,
+                        formatter: (params) => {
+                            const temp = tempMapData[params.name];
+                            if (temp !== undefined && temp !== null && !isNaN(temp)) {
+                                return `${params.name}\n${temp}°C`;
+                            }
+                            return `${params.name}\n-`;
+                        }
+                    },
+                    itemStyle: {
+                        areaColor: '#4b5563',
+                        shadowColor: 'rgba(0, 0, 0, 0.5)',
+                        shadowBlur: 10
+                    }
+                },
+                data: data
+            }]
         });
 
         updateMapOption(window.myMapChart);

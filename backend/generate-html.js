@@ -699,7 +699,7 @@ async function generateDayPage(dayIndex, allForecastData, forecastData) {
                             <div class="flex items-center gap-3">
                                 <div class="text-right">
                                     <div data-role="temp-val" class="text-lg font-bold tabular-nums tracking-tight">
-                                        ${item.temperature}°
+                                        ${item.temperature !== null && item.temperature !== undefined && !isNaN(item.temperature) ? item.temperature + '°' : '-'}
                                     </div>
                                 </div>
                                 <!-- 箭头 -->
@@ -948,9 +948,12 @@ async function generateDayPage(dayIndex, allForecastData, forecastData) {
                     textStyle: { color: tooltipText },
                     formatter: (p) => {
                         const displayName = window.getProvinceName(p.name, currentLang);
-                        const temp = p.value || 0;
-                        const color = getColorForTemp(temp);
+                        const temp = p.value;
                         const tempLabel = currentLang === 'zh' ? '温度' : 'Temperature';
+                        if (temp === undefined || temp === null || isNaN(temp)) {
+                            return \`<div class="font-bold text-sm mb-1">\${displayName}</div><div class="text-xs">\${tempLabel}: <span class="font-bold">-</span></div>\`;
+                        }
+                        const color = getColorForTemp(temp);
                         return \`<div class="font-bold text-sm mb-1">\${displayName}</div><div class="text-xs">\${tempLabel}: <span class="font-bold" style="color: \${color}">\${temp}°C</span></div>\`;
                     }
                 },
@@ -965,10 +968,10 @@ async function generateDayPage(dayIndex, allForecastData, forecastData) {
                             const displayName = window.getProvinceName(params.name, currentLang);
                             const temp = tempMapData[params.name];
 
-                            if (temp !== undefined) {
+                            if (temp !== undefined && temp !== null && !isNaN(temp)) {
                                 return \`\${displayName}\\n\${temp}°\`;
                             }
-                            return displayName;
+                            return \`\${displayName}\\n-\`;
                         }
                     },
                     itemStyle: { areaColor: areaColor, borderColor: borderColor },
@@ -981,10 +984,10 @@ async function generateDayPage(dayIndex, allForecastData, forecastData) {
                                 const displayName = window.getProvinceName(params.name, currentLang);
                                 const temp = tempMapData[params.name];
 
-                                if (temp !== undefined) {
+                                if (temp !== undefined && temp !== null && !isNaN(temp)) {
                                     return \`\${displayName}\\n\${temp}°C\`;
                                 }
-                                return displayName;
+                                return \`\${displayName}\\n-\`;
                             }
                         },
                         itemStyle: { areaColor: hoverColor, shadowColor: shadowColor, shadowBlur: 10 }
@@ -1193,6 +1196,18 @@ async function generateProvincePage(provinceName, provinceConfig) {
   if (!cityData || cityData.length === 0) {
     console.warn(`  ⚠️  ${provinceName} 暂无城市数据，跳过`);
     return;
+  }
+
+  // 为每个城市添加full_name（从provinceConfig.cities中查找）
+  if (provinceConfig && provinceConfig.cities) {
+    cityData.forEach(city => {
+      const cityConfig = provinceConfig.cities.find(c => c.name === city.city);
+      if (cityConfig && cityConfig.full_name) {
+        city.fullName = cityConfig.full_name;
+      } else {
+        city.fullName = city.city;
+      }
+    });
   }
 
   // 获取该省份所有城市的7天预报数据
@@ -1446,7 +1461,7 @@ async function generateProvincePage(provinceName, provinceConfig) {
                     <div class="flex items-center gap-3">
                         <div class="text-right">
                             <div data-role="temp-val" class="text-lg font-bold tabular-nums tracking-tight">
-                                ${item.temperature}°
+                                ${item.temperature !== null && item.temperature !== undefined && !isNaN(item.temperature) ? item.temperature + '°' : '-'}
                             </div>
                         </div>
                         <div class="arrow-icon p-1 rounded-full hover:bg-black/5 dark:hover:bg-white/5 transition-transform duration-300">
@@ -1627,7 +1642,6 @@ async function generateProvincePage(provinceName, provinceConfig) {
 
     function updateMapOption(chart) {
         const isDark = document.documentElement.classList.contains('dark');
-        const areaColor = isDark ? '#1f2937' : '#e2e8f0';
         const borderColor = isDark ? '#111' : '#cbd5e1';
         const hoverColor = isDark ? '#4b5563' : '#94a3b8';
         const labelColor = isDark ? '#e5e7eb' : '#334155';
@@ -1643,44 +1657,38 @@ async function generateProvincePage(provinceName, provinceConfig) {
                 borderColor: tooltipBorder,
                 textStyle: { color: tooltipText },
                 formatter: (p) => {
-                    const temp = p.value || 0;
-                    const color = getColorForTemp(temp);
+                    // 从tempMapData获取温度值，支持多种后缀格式
+                    let temp = tempMapData[p.name];
+                    if (temp === undefined) {
+                        temp = p.value;
+                    }
                     const tempLabel = currentLang === 'zh' ? '温度' : 'Temperature';
+                    if (temp === undefined || temp === null || isNaN(temp)) {
+                        return \`<div class="font-bold text-sm mb-1">\${p.name}</div><div class="text-xs">\${tempLabel}: <span class="font-bold">-</span></div>\`;
+                    }
+                    const color = getColorForTemp(temp);
                     return \`<div class="font-bold text-sm mb-1">\${p.name}</div><div class="text-xs">\${tempLabel}: <span class="font-bold" style="color: \${color}">\${temp}°C</span></div>\`;
                 }
             },
-            geo: {
-                label: {
-                    show: true,
-                    fontSize: 10,
-                    color: labelColor,
-                    textBorderColor: isDark ? '#111827' : '#f8fafc',
-                    textBorderWidth: 2,
-                    formatter: (params) => {
-                        const temp = tempMapData[params.name];
-                        if (temp !== undefined) {
-                            return \`\${params.name}\\n\${temp}°\`;
-                        }
-                        return params.name;
-                    }
+            series: [{
+                itemStyle: {
+                    borderColor: borderColor
                 },
-                itemStyle: { areaColor: areaColor, borderColor: borderColor },
+                label: {
+                    color: labelColor,
+                    textBorderColor: isDark ? '#111827' : '#f8fafc'
+                },
                 emphasis: {
                     label: {
-                        show: true,
-                        color: emphasisLabelColor,
-                        fontSize: 12,
-                        formatter: (params) => {
-                            const temp = tempMapData[params.name];
-                            if (temp !== undefined) {
-                                return \`\${params.name}\\n\${temp}°C\`;
-                            }
-                            return params.name;
-                        }
+                        color: emphasisLabelColor
                     },
-                    itemStyle: { areaColor: hoverColor, shadowColor: shadowColor, shadowBlur: 10 }
+                    itemStyle: {
+                        areaColor: hoverColor,
+                        shadowColor: shadowColor,
+                        shadowBlur: 10
+                    }
                 }
-            }
+            }]
         });
     }
 
@@ -1689,8 +1697,12 @@ async function generateProvincePage(provinceName, provinceConfig) {
         window.myMapChart = echarts.init(chartDom);
 
         const data = ${JSON.stringify(cityData.map(item => ({
-          name: item.city,
-          value: item.temperature
+          name: item.fullName || item.city,
+          shortName: item.city,
+          value: item.temperature,
+          itemStyle: {
+            areaColor: getColorForTemp(item.temperature)
+          }
         })))};
 
         try {
@@ -1705,6 +1717,7 @@ async function generateProvincePage(provinceName, provinceConfig) {
 
         data.forEach(item => {
             tempMapData[item.name] = item.value;
+            tempMapData[item.shortName] = item.value;
         });
 
         window.myMapChart.setOption({
@@ -1718,16 +1731,56 @@ async function generateProvincePage(provinceName, provinceConfig) {
                 show: false,
                 min: -15,
                 max: 40,
-                inRange: { color: ['#6366f1', '#3b82f6', '#06b6d4', '#10b981', '#eab308', '#f97316', '#ef4444'] }
+                inRange: {
+                    color: ['#6366f1', '#3b82f6', '#06b6d4', '#10b981', '#eab308', '#f97316', '#ef4444']
+                },
+                calculable: false
             },
-            geo: {
+            series: [{
+                type: 'map',
                 map: 'province',
                 roam: true,
                 top: '18%',
                 zoom: 1.2,
-                itemStyle: { borderWidth: 1 }
-            },
-            series: [{ type: 'map', geoIndex: 0, data: data }]
+                label: {
+                    show: true,
+                    fontSize: 10,
+                    color: '#e5e7eb',
+                    textBorderColor: '#111827',
+                    textBorderWidth: 2,
+                    formatter: (params) => {
+                        const temp = tempMapData[params.name];
+                        if (temp !== undefined && temp !== null && !isNaN(temp)) {
+                            return \`\${params.name}\\n\${temp}°\`;
+                        }
+                        return \`\${params.name}\\n-\`;
+                    }
+                },
+                itemStyle: {
+                    borderWidth: 1,
+                    borderColor: '#111'
+                },
+                emphasis: {
+                    label: {
+                        show: true,
+                        color: '#fff',
+                        fontSize: 12,
+                        formatter: (params) => {
+                            const temp = tempMapData[params.name];
+                            if (temp !== undefined && temp !== null && !isNaN(temp)) {
+                                return \`\${params.name}\\n\${temp}°C\`;
+                            }
+                            return \`\${params.name}\\n-\`;
+                        }
+                    },
+                    itemStyle: {
+                        areaColor: '#4b5563',
+                        shadowColor: 'rgba(0, 0, 0, 0.5)',
+                        shadowBlur: 10
+                    }
+                },
+                data: data
+            }]
         });
 
         updateMapOption(window.myMapChart);

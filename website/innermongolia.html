@@ -15601,7 +15601,6 @@
 
     function updateMapOption(chart) {
         const isDark = document.documentElement.classList.contains('dark');
-        const areaColor = isDark ? '#1f2937' : '#e2e8f0';
         const borderColor = isDark ? '#111' : '#cbd5e1';
         const hoverColor = isDark ? '#4b5563' : '#94a3b8';
         const labelColor = isDark ? '#e5e7eb' : '#334155';
@@ -15617,44 +15616,38 @@
                 borderColor: tooltipBorder,
                 textStyle: { color: tooltipText },
                 formatter: (p) => {
-                    const temp = p.value || 0;
-                    const color = getColorForTemp(temp);
+                    // 从tempMapData获取温度值，支持多种后缀格式
+                    let temp = tempMapData[p.name];
+                    if (temp === undefined) {
+                        temp = p.value;
+                    }
                     const tempLabel = currentLang === 'zh' ? '温度' : 'Temperature';
+                    if (temp === undefined || temp === null || isNaN(temp)) {
+                        return `<div class="font-bold text-sm mb-1">${p.name}</div><div class="text-xs">${tempLabel}: <span class="font-bold">-</span></div>`;
+                    }
+                    const color = getColorForTemp(temp);
                     return `<div class="font-bold text-sm mb-1">${p.name}</div><div class="text-xs">${tempLabel}: <span class="font-bold" style="color: ${color}">${temp}°C</span></div>`;
                 }
             },
-            geo: {
-                label: {
-                    show: true,
-                    fontSize: 10,
-                    color: labelColor,
-                    textBorderColor: isDark ? '#111827' : '#f8fafc',
-                    textBorderWidth: 2,
-                    formatter: (params) => {
-                        const temp = tempMapData[params.name];
-                        if (temp !== undefined) {
-                            return `${params.name}\n${temp}°`;
-                        }
-                        return params.name;
-                    }
+            series: [{
+                itemStyle: {
+                    borderColor: borderColor
                 },
-                itemStyle: { areaColor: areaColor, borderColor: borderColor },
+                label: {
+                    color: labelColor,
+                    textBorderColor: isDark ? '#111827' : '#f8fafc'
+                },
                 emphasis: {
                     label: {
-                        show: true,
-                        color: emphasisLabelColor,
-                        fontSize: 12,
-                        formatter: (params) => {
-                            const temp = tempMapData[params.name];
-                            if (temp !== undefined) {
-                                return `${params.name}\n${temp}°C`;
-                            }
-                            return params.name;
-                        }
+                        color: emphasisLabelColor
                     },
-                    itemStyle: { areaColor: hoverColor, shadowColor: shadowColor, shadowBlur: 10 }
+                    itemStyle: {
+                        areaColor: hoverColor,
+                        shadowColor: shadowColor,
+                        shadowBlur: 10
+                    }
                 }
-            }
+            }]
         });
     }
 
@@ -15662,7 +15655,7 @@
         const chartDom = document.getElementById('main-map');
         window.myMapChart = echarts.init(chartDom);
 
-        const data = [{"name":"河南","value":8.8},{"name":"乌审旗","value":6.8},{"name":"吉兰泰","value":6.8},{"name":"孪井滩","value":6.8},{"name":"鄂托克前旗","value":6.8},{"name":"阿拉善右旗","value":6.8},{"name":"雅布赖","value":6.8},{"name":"阿拉善左旗","value":6},{"name":"乌审召","value":5.8},{"name":"乌海","value":5.8},{"name":"拐子湖","value":5.8},{"name":"乌斯太","value":4.8},{"name":"伊克乌素","value":4.8},{"name":"准格尔旗","value":4.8},{"name":"巴彦诺日公","value":4.8},{"name":"杭锦后旗","value":4.8},{"name":"磴口","value":4.8},{"name":"鄂托克旗","value":4.8},{"name":"额济纳旗","value":4.8},{"name":"临河","value":3.8},{"name":"五原","value":3.8},{"name":"伊金霍洛旗","value":3.8},{"name":"八里罕","value":3.8},{"name":"包头","value":3.8},{"name":"康巴什体育中心","value":3.8},{"name":"赤峰","value":3.8},{"name":"杭锦旗","value":3.3},{"name":"丰镇","value":2.9},{"name":"东胜","value":2.8},{"name":"乌拉特前旗","value":2.8},{"name":"乌拉特后旗","value":2.8},{"name":"喀喇沁旗","value":2.8},{"name":"土默特右旗","value":2.8},{"name":"土默特左旗","value":2.8},{"name":"大佘太","value":2.8},{"name":"宁城","value":2.8},{"name":"达拉特旗","value":2.8},{"name":"托克托","value":2.7},{"name":"兴和","value":1.8},{"name":"呼和浩特","value":1.8},{"name":"四子王旗","value":1.8},{"name":"赛罕","value":1.8},{"name":"清水河","value":1.7},{"name":"察哈尔右翼前旗","value":1.6},{"name":"凉城","value":1.5},{"name":"乌拉特中旗","value":0.8},{"name":"商都","value":0.8},{"name":"多伦","value":0.8},{"name":"宝国吐","value":0.8},{"name":"岗子","value":0.8},{"name":"敖汉旗","value":0.8},{"name":"朱日和","value":0.8},{"name":"满都拉","value":0.8},{"name":"苏尼特右旗","value":0.8},{"name":"察右后旗","value":0.6},{"name":"和林格尔县","value":0.3},{"name":"二连浩特","value":-0.2},{"name":"化德","value":-0.2},{"name":"正蓝旗","value":-0.2},{"name":"正镶白旗","value":-0.2},{"name":"武川","value":-0.2},{"name":"翁牛特旗","value":-0.2},{"name":"镶黄旗","value":-0.2},{"name":"集宁","value":-0.3},{"name":"达尔罕茂明安联合旗","value":-0.6},{"name":"卓资","value":-1.2},{"name":"太仆寺旗","value":-1.2},{"name":"希拉穆仁","value":-1.4},{"name":"固阳","value":-1.6},{"name":"克什克腾旗","value":-2.2},{"name":"海力素","value":-2.2},{"name":"白云鄂博","value":-2.2},{"name":"锡林浩特","value":-2.2},{"name":"察右中旗","value":-3.2},{"name":"库伦旗","value":-3.2},{"name":"青龙山","value":-3.2},{"name":"奈曼旗","value":-4.2},{"name":"苏尼特左旗","value":-4.2},{"name":"阿巴嘎旗","value":-4.2},{"name":"科左后旗","value":-5.2},{"name":"西乌珠穆沁旗","value":-5.2},{"name":"通辽","value":-6.2},{"name":"巴林右旗","value":-7.2},{"name":"开鲁","value":-7.2},{"name":"林西","value":-7.2},{"name":"那仁宝力格","value":-7.2},{"name":"巴林左旗","value":-8.2},{"name":"科左中旗","value":-8.2},{"name":"舍伯吐","value":-8.2},{"name":"富河","value":-9.2},{"name":"扎鲁特旗","value":-9.2},{"name":"科尔沁右翼中旗","value":-9.2},{"name":"阿鲁科尔沁旗","value":-9.2},{"name":"高力板","value":-9.2},{"name":"巴雅尔吐胡硕","value":-10.2},{"name":"突泉","value":-10.2},{"name":"乌兰浩特","value":-11.2},{"name":"扎赉特旗","value":-11.2},{"name":"索伦","value":-11.2},{"name":"胡尔勒","value":-11.2},{"name":"霍林郭勒","value":-11.2},{"name":"扎兰屯","value":-12.2},{"name":"东乌珠穆沁旗","value":-13.2},{"name":"乌拉盖","value":-13.2},{"name":"阿荣旗","value":-14.2},{"name":"鄂伦春自治旗","value":-15.2},{"name":"阿尔山","value":-15.2},{"name":"小二沟","value":-16.2},{"name":"博克图","value":-17.2},{"name":"莫力达瓦达斡尔族自治旗","value":-17.6},{"name":"新巴尔虎右旗","value":-20.2},{"name":"新巴尔虎左旗","value":-20.2},{"name":"根河","value":-21.2},{"name":"满洲里","value":-21.2},{"name":"图里河","value":-23.2},{"name":"海拉尔","value":-24.2},{"name":"鄂温克族自治旗","value":-24.2},{"name":"牙克石","value":-25.2},{"name":"陈巴尔虎旗","value":-25.2},{"name":"额尔古纳","value":-26.2}];
+        const data = [{"name":"河南","shortName":"河南","value":8.8,"itemStyle":{"areaColor":"#06b6d4"}},{"name":"乌审旗","shortName":"乌审旗","value":6.8,"itemStyle":{"areaColor":"#06b6d4"}},{"name":"吉兰泰","shortName":"吉兰泰","value":6.8,"itemStyle":{"areaColor":"#06b6d4"}},{"name":"孪井滩","shortName":"孪井滩","value":6.8,"itemStyle":{"areaColor":"#06b6d4"}},{"name":"鄂托克前旗","shortName":"鄂托克前旗","value":6.8,"itemStyle":{"areaColor":"#06b6d4"}},{"name":"阿拉善右旗","shortName":"阿拉善右旗","value":6.8,"itemStyle":{"areaColor":"#06b6d4"}},{"name":"雅布赖","shortName":"雅布赖","value":6.8,"itemStyle":{"areaColor":"#06b6d4"}},{"name":"阿拉善左旗","shortName":"阿拉善左旗","value":6,"itemStyle":{"areaColor":"#06b6d4"}},{"name":"乌审召","shortName":"乌审召","value":5.8,"itemStyle":{"areaColor":"#06b6d4"}},{"name":"乌海市","shortName":"乌海","value":5.8,"itemStyle":{"areaColor":"#06b6d4"}},{"name":"拐子湖","shortName":"拐子湖","value":5.8,"itemStyle":{"areaColor":"#06b6d4"}},{"name":"乌斯太","shortName":"乌斯太","value":4.8,"itemStyle":{"areaColor":"#06b6d4"}},{"name":"伊克乌素","shortName":"伊克乌素","value":4.8,"itemStyle":{"areaColor":"#06b6d4"}},{"name":"准格尔旗","shortName":"准格尔旗","value":4.8,"itemStyle":{"areaColor":"#06b6d4"}},{"name":"巴彦诺日公","shortName":"巴彦诺日公","value":4.8,"itemStyle":{"areaColor":"#06b6d4"}},{"name":"杭锦后旗","shortName":"杭锦后旗","value":4.8,"itemStyle":{"areaColor":"#06b6d4"}},{"name":"磴口","shortName":"磴口","value":4.8,"itemStyle":{"areaColor":"#06b6d4"}},{"name":"鄂托克旗","shortName":"鄂托克旗","value":4.8,"itemStyle":{"areaColor":"#06b6d4"}},{"name":"额济纳旗","shortName":"额济纳旗","value":4.8,"itemStyle":{"areaColor":"#06b6d4"}},{"name":"临河","shortName":"临河","value":3.8,"itemStyle":{"areaColor":"#06b6d4"}},{"name":"五原","shortName":"五原","value":3.8,"itemStyle":{"areaColor":"#06b6d4"}},{"name":"伊金霍洛旗","shortName":"伊金霍洛旗","value":3.8,"itemStyle":{"areaColor":"#06b6d4"}},{"name":"八里罕","shortName":"八里罕","value":3.8,"itemStyle":{"areaColor":"#06b6d4"}},{"name":"包头市","shortName":"包头","value":3.8,"itemStyle":{"areaColor":"#06b6d4"}},{"name":"康巴什体育中心","shortName":"康巴什体育中心","value":3.8,"itemStyle":{"areaColor":"#06b6d4"}},{"name":"赤峰市","shortName":"赤峰","value":3.8,"itemStyle":{"areaColor":"#06b6d4"}},{"name":"杭锦旗","shortName":"杭锦旗","value":3.3,"itemStyle":{"areaColor":"#06b6d4"}},{"name":"丰镇","shortName":"丰镇","value":2.9,"itemStyle":{"areaColor":"#06b6d4"}},{"name":"东胜","shortName":"东胜","value":2.8,"itemStyle":{"areaColor":"#06b6d4"}},{"name":"乌拉特前旗","shortName":"乌拉特前旗","value":2.8,"itemStyle":{"areaColor":"#06b6d4"}},{"name":"乌拉特后旗","shortName":"乌拉特后旗","value":2.8,"itemStyle":{"areaColor":"#06b6d4"}},{"name":"喀喇沁旗","shortName":"喀喇沁旗","value":2.8,"itemStyle":{"areaColor":"#06b6d4"}},{"name":"土默特右旗","shortName":"土默特右旗","value":2.8,"itemStyle":{"areaColor":"#06b6d4"}},{"name":"土默特左旗","shortName":"土默特左旗","value":2.8,"itemStyle":{"areaColor":"#06b6d4"}},{"name":"大佘太","shortName":"大佘太","value":2.8,"itemStyle":{"areaColor":"#06b6d4"}},{"name":"宁城","shortName":"宁城","value":2.8,"itemStyle":{"areaColor":"#06b6d4"}},{"name":"达拉特旗","shortName":"达拉特旗","value":2.8,"itemStyle":{"areaColor":"#06b6d4"}},{"name":"托克托","shortName":"托克托","value":2.7,"itemStyle":{"areaColor":"#06b6d4"}},{"name":"兴和","shortName":"兴和","value":1.8,"itemStyle":{"areaColor":"#06b6d4"}},{"name":"呼和浩特市","shortName":"呼和浩特","value":1.8,"itemStyle":{"areaColor":"#06b6d4"}},{"name":"四子王旗","shortName":"四子王旗","value":1.8,"itemStyle":{"areaColor":"#06b6d4"}},{"name":"赛罕","shortName":"赛罕","value":1.8,"itemStyle":{"areaColor":"#06b6d4"}},{"name":"清水河","shortName":"清水河","value":1.7,"itemStyle":{"areaColor":"#06b6d4"}},{"name":"察哈尔右翼前旗","shortName":"察哈尔右翼前旗","value":1.6,"itemStyle":{"areaColor":"#06b6d4"}},{"name":"凉城","shortName":"凉城","value":1.5,"itemStyle":{"areaColor":"#06b6d4"}},{"name":"乌拉特中旗","shortName":"乌拉特中旗","value":0.8,"itemStyle":{"areaColor":"#06b6d4"}},{"name":"商都","shortName":"商都","value":0.8,"itemStyle":{"areaColor":"#06b6d4"}},{"name":"多伦","shortName":"多伦","value":0.8,"itemStyle":{"areaColor":"#06b6d4"}},{"name":"宝国吐","shortName":"宝国吐","value":0.8,"itemStyle":{"areaColor":"#06b6d4"}},{"name":"岗子","shortName":"岗子","value":0.8,"itemStyle":{"areaColor":"#06b6d4"}},{"name":"敖汉旗","shortName":"敖汉旗","value":0.8,"itemStyle":{"areaColor":"#06b6d4"}},{"name":"朱日和","shortName":"朱日和","value":0.8,"itemStyle":{"areaColor":"#06b6d4"}},{"name":"满都拉","shortName":"满都拉","value":0.8,"itemStyle":{"areaColor":"#06b6d4"}},{"name":"苏尼特右旗","shortName":"苏尼特右旗","value":0.8,"itemStyle":{"areaColor":"#06b6d4"}},{"name":"察右后旗","shortName":"察右后旗","value":0.6,"itemStyle":{"areaColor":"#06b6d4"}},{"name":"和林格尔县","shortName":"和林格尔县","value":0.3,"itemStyle":{"areaColor":"#06b6d4"}},{"name":"二连浩特","shortName":"二连浩特","value":-0.2,"itemStyle":{"areaColor":"#3b82f6"}},{"name":"化德","shortName":"化德","value":-0.2,"itemStyle":{"areaColor":"#3b82f6"}},{"name":"正蓝旗","shortName":"正蓝旗","value":-0.2,"itemStyle":{"areaColor":"#3b82f6"}},{"name":"正镶白旗","shortName":"正镶白旗","value":-0.2,"itemStyle":{"areaColor":"#3b82f6"}},{"name":"武川","shortName":"武川","value":-0.2,"itemStyle":{"areaColor":"#3b82f6"}},{"name":"翁牛特旗","shortName":"翁牛特旗","value":-0.2,"itemStyle":{"areaColor":"#3b82f6"}},{"name":"镶黄旗","shortName":"镶黄旗","value":-0.2,"itemStyle":{"areaColor":"#3b82f6"}},{"name":"集宁","shortName":"集宁","value":-0.3,"itemStyle":{"areaColor":"#3b82f6"}},{"name":"达尔罕茂明安联合旗","shortName":"达尔罕茂明安联合旗","value":-0.6,"itemStyle":{"areaColor":"#3b82f6"}},{"name":"卓资","shortName":"卓资","value":-1.2,"itemStyle":{"areaColor":"#3b82f6"}},{"name":"太仆寺旗","shortName":"太仆寺旗","value":-1.2,"itemStyle":{"areaColor":"#3b82f6"}},{"name":"希拉穆仁","shortName":"希拉穆仁","value":-1.4,"itemStyle":{"areaColor":"#3b82f6"}},{"name":"固阳","shortName":"固阳","value":-1.6,"itemStyle":{"areaColor":"#3b82f6"}},{"name":"克什克腾旗","shortName":"克什克腾旗","value":-2.2,"itemStyle":{"areaColor":"#3b82f6"}},{"name":"海力素","shortName":"海力素","value":-2.2,"itemStyle":{"areaColor":"#3b82f6"}},{"name":"白云鄂博","shortName":"白云鄂博","value":-2.2,"itemStyle":{"areaColor":"#3b82f6"}},{"name":"锡林浩特","shortName":"锡林浩特","value":-2.2,"itemStyle":{"areaColor":"#3b82f6"}},{"name":"察右中旗","shortName":"察右中旗","value":-3.2,"itemStyle":{"areaColor":"#3b82f6"}},{"name":"库伦旗","shortName":"库伦旗","value":-3.2,"itemStyle":{"areaColor":"#3b82f6"}},{"name":"青龙山","shortName":"青龙山","value":-3.2,"itemStyle":{"areaColor":"#3b82f6"}},{"name":"奈曼旗","shortName":"奈曼旗","value":-4.2,"itemStyle":{"areaColor":"#3b82f6"}},{"name":"苏尼特左旗","shortName":"苏尼特左旗","value":-4.2,"itemStyle":{"areaColor":"#3b82f6"}},{"name":"阿巴嘎旗","shortName":"阿巴嘎旗","value":-4.2,"itemStyle":{"areaColor":"#3b82f6"}},{"name":"科左后旗","shortName":"科左后旗","value":-5.2,"itemStyle":{"areaColor":"#3b82f6"}},{"name":"西乌珠穆沁旗","shortName":"西乌珠穆沁旗","value":-5.2,"itemStyle":{"areaColor":"#3b82f6"}},{"name":"通辽市","shortName":"通辽","value":-6.2,"itemStyle":{"areaColor":"#3b82f6"}},{"name":"巴林右旗","shortName":"巴林右旗","value":-7.2,"itemStyle":{"areaColor":"#3b82f6"}},{"name":"开鲁","shortName":"开鲁","value":-7.2,"itemStyle":{"areaColor":"#3b82f6"}},{"name":"林西","shortName":"林西","value":-7.2,"itemStyle":{"areaColor":"#3b82f6"}},{"name":"那仁宝力格","shortName":"那仁宝力格","value":-7.2,"itemStyle":{"areaColor":"#3b82f6"}},{"name":"巴林左旗","shortName":"巴林左旗","value":-8.2,"itemStyle":{"areaColor":"#3b82f6"}},{"name":"科左中旗","shortName":"科左中旗","value":-8.2,"itemStyle":{"areaColor":"#3b82f6"}},{"name":"舍伯吐","shortName":"舍伯吐","value":-8.2,"itemStyle":{"areaColor":"#3b82f6"}},{"name":"富河","shortName":"富河","value":-9.2,"itemStyle":{"areaColor":"#3b82f6"}},{"name":"扎鲁特旗","shortName":"扎鲁特旗","value":-9.2,"itemStyle":{"areaColor":"#3b82f6"}},{"name":"科尔沁右翼中旗","shortName":"科尔沁右翼中旗","value":-9.2,"itemStyle":{"areaColor":"#3b82f6"}},{"name":"阿鲁科尔沁旗","shortName":"阿鲁科尔沁旗","value":-9.2,"itemStyle":{"areaColor":"#3b82f6"}},{"name":"高力板","shortName":"高力板","value":-9.2,"itemStyle":{"areaColor":"#3b82f6"}},{"name":"巴雅尔吐胡硕","shortName":"巴雅尔吐胡硕","value":-10.2,"itemStyle":{"areaColor":"#6366f1"}},{"name":"突泉","shortName":"突泉","value":-10.2,"itemStyle":{"areaColor":"#6366f1"}},{"name":"乌兰浩特","shortName":"乌兰浩特","value":-11.2,"itemStyle":{"areaColor":"#6366f1"}},{"name":"扎赉特旗","shortName":"扎赉特旗","value":-11.2,"itemStyle":{"areaColor":"#6366f1"}},{"name":"索伦","shortName":"索伦","value":-11.2,"itemStyle":{"areaColor":"#6366f1"}},{"name":"胡尔勒","shortName":"胡尔勒","value":-11.2,"itemStyle":{"areaColor":"#6366f1"}},{"name":"霍林郭勒","shortName":"霍林郭勒","value":-11.2,"itemStyle":{"areaColor":"#6366f1"}},{"name":"扎兰屯","shortName":"扎兰屯","value":-12.2,"itemStyle":{"areaColor":"#6366f1"}},{"name":"东乌珠穆沁旗","shortName":"东乌珠穆沁旗","value":-13.2,"itemStyle":{"areaColor":"#6366f1"}},{"name":"乌拉盖","shortName":"乌拉盖","value":-13.2,"itemStyle":{"areaColor":"#6366f1"}},{"name":"阿荣旗","shortName":"阿荣旗","value":-14.2,"itemStyle":{"areaColor":"#6366f1"}},{"name":"鄂伦春自治旗","shortName":"鄂伦春自治旗","value":-15.2,"itemStyle":{"areaColor":"#6366f1"}},{"name":"阿尔山","shortName":"阿尔山","value":-15.2,"itemStyle":{"areaColor":"#6366f1"}},{"name":"小二沟","shortName":"小二沟","value":-16.2,"itemStyle":{"areaColor":"#6366f1"}},{"name":"博克图","shortName":"博克图","value":-17.2,"itemStyle":{"areaColor":"#6366f1"}},{"name":"莫力达瓦达斡尔族自治旗","shortName":"莫力达瓦达斡尔族自治旗","value":-17.6,"itemStyle":{"areaColor":"#6366f1"}},{"name":"新巴尔虎右旗","shortName":"新巴尔虎右旗","value":-20.2,"itemStyle":{"areaColor":"#6366f1"}},{"name":"新巴尔虎左旗","shortName":"新巴尔虎左旗","value":-20.2,"itemStyle":{"areaColor":"#6366f1"}},{"name":"根河","shortName":"根河","value":-21.2,"itemStyle":{"areaColor":"#6366f1"}},{"name":"满洲里","shortName":"满洲里","value":-21.2,"itemStyle":{"areaColor":"#6366f1"}},{"name":"图里河","shortName":"图里河","value":-23.2,"itemStyle":{"areaColor":"#6366f1"}},{"name":"海拉尔","shortName":"海拉尔","value":-24.2,"itemStyle":{"areaColor":"#6366f1"}},{"name":"鄂温克族自治旗","shortName":"鄂温克族自治旗","value":-24.2,"itemStyle":{"areaColor":"#6366f1"}},{"name":"牙克石","shortName":"牙克石","value":-25.2,"itemStyle":{"areaColor":"#6366f1"}},{"name":"陈巴尔虎旗","shortName":"陈巴尔虎旗","value":-25.2,"itemStyle":{"areaColor":"#6366f1"}},{"name":"额尔古纳","shortName":"额尔古纳","value":-26.2,"itemStyle":{"areaColor":"#6366f1"}}];
 
         try {
             // 加载省份地图
@@ -15676,6 +15669,7 @@
 
         data.forEach(item => {
             tempMapData[item.name] = item.value;
+            tempMapData[item.shortName] = item.value;
         });
 
         window.myMapChart.setOption({
@@ -15689,16 +15683,56 @@
                 show: false,
                 min: -15,
                 max: 40,
-                inRange: { color: ['#6366f1', '#3b82f6', '#06b6d4', '#10b981', '#eab308', '#f97316', '#ef4444'] }
+                inRange: {
+                    color: ['#6366f1', '#3b82f6', '#06b6d4', '#10b981', '#eab308', '#f97316', '#ef4444']
+                },
+                calculable: false
             },
-            geo: {
+            series: [{
+                type: 'map',
                 map: 'province',
                 roam: true,
                 top: '18%',
                 zoom: 1.2,
-                itemStyle: { borderWidth: 1 }
-            },
-            series: [{ type: 'map', geoIndex: 0, data: data }]
+                label: {
+                    show: true,
+                    fontSize: 10,
+                    color: '#e5e7eb',
+                    textBorderColor: '#111827',
+                    textBorderWidth: 2,
+                    formatter: (params) => {
+                        const temp = tempMapData[params.name];
+                        if (temp !== undefined && temp !== null && !isNaN(temp)) {
+                            return `${params.name}\n${temp}°`;
+                        }
+                        return `${params.name}\n-`;
+                    }
+                },
+                itemStyle: {
+                    borderWidth: 1,
+                    borderColor: '#111'
+                },
+                emphasis: {
+                    label: {
+                        show: true,
+                        color: '#fff',
+                        fontSize: 12,
+                        formatter: (params) => {
+                            const temp = tempMapData[params.name];
+                            if (temp !== undefined && temp !== null && !isNaN(temp)) {
+                                return `${params.name}\n${temp}°C`;
+                            }
+                            return `${params.name}\n-`;
+                        }
+                    },
+                    itemStyle: {
+                        areaColor: '#4b5563',
+                        shadowColor: 'rgba(0, 0, 0, 0.5)',
+                        shadowBlur: 10
+                    }
+                },
+                data: data
+            }]
         });
 
         updateMapOption(window.myMapChart);

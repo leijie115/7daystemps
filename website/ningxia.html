@@ -2901,7 +2901,6 @@
 
     function updateMapOption(chart) {
         const isDark = document.documentElement.classList.contains('dark');
-        const areaColor = isDark ? '#1f2937' : '#e2e8f0';
         const borderColor = isDark ? '#111' : '#cbd5e1';
         const hoverColor = isDark ? '#4b5563' : '#94a3b8';
         const labelColor = isDark ? '#e5e7eb' : '#334155';
@@ -2917,44 +2916,38 @@
                 borderColor: tooltipBorder,
                 textStyle: { color: tooltipText },
                 formatter: (p) => {
-                    const temp = p.value || 0;
-                    const color = getColorForTemp(temp);
+                    // 从tempMapData获取温度值，支持多种后缀格式
+                    let temp = tempMapData[p.name];
+                    if (temp === undefined) {
+                        temp = p.value;
+                    }
                     const tempLabel = currentLang === 'zh' ? '温度' : 'Temperature';
+                    if (temp === undefined || temp === null || isNaN(temp)) {
+                        return `<div class="font-bold text-sm mb-1">${p.name}</div><div class="text-xs">${tempLabel}: <span class="font-bold">-</span></div>`;
+                    }
+                    const color = getColorForTemp(temp);
                     return `<div class="font-bold text-sm mb-1">${p.name}</div><div class="text-xs">${tempLabel}: <span class="font-bold" style="color: ${color}">${temp}°C</span></div>`;
                 }
             },
-            geo: {
-                label: {
-                    show: true,
-                    fontSize: 10,
-                    color: labelColor,
-                    textBorderColor: isDark ? '#111827' : '#f8fafc',
-                    textBorderWidth: 2,
-                    formatter: (params) => {
-                        const temp = tempMapData[params.name];
-                        if (temp !== undefined) {
-                            return `${params.name}\n${temp}°`;
-                        }
-                        return params.name;
-                    }
+            series: [{
+                itemStyle: {
+                    borderColor: borderColor
                 },
-                itemStyle: { areaColor: areaColor, borderColor: borderColor },
+                label: {
+                    color: labelColor,
+                    textBorderColor: isDark ? '#111827' : '#f8fafc'
+                },
                 emphasis: {
                     label: {
-                        show: true,
-                        color: emphasisLabelColor,
-                        fontSize: 12,
-                        formatter: (params) => {
-                            const temp = tempMapData[params.name];
-                            if (temp !== undefined) {
-                                return `${params.name}\n${temp}°C`;
-                            }
-                            return params.name;
-                        }
+                        color: emphasisLabelColor
                     },
-                    itemStyle: { areaColor: hoverColor, shadowColor: shadowColor, shadowBlur: 10 }
+                    itemStyle: {
+                        areaColor: hoverColor,
+                        shadowColor: shadowColor,
+                        shadowBlur: 10
+                    }
                 }
-            }
+            }]
         });
     }
 
@@ -2962,7 +2955,7 @@
         const chartDom = document.getElementById('main-map');
         window.myMapChart = echarts.init(chartDom);
 
-        const data = [{"name":"彭阳","value":12.9},{"name":"同心","value":12.7},{"name":"固原","value":12.1},{"name":"中宁","value":11.6},{"name":"青铜峡","value":11.5},{"name":"中卫","value":10.7},{"name":"永宁","value":10.6},{"name":"海原","value":10.5},{"name":"泾源","value":10.2},{"name":"盐池","value":10.2},{"name":"贺兰","value":10.2},{"name":"吴忠","value":10},{"name":"平罗","value":9.7},{"name":"灵武","value":9.5},{"name":"陶乐","value":9.1},{"name":"银川","value":9},{"name":"隆德","value":8},{"name":"西吉","value":7.5},{"name":"惠农","value":6.7},{"name":"石嘴山","value":6.4}];
+        const data = [{"name":"彭阳","shortName":"彭阳","value":12.9,"itemStyle":{"areaColor":"#10b981"}},{"name":"同心","shortName":"同心","value":12.7,"itemStyle":{"areaColor":"#10b981"}},{"name":"固原市","shortName":"固原","value":12.1,"itemStyle":{"areaColor":"#10b981"}},{"name":"中宁","shortName":"中宁","value":11.6,"itemStyle":{"areaColor":"#10b981"}},{"name":"青铜峡","shortName":"青铜峡","value":11.5,"itemStyle":{"areaColor":"#10b981"}},{"name":"中卫市","shortName":"中卫","value":10.7,"itemStyle":{"areaColor":"#10b981"}},{"name":"永宁","shortName":"永宁","value":10.6,"itemStyle":{"areaColor":"#10b981"}},{"name":"海原","shortName":"海原","value":10.5,"itemStyle":{"areaColor":"#10b981"}},{"name":"泾源","shortName":"泾源","value":10.2,"itemStyle":{"areaColor":"#10b981"}},{"name":"盐池","shortName":"盐池","value":10.2,"itemStyle":{"areaColor":"#10b981"}},{"name":"贺兰","shortName":"贺兰","value":10.2,"itemStyle":{"areaColor":"#10b981"}},{"name":"吴忠市","shortName":"吴忠","value":10,"itemStyle":{"areaColor":"#10b981"}},{"name":"平罗","shortName":"平罗","value":9.7,"itemStyle":{"areaColor":"#06b6d4"}},{"name":"灵武","shortName":"灵武","value":9.5,"itemStyle":{"areaColor":"#06b6d4"}},{"name":"陶乐","shortName":"陶乐","value":9.1,"itemStyle":{"areaColor":"#06b6d4"}},{"name":"银川市","shortName":"银川","value":9,"itemStyle":{"areaColor":"#06b6d4"}},{"name":"隆德","shortName":"隆德","value":8,"itemStyle":{"areaColor":"#06b6d4"}},{"name":"西吉","shortName":"西吉","value":7.5,"itemStyle":{"areaColor":"#06b6d4"}},{"name":"惠农","shortName":"惠农","value":6.7,"itemStyle":{"areaColor":"#06b6d4"}},{"name":"石嘴山市","shortName":"石嘴山","value":6.4,"itemStyle":{"areaColor":"#06b6d4"}}];
 
         try {
             // 加载省份地图
@@ -2976,6 +2969,7 @@
 
         data.forEach(item => {
             tempMapData[item.name] = item.value;
+            tempMapData[item.shortName] = item.value;
         });
 
         window.myMapChart.setOption({
@@ -2989,16 +2983,56 @@
                 show: false,
                 min: -15,
                 max: 40,
-                inRange: { color: ['#6366f1', '#3b82f6', '#06b6d4', '#10b981', '#eab308', '#f97316', '#ef4444'] }
+                inRange: {
+                    color: ['#6366f1', '#3b82f6', '#06b6d4', '#10b981', '#eab308', '#f97316', '#ef4444']
+                },
+                calculable: false
             },
-            geo: {
+            series: [{
+                type: 'map',
                 map: 'province',
                 roam: true,
                 top: '18%',
                 zoom: 1.2,
-                itemStyle: { borderWidth: 1 }
-            },
-            series: [{ type: 'map', geoIndex: 0, data: data }]
+                label: {
+                    show: true,
+                    fontSize: 10,
+                    color: '#e5e7eb',
+                    textBorderColor: '#111827',
+                    textBorderWidth: 2,
+                    formatter: (params) => {
+                        const temp = tempMapData[params.name];
+                        if (temp !== undefined && temp !== null && !isNaN(temp)) {
+                            return `${params.name}\n${temp}°`;
+                        }
+                        return `${params.name}\n-`;
+                    }
+                },
+                itemStyle: {
+                    borderWidth: 1,
+                    borderColor: '#111'
+                },
+                emphasis: {
+                    label: {
+                        show: true,
+                        color: '#fff',
+                        fontSize: 12,
+                        formatter: (params) => {
+                            const temp = tempMapData[params.name];
+                            if (temp !== undefined && temp !== null && !isNaN(temp)) {
+                                return `${params.name}\n${temp}°C`;
+                            }
+                            return `${params.name}\n-`;
+                        }
+                    },
+                    itemStyle: {
+                        areaColor: '#4b5563',
+                        shadowColor: 'rgba(0, 0, 0, 0.5)',
+                        shadowBlur: 10
+                    }
+                },
+                data: data
+            }]
         });
 
         updateMapOption(window.myMapChart);
