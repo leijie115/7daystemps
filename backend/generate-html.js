@@ -1225,15 +1225,17 @@ async function generateProvincePage(provinceName, provinceConfig) {
     return;
   }
 
-  // 为每个城市添加full_name（从provinceConfig.cities中查找，已在getCityTemperaturesByDate中处理）
+  // 为每个城市添加full_name和en_name（从provinceConfig.cities中查找，已在getCityTemperaturesByDate中处理）
   // cityData中已经包含了city（中文名）和cityCode
   if (provinceConfig && provinceConfig.cities) {
     cityData.forEach(city => {
       const cityConfig = provinceConfig.cities.find(c => c.code === city.cityCode);
-      if (cityConfig && cityConfig.full_name) {
-        city.fullName = cityConfig.full_name;
+      if (cityConfig) {
+        city.fullName = cityConfig.full_name || city.city;
+        city.en_name = cityConfig.en_name || city.city;
       } else {
         city.fullName = city.city;
+        city.en_name = city.city;
       }
     });
   }
@@ -1269,12 +1271,57 @@ async function generateProvincePage(provinceName, provinceConfig) {
       // 天气描述中英文对照表
       window.weatherDescMap = ${JSON.stringify(weatherDescMap)};
 
+      // 城市名称中英文对照表
+      window.cityNameMap = ${JSON.stringify(
+        cityData.reduce((map, city) => {
+          const cityName = city.city || city.name;
+          const fullName = city.fullName || cityName;
+          const enName = city.cityEn || city.en_name || cityName;
+
+          // 添加多个键以匹配不同的名称格式
+          map[cityName] = { zh: fullName, en: enName };
+          map[fullName] = { zh: fullName, en: enName };
+
+          // 去掉"市"、"区"、"县"等后缀的版本
+          const shortName = fullName.replace(/[市区县]/g, '');
+          if (shortName !== fullName) {
+            map[shortName] = { zh: fullName, en: enName };
+          }
+
+          return map;
+        }, {})
+      )};
+
       // 翻译天气描述
       window.translateWeatherDesc = function(weatherDesc, lang) {
         if (lang === 'zh') {
           return weatherDesc;
         }
         return window.weatherDescMap[weatherDesc] || weatherDesc;
+      };
+
+      // 获取城市名称（支持中英文）
+      window.getCityName = function(cityName, lang) {
+        if (!cityName) return '';
+
+        // 直接匹配
+        if (window.cityNameMap[cityName]) {
+          return window.cityNameMap[cityName][lang];
+        }
+
+        // 尝试去掉常见后缀再匹配
+        const suffixes = ['市', '区', '县', '自治州', '地区', '盟'];
+        for (const suffix of suffixes) {
+          if (cityName.endsWith(suffix)) {
+            const baseName = cityName.slice(0, -suffix.length);
+            if (window.cityNameMap[baseName]) {
+              return window.cityNameMap[baseName][lang];
+            }
+          }
+        }
+
+        // 如果没有匹配，返回原名称
+        return cityName;
       };
     </script>
     <script src="https://cdn.tailwindcss.com"></script>
@@ -1480,7 +1527,7 @@ async function generateProvincePage(provinceName, provinceConfig) {
                             ${index + 1}
                         </span>
                         <div>
-                            <h3 data-role="title" class="font-semibold text-slate-700 dark:text-gray-300 text-sm md:text-base">${item.city}</h3>
+                            <h3 data-role="title" data-city-zh="${item.fullName || item.city}" data-city-en="${item.en_name || item.city}" class="font-semibold text-slate-700 dark:text-gray-300 text-sm md:text-base">${item.en_name || item.city}</h3>
                             <div class="text-xs text-slate-500 dark:text-gray-500 flex gap-2 items-center mt-0.5">
                                 <span class="weather-desc" data-weather-zh="${item.weatherDesc || '未知'}" data-weather-en="${translateWeatherDesc(item.weatherDesc || '未知', 'en')}">${translateWeatherDesc(item.weatherDesc || '未知', 'en')}</span><span class="w-1 h-1 rounded-full bg-slate-400 dark:bg-gray-600"></span><span class="wind-label">Wind</span>: ${item.windSpeed || '0'} m/s</span>
                             </div>
@@ -1591,6 +1638,13 @@ async function generateProvincePage(provinceName, provinceConfig) {
             el.textContent = lang === 'zh' ? el.dataset.dayZh : el.dataset.dayEn;
         });
 
+        // 更新城市标题
+        document.querySelectorAll('[data-role="title"]').forEach(el => {
+            if (el.dataset.cityZh && el.dataset.cityEn) {
+                el.textContent = lang === 'zh' ? el.dataset.cityZh : el.dataset.cityEn;
+            }
+        });
+
         if (window.myMapChart) {
             updateMapOption(window.myMapChart);
         }
@@ -1690,12 +1744,13 @@ async function generateProvincePage(provinceName, provinceConfig) {
                     if (temp === undefined) {
                         temp = p.value;
                     }
+                    const displayName = window.getCityName(p.name, currentLang);
                     const tempLabel = currentLang === 'zh' ? '温度' : 'Temperature';
                     if (temp === undefined || temp === null || isNaN(temp)) {
-                        return \`<div class="font-bold text-sm mb-1">\${p.name}</div><div class="text-xs">\${tempLabel}: <span class="font-bold">-</span></div>\`;
+                        return \`<div class="font-bold text-sm mb-1">\${displayName}</div><div class="text-xs">\${tempLabel}: <span class="font-bold">-</span></div>\`;
                     }
                     const color = getColorForTemp(temp);
-                    return \`<div class="font-bold text-sm mb-1">\${p.name}</div><div class="text-xs">\${tempLabel}: <span class="font-bold" style="color: \${color}">\${temp}°C</span></div>\`;
+                    return \`<div class="font-bold text-sm mb-1">\${displayName}</div><div class="text-xs">\${tempLabel}: <span class="font-bold" style="color: \${color}">\${temp}°C</span></div>\`;
                 }
             },
             series: [{
@@ -1768,8 +1823,8 @@ async function generateProvincePage(provinceName, provinceConfig) {
                 type: 'map',
                 map: 'province',
                 roam: true,
-                top: '18%',
-                zoom: 1.2,
+                top: '6%',
+                zoom: 0.9,
                 label: {
                     show: true,
                     fontSize: 10,
@@ -1777,11 +1832,12 @@ async function generateProvincePage(provinceName, provinceConfig) {
                     textBorderColor: '#111827',
                     textBorderWidth: 2,
                     formatter: (params) => {
+                        const displayName = window.getCityName(params.name, currentLang);
                         const temp = tempMapData[params.name];
                         if (temp !== undefined && temp !== null && !isNaN(temp)) {
-                            return \`\${params.name}\\n\${temp}°\`;
+                            return \`\${displayName}\\n\${temp}°\`;
                         }
-                        return \`\${params.name}\\n-\`;
+                        return \`\${displayName}\\n-\`;
                     }
                 },
                 itemStyle: {
@@ -1794,11 +1850,12 @@ async function generateProvincePage(provinceName, provinceConfig) {
                         color: '#fff',
                         fontSize: 12,
                         formatter: (params) => {
+                            const displayName = window.getCityName(params.name, currentLang);
                             const temp = tempMapData[params.name];
                             if (temp !== undefined && temp !== null && !isNaN(temp)) {
-                                return \`\${params.name}\\n\${temp}°C\`;
+                                return \`\${displayName}\\n\${temp}°C\`;
                             }
-                            return \`\${params.name}\\n-\`;
+                            return \`\${displayName}\\n-\`;
                         }
                     },
                     itemStyle: {

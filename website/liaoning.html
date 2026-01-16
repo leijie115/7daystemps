@@ -13,12 +13,39 @@
       // 天气描述中英文对照表
       window.weatherDescMap = {"晴":"Sunny","多云":"Cloudy","阴":"Overcast","阵雨":"Shower","雷阵雨":"Thunderstorm","雷阵雨伴有冰雹":"Thunderstorm with Hail","雨夹雪":"Sleet","小雨":"Light Rain","中雨":"Moderate Rain","大雨":"Heavy Rain","暴雨":"Storm","大暴雨":"Heavy Storm","特大暴雨":"Severe Storm","阵雪":"Snow Shower","小雪":"Light Snow","中雪":"Moderate Snow","大雪":"Heavy Snow","暴雪":"Snowstorm","雾":"Fog","冻雨":"Freezing Rain","沙尘暴":"Sandstorm","小雨-中雨":"Light to Moderate Rain","中雨-大雨":"Moderate to Heavy Rain","大雨-暴雨":"Heavy Rain to Storm","暴雨-大暴雨":"Storm to Heavy Storm","大暴雨-特大暴雨":"Heavy Storm to Severe Storm","小雪-中雪":"Light to Moderate Snow","中雪-大雪":"Moderate to Heavy Snow","大雪-暴雪":"Heavy Snow to Snowstorm","浮尘":"Dust","扬沙":"Sand","强沙尘暴":"Severe Sandstorm","霾":"Haze","未知":"Unknown"};
 
+      // 城市名称中英文对照表
+      window.cityNameMap = {"丹东":{"zh":"丹东市","en":"DanDong"},"丹东市":{"zh":"丹东市","en":"DanDong"},"葫芦岛":{"zh":"葫芦岛市","en":"HuLuDao"},"葫芦岛市":{"zh":"葫芦岛市","en":"HuLuDao"},"大连":{"zh":"大连市","en":"DaLian"},"大连市":{"zh":"大连市","en":"DaLian"},"朝阳":{"zh":"朝阳市","en":"ZhaoYang"},"朝阳市":{"zh":"朝阳市","en":"ZhaoYang"},"锦州":{"zh":"锦州市","en":"JinZhou"},"锦州市":{"zh":"锦州市","en":"JinZhou"},"营口":{"zh":"营口市","en":"YingKou"},"营口市":{"zh":"营口市","en":"YingKou"},"盘锦":{"zh":"盘锦市","en":"PanJin"},"盘锦市":{"zh":"盘锦市","en":"PanJin"},"鞍山":{"zh":"鞍山市","en":"AnShan"},"鞍山市":{"zh":"鞍山市","en":"AnShan"},"阜新":{"zh":"阜新市","en":"FuXin"},"阜新市":{"zh":"阜新市","en":"FuXin"},"沈阳":{"zh":"沈阳市","en":"ShenYang"},"沈阳市":{"zh":"沈阳市","en":"ShenYang"},"辽阳":{"zh":"辽阳市","en":"LiaoYang"},"辽阳市":{"zh":"辽阳市","en":"LiaoYang"},"本溪":{"zh":"本溪市","en":"BenXi"},"本溪市":{"zh":"本溪市","en":"BenXi"},"铁岭":{"zh":"铁岭市","en":"TieLing"},"铁岭市":{"zh":"铁岭市","en":"TieLing"},"抚顺":{"zh":"抚顺市","en":"FuShun"},"抚顺市":{"zh":"抚顺市","en":"FuShun"}};
+
       // 翻译天气描述
       window.translateWeatherDesc = function(weatherDesc, lang) {
         if (lang === 'zh') {
           return weatherDesc;
         }
         return window.weatherDescMap[weatherDesc] || weatherDesc;
+      };
+
+      // 获取城市名称（支持中英文）
+      window.getCityName = function(cityName, lang) {
+        if (!cityName) return '';
+
+        // 直接匹配
+        if (window.cityNameMap[cityName]) {
+          return window.cityNameMap[cityName][lang];
+        }
+
+        // 尝试去掉常见后缀再匹配
+        const suffixes = ['市', '区', '县', '自治州', '地区', '盟'];
+        for (const suffix of suffixes) {
+          if (cityName.endsWith(suffix)) {
+            const baseName = cityName.slice(0, -suffix.length);
+            if (window.cityNameMap[baseName]) {
+              return window.cityNameMap[baseName][lang];
+            }
+          }
+        }
+
+        // 如果没有匹配，返回原名称
+        return cityName;
       };
     </script>
     <script src="https://cdn.tailwindcss.com"></script>
@@ -234,7 +261,7 @@
                             1
                         </span>
                         <div>
-                            <h3 data-role="title" class="font-semibold text-slate-700 dark:text-gray-300 text-sm md:text-base">丹东</h3>
+                            <h3 data-role="title" data-city-zh="丹东市" data-city-en="DanDong" class="font-semibold text-slate-700 dark:text-gray-300 text-sm md:text-base">DanDong</h3>
                             <div class="text-xs text-slate-500 dark:text-gray-500 flex gap-2 items-center mt-0.5">
                                 <span class="weather-desc" data-weather-zh="晴" data-weather-en="Sunny">Sunny</span><span class="w-1 h-1 rounded-full bg-slate-400 dark:bg-gray-600"></span><span class="wind-label">Wind</span>: 10.7 m/s</span>
                             </div>
@@ -361,7 +388,7 @@
                             2
                         </span>
                         <div>
-                            <h3 data-role="title" class="font-semibold text-slate-700 dark:text-gray-300 text-sm md:text-base">葫芦岛</h3>
+                            <h3 data-role="title" data-city-zh="葫芦岛市" data-city-en="HuLuDao" class="font-semibold text-slate-700 dark:text-gray-300 text-sm md:text-base">HuLuDao</h3>
                             <div class="text-xs text-slate-500 dark:text-gray-500 flex gap-2 items-center mt-0.5">
                                 <span class="weather-desc" data-weather-zh="晴" data-weather-en="Sunny">Sunny</span><span class="w-1 h-1 rounded-full bg-slate-400 dark:bg-gray-600"></span><span class="wind-label">Wind</span>: 10.7 m/s</span>
                             </div>
@@ -488,7 +515,7 @@
                             3
                         </span>
                         <div>
-                            <h3 data-role="title" class="font-semibold text-slate-700 dark:text-gray-300 text-sm md:text-base">大连</h3>
+                            <h3 data-role="title" data-city-zh="大连市" data-city-en="DaLian" class="font-semibold text-slate-700 dark:text-gray-300 text-sm md:text-base">DaLian</h3>
                             <div class="text-xs text-slate-500 dark:text-gray-500 flex gap-2 items-center mt-0.5">
                                 <span class="weather-desc" data-weather-zh="晴" data-weather-en="Sunny">Sunny</span><span class="w-1 h-1 rounded-full bg-slate-400 dark:bg-gray-600"></span><span class="wind-label">Wind</span>: 13.8 m/s</span>
                             </div>
@@ -615,7 +642,7 @@
                             4
                         </span>
                         <div>
-                            <h3 data-role="title" class="font-semibold text-slate-700 dark:text-gray-300 text-sm md:text-base">朝阳</h3>
+                            <h3 data-role="title" data-city-zh="朝阳市" data-city-en="ZhaoYang" class="font-semibold text-slate-700 dark:text-gray-300 text-sm md:text-base">ZhaoYang</h3>
                             <div class="text-xs text-slate-500 dark:text-gray-500 flex gap-2 items-center mt-0.5">
                                 <span class="weather-desc" data-weather-zh="晴" data-weather-en="Sunny">Sunny</span><span class="w-1 h-1 rounded-full bg-slate-400 dark:bg-gray-600"></span><span class="wind-label">Wind</span>: 9.9 m/s</span>
                             </div>
@@ -742,7 +769,7 @@
                             5
                         </span>
                         <div>
-                            <h3 data-role="title" class="font-semibold text-slate-700 dark:text-gray-300 text-sm md:text-base">锦州</h3>
+                            <h3 data-role="title" data-city-zh="锦州市" data-city-en="JinZhou" class="font-semibold text-slate-700 dark:text-gray-300 text-sm md:text-base">JinZhou</h3>
                             <div class="text-xs text-slate-500 dark:text-gray-500 flex gap-2 items-center mt-0.5">
                                 <span class="weather-desc" data-weather-zh="晴" data-weather-en="Sunny">Sunny</span><span class="w-1 h-1 rounded-full bg-slate-400 dark:bg-gray-600"></span><span class="wind-label">Wind</span>: 10.7 m/s</span>
                             </div>
@@ -869,7 +896,7 @@
                             6
                         </span>
                         <div>
-                            <h3 data-role="title" class="font-semibold text-slate-700 dark:text-gray-300 text-sm md:text-base">营口</h3>
+                            <h3 data-role="title" data-city-zh="营口市" data-city-en="YingKou" class="font-semibold text-slate-700 dark:text-gray-300 text-sm md:text-base">YingKou</h3>
                             <div class="text-xs text-slate-500 dark:text-gray-500 flex gap-2 items-center mt-0.5">
                                 <span class="weather-desc" data-weather-zh="晴" data-weather-en="Sunny">Sunny</span><span class="w-1 h-1 rounded-full bg-slate-400 dark:bg-gray-600"></span><span class="wind-label">Wind</span>: 10.5 m/s</span>
                             </div>
@@ -996,7 +1023,7 @@
                             7
                         </span>
                         <div>
-                            <h3 data-role="title" class="font-semibold text-slate-700 dark:text-gray-300 text-sm md:text-base">盘锦</h3>
+                            <h3 data-role="title" data-city-zh="盘锦市" data-city-en="PanJin" class="font-semibold text-slate-700 dark:text-gray-300 text-sm md:text-base">PanJin</h3>
                             <div class="text-xs text-slate-500 dark:text-gray-500 flex gap-2 items-center mt-0.5">
                                 <span class="weather-desc" data-weather-zh="晴" data-weather-en="Sunny">Sunny</span><span class="w-1 h-1 rounded-full bg-slate-400 dark:bg-gray-600"></span><span class="wind-label">Wind</span>: 9.9 m/s</span>
                             </div>
@@ -1123,7 +1150,7 @@
                             8
                         </span>
                         <div>
-                            <h3 data-role="title" class="font-semibold text-slate-700 dark:text-gray-300 text-sm md:text-base">鞍山</h3>
+                            <h3 data-role="title" data-city-zh="鞍山市" data-city-en="AnShan" class="font-semibold text-slate-700 dark:text-gray-300 text-sm md:text-base">AnShan</h3>
                             <div class="text-xs text-slate-500 dark:text-gray-500 flex gap-2 items-center mt-0.5">
                                 <span class="weather-desc" data-weather-zh="晴" data-weather-en="Sunny">Sunny</span><span class="w-1 h-1 rounded-full bg-slate-400 dark:bg-gray-600"></span><span class="wind-label">Wind</span>: 2.8 m/s</span>
                             </div>
@@ -1250,7 +1277,7 @@
                             9
                         </span>
                         <div>
-                            <h3 data-role="title" class="font-semibold text-slate-700 dark:text-gray-300 text-sm md:text-base">阜新</h3>
+                            <h3 data-role="title" data-city-zh="阜新市" data-city-en="FuXin" class="font-semibold text-slate-700 dark:text-gray-300 text-sm md:text-base">FuXin</h3>
                             <div class="text-xs text-slate-500 dark:text-gray-500 flex gap-2 items-center mt-0.5">
                                 <span class="weather-desc" data-weather-zh="晴" data-weather-en="Sunny">Sunny</span><span class="w-1 h-1 rounded-full bg-slate-400 dark:bg-gray-600"></span><span class="wind-label">Wind</span>: 9 m/s</span>
                             </div>
@@ -1377,7 +1404,7 @@
                             10
                         </span>
                         <div>
-                            <h3 data-role="title" class="font-semibold text-slate-700 dark:text-gray-300 text-sm md:text-base">沈阳</h3>
+                            <h3 data-role="title" data-city-zh="沈阳市" data-city-en="ShenYang" class="font-semibold text-slate-700 dark:text-gray-300 text-sm md:text-base">ShenYang</h3>
                             <div class="text-xs text-slate-500 dark:text-gray-500 flex gap-2 items-center mt-0.5">
                                 <span class="weather-desc" data-weather-zh="晴" data-weather-en="Sunny">Sunny</span><span class="w-1 h-1 rounded-full bg-slate-400 dark:bg-gray-600"></span><span class="wind-label">Wind</span>: 7.8 m/s</span>
                             </div>
@@ -1504,7 +1531,7 @@
                             11
                         </span>
                         <div>
-                            <h3 data-role="title" class="font-semibold text-slate-700 dark:text-gray-300 text-sm md:text-base">辽阳</h3>
+                            <h3 data-role="title" data-city-zh="辽阳市" data-city-en="LiaoYang" class="font-semibold text-slate-700 dark:text-gray-300 text-sm md:text-base">LiaoYang</h3>
                             <div class="text-xs text-slate-500 dark:text-gray-500 flex gap-2 items-center mt-0.5">
                                 <span class="weather-desc" data-weather-zh="晴" data-weather-en="Sunny">Sunny</span><span class="w-1 h-1 rounded-full bg-slate-400 dark:bg-gray-600"></span><span class="wind-label">Wind</span>: 7.6 m/s</span>
                             </div>
@@ -1631,7 +1658,7 @@
                             12
                         </span>
                         <div>
-                            <h3 data-role="title" class="font-semibold text-slate-700 dark:text-gray-300 text-sm md:text-base">本溪</h3>
+                            <h3 data-role="title" data-city-zh="本溪市" data-city-en="BenXi" class="font-semibold text-slate-700 dark:text-gray-300 text-sm md:text-base">BenXi</h3>
                             <div class="text-xs text-slate-500 dark:text-gray-500 flex gap-2 items-center mt-0.5">
                                 <span class="weather-desc" data-weather-zh="晴" data-weather-en="Sunny">Sunny</span><span class="w-1 h-1 rounded-full bg-slate-400 dark:bg-gray-600"></span><span class="wind-label">Wind</span>: 7.3 m/s</span>
                             </div>
@@ -1758,7 +1785,7 @@
                             13
                         </span>
                         <div>
-                            <h3 data-role="title" class="font-semibold text-slate-700 dark:text-gray-300 text-sm md:text-base">铁岭</h3>
+                            <h3 data-role="title" data-city-zh="铁岭市" data-city-en="TieLing" class="font-semibold text-slate-700 dark:text-gray-300 text-sm md:text-base">TieLing</h3>
                             <div class="text-xs text-slate-500 dark:text-gray-500 flex gap-2 items-center mt-0.5">
                                 <span class="weather-desc" data-weather-zh="晴" data-weather-en="Sunny">Sunny</span><span class="w-1 h-1 rounded-full bg-slate-400 dark:bg-gray-600"></span><span class="wind-label">Wind</span>: 3.3 m/s</span>
                             </div>
@@ -1885,7 +1912,7 @@
                             14
                         </span>
                         <div>
-                            <h3 data-role="title" class="font-semibold text-slate-700 dark:text-gray-300 text-sm md:text-base">抚顺</h3>
+                            <h3 data-role="title" data-city-zh="抚顺市" data-city-en="FuShun" class="font-semibold text-slate-700 dark:text-gray-300 text-sm md:text-base">FuShun</h3>
                             <div class="text-xs text-slate-500 dark:text-gray-500 flex gap-2 items-center mt-0.5">
                                 <span class="weather-desc" data-weather-zh="晴" data-weather-en="Sunny">Sunny</span><span class="w-1 h-1 rounded-full bg-slate-400 dark:bg-gray-600"></span><span class="wind-label">Wind</span>: 7.3 m/s</span>
                             </div>
@@ -2060,6 +2087,13 @@
             el.textContent = lang === 'zh' ? el.dataset.dayZh : el.dataset.dayEn;
         });
 
+        // 更新城市标题
+        document.querySelectorAll('[data-role="title"]').forEach(el => {
+            if (el.dataset.cityZh && el.dataset.cityEn) {
+                el.textContent = lang === 'zh' ? el.dataset.cityZh : el.dataset.cityEn;
+            }
+        });
+
         if (window.myMapChart) {
             updateMapOption(window.myMapChart);
         }
@@ -2159,12 +2193,13 @@
                     if (temp === undefined) {
                         temp = p.value;
                     }
+                    const displayName = window.getCityName(p.name, currentLang);
                     const tempLabel = currentLang === 'zh' ? '温度' : 'Temperature';
                     if (temp === undefined || temp === null || isNaN(temp)) {
-                        return `<div class="font-bold text-sm mb-1">${p.name}</div><div class="text-xs">${tempLabel}: <span class="font-bold">-</span></div>`;
+                        return `<div class="font-bold text-sm mb-1">${displayName}</div><div class="text-xs">${tempLabel}: <span class="font-bold">-</span></div>`;
                     }
                     const color = getColorForTemp(temp);
-                    return `<div class="font-bold text-sm mb-1">${p.name}</div><div class="text-xs">${tempLabel}: <span class="font-bold" style="color: ${color}">${temp}°C</span></div>`;
+                    return `<div class="font-bold text-sm mb-1">${displayName}</div><div class="text-xs">${tempLabel}: <span class="font-bold" style="color: ${color}">${temp}°C</span></div>`;
                 }
             },
             series: [{
@@ -2230,8 +2265,8 @@
                 type: 'map',
                 map: 'province',
                 roam: true,
-                top: '18%',
-                zoom: 1.2,
+                top: '6%',
+                zoom: 0.9,
                 label: {
                     show: true,
                     fontSize: 10,
@@ -2239,11 +2274,12 @@
                     textBorderColor: '#111827',
                     textBorderWidth: 2,
                     formatter: (params) => {
+                        const displayName = window.getCityName(params.name, currentLang);
                         const temp = tempMapData[params.name];
                         if (temp !== undefined && temp !== null && !isNaN(temp)) {
-                            return `${params.name}\n${temp}°`;
+                            return `${displayName}\n${temp}°`;
                         }
-                        return `${params.name}\n-`;
+                        return `${displayName}\n-`;
                     }
                 },
                 itemStyle: {
@@ -2256,11 +2292,12 @@
                         color: '#fff',
                         fontSize: 12,
                         formatter: (params) => {
+                            const displayName = window.getCityName(params.name, currentLang);
                             const temp = tempMapData[params.name];
                             if (temp !== undefined && temp !== null && !isNaN(temp)) {
-                                return `${params.name}\n${temp}°C`;
+                                return `${displayName}\n${temp}°C`;
                             }
-                            return `${params.name}\n-`;
+                            return `${displayName}\n-`;
                         }
                     },
                     itemStyle: {
