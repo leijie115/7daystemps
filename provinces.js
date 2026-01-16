@@ -1,9 +1,9 @@
 /**
  * 中国省份和城市配置
  * 包含省份的adcode、英文名称、城市列表等信息
- * 仅包含在阿里云地图数据中存在的省份和城市
- * 自动生成时间: 2026-01-16 09:11:48
- * https://www.nmc.cn/publish/forecast/ASC/chengdu.html
+ * 保留所有在阿里云地图中存在的省份
+ * 城市列表仅包含在阿里云地图数据中存在的城市（部分省份的cities可能为空数组）
+ * 自动生成时间: 2026-01-16 14:43:01
  */
 
 module.exports = [
@@ -3670,5 +3670,26 @@ module.exports = [
         "adcode": 659003
       }
     ]
+  },
+  {
+    "name": "香港特别行政区",
+    "en_name": "Hongkong",
+    "code": "AXG",
+    "adcode": 810000,
+    "cities": []
+  },
+  {
+    "name": "澳门特别行政区",
+    "en_name": "Aomen",
+    "code": "AAM",
+    "adcode": 820000,
+    "cities": []
+  },
+  {
+    "name": "台湾省",
+    "en_name": "Taiwan",
+    "code": "ATW",
+    "adcode": 710000,
+    "cities": []
   }
 ];

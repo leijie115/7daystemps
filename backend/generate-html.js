@@ -22,17 +22,19 @@ const OUTPUT_DIR = path.join(__dirname, '../website');
 const PROVINCES_DATA = require('../provinces.js');
 
 /**
- * 根据省份名称查找provinces.js中的完整配置
- * 支持模糊匹配：如 "北京"/"北京市" 都能匹配
+ * 根据省份code查找provinces.js中的完整配置
  */
-function getProvinceConfig(provinceName) {
-  // 移除常见后缀进行匹配
-  const cleanName = provinceName.replace(/(省|市|自治区|特别行政区|壮族|回族|维吾尔)$/g, '');
+function getProvinceConfig(provinceCode) {
+  return PROVINCES_DATA.find(p => p.code === provinceCode);
+}
 
-  return PROVINCES_DATA.find(p => {
-    const pCleanName = p.name.replace(/(省|市|自治区|特别行政区|壮族|回族|维吾尔)$/g, '');
-    return p.name === provinceName || pCleanName === cleanName || p.name.includes(cleanName) || p.full_name === provinceName;
-  });
+/**
+ * 根据省份code和城市code查找城市配置
+ */
+function getCityConfig(provinceCode, cityCode) {
+  const province = getProvinceConfig(provinceCode);
+  if (!province || !province.cities) return null;
+  return province.cities.find(c => c.code === cityCode);
 }
 
 /**
@@ -74,10 +76,10 @@ async function getProvinceTemperaturesByDate(date = new Date()) {
   const results = await influx.query(query);
 
   return results.map(row => {
-    const config = getProvinceConfig(row.province);
+    const config = getProvinceConfig(row.province); // row.province 现在是 code
 
     return {
-      province: row.province,
+      province: config ? config.name : row.province, // 返回中文名称
       temperature: row.max_temp ? parseFloat(row.max_temp.toFixed(1)) : null,
       maxTemp: row.max_temp ? parseFloat(row.max_temp.toFixed(1)) : null,
       minTemp: row.min_temp ? parseFloat(row.min_temp.toFixed(1)) : null,
@@ -85,8 +87,8 @@ async function getProvinceTemperaturesByDate(date = new Date()) {
       weatherDesc: row.weather_desc || '未知',
       adcode: config ? config.adcode : null,
       enName: config ? config.en_name : row.province,
-      fullName: config ? config.full_name : row.province,
-      code: config ? config.code : null,
+      fullName: config ? config.name : row.province, // 使用 name 作为 fullName
+      code: row.province, // code 就是 row.province
       cities: config ? config.cities : []
     };
   }).sort((a, b) => (b.temperature || -999) - (a.temperature || -999));
@@ -101,29 +103,36 @@ async function getProvinceTemperatures() {
 
 /**
  * 获取指定省份所有城市的最新温度数据
+ * @param {string} provinceCode - 省份code (如 "ABJ")
  */
-async function getCityTemperatures(province) {
+async function getCityTemperatures(provinceCode) {
   const query = `
     SELECT LAST(temperature) as latest_temp, LAST(windSpeed) as latest_wind, LAST(weatherDesc) as latest_weather
     FROM weather
-    WHERE time > now() - 24h AND province = '${province}'
+    WHERE time > now() - 24h AND province = '${provinceCode}'
     GROUP BY city
   `;
 
   const results = await influx.query(query);
 
-  return results.map(row => ({
-    city: row.city,
-    temperature: parseFloat(row.latest_temp.toFixed(1)),
-    windSpeed: getWindSpeed(row.latest_wind),
-    weatherDesc: row.latest_weather || '未知'
-  })).sort((a, b) => b.temperature - a.temperature);
+  return results.map(row => {
+    const cityConfig = getCityConfig(provinceCode, row.city); // row.city 现在是 code
+
+    return {
+      city: cityConfig ? cityConfig.name : row.city, // 返回中文名称
+      cityCode: row.city, // 保留 code
+      temperature: parseFloat(row.latest_temp.toFixed(1)),
+      windSpeed: getWindSpeed(row.latest_wind),
+      weatherDesc: row.latest_weather || '未知'
+    };
+  }).sort((a, b) => b.temperature - a.temperature);
 }
 
 /**
  * 获取指定省份所有城市在指定日期的温度数据
+ * @param {string} provinceCode - 省份code (如 "ABJ")
  */
-async function getCityTemperaturesByDate(province, date = new Date()) {
+async function getCityTemperaturesByDate(provinceCode, date = new Date()) {
   const startOfDay = new Date(date);
   startOfDay.setHours(0, 0, 0, 0);
 
@@ -133,26 +142,32 @@ async function getCityTemperaturesByDate(province, date = new Date()) {
   const query = `
     SELECT MAX(temperature) as max_temp, MIN(temperature) as min_temp, MAX(windSpeed) as max_wind, LAST(weatherDesc) as weather_desc
     FROM weather
-    WHERE time >= '${startOfDay.toISOString()}' AND time <= '${endOfDay.toISOString()}' AND province = '${province}'
+    WHERE time >= '${startOfDay.toISOString()}' AND time <= '${endOfDay.toISOString()}' AND province = '${provinceCode}'
     GROUP BY city
   `;
 
   const results = await influx.query(query);
 
-  return results.map(row => ({
-    city: row.city,
-    temperature: row.max_temp ? parseFloat(row.max_temp.toFixed(1)) : null,
-    maxTemp: row.max_temp ? parseFloat(row.max_temp.toFixed(1)) : null,
-    minTemp: row.min_temp ? parseFloat(row.min_temp.toFixed(1)) : null,
-    windSpeed: getWindSpeed(row.max_wind),
-    weatherDesc: row.weather_desc || '未知'
-  })).sort((a, b) => (b.temperature || -999) - (a.temperature || -999));
+  return results.map(row => {
+    const cityConfig = getCityConfig(provinceCode, row.city); // row.city 现在是 code
+
+    return {
+      city: cityConfig ? cityConfig.name : row.city, // 返回中文名称
+      cityCode: row.city, // 保留 code
+      temperature: row.max_temp ? parseFloat(row.max_temp.toFixed(1)) : null,
+      maxTemp: row.max_temp ? parseFloat(row.max_temp.toFixed(1)) : null,
+      minTemp: row.min_temp ? parseFloat(row.min_temp.toFixed(1)) : null,
+      windSpeed: getWindSpeed(row.max_wind),
+      weatherDesc: row.weather_desc || '未知'
+    };
+  }).sort((a, b) => (b.temperature || -999) - (a.temperature || -999));
 }
 
 /**
  * 获取指定省份所有城市未来7天的预报数据
+ * @param {string} provinceCode - 省份code (如 "ABJ")
  */
-async function getCityForecast(province) {
+async function getCityForecast(provinceCode) {
   const dayNames = ['今天', '周一', '周二', '周三', '周四', '周五', '周六', '周日'];
   const forecastByCity = {};
 
@@ -160,7 +175,7 @@ async function getCityForecast(province) {
     const date = new Date();
     date.setDate(date.getDate() + i);
 
-    const dayData = await getCityTemperaturesByDate(province, date);
+    const dayData = await getCityTemperaturesByDate(provinceCode, date);
 
     dayData.forEach(cityData => {
       if (!forecastByCity[cityData.city]) {
@@ -403,6 +418,13 @@ async function generateDayPage(dayIndex, allForecastData, forecastData) {
               map[cleanName] = entry;
             }
           });
+
+          // 特殊处理：南海诸岛
+          map['南海诸岛'] = {
+            zh: '南海诸岛',
+            en: 'Nanhai Islands',
+            fullName: '南海诸岛'
+          };
 
           // 然后用当前数据覆盖（如果有的话）
           provinceData.forEach(item => {
@@ -1181,27 +1203,33 @@ async function generateAllIndexPages(allForecastData, forecastData) {
 
 /**
  * 生成单个省份的详情页面
- * @param {string} provinceName - 省份名称
+ * @param {string} provinceName - 省份名称（用于显示）
  * @param {Object} provinceConfig - 省份配置信息（来自provinces.js）
  */
 async function generateProvincePage(provinceName, provinceConfig) {
   console.log(`  🏙️  生成省份页面: ${provinceName}`);
 
-  // 使用省份简称查询（数据库中存储的是简称，如"北京"而非"北京市"）
-  const provinceShortName = provinceConfig ? provinceConfig.name : provinceName;
+  if (!provinceConfig) {
+    console.warn(`  ⚠️  ${provinceName} 未找到配置信息，跳过`);
+    return;
+  }
+
+  // 使用省份code查询（数据库中存储的是code，如"ABJ"）
+  const provinceCode = provinceConfig.code;
 
   // 获取今天的城市数据
-  const cityData = await getCityTemperaturesByDate(provinceShortName, new Date());
+  const cityData = await getCityTemperaturesByDate(provinceCode, new Date());
 
   if (!cityData || cityData.length === 0) {
     console.warn(`  ⚠️  ${provinceName} 暂无城市数据，跳过`);
     return;
   }
 
-  // 为每个城市添加full_name（从provinceConfig.cities中查找）
+  // 为每个城市添加full_name（从provinceConfig.cities中查找，已在getCityTemperaturesByDate中处理）
+  // cityData中已经包含了city（中文名）和cityCode
   if (provinceConfig && provinceConfig.cities) {
     cityData.forEach(city => {
-      const cityConfig = provinceConfig.cities.find(c => c.name === city.city);
+      const cityConfig = provinceConfig.cities.find(c => c.code === city.cityCode);
       if (cityConfig && cityConfig.full_name) {
         city.fullName = cityConfig.full_name;
       } else {
@@ -1211,7 +1239,7 @@ async function generateProvincePage(provinceName, provinceConfig) {
   }
 
   // 获取该省份所有城市的7天预报数据
-  const cityForecastData = await getCityForecast(provinceShortName);
+  const cityForecastData = await getCityForecast(provinceCode);
 
   // 获取省份的adcode（用于加载省份地图）
   const adcode = provinceConfig ? provinceConfig.adcode : null;

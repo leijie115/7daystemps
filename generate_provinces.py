@@ -149,9 +149,10 @@ def fetch_city_adcodes(province_adcode, cities):
     获取城市级别的 adcode 和 full_name（第二级）
     从阿里云获取该省份下的所有城市数据
     返回过滤后的城市列表（只保留在阿里云数据中存在的城市）
+    如果请求失败或无匹配城市，返回空列表
     """
     if not province_adcode:
-        return cities
+        return []
 
     try:
         # 获取省份下的所有城市/区县数据
@@ -223,7 +224,7 @@ def fetch_city_adcodes(province_adcode, cities):
 
     except Exception as e:
         print(f'    获取城市 adcode 失败: {e}')
-        return []  # 如果请求失败，返回空列表（过滤掉该省份）
+        return []  # 如果请求失败，返回空列表
 
 
 def main():
@@ -231,7 +232,8 @@ def main():
     主函数
     """
     print('=' * 60)
-    print('开始生成省份配置文件（仅保留阿里云数据中存在的城市）')
+    print('开始生成省份配置文件')
+    print('保留所有省份，城市列表仅包含阿里云数据中存在的城市')
     print('=' * 60)
 
     # 第一步：获取省级 adcode 映射
@@ -262,6 +264,8 @@ def main():
         print(f'  ✓ 从 NMC 获取到 {original_city_count} 个城市')
 
         # 第二步：获取该省份下所有城市的 adcode 和 full_name（第二级过滤）
+        filtered_cities = []
+
         if cities:
             print(f'  正在从阿里云获取城市数据并过滤...')
             filtered_cities = fetch_city_adcodes(province_adcode, cities)
@@ -270,20 +274,20 @@ def main():
 
             print(f'  ✓ 保留 {filtered_city_count} 个城市，移除 {removed_count} 个未匹配城市')
 
-            # 只有当省份有城市时才添加到结果中
-            if filtered_cities:
-                result.append({
-                    'name': province['name'],
-                    'en_name': province['en_name'],
-                    'code': province['code'],
-                    'adcode': province_adcode,
-                    'cities': filtered_cities
-                })
-                filtered_province_count += 1
-            else:
-                print(f'  ✗ 该省份没有匹配的城市，跳过')
+            if not filtered_cities:
+                print(f'  ⚠ 该省份没有匹配的城市，cities 将设置为空数组')
         else:
-            print(f'  ✗ 未获取到城市数据')
+            print(f'  ⚠ 未获取到城市数据，cities 将设置为空数组')
+
+        # 无论是否有城市，都添加省份到结果中
+        result.append({
+            'name': province['name'],
+            'en_name': province['en_name'],
+            'code': province['code'],
+            'adcode': province_adcode,
+            'cities': filtered_cities  # 可能为空数组
+        })
+        filtered_province_count += 1
 
         # 添加延迟，避免请求过快
         if i < len(PROVINCES):
@@ -295,7 +299,8 @@ def main():
     file_content = f"""/**
  * 中国省份和城市配置
  * 包含省份的adcode、英文名称、城市列表等信息
- * 仅包含在阿里云地图数据中存在的省份和城市
+ * 保留所有在阿里云地图中存在的省份
+ * 城市列表仅包含在阿里云地图数据中存在的城市（部分省份的cities可能为空数组）
  * 自动生成时间: {time.strftime('%Y-%m-%d %H:%M:%S')}
  */
 
@@ -313,9 +318,14 @@ module.exports = {json.dumps(result, ensure_ascii=False, indent=2)};
 
     # 统计信息
     total_cities = sum(len(p['cities']) for p in result)
+    provinces_with_cities = sum(1 for p in result if len(p['cities']) > 0)
+    provinces_without_cities = filtered_province_count - provinces_with_cities
+
     print(f'\n统计信息:')
     print(f'  原始省份数量: {original_province_count}')
     print(f'  保留省份数量: {filtered_province_count}')
+    print(f'  有城市数据的省份: {provinces_with_cities}')
+    print(f'  无城市数据的省份: {provinces_without_cities}')
     print(f'  城市总数: {total_cities}')
     print(f'  数据完整性: 所有城市都有 adcode ✓')
 
