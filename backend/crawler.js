@@ -29,13 +29,11 @@ const influx = new Influx.InfluxDB({
         humidity: Influx.FieldType.FLOAT, // 单位: %
         cloudCover: Influx.FieldType.FLOAT, // 单位: % (云量)
         weatherCode: Influx.FieldType.STRING, // 天气代码 (图片文件名中的数字)
-        weatherDesc: Influx.FieldType.STRING, // 天气描述 (中文)
-        updateTime: Influx.FieldType.STRING // 数据更新时间 (HH:mm 格式)
+        weatherDesc: Influx.FieldType.STRING // 天气描述 (中文)
       },
       tags: [
         'province',
-        'city',
-        'stationId'
+        'city'
       ]
     }
   ]
@@ -62,18 +60,6 @@ async function initDatabase() {
     console.error('初始化数据库失败:', error.message);
     throw error;
   }
-}
-
-/**
- * 从 HTML 中提取数据更新时间
- * 格式: <span id="realPublishTime">08:50更新</span>
- * 返回格式: "08:50"
- */
-function extractUpdateTime(html) {
-  const $ = cheerio.load(html);
-  const updateText = $('#realPublishTime').text().trim();
-  const match = updateText.match(/(\d{1,2}:\d{2})/);
-  return match ? match[1] : null;
 }
 
 /**
@@ -107,15 +93,11 @@ function extractWeatherCodeMapping(html) {
 
 /**
  * 解析 HTML 中的天气数据
- * 从 day0 和 day1 的 hour3 元素中提取逐小时数据
+ * 从 day0 到 day6 的 hour3 元素中提取逐小时数据
  */
-function parseWeatherData(html, stationId, cityName, provinceName) {
+function parseWeatherData(html, cityCode, provinceCode) {
   const $ = cheerio.load(html);
   const weatherData = [];
-
-  // 提取数据更新时间
-  const updateTime = extractUpdateTime(html);
-  console.log(`  数据更新时间: ${updateTime || '未知'}`);
 
   // 提取天气代码和中文描述的映射关系
   const weatherCodeMap = extractWeatherCodeMapping(html);
@@ -125,10 +107,15 @@ function parseWeatherData(html, stationId, cityName, provinceName) {
   const now = new Date();
   const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
 
-  // 解析 day0 (今天) 和 day1 (明天) 的数据
-  ['day0', 'day1'].forEach((dayId, dayOffset) => {
+  // 解析 day0 到 day6 (7天) 的数据
+  for (let dayOffset = 0; dayOffset < 7; dayOffset++) {
+    const dayId = `day${dayOffset}`;
     const dayContainer = $(`#${dayId}`);
-    if (dayContainer.length === 0) return;
+    if (dayContainer.length === 0) {
+      console.log(`  警告: 未找到 #${dayId} 元素`);
+      continue;
+    }
+    console.log(`  找到 #${dayId}, 包含 ${dayContainer.find('.hour3').length} 个 hour3 元素`);
 
     // 计算当前日期
     const currentDate = new Date(today);
@@ -207,27 +194,25 @@ function parseWeatherData(html, stationId, cityName, provinceName) {
         pressure,
         humidity,
         cloudCover,
-        updateTime,
-        stationId,
-        cityName,
-        provinceName
+        cityCode,
+        provinceCode
       });
     });
-  });
+  }
 
   return weatherData;
 }
 
 /**
  * 抓取单个城市的天气数据
- * 使用新的 API: https://www.nmc.cn/rest/weather?stationid={code}
+ * 从城市的 URL 获取完整的 HTML 页面
  */
-async function fetchCityWeather(code, cityName, provinceName, lastUpdateTime = null) {
-  const timestamp = Date.now();
-  const url = `https://www.nmc.cn/rest/weather?stationid=${code}&_=${timestamp}`;
+async function fetchCityWeather(cityUrl, cityCode, cityName, provinceCode, provinceName) {
+  const url = `https://www.nmc.cn${cityUrl}`;
 
   try {
-    console.log(`  抓取: ${provinceName} - ${cityName} (${code})`);
+    console.log(`  抓取: ${provinceName} - ${cityName} (${provinceCode}/${cityCode})`);
+    console.log(`  请求URL: ${url}`);
 
     const response = await axios.get(url, {
       headers: {
@@ -237,28 +222,44 @@ async function fetchCityWeather(code, cityName, provinceName, lastUpdateTime = n
       timeout: 15000
     });
 
+    console.log(`  响应状态: ${response.status}`);
+    console.log(`  响应内容类型: ${response.headers['content-type']}`);
+    console.log(`  响应内容长度: ${response.data.length} 字符`);
+
     const html = response.data;
-    const weatherData = parseWeatherData(html, code, cityName, provinceName);
+    const weatherData = parseWeatherData(html, cityCode, provinceCode);
 
     if (weatherData.length === 0) {
       console.log(`  ⊘ 跳过: ${cityName} - 没有解析到数据`);
-      return { success: true, count: 0, skipped: true };
+      return { success: true, count: 0 };
     }
 
-    // 检查更新时间，实现增量更新
-    const currentUpdateTime = weatherData[0].updateTime;
-    if (lastUpdateTime && currentUpdateTime === lastUpdateTime) {
-      console.log(`  ⊘ 跳过: ${cityName} - 数据未更新 (${currentUpdateTime})`);
-      return { success: true, count: 0, skipped: true, updateTime: currentUpdateTime };
+    // 获取数据的时间范围
+    const times = weatherData.map(d => d.time.getTime());
+    const minTime = Math.min(...times);
+    const maxTime = Math.max(...times);
+
+    // 删除这个城市在该时间范围内的旧数据
+    try {
+      await influx.query(`
+        DELETE FROM weather
+        WHERE province = '${provinceCode}'
+        AND city = '${cityCode}'
+        AND time >= ${minTime}000000
+        AND time <= ${maxTime}000000
+      `);
+      console.log(`  已删除旧数据: ${new Date(minTime).toLocaleString('zh-CN')} 到 ${new Date(maxTime).toLocaleString('zh-CN')}`);
+    } catch (deleteError) {
+      // 删除失败可能是因为没有数据,继续执行
+      console.log(`  删除旧数据时出现提示: ${deleteError.message}`);
     }
 
     // 写入 InfluxDB 1.8
     const points = weatherData.map(data => ({
       measurement: 'weather',
       tags: {
-        province: provinceName,
-        city: cityName,
-        stationId: code
+        province: data.provinceCode,
+        city: data.cityCode
       },
       fields: {
         temperature: data.temperature,
@@ -269,16 +270,16 @@ async function fetchCityWeather(code, cityName, provinceName, lastUpdateTime = n
         humidity: data.humidity,
         cloudCover: data.cloudCover,
         weatherCode: data.weatherCode,
-        weatherDesc: data.weatherDesc,
-        updateTime: data.updateTime || ''
+        weatherDesc: data.weatherDesc
       },
       timestamp: data.time
     }));
 
     await influx.writePoints(points);
 
-    console.log(`  ✓ 成功: ${cityName} - ${weatherData.length} 条数据 (更新时间: ${currentUpdateTime})`);
-    return { success: true, count: weatherData.length, updateTime: currentUpdateTime };
+    console.log(`  ✓ 成功: ${cityName} - ${weatherData.length} 条数据`);
+
+    return { success: true, count: weatherData.length };
 
   } catch (error) {
     console.error(`  ✗ 失败: ${cityName} - ${error.message}`);
@@ -289,7 +290,6 @@ async function fetchCityWeather(code, cityName, provinceName, lastUpdateTime = n
 /**
  * 抓取所有城市的天气数据
  * 从 provinces 的第二级 (cities) 开始遍历
- * 支持增量更新：检查更新时间，如果数据未变化则跳过后续请求
  */
 async function crawlAllCities() {
   console.log('开始抓取天气数据...\n');
@@ -302,67 +302,34 @@ async function crawlAllCities() {
   let totalCities = 0;
   let successCount = 0;
   let failCount = 0;
-  let skippedCount = 0;
 
   const requestDelay = parseInt(process.env.REQUEST_DELAY) || 2000;
-
-  // 用于存储第一个城市的更新时间，用于增量更新判断
-  let firstUpdateTime = null;
-  let shouldSkipRemaining = false;
 
   for (const province of provinces) {
     if (!province.cities || province.cities.length === 0) continue;
 
     console.log(`\n[${province.name}] 共 ${province.cities.length} 个城市`);
 
-    for (let i = 0; i < province.cities.length; i++) {
-      const city = province.cities[i];
+    for (const city of province.cities) {
       totalCities++;
 
-      // 如果已经检测到数据未更新，跳过剩余城市
-      if (shouldSkipRemaining) {
-        console.log(`  ⊘ 跳过: ${city.name} - 批量跳过（数据未更新）`);
-        skippedCount++;
-        continue;
-      }
-
       const result = await fetchCityWeather(
+        city.url,
         city.code,
         city.name,
-        province.name,
-        i === 0 ? null : firstUpdateTime // 第一个城市不传 lastUpdateTime
+        province.code,
+        province.name
       );
 
       if (result.success) {
         successCount++;
-
-        // 记录第一个城市的更新时间
-        if (i === 0 && result.updateTime) {
-          firstUpdateTime = result.updateTime;
-        }
-
-        // 如果第一个城市之后的城市数据未更新，则跳过后续所有城市
-        if (i === 0 && result.skipped) {
-          console.log(`  → 检测到数据未更新，将跳过本省剩余城市`);
-          shouldSkipRemaining = true;
-        }
-
-        if (result.skipped) {
-          skippedCount++;
-        }
       } else {
         failCount++;
       }
 
       // 延迟，避免请求过快
-      if (!shouldSkipRemaining) {
-        await delay(requestDelay);
-      }
+      await delay(requestDelay);
     }
-
-    // 重置跳过标志，为下一个省份做准备
-    shouldSkipRemaining = false;
-    firstUpdateTime = null;
   }
 
   const duration = ((Date.now() - startTime) / 1000).toFixed(2);
@@ -370,7 +337,6 @@ async function crawlAllCities() {
   console.log('\n==================== 抓取完成 ====================');
   console.log(`总城市数: ${totalCities}`);
   console.log(`成功: ${successCount}`);
-  console.log(`跳过: ${skippedCount}`);
   console.log(`失败: ${failCount}`);
   console.log(`耗时: ${duration} 秒`);
   console.log('================================================\n');
