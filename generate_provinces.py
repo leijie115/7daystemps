@@ -148,11 +148,13 @@ def fetch_city_adcodes(province_adcode, cities):
     """
     获取城市级别的 adcode 和 full_name（第二级）
     从阿里云获取该省份下的所有城市数据
-    返回过滤后的城市列表（只保留在阿里云数据中存在的城市）
-    如果请求失败或无匹配城市，返回空列表
+
+    返回值: (filtered_cities, has_aliyun_data)
+    - filtered_cities: 处理后的城市列表
+    - has_aliyun_data: 是否成功获取到阿里云数据
     """
     if not province_adcode:
-        return []
+        return cities, False
 
     try:
         # 获取省份下的所有城市/区县数据
@@ -175,6 +177,11 @@ def fetch_city_adcodes(province_adcode, cities):
                         'adcode': adcode,
                         'full_name': name
                     }
+
+        # 如果阿里云没有城市数据，返回原始城市列表（不过滤）
+        if not city_data_map:
+            print(f'    阿里云数据为空，保留所有 NMC 城市数据')
+            return cities, False
 
         # 过滤并匹配城市的 adcode 和 full_name
         filtered_cities = []
@@ -220,11 +227,17 @@ def fetch_city_adcodes(province_adcode, cities):
             if matched:
                 filtered_cities.append(city)
 
-        return filtered_cities
+        # 如果没有匹配到任何城市，返回原始城市列表（不过滤）
+        if not filtered_cities:
+            print(f'    阿里云数据中无匹配城市，保留所有 NMC 城市数据')
+            return cities, False
+
+        return filtered_cities, True
 
     except Exception as e:
         print(f'    获取城市 adcode 失败: {e}')
-        return []  # 如果请求失败，返回空列表
+        # 如果是404或其他错误，返回原始城市列表（不过滤）
+        return cities, False
 
 
 def main():
@@ -265,28 +278,36 @@ def main():
 
         # 第二步：获取该省份下所有城市的 adcode 和 full_name（第二级过滤）
         filtered_cities = []
+        has_aliyun_data = True  # 默认为 true
 
         if cities:
             print(f'  正在从阿里云获取城市数据并过滤...')
-            filtered_cities = fetch_city_adcodes(province_adcode, cities)
+            filtered_cities, has_aliyun_data = fetch_city_adcodes(province_adcode, cities)
             filtered_city_count = len(filtered_cities)
             removed_count = original_city_count - filtered_city_count
 
-            print(f'  ✓ 保留 {filtered_city_count} 个城市，移除 {removed_count} 个未匹配城市')
-
-            if not filtered_cities:
-                print(f'  ⚠ 该省份没有匹配的城市，cities 将设置为空数组')
+            if has_aliyun_data:
+                print(f'  ✓ 保留 {filtered_city_count} 个城市，移除 {removed_count} 个未匹配城市')
+            else:
+                print(f'  ⚠ 阿里云无该省份数据，保留所有 {filtered_city_count} 个 NMC 城市')
         else:
             print(f'  ⚠ 未获取到城市数据，cities 将设置为空数组')
+            has_aliyun_data = True  # 没有城市数据时，不添加标识字段
 
         # 无论是否有城市，都添加省份到结果中
-        result.append({
+        province_data = {
             'name': province['name'],
             'en_name': province['en_name'],
             'code': province['code'],
             'adcode': province_adcode,
             'cities': filtered_cities  # 可能为空数组
-        })
+        }
+
+        # 如果没有阿里云数据，添加标识字段（值为 false 表示无阿里云数据）
+        if not has_aliyun_data:
+            province_data['has_aliyun_data'] = False
+
+        result.append(province_data)
         filtered_province_count += 1
 
         # 添加延迟，避免请求过快

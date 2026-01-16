@@ -3,7 +3,7 @@
  * 包含省份的adcode、英文名称、城市列表等信息
  * 保留所有在阿里云地图中存在的省份
  * 城市列表仅包含在阿里云地图数据中存在的城市（部分省份的cities可能为空数组）
- * 自动生成时间: 2026-01-16 14:43:01
+ * 自动生成时间: 2026-01-16 19:30:34
  */
 
 module.exports = [
@@ -3676,20 +3676,82 @@ module.exports = [
     "en_name": "Hongkong",
     "code": "AXG",
     "adcode": 810000,
-    "cities": []
+    "cities": [
+      {
+        "name": "香港",
+        "full_name": "香港",
+        "en_name": "XiangGang",
+        "code": "KnxKc",
+        "url": "/publish/forecast/AXG/xianggang.html",
+        "adcode": ""
+      },
+      {
+        "name": "香港天文台",
+        "full_name": "香港天文台",
+        "en_name": "XiangGangTianWenTai",
+        "code": "hcBhy",
+        "url": "/publish/forecast/AXG/xianggangtianwentai.html",
+        "adcode": ""
+      }
+    ],
+    "no_aliyun_data": true
   },
   {
     "name": "澳门特别行政区",
     "en_name": "Aomen",
     "code": "AAM",
     "adcode": 820000,
-    "cities": []
+    "cities": [
+      {
+        "name": "澳门",
+        "full_name": "澳门",
+        "en_name": "AoMen",
+        "code": "ZZhCJ",
+        "url": "/publish/forecast/AAM/aomen.html",
+        "adcode": ""
+      },
+      {
+        "name": "大潭山",
+        "full_name": "大潭山",
+        "en_name": "DaTanShan",
+        "code": "RQqyQ",
+        "url": "/publish/forecast/AAM/datanshan.html",
+        "adcode": ""
+      }
+    ],
+    "no_aliyun_data": true
   },
   {
     "name": "台湾省",
     "en_name": "Taiwan",
     "code": "ATW",
     "adcode": 710000,
-    "cities": []
+    "cities": [
+      {
+        "name": "台北",
+        "full_name": "台北",
+        "en_name": "TaiBei",
+        "code": "VrMVF",
+        "url": "/publish/forecast/ATW/taibei.html",
+        "adcode": ""
+      },
+      {
+        "name": "高雄",
+        "full_name": "高雄",
+        "en_name": "GaoXiong",
+        "code": "Urwjw",
+        "url": "/publish/forecast/ATW/gaoxiong.html",
+        "adcode": ""
+      },
+      {
+        "name": "台中",
+        "full_name": "台中",
+        "en_name": "TaiZhong",
+        "code": "FYDSf",
+        "url": "/publish/forecast/ATW/taizhong.html",
+        "adcode": ""
+      }
+    ],
+    "no_aliyun_data": true
   }
 ];
