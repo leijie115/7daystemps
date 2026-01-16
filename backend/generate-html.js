@@ -166,9 +166,10 @@ async function getCityTemperaturesByDate(provinceCode, date = new Date()) {
 /**
  * 获取指定省份所有城市未来7天的预报数据
  * @param {string} provinceCode - 省份code (如 "ABJ")
+ * @param {number} dayIndex - 天数索引 (0=今天, 1=明天, ...),用于确定哪一天是"今天"
  */
-async function getCityForecast(provinceCode) {
-  const dayNames = ['今天', '周一', '周二', '周三', '周四', '周五', '周六', '周日'];
+async function getCityForecast(provinceCode, dayIndex = 0) {
+  const weekdaysZh = ['周日', '周一', '周二', '周三', '周四', '周五', '周六'];
   const forecastByCity = {};
 
   for (let i = 0; i < 7; i++) {
@@ -183,7 +184,7 @@ async function getCityForecast(provinceCode) {
       }
 
       forecastByCity[cityData.city].push({
-        dayName: i === 0 ? '今天' : dayNames[date.getDay()],
+        dayName: i === dayIndex ? '今天' : weekdaysZh[date.getDay()],
         high: cityData.maxTemp,
         low: cityData.minTemp
       });
@@ -1205,9 +1206,16 @@ async function generateAllIndexPages(allForecastData, forecastData) {
  * 生成单个省份的详情页面
  * @param {string} provinceName - 省份名称（用于显示）
  * @param {Object} provinceConfig - 省份配置信息（来自provinces.js）
+ * @param {number} dayIndex - 天数索引 (0=今天, 1=明天, ...)
  */
-async function generateProvincePage(provinceName, provinceConfig) {
-  console.log(`  🏙️  生成省份页面: ${provinceName}`);
+async function generateProvincePage(provinceName, provinceConfig, dayIndex = 0) {
+  // 计算目标日期
+  const targetDate = new Date();
+  targetDate.setDate(targetDate.getDate() + dayIndex);
+  const dateStr = targetDate.toISOString().slice(0, 10).replace(/-/g, '');
+  const dateFormatted = targetDate.toLocaleDateString('zh-CN', { year: 'numeric', month: 'long', day: 'numeric' });
+
+  console.log(`  🏙️  生成省份页面: ${provinceName} (${dateFormatted})`);
 
   if (!provinceConfig) {
     console.warn(`  ⚠️  ${provinceName} 未找到配置信息，跳过`);
@@ -1217,8 +1225,8 @@ async function generateProvincePage(provinceName, provinceConfig) {
   // 使用省份code查询（数据库中存储的是code，如"ABJ"）
   const provinceCode = provinceConfig.code;
 
-  // 获取今天的城市数据
-  const cityData = await getCityTemperaturesByDate(provinceCode, new Date());
+  // 获取指定日期的城市数据
+  const cityData = await getCityTemperaturesByDate(provinceCode, targetDate);
 
   if (!cityData || cityData.length === 0) {
     console.warn(`  ⚠️  ${provinceName} 暂无城市数据，跳过`);
@@ -1241,7 +1249,7 @@ async function generateProvincePage(provinceName, provinceConfig) {
   }
 
   // 获取该省份所有城市的7天预报数据
-  const cityForecastData = await getCityForecast(provinceCode);
+  const cityForecastData = await getCityForecast(provinceCode, dayIndex);
 
   // 获取省份的adcode（用于加载省份地图）
   const adcode = provinceConfig ? provinceConfig.adcode : null;
@@ -1255,6 +1263,10 @@ async function generateProvincePage(provinceName, provinceConfig) {
   const temps = cityData.map(c => c.temperature);
   const minTemp = Math.min(...temps);
   const maxTemp = Math.max(...temps);
+
+  // 提前计算文件名,供HTML中使用
+  const enName = provinceConfig ? provinceConfig.en_name : provinceName;
+  const fileName = enName.toLowerCase().replace(/\s+/g, '') + '.html';
 
   const html = `<!DOCTYPE html>
 <html lang="en" class="dark">
@@ -1443,21 +1455,30 @@ async function generateProvincePage(provinceName, provinceConfig) {
             ${(() => {
               const dayButtons = [];
               for (let i = 0; i < 7; i++) {
-                const daysZh = ['今天', '周一', '周二', '周三', '周四', '周五', '周六', '周日'];
-                const daysEn = ['Today', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
+                // 星期几的中英文名称 (0=周日, 1=周一, ..., 6=周六)
+                const weekdaysZh = ['周日', '周一', '周二', '周三', '周四', '周五', '周六'];
+                const weekdaysEn = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
                 const date = new Date();
                 date.setDate(date.getDate() + i);
-                const dayNameZh = i === 0 ? '今天' : daysZh[date.getDay()];
-                const dayNameEn = i === 0 ? 'Today' : daysEn[date.getDay()];
+                const dayNameZh = i === 0 ? '今天' : weekdaysZh[date.getDay()];
+                const dayNameEn = i === 0 ? 'Today' : weekdaysEn[date.getDay()];
 
-                const isActive = i === 0;
+                const isActive = i === dayIndex;
                 let href = '#';
                 if (!isActive) {
                   if (i === 0) {
-                    href = 'index.html';
+                    // 链接到今天的省份页面
+                    href = dayIndex === 0 ? fileName : '../' + fileName;
                   } else {
-                    const dateStr = date.toISOString().slice(0, 10).replace(/-/g, '');
-                    href = dateStr + '/index.html';
+                    const targetDateStr = date.toISOString().slice(0, 10).replace(/-/g, '');
+                    // 链接到对应日期的省份页面
+                    if (dayIndex === 0) {
+                      // 当前在今天的页面，链接到未来日期
+                      href = targetDateStr + '/' + fileName;
+                    } else {
+                      // 当前在未来日期的页面，链接到其他日期
+                      href = '../' + targetDateStr + '/' + fileName;
+                    }
                   }
                 }
 
@@ -1508,11 +1529,11 @@ async function generateProvincePage(provinceName, provinceConfig) {
               const forecast = cityForecastData[item.city] || [];
 
               while (forecast.length < 7) {
-                const dayNames = ['今天', '周一', '周二', '周三', '周四', '周五', '周六', '周日'];
+                const weekdaysZh = ['周日', '周一', '周二', '周三', '周四', '周五', '周六'];
                 const date = new Date();
                 date.setDate(date.getDate() + forecast.length);
                 forecast.push({
-                  dayName: forecast.length === 0 ? '今天' : dayNames[date.getDay()],
+                  dayName: forecast.length === dayIndex ? '今天' : weekdaysZh[date.getDay()],
                   high: null,
                   low: null
                 });
@@ -1564,7 +1585,7 @@ async function generateProvincePage(provinceName, provinceConfig) {
 
                           return `
                         <div class="flex flex-col items-center group/day">
-                            <span class="forecast-day-label text-[9px] font-medium mb-1 ${idx === 0 ? 'text-blue-500' : 'text-slate-500 dark:text-gray-500'}" data-day-zh="${day.dayName}" data-day-en="${dayNameEn}">
+                            <span class="forecast-day-label text-[9px] font-medium mb-1 ${idx === dayIndex ? 'text-blue-500' : 'text-slate-500 dark:text-gray-500'}" data-day-zh="${day.dayName}" data-day-en="${dayNameEn}">
                                 ${dayNameEn}
                             </span>
                             <div class="w-full bg-slate-200 dark:bg-gray-800/50 rounded-full h-20 relative w-1.5 md:w-2 mx-auto ring-1 ring-black/5 dark:ring-white/5">
@@ -1938,26 +1959,42 @@ async function generateProvincePage(provinceName, provinceConfig) {
 </body>
 </html>`;
 
-  // 使用英文名称小写作为文件名
-  const enName = provinceConfig ? provinceConfig.en_name : provinceName;
-  const fileName = enName.toLowerCase().replace(/\s+/g, '') + '.html';
-  const fullPath = path.join(OUTPUT_DIR, fileName);
+  // 文件路径: 今天是 website/anhui.html, 其他天是 website/YYYYMMDD/anhui.html
+  let fullPath;
+  if (dayIndex === 0) {
+    fullPath = path.join(OUTPUT_DIR, fileName);
+  } else {
+    const dayDir = path.join(OUTPUT_DIR, dateStr);
+    if (!fs.existsSync(dayDir)) {
+      fs.mkdirSync(dayDir, { recursive: true });
+    }
+    fullPath = path.join(dayDir, fileName);
+  }
 
   fs.writeFileSync(fullPath, html, 'utf8');
-  console.log(`  ✅ ${provinceName} 页面生成完成 (${fileName})`);
+  console.log(`  ✅ ${provinceName} 页面生成完成 (${dayIndex === 0 ? fileName : dateStr + '/' + fileName})`);
 }
 
 /**
- * 生成所有省份的详情页面
+ * 生成所有省份的详情页面（为未来7天都生成）
  */
 async function generateAllProvincePages() {
-  console.log('🏙️  生成所有省份详情页面...');
+  console.log('🏙️  生成所有省份详情页面（未来7天）...');
 
-  for (const provinceConfig of PROVINCES_DATA) {
-    await generateProvincePage(provinceConfig.full_name || provinceConfig.name, provinceConfig);
+  // 为未来7天的每一天生成所有省份的页面
+  for (let dayIndex = 0; dayIndex < 7; dayIndex++) {
+    const date = new Date();
+    date.setDate(date.getDate() + dayIndex);
+    const dateStr = date.toLocaleDateString('zh-CN');
+
+    console.log(`\n📅 生成第${dayIndex}天的省份页面 (${dateStr}):`);
+
+    for (const provinceConfig of PROVINCES_DATA) {
+      await generateProvincePage(provinceConfig.full_name || provinceConfig.name, provinceConfig, dayIndex);
+    }
   }
 
-  console.log('✅ 所有省份详情页面生成完成\n');
+  console.log('\n✅ 所有省份详情页面生成完成\n');
 }
 
 /**
