@@ -1273,9 +1273,9 @@ async function generateProvincePage(provinceName, provinceConfig, dayIndex = 0) 
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="${provinceName} Temperature Rankings - City temperature data">
-    <meta name="keywords" content="${provinceName},temperature,weather,cities">
-    <title>${provinceName} Temperature Rankings</title>
+    <meta name="description" content="${enName} Temperature Rankings - City temperature data">
+    <meta name="keywords" content="${enName},${provinceName},temperature,weather,cities">
+    <title>${enName} Temperature Rankings</title>
     <script>
       // 多语言配置
       window.i18n = ${JSON.stringify(i18n)};
@@ -1400,8 +1400,8 @@ async function generateProvincePage(provinceName, provinceConfig, dayIndex = 0) 
                         </svg>
                     </a>
                     <div>
-                        <h1 id="main-heading" class="text-3xl font-black tracking-tighter text-transparent bg-clip-text bg-gradient-to-r from-blue-500 to-emerald-500 drop-shadow-sm font-sans">
-                            ${provinceName}
+                        <h1 id="main-heading" class="text-3xl font-black tracking-tighter text-transparent bg-clip-text bg-gradient-to-r from-blue-500 to-emerald-500 drop-shadow-sm font-sans" data-province-zh="${provinceName}" data-province-en="${enName}">
+                            ${enName}
                         </h1>
                     </div>
                 </div>
@@ -1646,6 +1646,15 @@ async function generateProvincePage(provinceName, provinceConfig, dayIndex = 0) 
         document.getElementById('temp-scale-label').textContent = t.tempScale;
         document.getElementById('btn-hot').textContent = t.sortHot;
         document.getElementById('btn-cold').textContent = t.sortCold;
+
+        // 更新省份标题
+        const mainHeading = document.getElementById('main-heading');
+        if (mainHeading && mainHeading.dataset.provinceZh && mainHeading.dataset.provinceEn) {
+            const provinceName = lang === 'zh' ? mainHeading.dataset.provinceZh : mainHeading.dataset.provinceEn;
+            mainHeading.textContent = provinceName;
+            // 更新页面标题
+            document.title = provinceName + (lang === 'zh' ? ' 气温排行' : ' Temperature Rankings');
+        }
 
         document.querySelectorAll('.weather-desc').forEach(el => {
             el.textContent = lang === 'zh' ? el.dataset.weatherZh : el.dataset.weatherEn;
