@@ -1668,6 +1668,11 @@ async function generateProvincePage(provinceName, provinceConfig, dayIndex = 0) 
             el.textContent = lang === 'zh' ? el.dataset.dayZh : el.dataset.dayEn;
         });
 
+        // 更新日期选择器
+        document.querySelectorAll('.day-label').forEach(el => {
+            el.textContent = lang === 'zh' ? el.dataset.dayZh : el.dataset.dayEn;
+        });
+
         // 更新城市标题
         document.querySelectorAll('[data-role="title"]').forEach(el => {
             if (el.dataset.cityZh && el.dataset.cityEn) {
