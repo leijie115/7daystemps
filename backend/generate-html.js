@@ -89,7 +89,8 @@ async function getProvinceTemperaturesByDate(date = new Date()) {
       enName: config ? config.en_name : row.province,
       fullName: config ? config.name : row.province, // 使用 name 作为 fullName
       code: row.province, // code 就是 row.province
-      cities: config ? config.cities : []
+      cities: config ? config.cities : [],
+      no_aliyun_data: config ? config.no_aliyun_data : false // 添加 no_aliyun_data 标记
     };
   }).sort((a, b) => (b.temperature || -999) - (a.temperature || -999));
 }
@@ -402,7 +403,8 @@ async function generateDayPage(dayIndex, allForecastData, forecastData) {
             const entry = {
               zh: p.name,
               en: p.en_name,
-              fullName: p.full_name
+              fullName: p.full_name,
+              no_aliyun_data: p.no_aliyun_data || false
             };
 
             // 添加全称映射
@@ -424,7 +426,8 @@ async function generateDayPage(dayIndex, allForecastData, forecastData) {
           map['南海诸岛'] = {
             zh: '南海诸岛',
             en: 'Nanhai Islands',
-            fullName: '南海诸岛'
+            fullName: '南海诸岛',
+            no_aliyun_data: false
           };
 
           // 然后用当前数据覆盖（如果有的话）
@@ -433,7 +436,8 @@ async function generateDayPage(dayIndex, allForecastData, forecastData) {
             const entry = {
               zh: item.province,
               en: item.enName || item.province,
-              fullName: fullName
+              fullName: fullName,
+              no_aliyun_data: item.no_aliyun_data || false
             };
 
             map[fullName] = entry;
@@ -721,7 +725,7 @@ async function generateDayPage(dayIndex, allForecastData, forecastData) {
                             </div>
                             <div class="flex items-center gap-3">
                                 <div class="text-right">
-                                    <div data-role="temp-val" class="text-lg font-bold tabular-nums tracking-tight">
+                                    <div data-role="temp-val" class="text-lg font-bold tabular-nums tracking-tight" style="color: ${item.temperature !== null && item.temperature !== undefined && !isNaN(item.temperature) ? getColorForTemp(item.temperature) : 'inherit'}">
                                         ${item.temperature !== null && item.temperature !== undefined && !isNaN(item.temperature) ? item.temperature + '°' : '-'}
                                     </div>
                                 </div>
@@ -1061,9 +1065,17 @@ async function generateDayPage(dayIndex, allForecastData, forecastData) {
                 },
                 visualMap: {
                     show: false,
-                    min: -15,
-                    max: 40,
-                    inRange: { color: ['#6366f1', '#3b82f6', '#06b6d4', '#10b981', '#eab308', '#f97316', '#ef4444'] }
+                    type: 'piecewise',
+                    seriesIndex: 0,
+                    pieces: [
+                        { gte: 35, color: '#ef4444' },           // >= 35°C 红色
+                        { gte: 28, lt: 35, color: '#f97316' },   // 28-34.9°C 橙色
+                        { gte: 20, lt: 28, color: '#eab308' },   // 20-27.9°C 黄色
+                        { gte: 10, lt: 20, color: '#10b981' },   // 10-19.9°C 绿色
+                        { gte: 0, lt: 10, color: '#06b6d4' },    // 0-9.9°C 青色
+                        { gte: -10, lt: 0, color: '#3b82f6' },   // -10--0.1°C 蓝色
+                        { lt: -10, color: '#6366f1' }            // < -10°C 紫色
+                    ]
                 },
                 geo: {
                     map: 'china',
@@ -1082,13 +1094,21 @@ async function generateDayPage(dayIndex, allForecastData, forecastData) {
                 // 跳转到省份详情页
                 const provinceName = params.name;
 
-                // 查找对应的英文名称
+                // 查找对应的英文名称和no_aliyun_data标记
                 let enName = provinceName;
+                let noAliyunData = false;
                 for (const [key, value] of Object.entries(window.provinceNameMap)) {
                     if (value.fullName === provinceName || value.zh === provinceName) {
                         enName = value.en;
+                        noAliyunData = value.no_aliyun_data || false;
                         break;
                     }
+                }
+
+                // 如果有no_aliyun_data标记，不跳转
+                if (noAliyunData) {
+                    console.log('Province has no aliyun data:', provinceName);
+                    return;
                 }
 
                 // 使用英文名称小写作为文件名
@@ -1556,7 +1576,7 @@ async function generateProvincePage(provinceName, provinceConfig, dayIndex = 0) 
                     </div>
                     <div class="flex items-center gap-3">
                         <div class="text-right">
-                            <div data-role="temp-val" class="text-lg font-bold tabular-nums tracking-tight">
+                            <div data-role="temp-val" class="text-lg font-bold tabular-nums tracking-tight" style="color: ${item.temperature !== null && item.temperature !== undefined && !isNaN(item.temperature) ? getColorForTemp(item.temperature) : 'inherit'}">
                                 ${item.temperature !== null && item.temperature !== undefined && !isNaN(item.temperature) ? item.temperature + '°' : '-'}
                             </div>
                         </div>
@@ -1814,14 +1834,19 @@ async function generateProvincePage(provinceName, provinceConfig, dayIndex = 0) 
         const chartDom = document.getElementById('main-map');
         window.myMapChart = echarts.init(chartDom);
 
-        const data = ${JSON.stringify(cityData.map(item => ({
-          name: item.fullName || item.city,
-          shortName: item.city,
-          value: item.temperature,
-          itemStyle: {
-            areaColor: getColorForTemp(item.temperature)
+        // 去重：如果有多个城市的fullName相同，只保留温度最高的一个
+        const uniqueDataMap = new Map();
+        ${JSON.stringify(cityData)}.forEach(item => {
+          const name = item.fullName || item.city;
+          if (!uniqueDataMap.has(name) || item.temperature > uniqueDataMap.get(name).value) {
+            uniqueDataMap.set(name, {
+              name: name,
+              shortName: item.city,
+              value: item.temperature
+            });
           }
-        })))};
+        });
+        const data = Array.from(uniqueDataMap.values());
 
         try {
             // 加载省份地图
@@ -1847,11 +1872,17 @@ async function generateProvincePage(provinceName, provinceConfig, dayIndex = 0) 
             },
             visualMap: {
                 show: false,
-                min: -15,
-                max: 40,
-                inRange: {
-                    color: ['#6366f1', '#3b82f6', '#06b6d4', '#10b981', '#eab308', '#f97316', '#ef4444']
-                },
+                type: 'piecewise',
+                seriesIndex: 0,
+                pieces: [
+                    { gte: 35, color: '#ef4444' },           // >= 35°C 红色
+                    { gte: 28, lt: 35, color: '#f97316' },   // 28-34.9°C 橙色
+                    { gte: 20, lt: 28, color: '#eab308' },   // 20-27.9°C 黄色
+                    { gte: 10, lt: 20, color: '#10b981' },   // 10-19.9°C 绿色
+                    { gte: 0, lt: 10, color: '#06b6d4' },    // 0-9.9°C 青色
+                    { gte: -10, lt: 0, color: '#3b82f6' },   // -10--0.1°C 蓝色
+                    { lt: -10, color: '#6366f1' }            // < -10°C 紫色
+                ],
                 calculable: false
             },
             series: [{

@@ -2254,14 +2254,6 @@ module.exports = [
         "adcode": 450900
       },
       {
-        "name": "防城",
-        "full_name": "防城港市",
-        "en_name": "FangCheng",
-        "code": "jOvlz",
-        "url": "/publish/forecast/AGX/fangcheng.html",
-        "adcode": 450600
-      },
-      {
         "name": "柳州",
         "full_name": "柳州市",
         "en_name": "LiuZhou",
