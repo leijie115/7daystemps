@@ -516,7 +516,7 @@ async function generateDayPage(dayIndex, allForecastData, forecastData) {
       };
     </script>
     <script src="https://cdn.tailwindcss.com"></script>
-    <script src="https://cdn.jsdelivr.net/npm/echarts@5.4.3/dist/echarts.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/echarts/5.4.3/echarts.min.js"></script>
     <script>
       tailwind.config = {
         darkMode: 'class',
@@ -1357,7 +1357,7 @@ async function generateProvincePage(provinceName, provinceConfig, dayIndex = 0) 
       };
     </script>
     <script src="https://cdn.tailwindcss.com"></script>
-    <script src="https://cdn.jsdelivr.net/npm/echarts@5.4.3/dist/echarts.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/echarts/5.4.3/echarts.min.js"></script>
     <script>
       tailwind.config = {
         darkMode: 'class',
