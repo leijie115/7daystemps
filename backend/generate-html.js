@@ -2148,12 +2148,109 @@ async function main() {
     // 创建中文版本
     await createChineseVersions();
 
+    // 生成 sitemap.xml
+    await generateSitemap();
+
     console.log('\n✨ 所有页面生成完成！');
     console.log(`📁 输出目录: ${OUTPUT_DIR}`);
   } catch (error) {
     console.error('❌ 生成失败:', error);
     process.exit(1);
   }
+}
+
+/**
+ * 生成 sitemap.xml
+ */
+async function generateSitemap() {
+  console.log('\n🗺️  生成 sitemap.xml...');
+
+  const baseUrl = 'https://cn.7daystemps.com';
+  const today = new Date().toISOString().split('T')[0];
+
+  const urls = [];
+
+  // 主页
+  if (fs.existsSync(path.join(OUTPUT_DIR, 'index.html'))) {
+    urls.push({ loc: baseUrl + '/', priority: '1.0', changefreq: 'daily' });
+  }
+
+  // 省份页面（根目录下的）
+  const rootFiles = fs.readdirSync(OUTPUT_DIR)
+    .filter(f => f.endsWith('.html') && f !== 'index.html');
+  rootFiles.forEach(f => {
+    urls.push({ loc: `${baseUrl}/${f.replace('.html', '')}`, priority: '0.8', changefreq: 'daily' });
+  });
+
+  // 日期文件夹中的文件
+  const dateFolders = fs.readdirSync(OUTPUT_DIR)
+    .filter(f => {
+      const fullPath = path.join(OUTPUT_DIR, f);
+      return fs.statSync(fullPath).isDirectory() && /^\d{8}$/.test(f);
+    });
+
+  dateFolders.forEach(folder => {
+    // 日期主页
+    if (fs.existsSync(path.join(OUTPUT_DIR, folder, 'index.html'))) {
+      urls.push({ loc: `${baseUrl}/${folder}/`, priority: '0.7', changefreq: 'daily' });
+    }
+
+    // 日期下的省份页面
+    const filesInFolder = fs.readdirSync(path.join(OUTPUT_DIR, folder))
+      .filter(f => f.endsWith('.html') && f !== 'index.html');
+    filesInFolder.forEach(f => {
+      urls.push({ loc: `${baseUrl}/${folder}/${f.replace('.html', '')}`, priority: '0.6', changefreq: 'daily' });
+    });
+  });
+
+  // 中文版本
+  const zhCnDir = path.join(OUTPUT_DIR, 'zh-cn');
+  if (fs.existsSync(zhCnDir)) {
+    // zh-cn 主页
+    if (fs.existsSync(path.join(zhCnDir, 'index.html'))) {
+      urls.push({ loc: `${baseUrl}/zh-cn/`, priority: '0.9', changefreq: 'daily' });
+    }
+
+    // zh-cn 下的省份页面
+    const zhRootFiles = fs.readdirSync(zhCnDir)
+      .filter(f => f.endsWith('.html') && f !== 'index.html');
+    zhRootFiles.forEach(f => {
+      urls.push({ loc: `${baseUrl}/zh-cn/${f.replace('.html', '')}`, priority: '0.7', changefreq: 'daily' });
+    });
+
+    // zh-cn 下的日期文件夹
+    const zhDateFolders = fs.readdirSync(zhCnDir)
+      .filter(f => {
+        const fullPath = path.join(zhCnDir, f);
+        return fs.statSync(fullPath).isDirectory() && /^\d{8}$/.test(f);
+      });
+
+    zhDateFolders.forEach(folder => {
+      if (fs.existsSync(path.join(zhCnDir, folder, 'index.html'))) {
+        urls.push({ loc: `${baseUrl}/zh-cn/${folder}/`, priority: '0.6', changefreq: 'daily' });
+      }
+
+      const filesInFolder = fs.readdirSync(path.join(zhCnDir, folder))
+        .filter(f => f.endsWith('.html') && f !== 'index.html');
+      filesInFolder.forEach(f => {
+        urls.push({ loc: `${baseUrl}/zh-cn/${folder}/${f.replace('.html', '')}`, priority: '0.5', changefreq: 'daily' });
+      });
+    });
+  }
+
+  // 生成 XML
+  const xml = `<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+${urls.map(u => `  <url>
+    <loc>${u.loc}</loc>
+    <lastmod>${today}</lastmod>
+    <changefreq>${u.changefreq}</changefreq>
+    <priority>${u.priority}</priority>
+  </url>`).join('\n')}
+</urlset>`;
+
+  fs.writeFileSync(path.join(OUTPUT_DIR, 'sitemap.xml'), xml);
+  console.log(`✅ sitemap.xml 已生成，包含 ${urls.length} 个 URL`);
 }
 
 /**
