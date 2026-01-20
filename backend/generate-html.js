@@ -2072,12 +2072,411 @@ async function main() {
     // 生成所有省份的详情页面
     await generateAllProvincePages();
 
+    // 创建中文版本
+    await createChineseVersions();
+
     console.log('\n✨ 所有页面生成完成！');
     console.log(`📁 输出目录: ${OUTPUT_DIR}`);
   } catch (error) {
     console.error('❌ 生成失败:', error);
     process.exit(1);
   }
+}
+
+/**
+ * 后处理：为所有生成的HTML创建中文版本
+ */
+async function createChineseVersions() {
+  console.log('\n🌏 生成中文版本...');
+
+  const ZH_CN_DIR = path.join(OUTPUT_DIR, 'zh-cn');
+
+  // 确保zh-cn目录存在
+  if (!fs.existsSync(ZH_CN_DIR)) {
+    fs.mkdirSync(ZH_CN_DIR, { recursive: true });
+  }
+
+  /**
+   * 修改HTML以适应特定语言
+   */
+  function adaptHTML(htmlContent, lang, relativePath) {
+    let html = htmlContent;
+
+    // 计算语言切换链接
+    const depth = (relativePath.match(/\//g) || []).length;
+    let enUrl, zhUrl;
+
+    if (lang === 'zh') {
+      // 在zh-cn目录下，回到英文版
+      enUrl = '../'.repeat(depth + 1) + relativePath;
+      zhUrl = '#';
+    } else {
+      // 在根目录，进入zh-cn目录
+      enUrl = '#';
+      // 如果在子目录中（如20260121/sichuan.html），需要先回到根目录
+      if (depth > 0) {
+        zhUrl = '../'.repeat(depth) + 'zh-cn/' + relativePath;
+      } else {
+        zhUrl = 'zh-cn/' + relativePath;
+      }
+    }
+
+    // 1. 移除i18n配置（因为每个页面只有一种语言）
+    html = html.replace(
+      /\/\/ 多语言配置\s*window\.i18n = \{[\s\S]*?\};/,
+      `// Language: ${lang}`
+    );
+
+    // 2. 移除provinceNameMap（getProvinceName已被简化，不再需要此映射）
+    html = html.replace(
+      /\/\/ 省份名称映射（fullName -> 中英文）\s*\/\/ 使用完整的provinces\.js数据,确保覆盖所有省份\s*window\.provinceNameMap = \{[^;]*\};/,
+      `// Province names are pre-rendered in ${lang}`
+    );
+
+    // 3. 移除weatherDescMap（天气描述已经在生成时确定）
+    html = html.replace(
+      /\/\/ 天气描述中英文对照表\s*window\.weatherDescMap = \{[\s\S]*?\};/,
+      '// Weather descriptions are pre-rendered in the correct language'
+    );
+
+    // 4. 移除cityNameMap（城市名称已经在生成时确定）
+    html = html.replace(
+      /\/\/ 城市名称映射[\s\S]*?window\.cityNameMap = \{[\s\S]*?\}\);?\};/,
+      '// City names are pre-rendered in the correct language'
+    );
+    // 省份页面使用不同的注释
+    html = html.replace(
+      /\/\/ 城市名称中英文对照表\s*window\.cityNameMap = \{[^;]*\};/,
+      '// City names are pre-rendered in the correct language'
+    );
+
+    // 5. 移除翻译函数（不再需要）
+    // 这些函数可能跨越多行，需要更精确的匹配
+    html = html.replace(
+      /\/\/ 翻译天气描述\s*window\.translateWeatherDesc = function\(weatherDesc, lang\) \{[\s\S]*?\};/,
+      ''
+    );
+
+    // getProvinceName函数 - 为不同语言版本创建不同的实现
+    const provinceNameMap = lang === 'en' ? `{
+        '北京市': 'Beijing', '天津市': 'Tianjin', '河北省': 'Hebei', '山西省': 'Shanxi',
+        '内蒙古自治区': 'Inner Mongolia', '辽宁省': 'Liaoning', '吉林省': 'Jilin', '黑龙江省': 'Heilongjiang',
+        '上海市': 'Shanghai', '江苏省': 'Jiangsu', '浙江省': 'Zhejiang', '安徽省': 'Anhui',
+        '福建省': 'Fujian', '江西省': 'Jiangxi', '山东省': 'Shandong', '河南省': 'Henan',
+        '湖北省': 'Hubei', '湖南省': 'Hunan', '广东省': 'Guangdong', '广西壮族自治区': 'Guangxi',
+        '海南省': 'Hainan', '重庆市': 'Chongqing', '四川省': 'Sichuan', '贵州省': 'Guizhou',
+        '云南省': 'Yunnan', '西藏自治区': 'Tibet', '陕西省': 'Shaanxi', '甘肃省': 'Gansu',
+        '青海省': 'Qinghai', '宁夏回族自治区': 'Ningxia', '新疆维吾尔自治区': 'Xinjiang',
+        '香港特别行政区': 'Hong Kong', '澳门特别行政区': 'Macau', '台湾省': 'Taiwan',
+        '南海诸岛': 'Nanhai Islands'
+    }` : `{}`;
+
+    html = html.replace(
+      /\/\/ 获取省份显示名称（支持模糊匹配）\s*window\.getProvinceName = function\(geoName, lang\) \{[\s\S]*?return geoName;\s*\};/,
+      `// Province name translation for ${lang} version
+      const provinceNames = ${provinceNameMap};
+      window.getProvinceName = function(geoName, lang) {
+        return provinceNames[geoName] || geoName;
+      };`
+    );
+
+    // getCityName函数可能有复杂的逻辑
+    html = html.replace(
+      /\/\/ 获取城市名称（支持中英文）\s*window\.getCityName = function\(cityName, lang\) \{[\s\S]*?return cityName;\s*\};/,
+      `// City names are already in the correct language\n      window.getCityName = function(cityName, lang) {\n        return cityName;\n      };`
+    );
+    html = html.replace(
+      /\/\/ 获取城市显示名称[\s\S]*?window\.getCityName = function[^}]*\};/,
+      ''
+    );
+
+    // 6. 固定语言
+    html = html.replace(/let currentLang = 'en';/, `let currentLang = '${lang}';`);
+
+    // 7. 简化初始化函数（不再需要从localStorage读取）
+    // 主页版本
+    html = html.replace(
+      /\/\/ 初始化语言设置\s*function initLanguage\(\) \{[\s\S]*?\}/,
+      `// Language is fixed for this version\n        function initLanguage() {\n            currentLang = '${lang}';\n        }`
+    );
+    // 省份页面版本（没有注释）
+    html = html.replace(
+      /function initLanguage\(\) \{\s*const savedLang = localStorage\.getItem\('preferredLanguage'\)[\s\S]*?updateLanguageUI\(savedLang\);\s*\}/,
+      `function initLanguage() {\n        currentLang = '${lang}';\n    }`
+    );
+
+    // 8. 移除switchLanguage函数（不再需要）
+    html = html.replace(
+      /\/\/ 切换语言\s*function switchLanguage\(lang\) \{[\s\S]*?\}/,
+      '// Language switching is done via navigation'
+    );
+    // 省份页面版本
+    html = html.replace(
+      /function switchLanguage\(lang\) \{\s*if[\s\S]*?updateLanguageUI\(lang\);\s*\}/,
+      '// Language switching is done via navigation'
+    );
+
+    // 9. 移除updateLanguageUI函数（所有文本已经是正确语言）
+    // 主页版本：有"// 更新UI语言"注释
+    html = html.replace(
+      /\/\/ 更新UI语言\s*function updateLanguageUI\(lang\) \{[\s\S]*?\/\/ 重绘地图（更新省份名称和主题）[\s\S]*?updateMapOption\(window\.myMapChart\);\s*\}\s*\}/,
+      '// UI language is pre-rendered (all text is already in the correct language)'
+    );
+    // 省份页面版本：没有注释，直接是function定义
+    html = html.replace(
+      /function updateLanguageUI\(lang\) \{\s*const t = window\.i18n\[lang\];[\s\S]*?updateMapOption\(window\.myMapChart\);\s*\}\s*\}/,
+      '// UI language is pre-rendered (all text is already in the correct language)'
+    );
+
+    // 10. 替换语言切换按钮为链接
+    const langSwitcher = `<div class="flex bg-white/80 dark:bg-gray-800/80 backdrop-blur rounded-lg border border-slate-200 dark:border-gray-700 p-1">
+                                <a href="${enUrl}" class="px-2 py-0.5 text-xs font-bold rounded ${lang === 'en' ? 'bg-blue-600 text-white' : 'text-slate-500 dark:text-gray-400 hover:text-slate-900 dark:hover:text-white transition-colors'} cursor-pointer">EN</a>
+                                <a href="${zhUrl}" class="px-2 py-0.5 text-xs font-bold rounded ${lang === 'zh' ? 'bg-blue-600 text-white' : 'text-slate-500 dark:text-gray-400 hover:text-slate-900 dark:hover:text-white transition-colors'} cursor-pointer">CN</a>
+                            </div>`;
+
+    html = html.replace(
+      /<div class="flex bg-white\/80 dark:bg-gray-800\/80 backdrop-blur rounded-lg border border-slate-200 dark:border-gray-700 p-1">\s*<button onclick="switchLanguage\('en'\)"[^>]*>EN<\/button>\s*<button onclick="switchLanguage\('zh'\)"[^>]*>CN<\/button>\s*<\/div>/,
+      langSwitcher
+    );
+
+    // 11. 更新html lang属性
+    html = html.replace(/lang="en"/, lang === 'zh' ? 'lang="zh-CN"' : 'lang="en"');
+
+    // 12. 替换HTML中硬编码的英文文本为对应语言
+    if (lang === 'en') {
+      // 英文版本：省份详情页面需要添加城市名称映射表（类似index.html的做法）
+      // 提取城市数据，构建映射表
+      const cityDataMatch = html.match(/const uniqueDataMap = new Map\(\);\s*(\[.*?\])\.forEach/s);
+      if (cityDataMatch) {
+        try {
+          const cityDataStr = cityDataMatch[1];
+          const cityData = JSON.parse(cityDataStr);
+
+          // 构建城市名称映射表
+          const cityNameMap = {};
+          cityData.forEach(city => {
+            const zhName = city.fullName || city.city;
+            const enName = city.en_name || city.city;
+            cityNameMap[zhName] = enName;
+          });
+
+          // 在getCityName函数之前插入城市名称映射表
+          const cityMapStr = `// City name mapping for en version
+      const cityNameMap = ${JSON.stringify(cityNameMap)};
+      `;
+
+          html = html.replace(
+            /\/\/ City names are already in the correct language\s*window\.getCityName/,
+            `${cityMapStr}window.getCityName`
+          );
+
+          // 修改getCityName函数使其使用映射表
+          html = html.replace(
+            /window\.getCityName = function\(cityName, lang\) \{\s*return cityName;\s*\};/,
+            `window.getCityName = function(cityName, lang) {
+        return cityNameMap[cityName] || cityName;
+      };`
+          );
+        } catch (e) {
+          console.error('解析城市数据失败:', e);
+        }
+      }
+    }
+
+    if (lang === 'zh') {
+      // 首先提取并替换省份页面中的省份名称（从data-province-zh属性中获取）
+      const provinceMatch = html.match(/data-province-zh="([^"]*)"/);
+      if (provinceMatch) {
+        const provinceChinese = provinceMatch[1];
+        const provinceEnglishMatch = html.match(/data-province-en="([^"]*)"/);
+        if (provinceEnglishMatch) {
+          const provinceEnglish = provinceEnglishMatch[1];
+          // 替换meta和title中的英文省份名称
+          html = html.replace(new RegExp(provinceEnglish, 'g'), provinceChinese);
+        }
+      }
+
+      // 替换标题和描述
+      html = html.replace(/China Temperature Rankings/g, '中国气温排行榜');
+      html = html.replace(/Real-time Temperature Data/g, '实时气温数据');
+      html = html.replace(/China Temp Rankings/g, '中国气温排行');
+      html = html.replace(/National Rankings/g, '全国排行');
+      html = html.replace(/Regions/g, '地区');
+      html = html.replace(/Temperature data across China/g, '全国各地气温数据');
+      html = html.replace(/data across China/g, '全国数据');
+
+      // 替换按钮文本（需要匹配整个词，包括前后的空白）
+      html = html.replace(/>\s*Hot\s*</g, '>高温<');
+      html = html.replace(/>\s*Cold\s*</g, '>低温<');
+      html = html.replace(/>\s*Wind\s*</g, '>风速<');
+
+      // 替换日期标签（匹配整个词，包括前后空白）
+      html = html.replace(/>\s*Today\s*</g, '>今天<');
+      html = html.replace(/>\s*Mon\s*</g, '>周一<');
+      html = html.replace(/>\s*Tue\s*</g, '>周二<');
+      html = html.replace(/>\s*Wed\s*</g, '>周三<');
+      html = html.replace(/>\s*Thu\s*</g, '>周四<');
+      html = html.replace(/>\s*Fri\s*</g, '>周五<');
+      html = html.replace(/>\s*Sat\s*</g, '>周六<');
+      html = html.replace(/>\s*Sun\s*</g, '>周日<');
+
+      // 替换温度标签
+      html = html.replace(/Temp Scale/g, '温度标尺');
+      html = html.replace(/Temperature/g, '温度');
+
+      // 替换排行榜中的省份名称（使用data-province-zh属性）
+      html = html.replace(
+        /(<h3[^>]*data-province-zh="([^"]*)"[^>]*data-province-en="[^"]*"[^>]*>)[^<]*(.*?<\/h3>)/g,
+        '$1$2$3'
+      );
+
+      // 替换排行榜中的天气描述（使用data-weather-zh属性）
+      html = html.replace(
+        /(<span[^>]*class="weather-desc"[^>]*data-weather-zh="([^"]*)"[^>]*data-weather-en="[^"]*"[^>]*>)[^<]*(.*?<\/span>)/g,
+        '$1$2$3'
+      );
+
+      // 省份详情页面：替换页面标题和meta描述中的英文
+      html = html.replace(/Temperature Rankings/g, '温度排行榜');
+      html = html.replace(/City temperature data/g, '城市气温数据');
+      html = html.replace(/temperature,weather,cities/g, '温度,天气,城市');
+
+      // 省份详情页面：替换主标题（使用data-province-zh属性）
+      html = html.replace(
+        /(<h1[^>]*data-province-zh="([^"]*)"[^>]*data-province-en="[^"]*"[^>]*>)[^<]*(.*?<\/h1>)/g,
+        '$1$2$3'
+      );
+
+      // 省份详情页面：替换城市名称（使用data-city-zh属性）
+      html = html.replace(
+        /(<[^>]*data-city-zh="([^"]*)"[^>]*data-city-en="[^"]*"[^>]*>)[^<]*(.*?<\/[^>]+>)/g,
+        '$1$2$3'
+      );
+
+      // 替换其他常见文本
+      html = html.replace(/Rankings/g, '排行榜');
+      html = html.replace(/Wind/g, '风速');
+    }
+
+    // 13. 移除initLanguage()调用中的updateLanguageUI
+    html = html.replace(
+      /\/\/ 初始化语言\s*initLanguage\(\);/,
+      '// Language is pre-rendered'
+    );
+
+    // 13. 移除地图点击事件中对provinceNameMap的循环查找，并修复点击处理逻辑
+    // 需要匹配整个点击处理逻辑，包括后续使用enName和noAliyunData的代码
+    html = html.replace(
+      /\/\/ 查找对应的英文名称和no_aliyun_data标记[\s\S]*?for \(const \[key, value\] of Object\.entries\(window\.provinceNameMap\)\)[\s\S]*?\}\s*\/\/ 如果有no_aliyun_data标记，不跳转[\s\S]*?\/\/ 使用英文名称小写作为文件名\s*const fileName = enName\.toLowerCase[\s\S]*?window\.location\.href = fileName;/,
+      `// Province click - use province name mapping
+                const provinceFileNames = {
+                    '北京': 'beijing', '北京市': 'beijing',
+                    '天津': 'tianjin', '天津市': 'tianjin',
+                    '河北': 'hebei', '河北省': 'hebei',
+                    '山西': 'shanxi', '山西省': 'shanxi',
+                    '内蒙古': 'neimenggu', '内蒙古自治区': 'neimenggu',
+                    '辽宁': 'liaoning', '辽宁省': 'liaoning',
+                    '吉林': 'jilin', '吉林省': 'jilin',
+                    '黑龙江': 'heilongjiang', '黑龙江省': 'heilongjiang',
+                    '上海': 'shanghai', '上海市': 'shanghai',
+                    '江苏': 'jiangsu', '江苏省': 'jiangsu',
+                    '浙江': 'zhejiang', '浙江省': 'zhejiang',
+                    '安徽': 'anhui', '安徽省': 'anhui',
+                    '福建': 'fujian', '福建省': 'fujian',
+                    '江西': 'jiangxi', '江西省': 'jiangxi',
+                    '山东': 'shandong', '山东省': 'shandong',
+                    '河南': 'henan', '河南省': 'henan',
+                    '湖北': 'hubei', '湖北省': 'hubei',
+                    '湖南': 'hunan', '湖南省': 'hunan',
+                    '广东': 'guangdong', '广东省': 'guangdong',
+                    '广西': 'guangxi', '广西壮族自治区': 'guangxi',
+                    '海南': 'hainan', '海南省': 'hainan',
+                    '重庆': 'chongqing', '重庆市': 'chongqing',
+                    '四川': 'sichuan', '四川省': 'sichuan',
+                    '贵州': 'guizhou', '贵州省': 'guizhou',
+                    '云南': 'yunnan', '云南省': 'yunnan',
+                    '西藏': 'xizang', '西藏自治区': 'xizang',
+                    '陕西': 'shaanxi', '陕西省': 'shaanxi',
+                    '甘肃': 'gansu', '甘肃省': 'gansu',
+                    '青海': 'qinghai', '青海省': 'qinghai',
+                    '宁夏': 'ningxia', '宁夏回族自治区': 'ningxia',
+                    '新疆': 'xinjiang', '新疆维吾尔自治区': 'xinjiang',
+                    '香港': 'hongkong', '香港特别行政区': 'hongkong',
+                    '澳门': 'aomen', '澳门特别行政区': 'aomen',
+                    '台湾': 'taiwan', '台湾省': 'taiwan'
+                };
+
+                const fileNameBase = provinceFileNames[provinceName] || provinceName.toLowerCase();
+                window.location.href = fileNameBase + '.html';`
+    );
+
+    return html;
+  }
+
+  /**
+   * 处理单个HTML文件
+   */
+  function processFile(relativePath) {
+    const sourcePath = path.join(OUTPUT_DIR, relativePath);
+
+    if (!fs.existsSync(sourcePath)) {
+      return;
+    }
+
+    const htmlContent = fs.readFileSync(sourcePath, 'utf8');
+
+    // 更新英文版本（原地）
+    const enContent = adaptHTML(htmlContent, 'en', relativePath);
+    fs.writeFileSync(sourcePath, enContent, 'utf8');
+
+    // 创建中文版本
+    const zhPath = path.join(ZH_CN_DIR, relativePath);
+    const zhDir = path.dirname(zhPath);
+
+    if (!fs.existsSync(zhDir)) {
+      fs.mkdirSync(zhDir, { recursive: true });
+    }
+
+    const zhContent = adaptHTML(htmlContent, 'zh', relativePath);
+    fs.writeFileSync(zhPath, zhContent, 'utf8');
+
+    console.log(`  ✅ ${relativePath}`);
+  }
+
+  // 收集所有HTML文件
+  const files = [];
+
+  // 主页
+  if (fs.existsSync(path.join(OUTPUT_DIR, 'index.html'))) {
+    files.push('index.html');
+  }
+
+  // 省份页面（根目录下的）
+  const rootFiles = fs.readdirSync(OUTPUT_DIR)
+    .filter(f => f.endsWith('.html') && f !== 'index.html');
+  files.push(...rootFiles);
+
+  // 日期文件夹中的文件
+  const dateFolders = fs.readdirSync(OUTPUT_DIR)
+    .filter(f => {
+      const fullPath = path.join(OUTPUT_DIR, f);
+      return fs.statSync(fullPath).isDirectory() && /^\d{8}$/.test(f);
+    });
+
+  dateFolders.forEach(folder => {
+    const folderPath = path.join(OUTPUT_DIR, folder);
+    const filesInFolder = fs.readdirSync(folderPath)
+      .filter(f => f.endsWith('.html'));
+
+    filesInFolder.forEach(f => {
+      files.push(`${folder}/${f}`);
+    });
+  });
+
+  // 处理每个文件
+  files.forEach(file => processFile(file));
+
+  console.log(`✅ 完成！共处理 ${files.length} 个文件`);
 }
 
 main();

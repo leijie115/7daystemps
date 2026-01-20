@@ -7,63 +7,16 @@
     <meta name="keywords" content="China temperature,temperature rankings,weather,temperature map,real-time temperature,2026年1月17日">
     <title>China Temperature Rankings - Real-time Temperature Data - 2026年1月17日</title>
     <script>
-      // 多语言配置
-      window.i18n = {"zh":{"title":"中国气温排行榜 - 全国实时气温数据","description":"中国气温排行榜 - {date}全国各省市气温数据","keywords":"中国气温,温度排行,天气,气温地图,实时温度","mainHeading":"中国气温排行","tempScale":"Temp Scale","rankingTitle":"全国 排行","regions":"地区","sortHot":"高温","sortCold":"低温","wind":"风速","unknown":"未知","today":"今天","monday":"周一","tuesday":"周二","wednesday":"周三","thursday":"周四","friday":"周五","saturday":"周六","sunday":"周日","tempUnit":"°C","windUnit":"m/s"},"en":{"title":"China Temperature Rankings - Real-time Temperature Data","description":"China Temperature Rankings - {date} Temperature data of provinces and cities across China","keywords":"China temperature,temperature rankings,weather,temperature map,real-time temperature","mainHeading":"China Temp Rankings","tempScale":"Temp Scale","rankingTitle":"National Rankings","regions":"Regions","sortHot":"Hot","sortCold":"Cold","wind":"Wind","unknown":"Unknown","today":"Today","monday":"Mon","tuesday":"Tue","wednesday":"Wed","thursday":"Thu","friday":"Fri","saturday":"Sat","sunday":"Sun","tempUnit":"°C","windUnit":"m/s"}};
+      // Language: en
 
-      // 省份名称映射（fullName -> 中英文）
-      // 使用完整的provinces.js数据,确保覆盖所有省份
+      // Province name mapping for en version
       window.provinceNameMap = {"undefined":{"zh":"台湾省","en":"Taiwan"},"北京市":{"zh":"北京市","en":"Beijing","fullName":"北京市"},"北京":{"zh":"北京市","en":"Beijing","fullName":"北京市"},"天津市":{"zh":"天津市","en":"Tianjin","fullName":"天津市"},"天津":{"zh":"天津市","en":"Tianjin","fullName":"天津市"},"河北省":{"zh":"河北省","en":"Hebei","fullName":"河北省"},"河北":{"zh":"河北省","en":"Hebei","fullName":"河北省"},"山西省":{"zh":"山西省","en":"Shanxi","fullName":"山西省"},"山西":{"zh":"山西省","en":"Shanxi","fullName":"山西省"},"内蒙古自治区":{"zh":"内蒙古自治区","en":"Neimenggu","fullName":"内蒙古自治区"},"辽宁省":{"zh":"辽宁省","en":"Liaoning","fullName":"辽宁省"},"辽宁":{"zh":"辽宁省","en":"Liaoning","fullName":"辽宁省"},"吉林省":{"zh":"吉林省","en":"Jilin","fullName":"吉林省"},"吉林":{"zh":"吉林省","en":"Jilin","fullName":"吉林省"},"黑龙江省":{"zh":"黑龙江省","en":"Heilongjiang","fullName":"黑龙江省"},"黑龙江":{"zh":"黑龙江省","en":"Heilongjiang","fullName":"黑龙江省"},"上海市":{"zh":"上海市","en":"Shanghai","fullName":"上海市"},"上海":{"zh":"上海市","en":"Shanghai","fullName":"上海市"},"江苏省":{"zh":"江苏省","en":"Jiangsu","fullName":"江苏省"},"江苏":{"zh":"江苏省","en":"Jiangsu","fullName":"江苏省"},"浙江省":{"zh":"浙江省","en":"Zhejiang","fullName":"浙江省"},"浙江":{"zh":"浙江省","en":"Zhejiang","fullName":"浙江省"},"安徽省":{"zh":"安徽省","en":"Anhui","fullName":"安徽省"},"安徽":{"zh":"安徽省","en":"Anhui","fullName":"安徽省"},"福建省":{"zh":"福建省","en":"Fujian","fullName":"福建省"},"福建":{"zh":"福建省","en":"Fujian","fullName":"福建省"},"江西省":{"zh":"江西省","en":"Jiangxi","fullName":"江西省"},"江西":{"zh":"江西省","en":"Jiangxi","fullName":"江西省"},"山东省":{"zh":"山东省","en":"Shandong","fullName":"山东省"},"山东":{"zh":"山东省","en":"Shandong","fullName":"山东省"},"河南省":{"zh":"河南省","en":"Henan","fullName":"河南省"},"河南":{"zh":"河南省","en":"Henan","fullName":"河南省"},"湖北省":{"zh":"湖北省","en":"Hubei","fullName":"湖北省"},"湖北":{"zh":"湖北省","en":"Hubei","fullName":"湖北省"},"湖南省":{"zh":"湖南省","en":"Hunan","fullName":"湖南省"},"湖南":{"zh":"湖南省","en":"Hunan","fullName":"湖南省"},"广东省":{"zh":"广东省","en":"Guangdong","fullName":"广东省"},"广东":{"zh":"广东省","en":"Guangdong","fullName":"广东省"},"广西壮族自治区":{"zh":"广西壮族自治区","en":"Guangxi","fullName":"广西壮族自治区"},"海南省":{"zh":"海南省","en":"Hainan","fullName":"海南省"},"海南":{"zh":"海南省","en":"Hainan","fullName":"海南省"},"重庆市":{"zh":"重庆市","en":"Chongqing","fullName":"重庆市"},"重庆":{"zh":"重庆市","en":"Chongqing","fullName":"重庆市"},"四川省":{"zh":"四川省","en":"Sichuan","fullName":"四川省"},"四川":{"zh":"四川省","en":"Sichuan","fullName":"四川省"},"贵州省":{"zh":"贵州省","en":"Guizhou","fullName":"贵州省"},"贵州":{"zh":"贵州省","en":"Guizhou","fullName":"贵州省"},"云南省":{"zh":"云南省","en":"Yunnan","fullName":"云南省"},"云南":{"zh":"云南省","en":"Yunnan","fullName":"云南省"},"西藏自治区":{"zh":"西藏自治区","en":"Xizang","fullName":"西藏自治区"},"陕西省":{"zh":"陕西省","en":"Shaanxi","fullName":"陕西省"},"陕西":{"zh":"陕西省","en":"Shaanxi","fullName":"陕西省"},"甘肃省":{"zh":"甘肃省","en":"Gansu","fullName":"甘肃省"},"甘肃":{"zh":"甘肃省","en":"Gansu","fullName":"甘肃省"},"青海省":{"zh":"青海省","en":"Qinghai","fullName":"青海省"},"青海":{"zh":"青海省","en":"Qinghai","fullName":"青海省"},"宁夏回族自治区":{"zh":"宁夏回族自治区","en":"Ningxia","fullName":"宁夏回族自治区"},"新疆维吾尔自治区":{"zh":"新疆维吾尔自治区","en":"Xinjiang","fullName":"新疆维吾尔自治区"},"香港特别行政区":{"zh":"香港特别行政区","en":"Hongkong","fullName":"香港特别行政区"},"澳门特别行政区":{"zh":"澳门特别行政区","en":"Aomen","fullName":"澳门特别行政区"},"台湾省":{"zh":"台湾省","en":"Taiwan","fullName":"台湾省"},"台湾":{"zh":"台湾省","en":"Taiwan","fullName":"台湾省"},"南海诸岛":{"zh":"南海诸岛","en":"Nanhai Islands","fullName":"南海诸岛"}};
 
-      // 天气描述中英文对照表
-      window.weatherDescMap = {"晴":"Sunny","多云":"Cloudy","阴":"Overcast","阵雨":"Shower","雷阵雨":"Thunderstorm","雷阵雨伴有冰雹":"Thunderstorm with Hail","雨夹雪":"Sleet","小雨":"Light Rain","中雨":"Moderate Rain","大雨":"Heavy Rain","暴雨":"Storm","大暴雨":"Heavy Storm","特大暴雨":"Severe Storm","阵雪":"Snow Shower","小雪":"Light Snow","中雪":"Moderate Snow","大雪":"Heavy Snow","暴雪":"Snowstorm","雾":"Fog","冻雨":"Freezing Rain","沙尘暴":"Sandstorm","小雨-中雨":"Light to Moderate Rain","中雨-大雨":"Moderate to Heavy Rain","大雨-暴雨":"Heavy Rain to Storm","暴雨-大暴雨":"Storm to Heavy Storm","大暴雨-特大暴雨":"Heavy Storm to Severe Storm","小雪-中雪":"Light to Moderate Snow","中雪-大雪":"Moderate to Heavy Snow","大雪-暴雪":"Heavy Snow to Snowstorm","浮尘":"Dust","扬沙":"Sand","强沙尘暴":"Severe Sandstorm","霾":"Haze","未知":"Unknown"};
+      // Weather descriptions are pre-rendered in the correct language
 
-      // 翻译天气描述
-      window.translateWeatherDesc = function(weatherDesc, lang) {
-        if (lang === 'zh') {
-          return weatherDesc;
-        }
-        return window.weatherDescMap[weatherDesc] || weatherDesc;
-      };
+      
 
-      // 获取省份显示名称（支持模糊匹配）
-      window.getProvinceName = function(geoName, lang) {
-        // 精确匹配
-        if (window.provinceNameMap[geoName]) {
-          return window.provinceNameMap[geoName][lang];
-        }
-
-        // 模糊匹配：移除常见后缀
-        const cleanName = geoName.replace(/(省|市|自治区|特别行政区|壮族|回族|维吾尔|蒙古族)$/g, '');
-
-        // 尝试查找匹配的省份
-        for (const [key, value] of Object.entries(window.provinceNameMap)) {
-          const cleanKey = key.replace(/(省|市|自治区|特别行政区|壮族|回族|维吾尔|蒙古族)$/g, '');
-
-          // 精确匹配清理后的名称
-          if (cleanKey === cleanName) {
-            return value[lang];
-          }
-
-          // 包含匹配（两个方向都试）
-          if (cleanKey.includes(cleanName) && cleanName.length >= 2) {
-            return value[lang];
-          }
-          if (cleanName.includes(cleanKey) && cleanKey.length >= 2) {
-            return value[lang];
-          }
-        }
-
-        // 如果还是找不到,尝试更激进的匹配
-        // 处理特殊情况: "内蒙古" vs "内蒙古自治区"
-        const specialCases = {
-          '内蒙古': '内蒙古自治区',
-          '广西': '广西壮族自治区',
-          '西藏': '西藏自治区',
-          '宁夏': '宁夏回族自治区',
-          '新疆': '新疆维吾尔自治区',
-          '香港': '香港特别行政区',
-          '澳门': '澳门特别行政区'
-        };
+      
 
         const normalized = specialCases[cleanName] || cleanName;
         if (window.provinceNameMap[normalized]) {
@@ -153,8 +106,8 @@
 
                             <!-- 语言切换 -->
                             <div class="flex bg-white/80 dark:bg-gray-800/80 backdrop-blur rounded-lg border border-slate-200 dark:border-gray-700 p-1">
-                                <button onclick="switchLanguage('en')" id="lang-en" class="px-2 py-0.5 text-xs font-bold rounded bg-blue-600 text-white cursor-pointer">EN</button>
-                                <button onclick="switchLanguage('zh')" id="lang-zh" class="px-2 py-0.5 text-xs font-bold rounded text-slate-500 dark:text-gray-400 hover:text-slate-900 dark:hover:text-white transition-colors cursor-pointer">CN</button>
+                                <a href="#" class="px-2 py-0.5 text-xs font-bold rounded bg-blue-600 text-white cursor-pointer">EN</a>
+                                <a href="zh-cn/20260117/index.html" class="px-2 py-0.5 text-xs font-bold rounded text-slate-500 dark:text-gray-400 hover:text-slate-900 dark:hover:text-white transition-colors cursor-pointer">CN</a>
                             </div>
                         </div>
 
@@ -4641,39 +4594,14 @@
         let currentLang = 'en'; // 'en' | 'zh' - 默认英文
         let tempMapData = {}; // 全局温度映射
 
-        // 初始化语言设置
+        // Language is fixed for this version
         function initLanguage() {
-            const savedLang = localStorage.getItem('preferredLanguage') || 'en';
-            currentLang = savedLang;
-            updateLanguageUI(savedLang);
+            currentLang = 'en';
         }
 
-        // 切换语言
-        function switchLanguage(lang) {
-            if (lang === currentLang) return;
+        // Language switching is done via navigation
 
-            currentLang = lang;
-            localStorage.setItem('preferredLanguage', lang);
-            updateLanguageUI(lang);
-        }
-
-        // 更新UI语言
-        function updateLanguageUI(lang) {
-            const t = window.i18n[lang];
-
-            // 更新HTML lang属性
-            document.documentElement.lang = lang === 'zh' ? 'zh-CN' : 'en';
-
-            // 更新按钮状态
-            const langEn = document.getElementById('lang-en');
-            const langZh = document.getElementById('lang-zh');
-            const activeClass = 'px-2 py-0.5 text-xs font-bold rounded bg-blue-600 text-white cursor-pointer';
-            const inactiveClass = 'px-2 py-0.5 text-xs font-bold rounded text-slate-500 dark:text-gray-400 hover:text-slate-900 dark:hover:text-white transition-colors cursor-pointer';
-
-            if (lang === 'en') {
-                langEn.className = activeClass;
-                langZh.className = inactiveClass;
-            } else {
+        // UI language is pre-rendered else {
                 langEn.className = inactiveClass;
                 langZh.className = activeClass;
             }
@@ -4885,7 +4813,7 @@
             window.myMapChart = echarts.init(chartDom);
 
             // 省份数据 - 直接使用provinces.js中的full_name
-            const data = [{"name":"海南省","value":29.1},{"name":"台湾省","value":28.8},{"name":"云南省","value":26.9},{"name":"广东省","value":26.8},{"name":"广西壮族自治区","value":25.8},{"name":"福建省","value":24.8},{"name":"江西省","value":23.8},{"name":"香港特别行政区","value":23.8},{"name":"澳门特别行政区","value":23.1},{"name":"浙江省","value":22.5},{"name":"四川省","value":22.4},{"name":"湖北省","value":20.2},{"name":"湖南省","value":18.8},{"name":"重庆市","value":18.5},{"name":"贵州省","value":18.2},{"name":"上海市","value":16.1},{"name":"甘肃省","value":15.8},{"name":"江苏省","value":15.3},{"name":"宁夏回族自治区","value":15.3},{"name":"安徽省","value":14.8},{"name":"陕西省","value":13.9},{"name":"西藏自治区","value":12.9},{"name":"新疆维吾尔自治区","value":12.2},{"name":"青海省","value":12},{"name":"山西省","value":9.9},{"name":"河南省","value":9.1},{"name":"山东省","value":6.9},{"name":"内蒙古自治区","value":5.8},{"name":"河北省","value":1.3},{"name":"天津市","value":-1.2},{"name":"北京市","value":-2.8},{"name":"辽宁省","value":-4.2},{"name":"吉林省","value":-12.2},{"name":"黑龙江省","value":-13.2}];
+            const data = [{"name":"Hainan","value":29.1},{"name":"Taiwan","value":28.8},{"name":"Yunnan","value":26.9},{"name":"Guangdong","value":26.8},{"name":"Guangxi","value":25.8},{"name":"Fujian","value":24.8},{"name":"Jiangxi","value":23.8},{"name":"Hong Kong","value":23.8},{"name":"Macau","value":23.1},{"name":"Zhejiang","value":22.5},{"name":"Sichuan","value":22.4},{"name":"Hubei","value":20.2},{"name":"Hunan","value":18.8},{"name":"Chongqing","value":18.5},{"name":"Guizhou","value":18.2},{"name":"Shanghai","value":16.1},{"name":"Gansu","value":15.8},{"name":"Jiangsu","value":15.3},{"name":"Ningxia","value":15.3},{"name":"Anhui","value":14.8},{"name":"Shaanxi","value":13.9},{"name":"Tibet","value":12.9},{"name":"Xinjiang","value":12.2},{"name":"Qinghai","value":12},{"name":"Shanxi","value":9.9},{"name":"Henan","value":9.1},{"name":"Shandong","value":6.9},{"name":"Inner Mongolia","value":5.8},{"name":"Hebei","value":1.3},{"name":"Tianjin","value":-1.2},{"name":"Beijing","value":-2.8},{"name":"Liaoning","value":-4.2},{"name":"Jilin","value":-12.2},{"name":"Heilongjiang","value":-13.2}];
 
             try {
                 const res = await fetch('https://geo.datav.aliyun.com/areas_v3/bound/100000_full.json');
@@ -5004,8 +4932,7 @@
 
         // 页面加载完成后初始化
         document.addEventListener('DOMContentLoaded', () => {
-            // 初始化语言
-            initLanguage();
+            // Language is pre-rendered
 
             // 初始化主题图标显示
             if(!document.documentElement.classList.contains('dark')) {

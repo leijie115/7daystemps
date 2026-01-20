@@ -7,44 +7,16 @@
     <meta name="keywords" content="Ningxia,宁夏回族自治区,temperature,weather,cities">
     <title>Ningxia Temperature Rankings</title>
     <script>
-      // 多语言配置
-      window.i18n = {"zh":{"title":"中国气温排行榜 - 全国实时气温数据","description":"中国气温排行榜 - {date}全国各省市气温数据","keywords":"中国气温,温度排行,天气,气温地图,实时温度","mainHeading":"中国气温排行","tempScale":"Temp Scale","rankingTitle":"全国 排行","regions":"地区","sortHot":"高温","sortCold":"低温","wind":"风速","unknown":"未知","today":"今天","monday":"周一","tuesday":"周二","wednesday":"周三","thursday":"周四","friday":"周五","saturday":"周六","sunday":"周日","tempUnit":"°C","windUnit":"m/s"},"en":{"title":"China Temperature Rankings - Real-time Temperature Data","description":"China Temperature Rankings - {date} Temperature data of provinces and cities across China","keywords":"China temperature,temperature rankings,weather,temperature map,real-time temperature","mainHeading":"China Temp Rankings","tempScale":"Temp Scale","rankingTitle":"National Rankings","regions":"Regions","sortHot":"Hot","sortCold":"Cold","wind":"Wind","unknown":"Unknown","today":"Today","monday":"Mon","tuesday":"Tue","wednesday":"Wed","thursday":"Thu","friday":"Fri","saturday":"Sat","sunday":"Sun","tempUnit":"°C","windUnit":"m/s"}};
+      // Language: en
 
-      // 天气描述中英文对照表
-      window.weatherDescMap = {"晴":"Sunny","多云":"Cloudy","阴":"Overcast","阵雨":"Shower","雷阵雨":"Thunderstorm","雷阵雨伴有冰雹":"Thunderstorm with Hail","雨夹雪":"Sleet","小雨":"Light Rain","中雨":"Moderate Rain","大雨":"Heavy Rain","暴雨":"Storm","大暴雨":"Heavy Storm","特大暴雨":"Severe Storm","阵雪":"Snow Shower","小雪":"Light Snow","中雪":"Moderate Snow","大雪":"Heavy Snow","暴雪":"Snowstorm","雾":"Fog","冻雨":"Freezing Rain","沙尘暴":"Sandstorm","小雨-中雨":"Light to Moderate Rain","中雨-大雨":"Moderate to Heavy Rain","大雨-暴雨":"Heavy Rain to Storm","暴雨-大暴雨":"Storm to Heavy Storm","大暴雨-特大暴雨":"Heavy Storm to Severe Storm","小雪-中雪":"Light to Moderate Snow","中雪-大雪":"Moderate to Heavy Snow","大雪-暴雪":"Heavy Snow to Snowstorm","浮尘":"Dust","扬沙":"Sand","强沙尘暴":"Severe Sandstorm","霾":"Haze","未知":"Unknown"};
+      // Weather descriptions are pre-rendered in the correct language
 
-      // 城市名称中英文对照表
-      window.cityNameMap = {"中卫":{"zh":"中卫市","en":"ZhongWei"},"中卫市":{"zh":"中卫市","en":"ZhongWei"},"吴忠":{"zh":"吴忠市","en":"WuZhong"},"吴忠市":{"zh":"吴忠市","en":"WuZhong"},"固原":{"zh":"固原市","en":"GuYuan"},"固原市":{"zh":"固原市","en":"GuYuan"},"银川":{"zh":"银川市","en":"YinChuan"},"银川市":{"zh":"银川市","en":"YinChuan"},"石嘴山":{"zh":"石嘴山市","en":"ShiZuiShan"},"石嘴山市":{"zh":"石嘴山市","en":"ShiZuiShan"}};
+      // City names are pre-rendered in the correct language
 
-      // 翻译天气描述
-      window.translateWeatherDesc = function(weatherDesc, lang) {
-        if (lang === 'zh') {
-          return weatherDesc;
-        }
-        return window.weatherDescMap[weatherDesc] || weatherDesc;
-      };
+      
 
-      // 获取城市名称（支持中英文）
+      // City names are already in the correct language
       window.getCityName = function(cityName, lang) {
-        if (!cityName) return '';
-
-        // 直接匹配
-        if (window.cityNameMap[cityName]) {
-          return window.cityNameMap[cityName][lang];
-        }
-
-        // 尝试去掉常见后缀再匹配
-        const suffixes = ['市', '区', '县', '自治州', '地区', '盟'];
-        for (const suffix of suffixes) {
-          if (cityName.endsWith(suffix)) {
-            const baseName = cityName.slice(0, -suffix.length);
-            if (window.cityNameMap[baseName]) {
-              return window.cityNameMap[baseName][lang];
-            }
-          }
-        }
-
-        // 如果没有匹配，返回原名称
         return cityName;
       };
     </script>
@@ -128,9 +100,9 @@
 
                         <!-- 语言切换 -->
                         <div class="flex bg-white/80 dark:bg-gray-800/80 backdrop-blur rounded-lg border border-slate-200 dark:border-gray-700 p-1">
-                            <button onclick="switchLanguage('en')" id="lang-en" class="px-2 py-0.5 text-xs font-bold rounded bg-blue-600 text-white cursor-pointer">EN</button>
-                            <button onclick="switchLanguage('zh')" id="lang-zh" class="px-2 py-0.5 text-xs font-bold rounded text-slate-500 dark:text-gray-400 hover:text-slate-900 dark:hover:text-white transition-colors cursor-pointer">CN</button>
-                        </div>
+                                <a href="#" class="px-2 py-0.5 text-xs font-bold rounded bg-blue-600 text-white cursor-pointer">EN</a>
+                                <a href="zh-cn/20260117/ningxia.html" class="px-2 py-0.5 text-xs font-bold rounded text-slate-500 dark:text-gray-400 hover:text-slate-900 dark:hover:text-white transition-colors cursor-pointer">CN</a>
+                            </div>
                     </div>
 
                     <!-- 温度图例 -->
@@ -899,71 +871,13 @@
     let tempMapData = {};
 
     function initLanguage() {
-        const savedLang = localStorage.getItem('preferredLanguage') || 'en';
-        currentLang = savedLang;
-        updateLanguageUI(savedLang);
-    }
-
-    function switchLanguage(lang) {
-        if (lang === currentLang) return;
-        currentLang = lang;
-        localStorage.setItem('preferredLanguage', lang);
-        updateLanguageUI(lang);
-    }
-
-    function updateLanguageUI(lang) {
-        const t = window.i18n[lang];
-        document.documentElement.lang = lang === 'zh' ? 'zh-CN' : 'en';
-
-        const langEn = document.getElementById('lang-en');
-        const langZh = document.getElementById('lang-zh');
-        const activeClass = 'px-2 py-0.5 text-xs font-bold rounded bg-blue-600 text-white cursor-pointer';
-        const inactiveClass = 'px-2 py-0.5 text-xs font-bold rounded text-slate-500 dark:text-gray-400 hover:text-slate-900 dark:hover:text-white transition-colors cursor-pointer';
-
-        if (lang === 'en') {
-            langEn.className = activeClass;
-            langZh.className = inactiveClass;
-        } else {
-            langEn.className = inactiveClass;
-            langZh.className = activeClass;
+            currentLang = 'en';
+            updateLanguageUI('en');
         }
 
-        document.getElementById('temp-scale-label').textContent = t.tempScale;
-        document.getElementById('btn-hot').textContent = t.sortHot;
-        document.getElementById('btn-cold').textContent = t.sortCold;
+    // Language switching is done via navigation
 
-        // 更新省份标题
-        const mainHeading = document.getElementById('main-heading');
-        if (mainHeading && mainHeading.dataset.provinceZh && mainHeading.dataset.provinceEn) {
-            const provinceName = lang === 'zh' ? mainHeading.dataset.provinceZh : mainHeading.dataset.provinceEn;
-            mainHeading.textContent = provinceName;
-            // 更新页面标题
-            document.title = provinceName + (lang === 'zh' ? ' 气温排行' : ' Temperature Rankings');
-        }
-
-        document.querySelectorAll('.weather-desc').forEach(el => {
-            el.textContent = lang === 'zh' ? el.dataset.weatherZh : el.dataset.weatherEn;
-        });
-
-        document.querySelectorAll('.wind-label').forEach(el => {
-            el.textContent = t.wind;
-        });
-
-        document.querySelectorAll('.forecast-day-label').forEach(el => {
-            el.textContent = lang === 'zh' ? el.dataset.dayZh : el.dataset.dayEn;
-        });
-
-        // 更新城市标题
-        document.querySelectorAll('[data-role="title"]').forEach(el => {
-            if (el.dataset.cityZh && el.dataset.cityEn) {
-                el.textContent = lang === 'zh' ? el.dataset.cityZh : el.dataset.cityEn;
-            }
-        });
-
-        if (window.myMapChart) {
-            updateMapOption(window.myMapChart);
-        }
-    }
+    // UI language is pre-rendered (all text is already in the correct language)
 
     const RANK_STYLES = {
         1: {
