@@ -6,7 +6,64 @@
 const fs = require('fs');
 const path = require('path');
 const Influx = require('influx');
+const https = require('https');
 require('dotenv').config();
+
+const GEO_DIR = path.join(__dirname, '../website/geo');
+
+/**
+ * 下载阿里云地理数据到本地
+ * @param {number} adcode - 地区代码，如 100000（全国）或 110000（北京）
+ * @returns {Promise<string>} 本地文件路径
+ */
+async function downloadGeoData(adcode) {
+  const fileName = `${adcode}_full.json`;
+  const localPath = path.join(GEO_DIR, fileName);
+
+  // 如果文件已存在，直接返回
+  if (fs.existsSync(localPath)) {
+    return localPath;
+  }
+
+  // 确保 geo 目录存在
+  if (!fs.existsSync(GEO_DIR)) {
+    fs.mkdirSync(GEO_DIR, { recursive: true });
+  }
+
+  const url = `https://geo.datav.aliyun.com/areas_v3/bound/${fileName}`;
+  console.log(`📥 下载地理数据: ${url}`);
+
+  return new Promise((resolve, reject) => {
+    https.get(url, (response) => {
+      if (response.statusCode !== 200) {
+        reject(new Error(`下载失败: HTTP ${response.statusCode}`));
+        return;
+      }
+
+      const chunks = [];
+      response.on('data', chunk => chunks.push(chunk));
+      response.on('end', () => {
+        const data = Buffer.concat(chunks).toString();
+        fs.writeFileSync(localPath, data);
+        console.log(`✅ 已保存: ${localPath}`);
+        resolve(localPath);
+      });
+      response.on('error', reject);
+    }).on('error', reject);
+  });
+}
+
+/**
+ * 确保指定的地理数据文件存在，如不存在则下载
+ * @param {number} adcode - 地区代码
+ */
+async function ensureGeoData(adcode) {
+  try {
+    await downloadGeoData(adcode);
+  } catch (error) {
+    console.error(`⚠️ 无法下载地理数据 ${adcode}:`, error.message);
+  }
+}
 
 const influx = new Influx.InfluxDB({
   host: process.env.INFLUX_HOST || 'localhost',
@@ -388,6 +445,7 @@ async function generateDayPage(dayIndex, allForecastData, forecastData) {
     <meta name="description" content="China Temperature Rankings - ${descriptionDate} Temperature data across China">
     <meta name="keywords" content="China temperature,temperature rankings,weather,temperature map,real-time temperature,${dateFormatted}">
     <title>China Temperature Rankings - Real-time Temperature Data${titleSuffix}</title>
+    <link rel="icon" type="image/x-icon" href="/favicon.ico">
     <script>
       // 多语言配置
       window.i18n = ${JSON.stringify(i18n)};
@@ -1035,7 +1093,7 @@ async function generateDayPage(dayIndex, allForecastData, forecastData) {
             })))};
 
             try {
-                const res = await fetch('https://geo.datav.aliyun.com/areas_v3/bound/100000_full.json');
+                const res = await fetch('/geo/100000_full.json');
                 const geoJson = await res.json();
 
                 // 调试：输出地图中的省份名称
@@ -1296,6 +1354,7 @@ async function generateProvincePage(provinceName, provinceConfig, dayIndex = 0) 
     <meta name="description" content="${enName} Temperature Rankings - City temperature data">
     <meta name="keywords" content="${enName},${provinceName},temperature,weather,cities">
     <title>${enName} Temperature Rankings</title>
+    <link rel="icon" type="image/x-icon" href="/favicon.ico">
     <script>
       // 多语言配置
       window.i18n = ${JSON.stringify(i18n)};
@@ -1850,7 +1909,7 @@ async function generateProvincePage(provinceName, provinceConfig, dayIndex = 0) 
 
         try {
             // 加载省份地图
-            const res = await fetch('https://geo.datav.aliyun.com/areas_v3/bound/${adcode}_full.json');
+            const res = await fetch('/geo/${adcode}_full.json');
             const geoJson = await res.json();
             echarts.registerMap('province', geoJson);
         } catch(e) {
@@ -2048,6 +2107,18 @@ async function generateAllProvincePages() {
 async function main() {
   try {
     console.log('开始生成静态网站...\n');
+
+    // 下载地理数据
+    console.log('🗺️  检查并下载地理数据...');
+    // 下载全国地图
+    await ensureGeoData(100000);
+    // 下载各省份地图
+    for (const provinceConfig of PROVINCES_DATA) {
+      if (provinceConfig.adcode && !provinceConfig.no_aliyun_data) {
+        await ensureGeoData(provinceConfig.adcode);
+      }
+    }
+    console.log('✅ 地理数据准备完成\n');
 
     // 获取未来7天每一天的省份数据
     console.log('📊 获取7天省份温度数据...');
