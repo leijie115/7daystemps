@@ -689,8 +689,8 @@ async function generateDayPage(dayIndex, allForecastData, forecastData) {
             <!-- 底部覆盖层：日期选择器 (DaySelector) -->
             <div class="absolute bottom-6 left-1/2 -translate-x-1/2 z-10 flex gap-1.5 md:gap-2 p-1.5 bg-white/80 dark:bg-gray-900/80 backdrop-blur-md rounded-2xl border border-slate-200 dark:border-gray-700/50 shadow-2xl shadow-slate-300/50 dark:shadow-black/50 max-w-[95%] overflow-x-auto no-scrollbar pointer-events-auto transition-colors duration-300">
                 ${Array.from({length: 7}, (_, i) => {
-                  const daysZh = ['今天', '周一', '周二', '周三', '周四', '周五', '周六', '周日'];
-                  const daysEn = ['Today', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
+                  const daysZh = ['周日', '周一', '周二', '周三', '周四', '周五', '周六'];
+                  const daysEn = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
                   const date = new Date();
                   date.setDate(date.getDate() + i);
                   const dayNameZh = i === 0 ? '今天' : daysZh[date.getDay()];
@@ -808,8 +808,8 @@ async function generateDayPage(dayIndex, allForecastData, forecastData) {
                                   const barColor = hasData ? getColorForTemp(day.high) : '#4b5563';
 
                                   // 获取中英文星期
-                                  const daysZh = ['今天', '周一', '周二', '周三', '周四', '周五', '周六', '周日'];
-                                  const daysEn = ['Today', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
+                                  const daysZh = ['今天', '周日', '周一', '周二', '周三', '周四', '周五', '周六'];
+                                  const daysEn = ['Today', 'Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
                                   const dayNameIndex = daysZh.indexOf(day.dayName);
                                   const dayNameEn = dayNameIndex >= 0 ? daysEn[dayNameIndex] : day.dayName;
 
@@ -1659,8 +1659,8 @@ async function generateProvincePage(provinceName, provinceConfig, dayIndex = 0) 
                           const barHeight = hasData ? Math.max(10, Math.min(100, tempRange * 2)) : 20;
                           const barColor = hasData ? getColorForTemp(day.high) : '#4b5563';
 
-                          const daysZh = ['今天', '周一', '周二', '周三', '周四', '周五', '周六', '周日'];
-                          const daysEn = ['Today', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
+                          const daysZh = ['今天', '周日', '周一', '周二', '周三', '周四', '周五', '周六'];
+                          const daysEn = ['Today', 'Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
                           const dayNameIndex = daysZh.indexOf(day.dayName);
                           const dayNameEn = dayNameIndex >= 0 ? daysEn[dayNameIndex] : day.dayName;
 
@@ -2165,7 +2165,7 @@ async function main() {
 async function generateSitemap() {
   console.log('\n🗺️  生成 sitemap.xml...');
 
-  const baseUrl = 'https://cn.7daystemps.com';
+  const baseUrl = 'https://www.7daystemps.com';
   const today = new Date().toISOString().split('T')[0];
 
   const urls = [];

@@ -32,7 +32,7 @@ echo ""
 
 # 运行生成脚本
 echo "🚀 开始生成静态页面..."
-node backend/generate-html.js
+/usr/local/bin/node backend/generate-html.js
 
 if [ $? -ne 0 ]; then
     echo "❌ 生成失败，退出"

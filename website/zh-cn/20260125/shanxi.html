@@ -380,11 +380,11 @@
                         <div class="flex flex-col items-center group/day">
                             <span class="forecast-day-label text-[9px] font-medium mb-1 text-slate-500 dark:text-gray-500" data-day-zh="周四" data-day-en="Thu">周四</span>
                             <div class="w-full bg-slate-200 dark:bg-gray-800/50 rounded-full h-20 relative w-1.5 md:w-2 mx-auto ring-1 ring-black/5 dark:ring-white/5">
-                                <div class="absolute w-full rounded-full opacity-80" style="bottom: 9.2%; height: 24.200000000000003%; background-color: #06b6d4;"></div>
+                                <div class="absolute w-full rounded-full opacity-80" style="bottom: 6.800000000000001%; height: 26.6%; background-color: #06b6d4;"></div>
                             </div>
                             <div class="flex flex-col items-center mt-1.5 gap-0.5">
                                 <span class="text-[10px] font-bold text-slate-700 dark:text-gray-300 leading-none">6.7°</span>
-                                <span class="text-[9px] text-slate-500 dark:text-gray-600 leading-none">-5.4°</span>
+                                <span class="text-[9px] text-slate-500 dark:text-gray-600 leading-none">-6.6°</span>
                             </div>
                         </div>
                         
@@ -1361,7 +1361,7 @@
                         <div>
                             <h3 data-role="title" data-city-zh="大同市" data-city-en="DaTong" class="font-semibold text-slate-700 dark:text-gray-300 text-sm md:text-base">大同市</h3>
                             <div class="text-xs text-slate-500 dark:text-gray-500 flex gap-2 items-center mt-0.5">
-                                <span class="weather-desc" data-weather-zh="小雪" data-weather-en="Light Snow">小雪</span><span class="w-1 h-1 rounded-full bg-slate-400 dark:bg-gray-600"></span><span class="wind-label">风速</span>: 3.3 m/s</span>
+                                <span class="weather-desc" data-weather-zh="多云" data-weather-en="Cloudy">多云</span><span class="w-1 h-1 rounded-full bg-slate-400 dark:bg-gray-600"></span><span class="wind-label">风速</span>: 3.3 m/s</span>
                             </div>
                         </div>
                     </div>
@@ -1613,7 +1613,7 @@
 
         // 去重：如果有多个城市的fullName相同，只保留温度最高的一个
         const uniqueDataMap = new Map();
-        [{"city":"临汾","cityCode":"nhsiM","temperature":4.7,"maxTemp":4.7,"minTemp":-0.7,"windSpeed":3.3,"weatherDesc":"多云","fullName":"临汾市","en_name":"LinFen"},{"city":"运城","cityCode":"AupnI","temperature":3.9,"maxTemp":3.9,"minTemp":-2,"windSpeed":3.3,"weatherDesc":"多云","fullName":"运城市","en_name":"YunCheng"},{"city":"吕梁","cityCode":"EQQRH","temperature":2.5,"maxTemp":2.5,"minTemp":-5.3,"windSpeed":3.3,"weatherDesc":"多云","fullName":"吕梁市","en_name":"LvLiang"},{"city":"晋城","cityCode":"VKljS","temperature":-0.1,"maxTemp":-0.1,"minTemp":-4.1,"windSpeed":3.3,"weatherDesc":"多云","fullName":"晋城市","en_name":"JinCheng"},{"city":"太原","cityCode":"jmHMK","temperature":-0.3,"maxTemp":-0.3,"minTemp":-8,"windSpeed":3.3,"weatherDesc":"多云","fullName":"太原市","en_name":"TaiYuan"},{"city":"长治","cityCode":"dwSMC","temperature":-1,"maxTemp":-1,"minTemp":-5.7,"windSpeed":3.3,"weatherDesc":"多云","fullName":"长治市","en_name":"ZhangZhi"},{"city":"晋中","cityCode":"ovSsu","temperature":-1.6,"maxTemp":-1.6,"minTemp":-6.8,"windSpeed":5.8,"weatherDesc":"多云","fullName":"晋中市","en_name":"JinZhong"},{"city":"朔州","cityCode":"OtlfP","temperature":-3.1,"maxTemp":-3.1,"minTemp":-11,"windSpeed":3.3,"weatherDesc":"多云","fullName":"朔州市","en_name":"ShuoZhou"},{"city":"忻州","cityCode":"twMEQ","temperature":-3.8,"maxTemp":-3.8,"minTemp":-9.3,"windSpeed":3.3,"weatherDesc":"多云","fullName":"忻州市","en_name":"XinZhou"},{"city":"阳泉","cityCode":"rwUnO","temperature":-5.4,"maxTemp":-5.4,"minTemp":-8.4,"windSpeed":3.3,"weatherDesc":"多云","fullName":"阳泉市","en_name":"YangQuan"},{"city":"大同","cityCode":"VZgct","temperature":-5.8,"maxTemp":-5.8,"minTemp":-14.8,"windSpeed":3.3,"weatherDesc":"小雪","fullName":"大同市","en_name":"DaTong"}].forEach(item => {
+        [{"city":"临汾","cityCode":"nhsiM","temperature":4.7,"maxTemp":4.7,"minTemp":-0.7,"windSpeed":3.3,"weatherDesc":"多云","fullName":"临汾市","en_name":"LinFen"},{"city":"运城","cityCode":"AupnI","temperature":3.9,"maxTemp":3.9,"minTemp":-2,"windSpeed":3.3,"weatherDesc":"多云","fullName":"运城市","en_name":"YunCheng"},{"city":"吕梁","cityCode":"EQQRH","temperature":2.5,"maxTemp":2.5,"minTemp":-5.3,"windSpeed":3.3,"weatherDesc":"多云","fullName":"吕梁市","en_name":"LvLiang"},{"city":"晋城","cityCode":"VKljS","temperature":-0.1,"maxTemp":-0.1,"minTemp":-4.1,"windSpeed":3.3,"weatherDesc":"多云","fullName":"晋城市","en_name":"JinCheng"},{"city":"太原","cityCode":"jmHMK","temperature":-0.3,"maxTemp":-0.3,"minTemp":-8,"windSpeed":3.3,"weatherDesc":"多云","fullName":"太原市","en_name":"TaiYuan"},{"city":"长治","cityCode":"dwSMC","temperature":-1,"maxTemp":-1,"minTemp":-5.7,"windSpeed":3.3,"weatherDesc":"多云","fullName":"长治市","en_name":"ZhangZhi"},{"city":"晋中","cityCode":"ovSsu","temperature":-1.6,"maxTemp":-1.6,"minTemp":-6.8,"windSpeed":5.8,"weatherDesc":"多云","fullName":"晋中市","en_name":"JinZhong"},{"city":"朔州","cityCode":"OtlfP","temperature":-3.1,"maxTemp":-3.1,"minTemp":-11,"windSpeed":3.3,"weatherDesc":"多云","fullName":"朔州市","en_name":"ShuoZhou"},{"city":"忻州","cityCode":"twMEQ","temperature":-3.8,"maxTemp":-3.8,"minTemp":-9.3,"windSpeed":3.3,"weatherDesc":"多云","fullName":"忻州市","en_name":"XinZhou"},{"city":"阳泉","cityCode":"rwUnO","temperature":-5.4,"maxTemp":-5.4,"minTemp":-8.4,"windSpeed":3.3,"weatherDesc":"多云","fullName":"阳泉市","en_name":"YangQuan"},{"city":"大同","cityCode":"VZgct","temperature":-5.8,"maxTemp":-5.8,"minTemp":-14.8,"windSpeed":3.3,"weatherDesc":"多云","fullName":"大同市","en_name":"DaTong"}].forEach(item => {
           const name = item.fullName || item.city;
           if (!uniqueDataMap.has(name) || item.temperature > uniqueDataMap.get(name).value) {
             uniqueDataMap.set(name, {
