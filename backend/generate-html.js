@@ -137,9 +137,9 @@ async function getProvinceTemperaturesByDate(date = new Date()) {
 
     return {
       province: config ? config.name : row.province, // 返回中文名称
-      temperature: row.max_temp ? parseFloat(row.max_temp.toFixed(1)) : null,
-      maxTemp: row.max_temp ? parseFloat(row.max_temp.toFixed(1)) : null,
-      minTemp: row.min_temp ? parseFloat(row.min_temp.toFixed(1)) : null,
+      temperature: row.max_temp !== null && row.max_temp !== undefined ? parseFloat(row.max_temp.toFixed(1)) : null,
+      maxTemp: row.max_temp !== null && row.max_temp !== undefined ? parseFloat(row.max_temp.toFixed(1)) : null,
+      minTemp: row.min_temp !== null && row.min_temp !== undefined ? parseFloat(row.min_temp.toFixed(1)) : null,
       windSpeed: getWindSpeed(row.max_wind),
       weatherDesc: row.weather_desc || '未知',
       adcode: config ? config.adcode : null,
@@ -149,7 +149,11 @@ async function getProvinceTemperaturesByDate(date = new Date()) {
       cities: config ? config.cities : [],
       no_aliyun_data: config ? config.no_aliyun_data : false // 添加 no_aliyun_data 标记
     };
-  }).sort((a, b) => (b.temperature || -999) - (a.temperature || -999));
+  }).sort((a, b) => {
+    const tempA = a.temperature !== null && a.temperature !== undefined ? a.temperature : -999;
+    const tempB = b.temperature !== null && b.temperature !== undefined ? b.temperature : -999;
+    return tempB - tempA;
+  });
 }
 
 /**
@@ -212,13 +216,17 @@ async function getCityTemperaturesByDate(provinceCode, date = new Date()) {
     return {
       city: cityConfig ? cityConfig.name : row.city, // 返回中文名称
       cityCode: row.city, // 保留 code
-      temperature: row.max_temp ? parseFloat(row.max_temp.toFixed(1)) : null,
-      maxTemp: row.max_temp ? parseFloat(row.max_temp.toFixed(1)) : null,
-      minTemp: row.min_temp ? parseFloat(row.min_temp.toFixed(1)) : null,
+      temperature: row.max_temp !== null && row.max_temp !== undefined ? parseFloat(row.max_temp.toFixed(1)) : null,
+      maxTemp: row.max_temp !== null && row.max_temp !== undefined ? parseFloat(row.max_temp.toFixed(1)) : null,
+      minTemp: row.min_temp !== null && row.min_temp !== undefined ? parseFloat(row.min_temp.toFixed(1)) : null,
       windSpeed: getWindSpeed(row.max_wind),
       weatherDesc: row.weather_desc || '未知'
     };
-  }).sort((a, b) => (b.temperature || -999) - (a.temperature || -999));
+  }).sort((a, b) => {
+    const tempA = a.temperature !== null && a.temperature !== undefined ? a.temperature : -999;
+    const tempB = b.temperature !== null && b.temperature !== undefined ? b.temperature : -999;
+    return tempB - tempA;
+  });
 }
 
 /**
@@ -454,64 +462,64 @@ async function generateDayPage(dayIndex, allForecastData, forecastData) {
       // 省份名称映射（fullName -> 中英文）
       // 使用完整的provinces.js数据,确保覆盖所有省份
       window.provinceNameMap = ${JSON.stringify(
-        (() => {
-          const map = {};
+    (() => {
+      const map = {};
 
-          // 首先添加provinces.js中的所有省份
-          PROVINCES_DATA.forEach(p => {
-            const entry = {
-              zh: p.name,
-              en: p.en_name,
-              fullName: p.full_name,
-              no_aliyun_data: p.no_aliyun_data || false
-            };
+      // 首先添加provinces.js中的所有省份
+      PROVINCES_DATA.forEach(p => {
+        const entry = {
+          zh: p.name,
+          en: p.en_name,
+          fullName: p.full_name,
+          no_aliyun_data: p.no_aliyun_data || false
+        };
 
-            // 添加全称映射
-            map[p.full_name] = entry;
+        // 添加全称映射
+        map[p.full_name] = entry;
 
-            // 添加简称映射
-            if (p.name !== p.full_name) {
-              map[p.name] = entry;
-            }
+        // 添加简称映射
+        if (p.name !== p.full_name) {
+          map[p.name] = entry;
+        }
 
-            // 添加去除后缀的映射
-            const cleanName = p.name.replace(/(省|市)$/g, '');
-            if (cleanName !== p.name) {
-              map[cleanName] = entry;
-            }
-          });
+        // 添加去除后缀的映射
+        const cleanName = p.name.replace(/(省|市)$/g, '');
+        if (cleanName !== p.name) {
+          map[cleanName] = entry;
+        }
+      });
 
-          // 特殊处理：南海诸岛
-          map['南海诸岛'] = {
-            zh: '南海诸岛',
-            en: 'Nanhai Islands',
-            fullName: '南海诸岛',
-            no_aliyun_data: false
-          };
+      // 特殊处理：南海诸岛
+      map['南海诸岛'] = {
+        zh: '南海诸岛',
+        en: 'Nanhai Islands',
+        fullName: '南海诸岛',
+        no_aliyun_data: false
+      };
 
-          // 然后用当前数据覆盖（如果有的话）
-          provinceData.forEach(item => {
-            const fullName = item.fullName || item.province;
-            const entry = {
-              zh: item.province,
-              en: item.enName || item.province,
-              fullName: fullName,
-              no_aliyun_data: item.no_aliyun_data || false
-            };
+      // 然后用当前数据覆盖（如果有的话）
+      provinceData.forEach(item => {
+        const fullName = item.fullName || item.province;
+        const entry = {
+          zh: item.province,
+          en: item.enName || item.province,
+          fullName: fullName,
+          no_aliyun_data: item.no_aliyun_data || false
+        };
 
-            map[fullName] = entry;
-            map[item.province] = entry;
+        map[fullName] = entry;
+        map[item.province] = entry;
 
-            // 也添加去除后缀的版本
-            const cleanName = item.province.replace(/(省|市)$/g, '');
-            if (cleanName !== item.province) {
-              map[cleanName] = entry;
-            }
-          });
+        // 也添加去除后缀的版本
+        const cleanName = item.province.replace(/(省|市)$/g, '');
+        if (cleanName !== item.province) {
+          map[cleanName] = entry;
+        }
+      });
 
-          return map;
-        })()
-      )};
+      return map;
+    })()
+  )};
 
       // 天气描述中英文对照表
       window.weatherDescMap = ${JSON.stringify(weatherDescMap)};
@@ -662,14 +670,14 @@ async function generateDayPage(dayIndex, allForecastData, forecastData) {
                             <div id="temp-scale-label" class="text-[10px] text-slate-500 dark:text-gray-400 font-semibold mb-1 uppercase tracking-wider w-full text-right px-1">Temp Scale</div>
                             <div class="flex flex-col gap-1">
                                 ${[
-                                  { label: '>35°C', color: '#ef4444' },
-                                  { label: '28~35°C', color: '#f97316' },
-                                  { label: '20~28°C', color: '#eab308' },
-                                  { label: '10~20°C', color: '#10b981' },
-                                  { label: '0~10°C', color: '#06b6d4' },
-                                  { label: '-10~0°C', color: '#3b82f6' },
-                                  { label: '<-10°C', color: '#6366f1' },
-                                ].map(step => `
+      { label: '>35°C', color: '#ef4444' },
+      { label: '28~35°C', color: '#f97316' },
+      { label: '20~28°C', color: '#eab308' },
+      { label: '10~20°C', color: '#10b981' },
+      { label: '0~10°C', color: '#06b6d4' },
+      { label: '-10~0°C', color: '#3b82f6' },
+      { label: '<-10°C', color: '#6366f1' },
+    ].map(step => `
                                 <div class="flex items-center gap-2 justify-end group">
                                     <span class="text-[10px] text-slate-500 dark:text-gray-400 font-medium group-hover:text-slate-800 dark:group-hover:text-gray-200">${step.label}</span>
                                     <div class="w-8 h-1.5 rounded-full shadow-[0_0_8px_rgba(0,0,0,0.1)] dark:shadow-[0_0_8px_rgba(0,0,0,0.3)] transition-all group-hover:w-10 bg-[${step.color}]"></div>
@@ -688,39 +696,39 @@ async function generateDayPage(dayIndex, allForecastData, forecastData) {
 
             <!-- 底部覆盖层：日期选择器 (DaySelector) -->
             <div class="absolute bottom-6 left-1/2 -translate-x-1/2 z-10 flex gap-1.5 md:gap-2 p-1.5 bg-white/80 dark:bg-gray-900/80 backdrop-blur-md rounded-2xl border border-slate-200 dark:border-gray-700/50 shadow-2xl shadow-slate-300/50 dark:shadow-black/50 max-w-[95%] overflow-x-auto no-scrollbar pointer-events-auto transition-colors duration-300">
-                ${Array.from({length: 7}, (_, i) => {
-                  const daysZh = ['周日', '周一', '周二', '周三', '周四', '周五', '周六'];
-                  const daysEn = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
-                  const date = new Date();
-                  date.setDate(date.getDate() + i);
-                  const dayNameZh = i === 0 ? '今天' : daysZh[date.getDay()];
-                  const dayNameEn = i === 0 ? 'Today' : daysEn[date.getDay()];
-                  const dateStr = date.toISOString().slice(0, 10).replace(/-/g, '');
-                  const isActive = i === dayIndex;
+                ${Array.from({ length: 7 }, (_, i) => {
+      const daysZh = ['周日', '周一', '周二', '周三', '周四', '周五', '周六'];
+      const daysEn = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+      const date = new Date();
+      date.setDate(date.getDate() + i);
+      const dayNameZh = i === 0 ? '今天' : daysZh[date.getDay()];
+      const dayNameEn = i === 0 ? 'Today' : daysEn[date.getDay()];
+      const dateStr = date.toISOString().slice(0, 10).replace(/-/g, '');
+      const isActive = i === dayIndex;
 
-                  // 链接路径: 今天是 index.html, 其他天是 YYYYMMDD/index.html
-                  let href;
-                  if (isActive) {
-                    href = '#';
-                  } else if (i === 0) {
-                    // 如果当前不是首页,链接回首页需要根据当前位置调整
-                    href = dayIndex === 0 ? 'index.html' : '../index.html';
-                  } else {
-                    // 链接到其他日期页面
-                    href = dayIndex === 0 ? dateStr + '/index.html' : '../' + dateStr + '/index.html';
-                  }
+      // 链接路径: 今天是 index.html, 其他天是 YYYYMMDD/index.html
+      let href;
+      if (isActive) {
+        href = '#';
+      } else if (i === 0) {
+        // 如果当前不是首页,链接回首页需要根据当前位置调整
+        href = dayIndex === 0 ? 'index.html' : '../index.html';
+      } else {
+        // 链接到其他日期页面
+        href = dayIndex === 0 ? dateStr + '/index.html' : '../' + dateStr + '/index.html';
+      }
 
-                  const targetAttr = isActive ? '' : 'target="_blank"';
-                  const activeClass = isActive ? 'bg-gradient-to-br from-blue-500 to-blue-600 text-white shadow-lg shadow-blue-500/25 ring-1 ring-white/20' : 'text-slate-500 dark:text-gray-400 hover:text-slate-800 dark:hover:text-gray-200 hover:bg-slate-100 dark:hover:bg-white/5';
-                  const indicator = isActive ? '<span class="w-1 h-1 bg-white rounded-full opacity-50 absolute bottom-1"></span>' : '';
+      const targetAttr = isActive ? '' : 'target="_blank"';
+      const activeClass = isActive ? 'bg-gradient-to-br from-blue-500 to-blue-600 text-white shadow-lg shadow-blue-500/25 ring-1 ring-white/20' : 'text-slate-500 dark:text-gray-400 hover:text-slate-800 dark:hover:text-gray-200 hover:bg-slate-100 dark:hover:bg-white/5';
+      const indicator = isActive ? '<span class="w-1 h-1 bg-white rounded-full opacity-50 absolute bottom-1"></span>' : '';
 
-                  return `
+      return `
                   <a href="${href}" ${targetAttr} class="relative px-3 md:px-4 py-2 rounded-xl text-xs font-bold transition-all duration-300 whitespace-nowrap flex flex-col items-center justify-center gap-0.5 ${activeClass}">
                       <span class="day-label" data-day-zh="${dayNameZh}" data-day-en="${dayNameEn}">${dayNameEn}</span>
                       ${indicator}
                   </a>
                   `;
-                }).join('')}
+    }).join('')}
             </div>
         </div>
 
@@ -752,22 +760,22 @@ async function generateDayPage(dayIndex, allForecastData, forecastData) {
             <!-- 列表内容区 -->
             <div id="ranking-list" class="flex-1 overflow-y-auto p-4 space-y-3 scroll-smooth">
                 ${provinceData.map((item, index) => {
-                  // 获取该省份的7天预报数据
-                  const forecast = forecastData[item.province] || [];
+      // 获取该省份的7天预报数据
+      const forecast = forecastData[item.province] || [];
 
-                  // 如果没有预报数据，创建空数据占位
-                  while (forecast.length < 7) {
-                    const dayNames = ['今天', '周一', '周二', '周三', '周四', '周五', '周六', '周日'];
-                    const date = new Date();
-                    date.setDate(date.getDate() + forecast.length);
-                    forecast.push({
-                      dayName: forecast.length === 0 ? '今天' : dayNames[date.getDay()],
-                      high: null,
-                      low: null
-                    });
-                  }
+      // 如果没有预报数据，创建空数据占位
+      while (forecast.length < 7) {
+        const dayNames = ['今天', '周一', '周二', '周三', '周四', '周五', '周六', '周日'];
+        const date = new Date();
+        date.setDate(date.getDate() + forecast.length);
+        forecast.push({
+          dayName: forecast.length === 0 ? '今天' : dayNames[date.getDay()],
+          high: null,
+          low: null
+        });
+      }
 
-                      return `
+      return `
                     <div class="ranking-item group flex flex-col p-3 rounded-xl transition-all duration-300 border cursor-pointer select-none border-slate-200 dark:border-gray-800 bg-white dark:bg-gray-800 hover:bg-slate-50 dark:hover:bg-gray-750"
                          data-temp="${item.temperature}" onclick="toggleExpand(this)">
                         <div class="flex items-center justify-between">
@@ -801,19 +809,19 @@ async function generateDayPage(dayIndex, allForecastData, forecastData) {
                         <div class="details-container mt-3 pt-3 border-t border-slate-200 dark:border-gray-700/50">
                             <div class="grid grid-cols-7 gap-1">
                                 ${forecast.map((day, idx) => {
-                                  const hasData = day.high !== null && day.low !== null;
-                                  const tempRange = hasData ? day.high - day.low : 10;
-                                  const bottomPos = hasData ? Math.max(0, Math.min(100, (day.low + 10) * 2)) : 50;
-                                  const barHeight = hasData ? Math.max(10, Math.min(100, tempRange * 2)) : 20;
-                                  const barColor = hasData ? getColorForTemp(day.high) : '#4b5563';
+        const hasData = day.high !== null && day.low !== null;
+        const tempRange = hasData ? day.high - day.low : 10;
+        const bottomPos = hasData ? Math.max(0, Math.min(100, (day.low + 10) * 2)) : 50;
+        const barHeight = hasData ? Math.max(10, Math.min(100, tempRange * 2)) : 20;
+        const barColor = hasData ? getColorForTemp(day.high) : '#4b5563';
 
-                                  // 获取中英文星期
-                                  const daysZh = ['今天', '周日', '周一', '周二', '周三', '周四', '周五', '周六'];
-                                  const daysEn = ['Today', 'Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
-                                  const dayNameIndex = daysZh.indexOf(day.dayName);
-                                  const dayNameEn = dayNameIndex >= 0 ? daysEn[dayNameIndex] : day.dayName;
+        // 获取中英文星期
+        const daysZh = ['今天', '周日', '周一', '周二', '周三', '周四', '周五', '周六'];
+        const daysEn = ['Today', 'Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+        const dayNameIndex = daysZh.indexOf(day.dayName);
+        const dayNameEn = dayNameIndex >= 0 ? daysEn[dayNameIndex] : day.dayName;
 
-                                  return `
+        return `
                                 <div class="flex flex-col items-center group/day">
                                     <span class="forecast-day-label text-[9px] font-medium mb-1 ${idx === dayIndex ? 'text-blue-500' : 'text-slate-500 dark:text-gray-500'}" data-day-zh="${day.dayName}" data-day-en="${dayNameEn}">
                                         ${dayNameEn}
@@ -827,12 +835,12 @@ async function generateDayPage(dayIndex, allForecastData, forecastData) {
                                     </div>
                                 </div>
                                 `;
-                                }).join('')}
+      }).join('')}
                             </div>
                         </div>
                     </div>
                       `;
-                    }).join('')}
+    }).join('')}
             </div>
             </div>
         </div>
@@ -1089,9 +1097,9 @@ async function generateDayPage(dayIndex, allForecastData, forecastData) {
 
             // 省份数据 - 直接使用provinces.js中的full_name
             const data = ${JSON.stringify(provinceData.map(item => ({
-              name: item.fullName || item.province,
-              value: item.temperature
-            })))};
+      name: item.fullName || item.province,
+      value: item.temperature
+    })))};
 
             try {
                 const res = await fetch('/geo/100000_full.json');
@@ -1366,24 +1374,24 @@ async function generateProvincePage(provinceName, provinceConfig, dayIndex = 0) 
 
       // 城市名称中英文对照表
       window.cityNameMap = ${JSON.stringify(
-        cityData.reduce((map, city) => {
-          const cityName = city.city || city.name;
-          const fullName = city.fullName || cityName;
-          const enName = city.cityEn || city.en_name || cityName;
+    cityData.reduce((map, city) => {
+      const cityName = city.city || city.name;
+      const fullName = city.fullName || cityName;
+      const enName = city.cityEn || city.en_name || cityName;
 
-          // 添加多个键以匹配不同的名称格式
-          map[cityName] = { zh: fullName, en: enName };
-          map[fullName] = { zh: fullName, en: enName };
+      // 添加多个键以匹配不同的名称格式
+      map[cityName] = { zh: fullName, en: enName };
+      map[fullName] = { zh: fullName, en: enName };
 
-          // 去掉"市"、"区"、"县"等后缀的版本
-          const shortName = fullName.replace(/[市区县]/g, '');
-          if (shortName !== fullName) {
-            map[shortName] = { zh: fullName, en: enName };
-          }
+      // 去掉"市"、"区"、"县"等后缀的版本
+      const shortName = fullName.replace(/[市区县]/g, '');
+      if (shortName !== fullName) {
+        map[shortName] = { zh: fullName, en: enName };
+      }
 
-          return map;
-        }, {})
-      )};
+      return map;
+    }, {})
+  )};
 
       // 翻译天气描述
       window.translateWeatherDesc = function(weatherDesc, lang) {
@@ -1507,14 +1515,14 @@ async function generateProvincePage(provinceName, provinceConfig, dayIndex = 0) 
                         <div id="temp-scale-label" class="text-[10px] text-slate-500 dark:text-gray-400 font-semibold mb-1 uppercase tracking-wider w-full text-right px-1">Temp Scale</div>
                         <div class="flex flex-col gap-1">
                             ${[
-                              { label: '>35°C', color: '#ef4444' },
-                              { label: '28~35°C', color: '#f97316' },
-                              { label: '20~28°C', color: '#eab308' },
-                              { label: '10~20°C', color: '#10b981' },
-                              { label: '0~10°C', color: '#06b6d4' },
-                              { label: '-10~0°C', color: '#3b82f6' },
-                              { label: '<-10°C', color: '#6366f1' },
-                            ].map(step => `
+      { label: '>35°C', color: '#ef4444' },
+      { label: '28~35°C', color: '#f97316' },
+      { label: '20~28°C', color: '#eab308' },
+      { label: '10~20°C', color: '#10b981' },
+      { label: '0~10°C', color: '#06b6d4' },
+      { label: '-10~0°C', color: '#3b82f6' },
+      { label: '<-10°C', color: '#6366f1' },
+    ].map(step => `
                             <div class="flex items-center gap-2 justify-end group">
                                 <span class="text-[10px] text-slate-500 dark:text-gray-400 font-medium group-hover:text-slate-800 dark:group-hover:text-gray-200">${step.label}</span>
                                 <div class="w-8 h-1.5 rounded-full shadow-[0_0_8px_rgba(0,0,0,0.1)] dark:shadow-[0_0_8px_rgba(0,0,0,0.3)] transition-all group-hover:w-10 bg-[${step.color}]"></div>
@@ -1534,48 +1542,48 @@ async function generateProvincePage(provinceName, provinceConfig, dayIndex = 0) 
         <!-- 底部覆盖层：日期选择器 (DaySelector) -->
         <div class="absolute bottom-6 left-1/2 -translate-x-1/2 z-10 flex gap-1.5 md:gap-2 p-1.5 bg-white/80 dark:bg-gray-900/80 backdrop-blur-md rounded-2xl border border-slate-200 dark:border-gray-700/50 shadow-2xl shadow-slate-300/50 dark:shadow-black/50 max-w-[95%] overflow-x-auto no-scrollbar pointer-events-auto transition-colors duration-300">
             ${(() => {
-              const dayButtons = [];
-              for (let i = 0; i < 7; i++) {
-                // 星期几的中英文名称 (0=周日, 1=周一, ..., 6=周六)
-                const weekdaysZh = ['周日', '周一', '周二', '周三', '周四', '周五', '周六'];
-                const weekdaysEn = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
-                const date = new Date();
-                date.setDate(date.getDate() + i);
-                const dayNameZh = i === 0 ? '今天' : weekdaysZh[date.getDay()];
-                const dayNameEn = i === 0 ? 'Today' : weekdaysEn[date.getDay()];
+      const dayButtons = [];
+      for (let i = 0; i < 7; i++) {
+        // 星期几的中英文名称 (0=周日, 1=周一, ..., 6=周六)
+        const weekdaysZh = ['周日', '周一', '周二', '周三', '周四', '周五', '周六'];
+        const weekdaysEn = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+        const date = new Date();
+        date.setDate(date.getDate() + i);
+        const dayNameZh = i === 0 ? '今天' : weekdaysZh[date.getDay()];
+        const dayNameEn = i === 0 ? 'Today' : weekdaysEn[date.getDay()];
 
-                const isActive = i === dayIndex;
-                let href = '#';
-                if (!isActive) {
-                  if (i === 0) {
-                    // 链接到今天的省份页面
-                    href = dayIndex === 0 ? fileName : '../' + fileName;
-                  } else {
-                    const targetDateStr = date.toISOString().slice(0, 10).replace(/-/g, '');
-                    // 链接到对应日期的省份页面
-                    if (dayIndex === 0) {
-                      // 当前在今天的页面，链接到未来日期
-                      href = targetDateStr + '/' + fileName;
-                    } else {
-                      // 当前在未来日期的页面，链接到其他日期
-                      href = '../' + targetDateStr + '/' + fileName;
-                    }
-                  }
-                }
+        const isActive = i === dayIndex;
+        let href = '#';
+        if (!isActive) {
+          if (i === 0) {
+            // 链接到今天的省份页面
+            href = dayIndex === 0 ? fileName : '../' + fileName;
+          } else {
+            const targetDateStr = date.toISOString().slice(0, 10).replace(/-/g, '');
+            // 链接到对应日期的省份页面
+            if (dayIndex === 0) {
+              // 当前在今天的页面，链接到未来日期
+              href = targetDateStr + '/' + fileName;
+            } else {
+              // 当前在未来日期的页面，链接到其他日期
+              href = '../' + targetDateStr + '/' + fileName;
+            }
+          }
+        }
 
-                const targetAttr = isActive ? '' : 'target="_blank"';
-                const activeClass = isActive ? 'bg-gradient-to-br from-blue-500 to-blue-600 text-white shadow-lg shadow-blue-500/25 ring-1 ring-white/20' : 'text-slate-500 dark:text-gray-400 hover:text-slate-800 dark:hover:text-gray-200 hover:bg-slate-100 dark:hover:bg-white/5';
-                const indicator = isActive ? '<span class="w-1 h-1 bg-white rounded-full opacity-50 absolute bottom-1"></span>' : '';
+        const targetAttr = isActive ? '' : 'target="_blank"';
+        const activeClass = isActive ? 'bg-gradient-to-br from-blue-500 to-blue-600 text-white shadow-lg shadow-blue-500/25 ring-1 ring-white/20' : 'text-slate-500 dark:text-gray-400 hover:text-slate-800 dark:hover:text-gray-200 hover:bg-slate-100 dark:hover:bg-white/5';
+        const indicator = isActive ? '<span class="w-1 h-1 bg-white rounded-full opacity-50 absolute bottom-1"></span>' : '';
 
-                dayButtons.push(`
+        dayButtons.push(`
               <a href="${href}" ${targetAttr} class="relative px-3 md:px-4 py-2 rounded-xl text-xs font-bold transition-all duration-300 whitespace-nowrap flex flex-col items-center justify-center gap-0.5 ${activeClass}">
                   <span class="day-label" data-day-zh="${dayNameZh}" data-day-en="${dayNameEn}">${dayNameEn}</span>
                   ${indicator}
               </a>
                 `);
-              }
-              return dayButtons.join('');
-            })()}
+      }
+      return dayButtons.join('');
+    })()}
         </div>
     </div>
 
@@ -1607,20 +1615,20 @@ async function generateProvincePage(provinceName, provinceConfig, dayIndex = 0) 
         <!-- 列表内容区 -->
         <div id="ranking-list" class="flex-1 overflow-y-auto p-4 space-y-3 scroll-smooth">
             ${cityData.map((item, index) => {
-              const forecast = cityForecastData[item.city] || [];
+      const forecast = cityForecastData[item.city] || [];
 
-              while (forecast.length < 7) {
-                const weekdaysZh = ['周日', '周一', '周二', '周三', '周四', '周五', '周六'];
-                const date = new Date();
-                date.setDate(date.getDate() + forecast.length);
-                forecast.push({
-                  dayName: forecast.length === dayIndex ? '今天' : weekdaysZh[date.getDay()],
-                  high: null,
-                  low: null
-                });
-              }
+      while (forecast.length < 7) {
+        const weekdaysZh = ['周日', '周一', '周二', '周三', '周四', '周五', '周六'];
+        const date = new Date();
+        date.setDate(date.getDate() + forecast.length);
+        forecast.push({
+          dayName: forecast.length === dayIndex ? '今天' : weekdaysZh[date.getDay()],
+          high: null,
+          low: null
+        });
+      }
 
-              return `
+      return `
             <div class="ranking-item group flex flex-col p-3 rounded-xl transition-all duration-300 border cursor-pointer select-none border-slate-200 dark:border-gray-800 bg-white dark:bg-gray-800 hover:bg-slate-50 dark:hover:bg-gray-750"
                  data-temp="${item.temperature}" onclick="toggleExpand(this)">
                 <div class="flex items-center justify-between">
@@ -1653,18 +1661,18 @@ async function generateProvincePage(provinceName, provinceConfig, dayIndex = 0) 
                 <div class="details-container mt-3 pt-3 border-t border-slate-200 dark:border-gray-700/50">
                     <div class="grid grid-cols-7 gap-1">
                         ${forecast.map((day, idx) => {
-                          const hasData = day.high !== null && day.low !== null;
-                          const tempRange = hasData ? day.high - day.low : 10;
-                          const bottomPos = hasData ? Math.max(0, Math.min(100, (day.low + 10) * 2)) : 50;
-                          const barHeight = hasData ? Math.max(10, Math.min(100, tempRange * 2)) : 20;
-                          const barColor = hasData ? getColorForTemp(day.high) : '#4b5563';
+        const hasData = day.high !== null && day.low !== null;
+        const tempRange = hasData ? day.high - day.low : 10;
+        const bottomPos = hasData ? Math.max(0, Math.min(100, (day.low + 10) * 2)) : 50;
+        const barHeight = hasData ? Math.max(10, Math.min(100, tempRange * 2)) : 20;
+        const barColor = hasData ? getColorForTemp(day.high) : '#4b5563';
 
-                          const daysZh = ['今天', '周日', '周一', '周二', '周三', '周四', '周五', '周六'];
-                          const daysEn = ['Today', 'Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
-                          const dayNameIndex = daysZh.indexOf(day.dayName);
-                          const dayNameEn = dayNameIndex >= 0 ? daysEn[dayNameIndex] : day.dayName;
+        const daysZh = ['今天', '周日', '周一', '周二', '周三', '周四', '周五', '周六'];
+        const daysEn = ['Today', 'Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+        const dayNameIndex = daysZh.indexOf(day.dayName);
+        const dayNameEn = dayNameIndex >= 0 ? daysEn[dayNameIndex] : day.dayName;
 
-                          return `
+        return `
                         <div class="flex flex-col items-center group/day">
                             <span class="forecast-day-label text-[9px] font-medium mb-1 ${idx === dayIndex ? 'text-blue-500' : 'text-slate-500 dark:text-gray-500'}" data-day-zh="${day.dayName}" data-day-en="${dayNameEn}">
                                 ${dayNameEn}
@@ -1678,12 +1686,12 @@ async function generateProvincePage(provinceName, provinceConfig, dayIndex = 0) 
                             </div>
                         </div>
                         `;
-                        }).join('')}
+      }).join('')}
                     </div>
                 </div>
             </div>
               `;
-            }).join('')}
+    }).join('')}
         </div>
         </div>
     </div>
