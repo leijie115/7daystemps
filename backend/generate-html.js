@@ -232,12 +232,13 @@ async function getCityTemperaturesByDate(provinceCode, date = new Date()) {
 /**
  * 获取指定省份所有城市未来7天的预报数据
  * @param {string} provinceCode - 省份code (如 "ABJ")
- * @param {number} dayIndex - 天数索引 (0=今天, 1=明天, ...),用于确定哪一天是"今天"
+ * @param {number} dayIndex - [已弃用] 用于保持兼容性，内部始终从今天开始
  */
 async function getCityForecast(provinceCode, dayIndex = 0) {
   const weekdaysZh = ['周日', '周一', '周二', '周三', '周四', '周五', '周六'];
   const forecastByCity = {};
 
+  // 从今天开始，获取未来7天的数据
   for (let i = 0; i < 7; i++) {
     const date = new Date();
     date.setDate(date.getDate() + i);
@@ -250,7 +251,7 @@ async function getCityForecast(provinceCode, dayIndex = 0) {
       }
 
       forecastByCity[cityData.city].push({
-        dayName: i === dayIndex ? '今天' : weekdaysZh[date.getDay()],
+        dayName: i === 0 ? '今天' : weekdaysZh[date.getDay()],
         high: cityData.maxTemp,
         low: cityData.minTemp
       });
@@ -263,12 +264,14 @@ async function getCityForecast(provinceCode, dayIndex = 0) {
 /**
  * 获取所有省份未来7天的预报数据
  * 使用getProvinceTemperaturesByDate函数逐天查询
+ * 始终从今天开始查询7天，保持所有页面显示相同的时间窗口
  */
 async function getAllProvincesForecast() {
-  const dayNames = ['今天', '周一', '周二', '周三', '周四', '周五', '周六', '周日'];
+  // 周日=0, 周一=1, ... 周六=6
+  const weekdaysZh = ['周日', '周一', '周二', '周三', '周四', '周五', '周六'];
   const forecastByProvince = {};
 
-  // 逐天查询未来7天的数据
+  // 从今天开始，获取未来7天的数据
   for (let i = 0; i < 7; i++) {
     const date = new Date();
     date.setDate(date.getDate() + i);
@@ -283,7 +286,7 @@ async function getAllProvincesForecast() {
       }
 
       forecastByProvince[provinceData.province].push({
-        dayName: i === 0 ? '今天' : dayNames[date.getDay()],
+        dayName: i === 0 ? '今天' : weekdaysZh[date.getDay()],
         high: provinceData.maxTemp,
         low: provinceData.minTemp
       });
@@ -641,10 +644,10 @@ async function generateDayPage(dayIndex, allForecastData, forecastData) {
     <!-- 左侧：地图可视化区域 -->
         <div class="relative flex-1 h-[50vh] md:h-full flex flex-col">
             <!-- 顶部覆盖层：标题 & 图例 -->
-            <div class="absolute top-0 left-0 w-full p-6 z-10 pointer-events-none">
+            <div class="absolute top-0 left-0 w-full p-3 md:p-6 z-10 pointer-events-none">
                 <div class="flex justify-between items-start">
                     <div>
-                        <h1 id="main-heading" class="text-3xl font-black tracking-tighter text-transparent bg-clip-text bg-gradient-to-r from-blue-500 to-emerald-500 drop-shadow-sm font-sans">
+                        <h1 id="main-heading" class="text-xl md:text-3xl font-black tracking-tighter text-transparent bg-clip-text bg-gradient-to-r from-blue-500 to-emerald-500 drop-shadow-sm font-sans">
                             China Temp Rankings
                         </h1>
                     </div>
@@ -666,7 +669,7 @@ async function generateDayPage(dayIndex, allForecastData, forecastData) {
                         </div>
 
                         <!-- 温度图例 -->
-                        <div class="flex flex-col gap-1 items-end p-2 rounded-lg bg-white/80 dark:bg-gray-900/60 backdrop-blur-md border border-slate-200 dark:border-gray-700/50 shadow-xl transition-colors duration-300">
+                        <div class="flex flex-col gap-1 items-end p-2 rounded-lg bg-white/80 dark:bg-gray-900/60 backdrop-blur-md border border-slate-200 dark:border-gray-700/50 shadow-xl transition-colors duration-300 scale-75 md:scale-100 origin-top-right">
                             <div id="temp-scale-label" class="text-[10px] text-slate-500 dark:text-gray-400 font-semibold mb-1 uppercase tracking-wider w-full text-right px-1">Temp Scale</div>
                             <div class="flex flex-col gap-1">
                                 ${[
@@ -775,16 +778,20 @@ async function generateDayPage(dayIndex, allForecastData, forecastData) {
         });
       }
 
+      // 获取省份英文名称用于链接
+      const provinceEnName = item.enName || item.province;
+      const provinceFileName = provinceEnName.toLowerCase().replace(/\\s+/g, '');
+
       return `
-                    <div class="ranking-item group flex flex-col p-3 rounded-xl transition-all duration-300 border cursor-pointer select-none border-slate-200 dark:border-gray-800 bg-white dark:bg-gray-800 hover:bg-slate-50 dark:hover:bg-gray-750"
-                         data-temp="${item.temperature}" onclick="toggleExpand(this)">
+                    <div class="ranking-item group flex flex-col p-3 rounded-xl transition-all duration-300 border select-none border-slate-200 dark:border-gray-800 bg-white dark:bg-gray-800 hover:bg-slate-50 dark:hover:bg-gray-750"
+                         data-temp="${item.temperature}" data-province-file="${provinceFileName}" data-no-aliyun="${item.no_aliyun_data || false}">
                         <div class="flex items-center justify-between">
                             <div class="flex items-center gap-4">
                                 <span data-role="badge" class="flex justify-center items-center w-7 h-7 rounded-lg text-sm font-bold shadow-sm bg-slate-200 dark:bg-gray-700 text-slate-500 dark:text-gray-400">
                                     ${index + 1}
                                 </span>
                                 <div>
-                                    <h3 data-role="title" data-province-zh="${item.province}" data-province-en="${item.enName || item.province}" class="font-semibold text-slate-700 dark:text-gray-300 text-sm md:text-base">${item.enName || item.province}</h3>
+                                    <a href="${item.no_aliyun_data ? '#' : provinceFileName + '.html'}" data-role="title" data-province-zh="${item.province}" data-province-en="${item.enName || item.province}" class="font-semibold text-slate-700 dark:text-gray-300 text-sm md:text-base hover:text-blue-500 dark:hover:text-blue-400 transition-colors ${item.no_aliyun_data ? 'pointer-events-none' : ''}" ${item.no_aliyun_data ? '' : ''}>${item.enName || item.province}</a>
                                     <div class="text-xs text-slate-500 dark:text-gray-500 flex gap-2 items-center mt-0.5">
                                         <span class="weather-desc" data-weather-zh="${item.weatherDesc || '未知'}" data-weather-en="${translateWeatherDesc(item.weatherDesc || '未知', 'en')}">${translateWeatherDesc(item.weatherDesc || '未知', 'en')}</span><span class="w-1 h-1 rounded-full bg-slate-400 dark:bg-gray-600"></span><span class="wind-label">Wind</span>: ${item.windSpeed || '0'} m/s</span>
                                     </div>
@@ -797,7 +804,7 @@ async function generateDayPage(dayIndex, allForecastData, forecastData) {
                                     </div>
                                 </div>
                                 <!-- 箭头 -->
-                                <div class="arrow-icon p-1 rounded-full hover:bg-black/5 dark:hover:bg-white/5 transition-transform duration-300">
+                                <div class="arrow-icon p-1 rounded-full hover:bg-black/5 dark:hover:bg-white/5 transition-transform duration-300 cursor-pointer" onclick="toggleExpand(this.closest('.ranking-item'))">
                                     <svg class="w-4 h-4 text-slate-400 dark:text-gray-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
                                     </svg>
@@ -815,15 +822,50 @@ async function generateDayPage(dayIndex, allForecastData, forecastData) {
         const barHeight = hasData ? Math.max(10, Math.min(100, tempRange * 2)) : 20;
         const barColor = hasData ? getColorForTemp(day.high) : '#4b5563';
 
+
         // 获取中英文星期
         const daysZh = ['今天', '周日', '周一', '周二', '周三', '周四', '周五', '周六'];
         const daysEn = ['Today', 'Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
         const dayNameIndex = daysZh.indexOf(day.dayName);
         const dayNameEn = dayNameIndex >= 0 ? daysEn[dayNameIndex] : day.dayName;
 
+        // 计算目标日期的字符串 (用于链接)
+        // 注意：data中的dayName已经是固定窗口的（从今天开始），所以idx直接对应从今天开始的偏移
+        const targetDate = new Date();
+        targetDate.setDate(targetDate.getDate() + idx);
+        const targetDateStr = targetDate.toISOString().slice(0, 10).replace(/-/g, '');
+
+        // 构建链接路径
+        // 如果是当前页面的日期，不高亮/不可点或指向自己
+        // 如果是其他日期，根据当前页面位置(dayIndex)决定是 ./ 还是 ../
+        // dayIndex=0: 在根目录. idx=0->#, idx>0->YYYYMMDD/
+        // dayIndex>0: 在子目录. idx=0->../, idx>0->../YYYYMMDD/ (除非同目录? 不，每天一个目录)
+
+        let targetUrl;
+        if (idx === dayIndex) {
+          targetUrl = '#'; // 当前页面
+        } else if (idx === 0) {
+          // 目标是今天(第一天)
+          targetUrl = dayIndex === 0 ? '#' : `../${provinceFileName}.html`;
+        } else {
+          // 目标是未来某天
+          targetUrl = dayIndex === 0
+            ? `${targetDateStr}/${provinceFileName}.html`
+            : `../${targetDateStr}/${provinceFileName}.html`;
+        }
+
+        const isSelected = idx === dayIndex;
+        // 如果是当前选中的日期，使用不同的cursor样式
+        const cursorClass = isSelected ? 'cursor-default' : 'cursor-pointer hover:opacity-80 transition-opacity';
+
+        // 使用a标签而非onclick，提升SEO和体验
+        // 如果是选中状态，使用div；如果是链接，使用a
+        const TagName = isSelected ? 'div' : 'a';
+        const hrefAttr = isSelected ? '' : `href="${targetUrl}"`;
+
         return `
-                                <div class="flex flex-col items-center group/day">
-                                    <span class="forecast-day-label text-[9px] font-medium mb-1 ${idx === dayIndex ? 'text-blue-500' : 'text-slate-500 dark:text-gray-500'}" data-day-zh="${day.dayName}" data-day-en="${dayNameEn}">
+                                <${TagName} ${hrefAttr} class="flex flex-col items-center group/day ${cursorClass}">
+                                    <span class="forecast-day-label text-[9px] font-medium mb-1 ${isSelected ? 'text-blue-500' : 'text-slate-500 dark:text-gray-500'}" data-day-zh="${day.dayName}" data-day-en="${dayNameEn}">
                                         ${dayNameEn}
                                     </span>
                                     <div class="w-full bg-slate-200 dark:bg-gray-800/50 rounded-full h-20 relative w-1.5 md:w-2 mx-auto ring-1 ring-black/5 dark:ring-white/5">
@@ -833,7 +875,7 @@ async function generateDayPage(dayIndex, allForecastData, forecastData) {
                                         <span class="text-[10px] font-bold text-slate-700 dark:text-gray-300 leading-none">${hasData ? day.high + '°' : '--'}</span>
                                         <span class="text-[9px] text-slate-500 dark:text-gray-600 leading-none">${hasData ? day.low + '°' : '--'}</span>
                                     </div>
-                                </div>
+                                </${TagName}>
                                 `;
       }).join('')}
                             </div>
@@ -841,250 +883,250 @@ async function generateDayPage(dayIndex, allForecastData, forecastData) {
                     </div>
                       `;
     }).join('')}
-            </div>
-            </div>
-        </div>
-    </div>
+            </div >
+            </div >
+        </div >
+    </div >
 
 
-    <script>
-        let currentTheme = 'dark'; // 'light' | 'dark'
-        let currentLang = 'en'; // 'en' | 'zh' - 默认英文
-        let tempMapData = {}; // 全局温度映射
+  <script>
+    let currentTheme = 'dark'; // 'light' | 'dark'
+    let currentLang = 'en'; // 'en' | 'zh' - 默认英文
+    let tempMapData = { }; // 全局温度映射
 
-        // 初始化语言设置
-        function initLanguage() {
+    // 初始化语言设置
+    function initLanguage() {
             const savedLang = localStorage.getItem('preferredLanguage') || 'en';
-            currentLang = savedLang;
-            updateLanguageUI(savedLang);
+    currentLang = savedLang;
+    updateLanguageUI(savedLang);
         }
 
-        // 切换语言
-        function switchLanguage(lang) {
+    // 切换语言
+    function switchLanguage(lang) {
             if (lang === currentLang) return;
 
-            currentLang = lang;
-            localStorage.setItem('preferredLanguage', lang);
-            updateLanguageUI(lang);
+    currentLang = lang;
+    localStorage.setItem('preferredLanguage', lang);
+    updateLanguageUI(lang);
         }
 
-        // 更新UI语言
-        function updateLanguageUI(lang) {
+    // 更新UI语言
+    function updateLanguageUI(lang) {
             const t = window.i18n[lang];
 
-            // 更新HTML lang属性
-            document.documentElement.lang = lang === 'zh' ? 'zh-CN' : 'en';
+    // 更新HTML lang属性
+    document.documentElement.lang = lang === 'zh' ? 'zh-CN' : 'en';
 
-            // 更新按钮状态
-            const langEn = document.getElementById('lang-en');
-            const langZh = document.getElementById('lang-zh');
-            const activeClass = 'px-2 py-0.5 text-xs font-bold rounded bg-blue-600 text-white cursor-pointer';
-            const inactiveClass = 'px-2 py-0.5 text-xs font-bold rounded text-slate-500 dark:text-gray-400 hover:text-slate-900 dark:hover:text-white transition-colors cursor-pointer';
+    // 更新按钮状态
+    const langEn = document.getElementById('lang-en');
+    const langZh = document.getElementById('lang-zh');
+    const activeClass = 'px-2 py-0.5 text-xs font-bold rounded bg-blue-600 text-white cursor-pointer';
+    const inactiveClass = 'px-2 py-0.5 text-xs font-bold rounded text-slate-500 dark:text-gray-400 hover:text-slate-900 dark:hover:text-white transition-colors cursor-pointer';
 
-            if (lang === 'en') {
-                langEn.className = activeClass;
-                langZh.className = inactiveClass;
+    if (lang === 'en') {
+      langEn.className = activeClass;
+    langZh.className = inactiveClass;
             } else {
-                langEn.className = inactiveClass;
-                langZh.className = activeClass;
+      langEn.className = inactiveClass;
+    langZh.className = activeClass;
             }
 
-            // 更新页面标题和meta
-            document.title = t.title;
-            document.querySelector('meta[name="description"]').content = t.description;
+    // 更新页面标题和meta
+    document.title = t.title;
+    document.querySelector('meta[name="description"]').content = t.description;
 
-            // 更新主标题
-            document.getElementById('main-heading').textContent = t.mainHeading;
+    // 更新主标题
+    document.getElementById('main-heading').textContent = t.mainHeading;
 
-            // 更新温度图例标签
-            document.getElementById('temp-scale-label').textContent = t.tempScale;
+    // 更新温度图例标签
+    document.getElementById('temp-scale-label').textContent = t.tempScale;
 
-            // 更新排行榜标题
-            document.getElementById('ranking-title').textContent = t.rankingTitle;
-            document.getElementById('regions-label').textContent = t.regions;
+    // 更新排行榜标题
+    document.getElementById('ranking-title').textContent = t.rankingTitle;
+    document.getElementById('regions-label').textContent = t.regions;
 
-            // 更新排序按钮
-            document.getElementById('btn-hot').textContent = t.sortHot;
-            document.getElementById('btn-cold').textContent = t.sortCold;
+    // 更新排序按钮
+    document.getElementById('btn-hot').textContent = t.sortHot;
+    document.getElementById('btn-cold').textContent = t.sortCold;
 
             // 更新省份名称
             document.querySelectorAll('[data-province-zh]').forEach(el => {
-                el.textContent = lang === 'zh' ? el.dataset.provinceZh : el.dataset.provinceEn;
+      el.textContent = lang === 'zh' ? el.dataset.provinceZh : el.dataset.provinceEn;
             });
 
             // 更新日期标签
             document.querySelectorAll('.day-label').forEach(el => {
-                el.textContent = lang === 'zh' ? el.dataset.dayZh : el.dataset.dayEn;
+      el.textContent = lang === 'zh' ? el.dataset.dayZh : el.dataset.dayEn;
             });
 
             // 更新预报日期标签
             document.querySelectorAll('.forecast-day-label').forEach(el => {
-                el.textContent = lang === 'zh' ? el.dataset.dayZh : el.dataset.dayEn;
+      el.textContent = lang === 'zh' ? el.dataset.dayZh : el.dataset.dayEn;
             });
 
             // 更新天气描述
             document.querySelectorAll('.weather-desc').forEach(el => {
-                el.textContent = lang === 'zh' ? el.dataset.weatherZh : el.dataset.weatherEn;
+      el.textContent = lang === 'zh' ? el.dataset.weatherZh : el.dataset.weatherEn;
             });
 
             // 更新风速标签
             document.querySelectorAll('.wind-label').forEach(el => {
-                el.textContent = t.wind;
+      el.textContent = t.wind;
             });
 
-            // 重绘地图（更新省份名称和主题）
-            if (window.myMapChart) {
-                updateMapOption(window.myMapChart);
+    // 重绘地图（更新省份名称和主题）
+    if (window.myMapChart) {
+      updateMapOption(window.myMapChart);
             }
         }
 
-        // 排名样式配置
-        const RANK_STYLES = {
-            1: {
-                container: "border-yellow-500/50 bg-gradient-to-r from-yellow-500/10 to-transparent dark:from-yellow-900/20",
-                badge: "bg-yellow-500 text-black shadow-[0_0_10px_rgba(234,179,8,0.4)]",
-                title: "text-yellow-700 dark:text-yellow-100"
+    // 排名样式配置
+    const RANK_STYLES = {
+      1: {
+      container: "border-yellow-500/50 bg-gradient-to-r from-yellow-500/10 to-transparent dark:from-yellow-900/20",
+    badge: "bg-yellow-500 text-black shadow-[0_0_10px_rgba(234,179,8,0.4)]",
+    title: "text-yellow-700 dark:text-yellow-100"
             },
-            2: {
-                container: "border-slate-400/50 dark:border-gray-400/40 bg-gradient-to-r from-slate-500/10 to-transparent dark:from-gray-700/20",
-                badge: "bg-slate-300 dark:bg-gray-300 text-black shadow-[0_0_10px_rgba(209,213,219,0.4)]",
-                title: "text-slate-700 dark:text-gray-100"
+    2: {
+      container: "border-slate-400/50 dark:border-gray-400/40 bg-gradient-to-r from-slate-500/10 to-transparent dark:from-gray-700/20",
+    badge: "bg-slate-300 dark:bg-gray-300 text-black shadow-[0_0_10px_rgba(209,213,219,0.4)]",
+    title: "text-slate-700 dark:text-gray-100"
             },
-            3: {
-                container: "border-orange-500/50 dark:border-orange-600/40 bg-gradient-to-r from-orange-500/10 to-transparent dark:from-orange-900/20",
-                badge: "bg-orange-500 dark:bg-orange-600 text-white shadow-[0_0_10px_rgba(234,88,12,0.4)]",
-                title: "text-orange-700 dark:text-orange-100"
+    3: {
+      container: "border-orange-500/50 dark:border-orange-600/40 bg-gradient-to-r from-orange-500/10 to-transparent dark:from-orange-900/20",
+    badge: "bg-orange-500 dark:bg-orange-600 text-white shadow-[0_0_10px_rgba(234,88,12,0.4)]",
+    title: "text-orange-700 dark:text-orange-100"
             },
-            default: {
-                container: "border-slate-200 dark:border-gray-800 bg-white dark:bg-gray-800 hover:bg-slate-50 dark:hover:bg-gray-750",
-                badge: "bg-slate-200 dark:bg-gray-700 text-slate-500 dark:text-gray-400",
-                title: "text-slate-700 dark:text-gray-300"
+    default: {
+      container: "border-slate-200 dark:border-gray-800 bg-white dark:bg-gray-800 hover:bg-slate-50 dark:hover:bg-gray-750",
+    badge: "bg-slate-200 dark:bg-gray-700 text-slate-500 dark:text-gray-400",
+    title: "text-slate-700 dark:text-gray-300"
             }
         };
 
-        // 温度颜色映射函数
-        function getColorForTemp(temp) {
+    // 温度颜色映射函数
+    function getColorForTemp(temp) {
             if (temp >= 35) return '#ef4444';
             if (temp >= 28) return '#f97316';
             if (temp >= 20) return '#eab308';
             if (temp >= 10) return '#10b981';
             if (temp >= 0) return '#06b6d4';
             if (temp >= -10) return '#3b82f6';
-            return '#6366f1';
+    return '#6366f1';
         }
 
-        // 主题切换逻辑
-        function toggleTheme() {
+    // 主题切换逻辑
+    function toggleTheme() {
             const html = document.documentElement;
-            const sunIcon = document.getElementById('icon-sun');
-            const moonIcon = document.getElementById('icon-moon');
+    const sunIcon = document.getElementById('icon-sun');
+    const moonIcon = document.getElementById('icon-moon');
 
-            if (html.classList.contains('dark')) {
-                html.classList.remove('dark');
-                currentTheme = 'light';
-                sunIcon.classList.add('hidden');
-                moonIcon.classList.remove('hidden');
+    if (html.classList.contains('dark')) {
+      html.classList.remove('dark');
+    currentTheme = 'light';
+    sunIcon.classList.add('hidden');
+    moonIcon.classList.remove('hidden');
             } else {
-                html.classList.add('dark');
-                currentTheme = 'dark';
-                sunIcon.classList.remove('hidden');
-                moonIcon.classList.add('hidden');
+      html.classList.add('dark');
+    currentTheme = 'dark';
+    sunIcon.classList.remove('hidden');
+    moonIcon.classList.add('hidden');
             }
 
-            // 重绘地图以适应新配色
-            if(window.myMapChart) {
-                updateMapOption(window.myMapChart);
+    // 重绘地图以适应新配色
+    if(window.myMapChart) {
+      updateMapOption(window.myMapChart);
             }
         }
 
-        // 应用排名样式
-        function applyRankStyle(element, rank) {
+    // 应用排名样式
+    function applyRankStyle(element, rank) {
             const badgeEl = element.querySelector('[data-role="badge"]');
-            const titleEl = element.querySelector('[data-role="title"]');
-            const tempEl = element.querySelector('[data-role="temp-val"]');
+    const titleEl = element.querySelector('[data-role="title"]');
+    const tempEl = element.querySelector('[data-role="temp-val"]');
 
-            if (!badgeEl || !titleEl || !tempEl) return;
+    if (!badgeEl || !titleEl || !tempEl) return;
 
-            const style = RANK_STYLES[rank] || RANK_STYLES.default;
+    const style = RANK_STYLES[rank] || RANK_STYLES.default;
 
-            // 更新容器样式
-            element.className = \`ranking-item group flex flex-col p-3 rounded-xl transition-all duration-300 border cursor-pointer select-none \${style.container}\`;
+    // 更新容器样式
+    element.className = \`ranking-item group flex flex-col p-3 rounded-xl transition-all duration-300 border cursor-pointer select-none \${style.container}\`;
 
-            // 更新徽章样式
-            badgeEl.className = \`flex justify-center items-center w-7 h-7 rounded-lg text-sm font-bold shadow-sm \${style.badge}\`;
-            badgeEl.textContent = rank;
+    // 更新徽章样式
+    badgeEl.className = \`flex justify-center items-center w-7 h-7 rounded-lg text-sm font-bold shadow-sm \${style.badge}\`;
+    badgeEl.textContent = rank;
 
-            // 更新标题样式
-            titleEl.className = \`font-semibold text-sm md:text-base \${style.title}\`;
+    // 更新标题样式
+    titleEl.className = \`font-semibold text-sm md:text-base \${style.title}\`;
 
-            // 更新温度颜色
-            const tempVal = parseFloat(element.dataset.temp);
-            tempEl.style.color = getColorForTemp(tempVal);
+    // 更新温度颜色
+    const tempVal = parseFloat(element.dataset.temp);
+    tempEl.style.color = getColorForTemp(tempVal);
         }
 
-        // 更新地图主题配色
-        function updateMapOption(chart) {
+    // 更新地图主题配色
+    function updateMapOption(chart) {
             const isDark = document.documentElement.classList.contains('dark');
-            const areaColor = isDark ? '#1f2937' : '#e2e8f0';
-            const borderColor = isDark ? '#111' : '#cbd5e1';
-            const hoverColor = isDark ? '#4b5563' : '#94a3b8';
-            const labelColor = isDark ? '#e5e7eb' : '#334155';
-            const emphasisLabelColor = isDark ? '#fff' : '#0f172a';
-            const shadowColor = isDark ? 'rgba(0, 0, 0, 0.5)' : 'rgba(0, 0, 0, 0.1)';
-            const tooltipBg = isDark ? 'rgba(23, 23, 26, 0.95)' : 'rgba(255, 255, 255, 0.95)';
-            const tooltipText = isDark ? '#e5e7eb' : '#1e293b';
-            const tooltipBorder = isDark ? '#374151' : '#e2e8f0';
+    const areaColor = isDark ? '#1f2937' : '#e2e8f0';
+    const borderColor = isDark ? '#111' : '#cbd5e1';
+    const hoverColor = isDark ? '#4b5563' : '#94a3b8';
+    const labelColor = isDark ? '#e5e7eb' : '#334155';
+    const emphasisLabelColor = isDark ? '#fff' : '#0f172a';
+    const shadowColor = isDark ? 'rgba(0, 0, 0, 0.5)' : 'rgba(0, 0, 0, 0.1)';
+    const tooltipBg = isDark ? 'rgba(23, 23, 26, 0.95)' : 'rgba(255, 255, 255, 0.95)';
+    const tooltipText = isDark ? '#e5e7eb' : '#1e293b';
+    const tooltipBorder = isDark ? '#374151' : '#e2e8f0';
 
-            chart.setOption({
-                tooltip: {
-                    backgroundColor: tooltipBg,
-                    borderColor: tooltipBorder,
-                    textStyle: { color: tooltipText },
+    chart.setOption({
+      tooltip: {
+      backgroundColor: tooltipBg,
+    borderColor: tooltipBorder,
+    textStyle: {color: tooltipText },
                     formatter: (p) => {
                         const displayName = window.getProvinceName(p.name, currentLang);
-                        const temp = p.value;
-                        const tempLabel = currentLang === 'zh' ? '温度' : 'Temperature';
-                        if (temp === undefined || temp === null || isNaN(temp)) {
+    const temp = p.value;
+    const tempLabel = currentLang === 'zh' ? '温度' : 'Temperature';
+    if (temp === undefined || temp === null || isNaN(temp)) {
                             return \`<div class="font-bold text-sm mb-1">\${displayName}</div><div class="text-xs">\${tempLabel}: <span class="font-bold">-</span></div>\`;
                         }
-                        const color = getColorForTemp(temp);
-                        return \`<div class="font-bold text-sm mb-1">\${displayName}</div><div class="text-xs">\${tempLabel}: <span class="font-bold" style="color: \${color}">\${temp}°C</span></div>\`;
+    const color = getColorForTemp(temp);
+    return \`<div class="font-bold text-sm mb-1">\${displayName}</div><div class="text-xs">\${tempLabel}: <span class="font-bold" style="color: \${color}">\${temp}°C</span></div>\`;
                     }
                 },
-                geo: {
-                    label: {
-                        show: true,
-                        fontSize: 10,
-                        color: labelColor,
-                        textBorderColor: isDark ? '#111827' : '#f8fafc',
-                        textBorderWidth: 2,
+    geo: {
+      label: {
+      show: true,
+    fontSize: 10,
+    color: labelColor,
+    textBorderColor: isDark ? '#111827' : '#f8fafc',
+    textBorderWidth: 2,
                         formatter: (params) => {
                             const displayName = window.getProvinceName(params.name, currentLang);
-                            const temp = tempMapData[params.name];
+    const temp = tempMapData[params.name];
 
-                            if (temp !== undefined && temp !== null && !isNaN(temp)) {
+    if (temp !== undefined && temp !== null && !isNaN(temp)) {
                                 return \`\${displayName}\\n\${temp}°\`;
                             }
-                            return \`\${displayName}\\n-\`;
+    return \`\${displayName}\\n-\`;
                         }
                     },
-                    itemStyle: { areaColor: areaColor, borderColor: borderColor },
-                    emphasis: {
-                        label: {
-                            show: true,
-                            color: emphasisLabelColor,
-                            fontSize: 12,
+    itemStyle: {areaColor: areaColor, borderColor: borderColor },
+    emphasis: {
+      label: {
+      show: true,
+    color: emphasisLabelColor,
+    fontSize: 12,
                             formatter: (params) => {
                                 const displayName = window.getProvinceName(params.name, currentLang);
-                                const temp = tempMapData[params.name];
+    const temp = tempMapData[params.name];
 
-                                if (temp !== undefined && temp !== null && !isNaN(temp)) {
+    if (temp !== undefined && temp !== null && !isNaN(temp)) {
                                     return \`\${displayName}\\n\${temp}°C\`;
                                 }
-                                return \`\${displayName}\\n-\`;
+    return \`\${displayName}\\n-\`;
                             }
                         },
-                        itemStyle: { areaColor: hoverColor, shadowColor: shadowColor, shadowBlur: 10 }
+    itemStyle: {areaColor: hoverColor, shadowColor: shadowColor, shadowBlur: 10 }
                     }
                 }
             });
@@ -1093,171 +1135,243 @@ async function generateDayPage(dayIndex, allForecastData, forecastData) {
         // 1. 初始化地图
         const initMap = async () => {
             const chartDom = document.getElementById('main-map');
-            window.myMapChart = echarts.init(chartDom);
+    window.myMapChart = echarts.init(chartDom);
 
-            // 省份数据 - 直接使用provinces.js中的full_name
-            const data = ${JSON.stringify(provinceData.map(item => ({
+    // 省份数据 - 直接使用provinces.js中的full_name
+    const data = ${JSON.stringify(provinceData.map(item => ({
       name: item.fullName || item.province,
       value: item.temperature
     })))};
 
-            try {
+    try {
                 const res = await fetch('/geo/100000_full.json');
-                const geoJson = await res.json();
+    const geoJson = await res.json();
 
                 // 调试：输出地图中的省份名称
                 console.log('地图GeoJSON中的省份名称:', geoJson.features.map(f => f.properties.name));
 
-                echarts.registerMap('china', geoJson);
+    echarts.registerMap('china', geoJson);
             } catch(e) {
-                console.error('Map Load Error', e);
-                return;
+      console.error('Map Load Error', e);
+    return;
             }
 
             // 创建省份名称到温度的映射（使用标准化名称）
             data.forEach(item => {
-                tempMapData[item.name] = item.value;
+      tempMapData[item.name] = item.value;
             });
 
-            // 调试输出
-            console.log('地图数据:', data);
-            console.log('温度映射:', tempMapData);
+    // 调试输出
+    console.log('地图数据:', data);
+    console.log('温度映射:', tempMapData);
 
-            window.myMapChart.setOption({
-                backgroundColor: 'transparent',
-                tooltip: {
-                    trigger: 'item',
-                    borderWidth: 1,
-                    textStyle: { fontSize: 12 }
+    window.myMapChart.setOption({
+      backgroundColor: 'transparent',
+    tooltip: {
+      trigger: 'item',
+    borderWidth: 1,
+    textStyle: {fontSize: 12 }
                 },
-                visualMap: {
-                    show: false,
-                    type: 'piecewise',
-                    seriesIndex: 0,
-                    pieces: [
-                        { gte: 35, color: '#ef4444' },           // >= 35°C 红色
-                        { gte: 28, lt: 35, color: '#f97316' },   // 28-34.9°C 橙色
-                        { gte: 20, lt: 28, color: '#eab308' },   // 20-27.9°C 黄色
-                        { gte: 10, lt: 20, color: '#10b981' },   // 10-19.9°C 绿色
-                        { gte: 0, lt: 10, color: '#06b6d4' },    // 0-9.9°C 青色
-                        { gte: -10, lt: 0, color: '#3b82f6' },   // -10--0.1°C 蓝色
-                        { lt: -10, color: '#6366f1' }            // < -10°C 紫色
-                    ]
+    visualMap: {
+      show: false,
+    type: 'piecewise',
+    seriesIndex: 0,
+    pieces: [
+    {gte: 35, color: '#ef4444' },           // >= 35°C 红色
+    {gte: 28, lt: 35, color: '#f97316' },   // 28-34.9°C 橙色
+    {gte: 20, lt: 28, color: '#eab308' },   // 20-27.9°C 黄色
+    {gte: 10, lt: 20, color: '#10b981' },   // 10-19.9°C 绿色
+    {gte: 0, lt: 10, color: '#06b6d4' },    // 0-9.9°C 青色
+    {gte: -10, lt: 0, color: '#3b82f6' },   // -10--0.1°C 蓝色
+    {lt: -10, color: '#6366f1' }            // < -10°C 紫色
+    ]
                 },
-                geo: {
-                    map: 'china',
-                    roam: true,
-                    top: '18%',
-                    zoom: 1.2,
-                    itemStyle: { borderWidth: 1 }
+    geo: {
+      map: 'china',
+    roam: true,
+    top: '18%',
+    zoom: 1.2,
+    itemStyle: {borderWidth: 1 }
                 },
-                series: [{ type: 'map', geoIndex: 0, data: data }]
+    series: [{type: 'map', geoIndex: 0, data: data }]
             });
 
-            // 应用正确的主题颜色
-            updateMapOption(window.myMapChart);
+    // 应用正确的主题颜色
+    updateMapOption(window.myMapChart);
 
-            window.myMapChart.on('click', function(params) {
+    window.myMapChart.on('click', function(params) {
                 // 跳转到省份详情页
                 const provinceName = params.name;
 
-                // 查找对应的英文名称和no_aliyun_data标记
-                let enName = provinceName;
-                let noAliyunData = false;
-                for (const [key, value] of Object.entries(window.provinceNameMap)) {
+    // 查找对应的英文名称和no_aliyun_data标记
+    let enName = provinceName;
+    let noAliyunData = false;
+    for (const [key, value] of Object.entries(window.provinceNameMap)) {
                     if (value.fullName === provinceName || value.zh === provinceName) {
-                        enName = value.en;
-                        noAliyunData = value.no_aliyun_data || false;
-                        break;
+      enName = value.en;
+    noAliyunData = value.no_aliyun_data || false;
+    break;
                     }
                 }
 
-                // 如果有no_aliyun_data标记，不跳转
-                if (noAliyunData) {
-                    console.log('Province has no aliyun data:', provinceName);
-                    return;
+    // 如果有no_aliyun_data标记，不跳转
+    if (noAliyunData) {
+      console.log('Province has no aliyun data:', provinceName);
+    return;
                 }
 
-                // 使用英文名称小写作为文件名
-                const fileName = enName.toLowerCase().replace(/\\s+/g, '') + '.html';
-                window.location.href = fileName;
+    // 使用英文名称小写作为文件名
+    const fileName = enName.toLowerCase().replace(/\\s+/g, '') + '.html';
+    window.location.href = fileName;
             });
 
             window.addEventListener('resize', () => window.myMapChart.resize());
         };
 
-        // 2. UI 交互: 展开详情
-        function toggleExpand(el) {
+    // 2. UI 交互: 展开详情
+    function toggleExpand(el) {
             const details = el.querySelector('.details-container');
-            const arrow = el.querySelector('.arrow-icon');
+    const arrow = el.querySelector('.arrow-icon');
 
-            if (details.classList.contains('open')) {
-                details.classList.remove('open', 'fade-in');
-                arrow.classList.remove('rotate-180', 'bg-black/5', 'dark:bg-white/10');
-                el.classList.remove('ring-1', 'ring-slate-400', 'dark:ring-gray-500');
+    if (details.classList.contains('open')) {
+      details.classList.remove('open', 'fade-in');
+    arrow.classList.remove('rotate-180', 'bg-black/5', 'dark:bg-white/10');
+    el.classList.remove('ring-1', 'ring-slate-400', 'dark:ring-gray-500');
             } else {
-                details.classList.add('open', 'fade-in');
-                arrow.classList.add('rotate-180', 'bg-black/5', 'dark:bg-white/10');
-                el.classList.add('ring-1', 'ring-slate-400', 'dark:ring-gray-500');
+      details.classList.add('open', 'fade-in');
+    arrow.classList.add('rotate-180', 'bg-black/5', 'dark:bg-white/10');
+    el.classList.add('ring-1', 'ring-slate-400', 'dark:ring-gray-500');
             }
         }
 
-        // 3. UI 交互: 排序
-        function sortList(order) {
-            const list = document.getElementById('ranking-list');
-            const items = Array.from(list.getElementsByClassName('ranking-item'));
-            const btnHot = document.getElementById('btn-hot');
-            const btnCold = document.getElementById('btn-cold');
+    // 展开指定元素（不切换，只展开）
+    function expandItem(el) {
+            const details = el.querySelector('.details-container');
+    const arrow = el.querySelector('.arrow-icon');
 
-            const activeClass = "flex-1 flex items-center justify-center gap-2 py-1.5 text-xs font-medium rounded-md transition-all bg-blue-500/10 text-blue-600 dark:text-blue-400 shadow-sm ring-1 ring-blue-500/50";
-            const hotActiveClass = "flex-1 flex items-center justify-center gap-2 py-1.5 text-xs font-medium rounded-md transition-all bg-red-500/10 text-red-600 dark:text-red-400 shadow-sm ring-1 ring-red-500/50";
-            const inactiveClass = "flex-1 flex items-center justify-center gap-2 py-1.5 text-xs font-medium rounded-md transition-all text-slate-400 dark:text-gray-400 hover:text-slate-600 dark:hover:text-gray-200";
-
-            if(order === 'desc') {
-                btnHot.className = hotActiveClass;
-                btnCold.className = inactiveClass;
-            } else {
-                btnHot.className = inactiveClass;
-                btnCold.className = activeClass;
+    if (!details.classList.contains('open')) {
+      details.classList.add('open', 'fade-in');
+    arrow.classList.add('rotate-180', 'bg-black/5', 'dark:bg-white/10');
+    el.classList.add('ring-1', 'ring-slate-400', 'dark:ring-gray-500');
             }
+        }
+
+    // 收起指定元素
+    function collapseItem(el) {
+            const details = el.querySelector('.details-container');
+    const arrow = el.querySelector('.arrow-icon');
+
+    if (details.classList.contains('open')) {
+      details.classList.remove('open', 'fade-in');
+    arrow.classList.remove('rotate-180', 'bg-black/5', 'dark:bg-white/10');
+    el.classList.remove('ring-1', 'ring-slate-400', 'dark:ring-gray-500');
+            }
+        }
+
+    // 收起所有展开的项
+    function collapseAll() {
+      document.querySelectorAll('.ranking-item').forEach(item => {
+        collapseItem(item);
+      });
+        }
+
+    // 导航到省份页面
+    function navigateToProvince(event, provinceFileName, noAliyunData) {
+      event.stopPropagation();
+    if (noAliyunData) {
+      console.log('Province has no aliyun data:', provinceFileName);
+    return;
+            }
+    window.location.href = provinceFileName + '.html';
+        }
+
+    // 导航到省份页面的特定日期
+    function navigateToProvinceDate(event, provinceFileName, dayIndex, dateStr, noAliyunData) {
+      event.stopPropagation();
+    if (noAliyunData) {
+      console.log('Province has no aliyun data:', provinceFileName);
+    return;
+            }
+    // 如果是今天（dayIndex === 0），跳转到省份主页
+    if (dayIndex === 0) {
+      window.location.href = provinceFileName + '.html';
+            } else {
+      // 其他日期，跳转到 YYYYMMDD/provincename.html
+      window.location.href = dateStr + '/' + provinceFileName + '.html';
+            }
+        }
+
+    // 3. UI 交互: 排序
+    function sortList(order) {
+            const list = document.getElementById('ranking-list');
+    const items = Array.from(list.getElementsByClassName('ranking-item'));
+    const btnHot = document.getElementById('btn-hot');
+    const btnCold = document.getElementById('btn-cold');
+
+    const activeClass = "flex-1 flex items-center justify-center gap-2 py-1.5 text-xs font-medium rounded-md transition-all bg-blue-500/10 text-blue-600 dark:text-blue-400 shadow-sm ring-1 ring-blue-500/50";
+    const hotActiveClass = "flex-1 flex items-center justify-center gap-2 py-1.5 text-xs font-medium rounded-md transition-all bg-red-500/10 text-red-600 dark:text-red-400 shadow-sm ring-1 ring-red-500/50";
+    const inactiveClass = "flex-1 flex items-center justify-center gap-2 py-1.5 text-xs font-medium rounded-md transition-all text-slate-400 dark:text-gray-400 hover:text-slate-600 dark:hover:text-gray-200";
+
+    if(order === 'desc') {
+      btnHot.className = hotActiveClass;
+    btnCold.className = inactiveClass;
+            } else {
+      btnHot.className = inactiveClass;
+    btnCold.className = activeClass;
+            }
+
+    // 先收起所有展开的项
+    collapseAll();
 
             items.sort((a, b) => {
                 const tA = parseFloat(a.dataset.temp);
-                const tB = parseFloat(b.dataset.temp);
-                return order === 'desc' ? tB - tA : tA - tB;
+    const tB = parseFloat(b.dataset.temp);
+    return order === 'desc' ? tB - tA : tA - tB;
             });
             items.forEach((item, index) => {
-                list.appendChild(item);
-                applyRankStyle(item, index + 1);
+      list.appendChild(item);
+    applyRankStyle(item, index + 1);
             });
+
+    // 展开排序后的第一个项
+    const firstItem = list.querySelector('.ranking-item');
+    if (firstItem) {
+      expandItem(firstItem);
+            }
         }
 
         // 页面加载完成后初始化
         document.addEventListener('DOMContentLoaded', () => {
-            // 初始化语言
-            initLanguage();
+      // 初始化语言
+      initLanguage();
 
-            // 初始化主题图标显示
-            if(!document.documentElement.classList.contains('dark')) {
-                document.getElementById('icon-sun').classList.add('hidden');
-                document.getElementById('icon-moon').classList.remove('hidden');
+    // 初始化主题图标显示
+    if(!document.documentElement.classList.contains('dark')) {
+      document.getElementById('icon-sun').classList.add('hidden');
+    document.getElementById('icon-moon').classList.remove('hidden');
             } else {
-                document.getElementById('icon-sun').classList.remove('hidden');
-                document.getElementById('icon-moon').classList.add('hidden');
+      document.getElementById('icon-sun').classList.remove('hidden');
+    document.getElementById('icon-moon').classList.add('hidden');
             }
 
-            // 初始化排名样式
-            const items = document.querySelectorAll('.ranking-item');
+    // 初始化排名样式
+    const items = document.querySelectorAll('.ranking-item');
             items.forEach((item, index) => {
-                applyRankStyle(item, index + 1);
+      applyRankStyle(item, index + 1);
             });
 
-            // 初始化地图
-            initMap();
+    // 自动展开第一个项（Hot模式下的第一个）
+    const firstItem = document.querySelector('.ranking-item');
+    if (firstItem) {
+      expandItem(firstItem);
+            }
+
+    // 初始化地图
+    initMap();
         });
-    </script>
-</body>
-</html>`;
+  </script>
+</body >
+</html > `;
 
   // 确保目录存在
   const fullPath = path.join(OUTPUT_DIR, filePath);
@@ -1273,13 +1387,16 @@ async function generateDayPage(dayIndex, allForecastData, forecastData) {
 /**
  * 生成所有日期的主页
  */
-async function generateAllIndexPages(allForecastData, forecastData) {
+async function generateAllIndexPages(allForecastData) {
   console.log('🏠 生成所有日期页面...');
 
   // 确保输出目录存在
   if (!fs.existsSync(OUTPUT_DIR)) {
     fs.mkdirSync(OUTPUT_DIR, { recursive: true });
   }
+
+  // 获取所有省份的7天预报数据（从今天开始的固定窗口）
+  const forecastData = await getAllProvincesForecast();
 
   for (let i = 0; i < 7; i++) {
     await generateDayPage(i, allForecastData, forecastData);
@@ -1356,24 +1473,24 @@ async function generateProvincePage(provinceName, provinceConfig, dayIndex = 0) 
   const fileName = enName.toLowerCase().replace(/\s+/g, '') + '.html';
 
   const html = `<!DOCTYPE html>
-<html lang="en" class="dark">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="google-adsense-account" content="ca-pub-4059058909472641">
-    <meta name="description" content="${enName} Temperature Rankings - City temperature data">
-    <meta name="keywords" content="${enName},${provinceName},temperature,weather,cities">
-    <title>${enName} Temperature Rankings</title>
-    <link rel="icon" type="image/x-icon" href="/favicon.ico">
-    <script>
+  <html lang="en" class="dark">
+    <head>
+      <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+          <meta name="google-adsense-account" content="ca-pub-4059058909472641">
+            <meta name="description" content="${enName} Temperature Rankings - City temperature data">
+              <meta name="keywords" content="${enName},${provinceName},temperature,weather,cities">
+                <title>${enName} Temperature Rankings</title>
+                <link rel="icon" type="image/x-icon" href="/favicon.ico">
+                  <script>
       // 多语言配置
-      window.i18n = ${JSON.stringify(i18n)};
+                    window.i18n = ${JSON.stringify(i18n)};
 
-      // 天气描述中英文对照表
-      window.weatherDescMap = ${JSON.stringify(weatherDescMap)};
+                    // 天气描述中英文对照表
+                    window.weatherDescMap = ${JSON.stringify(weatherDescMap)};
 
-      // 城市名称中英文对照表
-      window.cityNameMap = ${JSON.stringify(
+                    // 城市名称中英文对照表
+                    window.cityNameMap = ${JSON.stringify(
     cityData.reduce((map, city) => {
       const cityName = city.city || city.name;
       const fullName = city.fullName || cityName;
@@ -1393,128 +1510,128 @@ async function generateProvincePage(provinceName, provinceConfig, dayIndex = 0) 
     }, {})
   )};
 
-      // 翻译天气描述
-      window.translateWeatherDesc = function(weatherDesc, lang) {
+                    // 翻译天气描述
+                    window.translateWeatherDesc = function(weatherDesc, lang) {
         if (lang === 'zh') {
           return weatherDesc;
         }
-        return window.weatherDescMap[weatherDesc] || weatherDesc;
+                    return window.weatherDescMap[weatherDesc] || weatherDesc;
       };
 
-      // 获取城市名称（支持中英文）
-      window.getCityName = function(cityName, lang) {
+                    // 获取城市名称（支持中英文）
+                    window.getCityName = function(cityName, lang) {
         if (!cityName) return '';
 
-        // 直接匹配
-        if (window.cityNameMap[cityName]) {
+                    // 直接匹配
+                    if (window.cityNameMap[cityName]) {
           return window.cityNameMap[cityName][lang];
         }
 
-        // 尝试去掉常见后缀再匹配
-        const suffixes = ['市', '区', '县', '自治州', '地区', '盟'];
-        for (const suffix of suffixes) {
+                    // 尝试去掉常见后缀再匹配
+                    const suffixes = ['市', '区', '县', '自治州', '地区', '盟'];
+                    for (const suffix of suffixes) {
           if (cityName.endsWith(suffix)) {
             const baseName = cityName.slice(0, -suffix.length);
-            if (window.cityNameMap[baseName]) {
+                    if (window.cityNameMap[baseName]) {
               return window.cityNameMap[baseName][lang];
             }
           }
         }
 
-        // 如果没有匹配，返回原名称
-        return cityName;
+                    // 如果没有匹配，返回原名称
+                    return cityName;
       };
-    </script>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/echarts/5.4.3/echarts.min.js"></script>
-    <script>
-      tailwind.config = {
-        darkMode: 'class',
-        theme: {
-          extend: {
-            colors: {
-              gray: {
-                750: '#2d3748',
-                850: '#1a202c',
-                950: '#0d1117',
+                  </script>
+                  <script src="https://cdn.tailwindcss.com"></script>
+                  <script src="https://cdnjs.cloudflare.com/ajax/libs/echarts/5.4.3/echarts.min.js"></script>
+                  <script>
+                    tailwind.config = {
+                      darkMode: 'class',
+                    theme: {
+                      extend: {
+                      colors: {
+                      gray: {
+                      750: '#2d3748',
+                    850: '#1a202c',
+                    950: '#0d1117',
               }
             }
           }
         }
       }
-    </script>
-    <style>
-      body {
-        margin: 0;
-        overflow: hidden;
+                  </script>
+                  <style>
+                    body {
+                      margin: 0;
+                    overflow: hidden;
       }
-      .no-scrollbar::-webkit-scrollbar {
-        display: none;
+                    .no-scrollbar::-webkit-scrollbar {
+                      display: none;
       }
-      .no-scrollbar {
-        -ms-overflow-style: none;
-        scrollbar-width: none;
+                    .no-scrollbar {
+                      -ms - overflow - style: none;
+                    scrollbar-width: none;
       }
-      .fade-in {
-        animation: fadeIn 0.3s ease-out forwards;
-        opacity: 0;
-        transform: translateY(-5px);
+                    .fade-in {
+                      animation: fadeIn 0.3s ease-out forwards;
+                    opacity: 0;
+                    transform: translateY(-5px);
       }
-      @keyframes fadeIn {
-        to {
-          opacity: 1;
-          transform: translateY(0);
+                    @keyframes fadeIn {
+                      to {
+                      opacity: 1;
+                    transform: translateY(0);
         }
       }
-      .details-container {
-        display: none;
+                    .details-container {
+                      display: none;
       }
-      .details-container.open {
-        display: block;
+                    .details-container.open {
+                      display: block;
       }
-    </style>
-</head>
-<body class="flex flex-col md:flex-row h-screen w-screen overflow-hidden bg-slate-50 dark:bg-[#0d1117] text-slate-900 dark:text-white font-sans transition-colors duration-300">
+                  </style>
+                </head>
+                <body class="flex flex-col md:flex-row h-screen w-screen overflow-hidden bg-slate-50 dark:bg-[#0d1117] text-slate-900 dark:text-white font-sans transition-colors duration-300">
 
-    <!-- 左侧：地图可视化区域 -->
-    <div class="relative flex-1 h-[50vh] md:h-full flex flex-col">
-        <!-- 顶部覆盖层：标题 & 图例 & 返回按钮 -->
-        <div class="absolute top-0 left-0 w-full p-6 z-10 pointer-events-none">
-            <div class="flex justify-between items-start">
-                <div class="flex items-center gap-3">
-                    <!-- 返回按钮 -->
-                    <a href="index.html" class="pointer-events-auto p-2 rounded-lg bg-white/80 dark:bg-gray-800/80 backdrop-blur border border-slate-200 dark:border-gray-700 text-slate-600 dark:text-gray-300 hover:text-blue-500 dark:hover:text-blue-400 transition-colors shadow-sm">
-                        <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
-                        </svg>
-                    </a>
-                    <div>
-                        <h1 id="main-heading" class="text-3xl font-black tracking-tighter text-transparent bg-clip-text bg-gradient-to-r from-blue-500 to-emerald-500 drop-shadow-sm font-sans" data-province-zh="${provinceName}" data-province-en="${enName}">
-                            ${enName}
-                        </h1>
-                    </div>
-                </div>
-
-                <div class="pointer-events-auto flex flex-col items-end gap-2">
-                    <div class="flex gap-2">
-                        <!-- Theme Toggle -->
-                        <button onclick="toggleTheme()" id="theme-btn" class="p-1.5 rounded-lg bg-white/80 dark:bg-gray-800/80 backdrop-blur border border-slate-200 dark:border-gray-700 text-slate-600 dark:text-gray-300 hover:text-blue-500 dark:hover:text-blue-400 transition-colors shadow-sm cursor-pointer">
-                            <svg id="icon-sun" class="w-4 h-4 hidden" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z" /></svg>
-                            <svg id="icon-moon" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z" /></svg>
-                        </button>
-
-                        <!-- 语言切换 -->
-                        <div class="flex bg-white/80 dark:bg-gray-800/80 backdrop-blur rounded-lg border border-slate-200 dark:border-gray-700 p-1">
-                            <button onclick="switchLanguage('en')" id="lang-en" class="px-2 py-0.5 text-xs font-bold rounded bg-blue-600 text-white cursor-pointer">EN</button>
-                            <button onclick="switchLanguage('zh')" id="lang-zh" class="px-2 py-0.5 text-xs font-bold rounded text-slate-500 dark:text-gray-400 hover:text-slate-900 dark:hover:text-white transition-colors cursor-pointer">CN</button>
+                  <!-- 左侧：地图可视化区域 -->
+                  <div class="relative flex-1 h-[50vh] md:h-full flex flex-col">
+                    <!-- 顶部覆盖层：标题 & 图例 & 返回按钮 -->
+                    <div class="absolute top-0 left-0 w-full p-3 md:p-6 z-10 pointer-events-none">
+                      <div class="flex justify-between items-start">
+                        <div class="flex items-center gap-3">
+                          <!-- 返回按钮 -->
+                          <a href="index.html" class="pointer-events-auto p-2 rounded-lg bg-white/80 dark:bg-gray-800/80 backdrop-blur border border-slate-200 dark:border-gray-700 text-slate-600 dark:text-gray-300 hover:text-blue-500 dark:hover:text-blue-400 transition-colors shadow-sm">
+                            <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
+                            </svg>
+                          </a>
+                          <div>
+                            <h1 id="main-heading" class="text-xl md:text-3xl font-black tracking-tighter text-transparent bg-clip-text bg-gradient-to-r from-blue-500 to-emerald-500 drop-shadow-sm font-sans" data-province-zh="${provinceName}" data-province-en="${enName}">
+                              ${enName}
+                            </h1>
+                          </div>
                         </div>
-                    </div>
 
-                    <!-- 温度图例 -->
-                    <div class="flex flex-col gap-1 items-end p-2 rounded-lg bg-white/80 dark:bg-gray-900/60 backdrop-blur-md border border-slate-200 dark:border-gray-700/50 shadow-xl transition-colors duration-300">
-                        <div id="temp-scale-label" class="text-[10px] text-slate-500 dark:text-gray-400 font-semibold mb-1 uppercase tracking-wider w-full text-right px-1">Temp Scale</div>
-                        <div class="flex flex-col gap-1">
-                            ${[
+                        <div class="pointer-events-auto flex flex-col items-end gap-2">
+                          <div class="flex gap-2">
+                            <!-- Theme Toggle -->
+                            <button onclick="toggleTheme()" id="theme-btn" class="p-1.5 rounded-lg bg-white/80 dark:bg-gray-800/80 backdrop-blur border border-slate-200 dark:border-gray-700 text-slate-600 dark:text-gray-300 hover:text-blue-500 dark:hover:text-blue-400 transition-colors shadow-sm cursor-pointer">
+                              <svg id="icon-sun" class="w-4 h-4 hidden" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z" /></svg>
+                              <svg id="icon-moon" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z" /></svg>
+                            </button>
+
+                            <!-- 语言切换 -->
+                            <div class="flex bg-white/80 dark:bg-gray-800/80 backdrop-blur rounded-lg border border-slate-200 dark:border-gray-700 p-1">
+                              <button onclick="switchLanguage('en')" id="lang-en" class="px-2 py-0.5 text-xs font-bold rounded bg-blue-600 text-white cursor-pointer">EN</button>
+                              <button onclick="switchLanguage('zh')" id="lang-zh" class="px-2 py-0.5 text-xs font-bold rounded text-slate-500 dark:text-gray-400 hover:text-slate-900 dark:hover:text-white transition-colors cursor-pointer">CN</button>
+                            </div>
+                          </div>
+
+                          <!-- 温度图例 -->
+                          <div class="flex flex-col gap-1 items-end p-2 rounded-lg bg-white/80 dark:bg-gray-900/60 backdrop-blur-md border border-slate-200 dark:border-gray-700/50 shadow-xl transition-colors duration-300 scale-75 md:scale-100 origin-top-right">
+                            <div id="temp-scale-label" class="text-[10px] text-slate-500 dark:text-gray-400 font-semibold mb-1 uppercase tracking-wider w-full text-right px-1">Temp Scale</div>
+                            <div class="flex flex-col gap-1">
+                              ${[
       { label: '>35°C', color: '#ef4444' },
       { label: '28~35°C', color: '#f97316' },
       { label: '20~28°C', color: '#eab308' },
@@ -1528,20 +1645,20 @@ async function generateProvincePage(provinceName, provinceConfig, dayIndex = 0) 
                                 <div class="w-8 h-1.5 rounded-full shadow-[0_0_8px_rgba(0,0,0,0.1)] dark:shadow-[0_0_8px_rgba(0,0,0,0.3)] transition-all group-hover:w-10 bg-[${step.color}]"></div>
                             </div>
                             `).join('')}
+                            </div>
+                          </div>
                         </div>
+                      </div>
                     </div>
-                </div>
-            </div>
-        </div>
 
-        <!-- 地图容器 -->
-        <div class="flex-1 w-full h-full">
-            <div id="main-map" class="w-full h-full"></div>
-        </div>
+                    <!-- 地图容器 -->
+                    <div class="flex-1 w-full h-full">
+                      <div id="main-map" class="w-full h-full"></div>
+                    </div>
 
-        <!-- 底部覆盖层：日期选择器 (DaySelector) -->
-        <div class="absolute bottom-6 left-1/2 -translate-x-1/2 z-10 flex gap-1.5 md:gap-2 p-1.5 bg-white/80 dark:bg-gray-900/80 backdrop-blur-md rounded-2xl border border-slate-200 dark:border-gray-700/50 shadow-2xl shadow-slate-300/50 dark:shadow-black/50 max-w-[95%] overflow-x-auto no-scrollbar pointer-events-auto transition-colors duration-300">
-            ${(() => {
+                    <!-- 底部覆盖层：日期选择器 (DaySelector) -->
+                    <div class="absolute bottom-6 left-1/2 -translate-x-1/2 z-10 flex gap-1.5 md:gap-2 p-1.5 bg-white/80 dark:bg-gray-900/80 backdrop-blur-md rounded-2xl border border-slate-200 dark:border-gray-700/50 shadow-2xl shadow-slate-300/50 dark:shadow-black/50 max-w-[95%] overflow-x-auto no-scrollbar pointer-events-auto transition-colors duration-300">
+                      ${(() => {
       const dayButtons = [];
       for (let i = 0; i < 7; i++) {
         // 星期几的中英文名称 (0=周日, 1=周一, ..., 6=周六)
@@ -1584,37 +1701,37 @@ async function generateProvincePage(provinceName, provinceConfig, dayIndex = 0) 
       }
       return dayButtons.join('');
     })()}
-        </div>
-    </div>
-
-    <!-- 右侧：城市排行榜面板 -->
-    <div class="w-full md:w-[400px] h-[50vh] md:h-full z-20">
-        <div class="flex flex-col h-full bg-white dark:bg-gray-900 border-l border-slate-200 dark:border-gray-700 shadow-2xl relative transition-colors duration-300">
-        <!-- 面板头部 -->
-        <div class="p-6 border-b border-slate-200 dark:border-gray-800 bg-white/95 dark:bg-gray-900/95 backdrop-blur z-10 sticky top-0 transition-colors duration-300">
-            <div class="flex items-center justify-between mb-4">
-                <div class="flex flex-col">
-                    <h2 id="ranking-title" class="text-xl font-bold text-slate-900 dark:text-white tracking-tight">City Rankings</h2>
-                    <div class="flex items-center gap-2 mt-1">
-                        <span class="text-xs text-slate-500 dark:text-gray-500">${cityData.length} <span id="regions-label">Cities</span></span>
                     </div>
-                </div>
-            </div>
+                  </div>
 
-            <!-- 排序控制 -->
-            <div class="flex p-1 bg-slate-100 dark:bg-gray-800 rounded-lg border border-slate-200 dark:border-gray-700">
-                <button onclick="sortList('desc')" id="btn-hot" class="flex-1 flex items-center justify-center gap-2 py-1.5 text-xs font-medium rounded-md transition-all bg-red-500/10 text-red-600 dark:text-red-400 shadow-sm ring-1 ring-red-500/50">
-                    Hot
-                </button>
-                <button onclick="sortList('asc')" id="btn-cold" class="flex-1 flex items-center justify-center gap-2 py-1.5 text-xs font-medium rounded-md transition-all text-slate-400 dark:text-gray-400 hover:text-slate-600 dark:hover:text-gray-200">
-                    Cold
-                </button>
-            </div>
-        </div>
+                  <!-- 右侧：城市排行榜面板 -->
+                  <div class="w-full md:w-[400px] h-[50vh] md:h-full z-20">
+                    <div class="flex flex-col h-full bg-white dark:bg-gray-900 border-l border-slate-200 dark:border-gray-700 shadow-2xl relative transition-colors duration-300">
+                      <!-- 面板头部 -->
+                      <div class="p-6 border-b border-slate-200 dark:border-gray-800 bg-white/95 dark:bg-gray-900/95 backdrop-blur z-10 sticky top-0 transition-colors duration-300">
+                        <div class="flex items-center justify-between mb-4">
+                          <div class="flex flex-col">
+                            <h2 id="ranking-title" class="text-xl font-bold text-slate-900 dark:text-white tracking-tight">City Rankings</h2>
+                            <div class="flex items-center gap-2 mt-1">
+                              <span class="text-xs text-slate-500 dark:text-gray-500">${cityData.length} <span id="regions-label">Cities</span></span>
+                            </div>
+                          </div>
+                        </div>
 
-        <!-- 列表内容区 -->
-        <div id="ranking-list" class="flex-1 overflow-y-auto p-4 space-y-3 scroll-smooth">
-            ${cityData.map((item, index) => {
+                        <!-- 排序控制 -->
+                        <div class="flex p-1 bg-slate-100 dark:bg-gray-800 rounded-lg border border-slate-200 dark:border-gray-700">
+                          <button onclick="sortList('desc')" id="btn-hot" class="flex-1 flex items-center justify-center gap-2 py-1.5 text-xs font-medium rounded-md transition-all bg-red-500/10 text-red-600 dark:text-red-400 shadow-sm ring-1 ring-red-500/50">
+                            Hot
+                          </button>
+                          <button onclick="sortList('asc')" id="btn-cold" class="flex-1 flex items-center justify-center gap-2 py-1.5 text-xs font-medium rounded-md transition-all text-slate-400 dark:text-gray-400 hover:text-slate-600 dark:hover:text-gray-200">
+                            Cold
+                          </button>
+                        </div>
+                      </div>
+
+                      <!-- 列表内容区 -->
+                      <div id="ranking-list" class="flex-1 overflow-y-auto p-4 space-y-3 scroll-smooth">
+                        ${cityData.map((item, index) => {
       const forecast = cityForecastData[item.city] || [];
 
       while (forecast.length < 7) {
@@ -1629,8 +1746,8 @@ async function generateProvincePage(provinceName, provinceConfig, dayIndex = 0) 
       }
 
       return `
-            <div class="ranking-item group flex flex-col p-3 rounded-xl transition-all duration-300 border cursor-pointer select-none border-slate-200 dark:border-gray-800 bg-white dark:bg-gray-800 hover:bg-slate-50 dark:hover:bg-gray-750"
-                 data-temp="${item.temperature}" onclick="toggleExpand(this)">
+            <div class="ranking-item group flex flex-col p-3 rounded-xl transition-all duration-300 border select-none border-slate-200 dark:border-gray-800 bg-white dark:bg-gray-800 hover:bg-slate-50 dark:hover:bg-gray-750"
+                 data-temp="${item.temperature}">
                 <div class="flex items-center justify-between">
                     <div class="flex items-center gap-4">
                         <span data-role="badge" class="flex justify-center items-center w-7 h-7 rounded-lg text-sm font-bold shadow-sm bg-slate-200 dark:bg-gray-700 text-slate-500 dark:text-gray-400">
@@ -1649,7 +1766,7 @@ async function generateProvincePage(provinceName, provinceConfig, dayIndex = 0) 
                                 ${item.temperature !== null && item.temperature !== undefined && !isNaN(item.temperature) ? item.temperature + '°' : '-'}
                             </div>
                         </div>
-                        <div class="arrow-icon p-1 rounded-full hover:bg-black/5 dark:hover:bg-white/5 transition-transform duration-300">
+                        <div class="arrow-icon p-1 rounded-full hover:bg-black/5 dark:hover:bg-white/5 transition-transform duration-300 cursor-pointer" onclick="toggleExpand(this.closest('.ranking-item'))">
                             <svg class="w-4 h-4 text-slate-400 dark:text-gray-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
                             </svg>
@@ -1667,14 +1784,38 @@ async function generateProvincePage(provinceName, provinceConfig, dayIndex = 0) 
         const barHeight = hasData ? Math.max(10, Math.min(100, tempRange * 2)) : 20;
         const barColor = hasData ? getColorForTemp(day.high) : '#4b5563';
 
+
         const daysZh = ['今天', '周日', '周一', '周二', '周三', '周四', '周五', '周六'];
         const daysEn = ['Today', 'Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
         const dayNameIndex = daysZh.indexOf(day.dayName);
         const dayNameEn = dayNameIndex >= 0 ? daysEn[dayNameIndex] : day.dayName;
 
+        // 计算目标日期的字符串 (用于链接)
+        const targetDate = new Date();
+        targetDate.setDate(targetDate.getDate() + idx);
+        const targetDateStr = targetDate.toISOString().slice(0, 10).replace(/-/g, '');
+
+        let targetUrl;
+        if (idx === dayIndex) {
+          targetUrl = '#'; // 当前页面
+        } else if (idx === 0) {
+          targetUrl = dayIndex === 0 ? '#' : `../${fileName}`;
+        } else {
+          targetUrl = dayIndex === 0
+            ? `${targetDateStr}/${fileName}`
+            : `../${targetDateStr}/${fileName}`;
+        }
+
+        const isSelected = idx === dayIndex;
+        const cursorClass = isSelected ? 'cursor-default' : 'cursor-pointer hover:opacity-80 transition-opacity';
+
+        // 使用a标签而非onclick
+        const TagName = isSelected ? 'div' : 'a';
+        const hrefAttr = isSelected ? '' : `href="${targetUrl}"`;
+
         return `
-                        <div class="flex flex-col items-center group/day">
-                            <span class="forecast-day-label text-[9px] font-medium mb-1 ${idx === dayIndex ? 'text-blue-500' : 'text-slate-500 dark:text-gray-500'}" data-day-zh="${day.dayName}" data-day-en="${dayNameEn}">
+                        <${TagName} ${hrefAttr} class="flex flex-col items-center group/day ${cursorClass}">
+                            <span class="forecast-day-label text-[9px] font-medium mb-1 ${isSelected ? 'text-blue-500' : 'text-slate-500 dark:text-gray-500'}" data-day-zh="${day.dayName}" data-day-en="${dayNameEn}">
                                 ${dayNameEn}
                             </span>
                             <div class="w-full bg-slate-200 dark:bg-gray-800/50 rounded-full h-20 relative w-1.5 md:w-2 mx-auto ring-1 ring-black/5 dark:ring-white/5">
@@ -1684,7 +1825,7 @@ async function generateProvincePage(provinceName, provinceConfig, dayIndex = 0) 
                                 <span class="text-[10px] font-bold text-slate-700 dark:text-gray-300 leading-none">${hasData ? day.high + '°' : '--'}</span>
                                 <span class="text-[9px] text-slate-500 dark:text-gray-600 leading-none">${hasData ? day.low + '°' : '--'}</span>
                             </div>
-                        </div>
+                        </${TagName}>
                         `;
       }).join('')}
                     </div>
@@ -1692,207 +1833,207 @@ async function generateProvincePage(provinceName, provinceConfig, dayIndex = 0) 
             </div>
               `;
     }).join('')}
-        </div>
-        </div>
-    </div>
-</div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
 
-<script>
-    let currentTheme = 'dark';
-    let currentLang = 'en';
-    let tempMapData = {};
+                <script>
+                  let currentTheme = 'dark';
+                  let currentLang = 'en';
+                  let tempMapData = { };
 
-    function initLanguage() {
+                  function initLanguage() {
         const savedLang = localStorage.getItem('preferredLanguage') || 'en';
-        currentLang = savedLang;
-        updateLanguageUI(savedLang);
+                  currentLang = savedLang;
+                  updateLanguageUI(savedLang);
     }
 
-    function switchLanguage(lang) {
+                  function switchLanguage(lang) {
         if (lang === currentLang) return;
-        currentLang = lang;
-        localStorage.setItem('preferredLanguage', lang);
-        updateLanguageUI(lang);
+                  currentLang = lang;
+                  localStorage.setItem('preferredLanguage', lang);
+                  updateLanguageUI(lang);
     }
 
-    function updateLanguageUI(lang) {
+                  function updateLanguageUI(lang) {
         const t = window.i18n[lang];
-        document.documentElement.lang = lang === 'zh' ? 'zh-CN' : 'en';
+                  document.documentElement.lang = lang === 'zh' ? 'zh-CN' : 'en';
 
-        const langEn = document.getElementById('lang-en');
-        const langZh = document.getElementById('lang-zh');
-        const activeClass = 'px-2 py-0.5 text-xs font-bold rounded bg-blue-600 text-white cursor-pointer';
-        const inactiveClass = 'px-2 py-0.5 text-xs font-bold rounded text-slate-500 dark:text-gray-400 hover:text-slate-900 dark:hover:text-white transition-colors cursor-pointer';
+                  const langEn = document.getElementById('lang-en');
+                  const langZh = document.getElementById('lang-zh');
+                  const activeClass = 'px-2 py-0.5 text-xs font-bold rounded bg-blue-600 text-white cursor-pointer';
+                  const inactiveClass = 'px-2 py-0.5 text-xs font-bold rounded text-slate-500 dark:text-gray-400 hover:text-slate-900 dark:hover:text-white transition-colors cursor-pointer';
 
-        if (lang === 'en') {
-            langEn.className = activeClass;
-            langZh.className = inactiveClass;
+                  if (lang === 'en') {
+                    langEn.className = activeClass;
+                  langZh.className = inactiveClass;
         } else {
-            langEn.className = inactiveClass;
-            langZh.className = activeClass;
+                    langEn.className = inactiveClass;
+                  langZh.className = activeClass;
         }
 
-        document.getElementById('temp-scale-label').textContent = t.tempScale;
-        document.getElementById('btn-hot').textContent = t.sortHot;
-        document.getElementById('btn-cold').textContent = t.sortCold;
+                  document.getElementById('temp-scale-label').textContent = t.tempScale;
+                  document.getElementById('btn-hot').textContent = t.sortHot;
+                  document.getElementById('btn-cold').textContent = t.sortCold;
 
-        // 更新省份标题
-        const mainHeading = document.getElementById('main-heading');
-        if (mainHeading && mainHeading.dataset.provinceZh && mainHeading.dataset.provinceEn) {
+                  // 更新省份标题
+                  const mainHeading = document.getElementById('main-heading');
+                  if (mainHeading && mainHeading.dataset.provinceZh && mainHeading.dataset.provinceEn) {
             const provinceName = lang === 'zh' ? mainHeading.dataset.provinceZh : mainHeading.dataset.provinceEn;
-            mainHeading.textContent = provinceName;
-            // 更新页面标题
-            document.title = provinceName + (lang === 'zh' ? ' 气温排行' : ' Temperature Rankings');
+                  mainHeading.textContent = provinceName;
+                  // 更新页面标题
+                  document.title = provinceName + (lang === 'zh' ? ' 气温排行' : ' Temperature Rankings');
         }
 
         document.querySelectorAll('.weather-desc').forEach(el => {
-            el.textContent = lang === 'zh' ? el.dataset.weatherZh : el.dataset.weatherEn;
+                    el.textContent = lang === 'zh' ? el.dataset.weatherZh : el.dataset.weatherEn;
         });
 
         document.querySelectorAll('.wind-label').forEach(el => {
-            el.textContent = t.wind;
+                    el.textContent = t.wind;
         });
 
         document.querySelectorAll('.forecast-day-label').forEach(el => {
-            el.textContent = lang === 'zh' ? el.dataset.dayZh : el.dataset.dayEn;
+                    el.textContent = lang === 'zh' ? el.dataset.dayZh : el.dataset.dayEn;
         });
 
         // 更新日期选择器
         document.querySelectorAll('.day-label').forEach(el => {
-            el.textContent = lang === 'zh' ? el.dataset.dayZh : el.dataset.dayEn;
+                    el.textContent = lang === 'zh' ? el.dataset.dayZh : el.dataset.dayEn;
         });
 
         // 更新城市标题
         document.querySelectorAll('[data-role="title"]').forEach(el => {
             if (el.dataset.cityZh && el.dataset.cityEn) {
-                el.textContent = lang === 'zh' ? el.dataset.cityZh : el.dataset.cityEn;
+                    el.textContent = lang === 'zh' ? el.dataset.cityZh : el.dataset.cityEn;
             }
         });
 
-        if (window.myMapChart) {
-            updateMapOption(window.myMapChart);
+                  if (window.myMapChart) {
+                    updateMapOption(window.myMapChart);
         }
     }
 
-    const RANK_STYLES = {
-        1: {
-            container: "border-yellow-500/50 bg-gradient-to-r from-yellow-500/10 to-transparent dark:from-yellow-900/20",
-            badge: "bg-yellow-500 text-black shadow-[0_0_10px_rgba(234,179,8,0.4)]",
-            title: "text-yellow-700 dark:text-yellow-100"
+                  const RANK_STYLES = {
+                    1: {
+                    container: "border-yellow-500/50 bg-gradient-to-r from-yellow-500/10 to-transparent dark:from-yellow-900/20",
+                  badge: "bg-yellow-500 text-black shadow-[0_0_10px_rgba(234,179,8,0.4)]",
+                  title: "text-yellow-700 dark:text-yellow-100"
         },
-        2: {
-            container: "border-slate-400/50 dark:border-gray-400/40 bg-gradient-to-r from-slate-500/10 to-transparent dark:from-gray-700/20",
-            badge: "bg-slate-300 dark:bg-gray-300 text-black shadow-[0_0_10px_rgba(209,213,219,0.4)]",
-            title: "text-slate-700 dark:text-gray-100"
+                  2: {
+                    container: "border-slate-400/50 dark:border-gray-400/40 bg-gradient-to-r from-slate-500/10 to-transparent dark:from-gray-700/20",
+                  badge: "bg-slate-300 dark:bg-gray-300 text-black shadow-[0_0_10px_rgba(209,213,219,0.4)]",
+                  title: "text-slate-700 dark:text-gray-100"
         },
-        3: {
-            container: "border-orange-500/50 dark:border-orange-600/40 bg-gradient-to-r from-orange-500/10 to-transparent dark:from-orange-900/20",
-            badge: "bg-orange-500 dark:bg-orange-600 text-white shadow-[0_0_10px_rgba(234,88,12,0.4)]",
-            title: "text-orange-700 dark:text-orange-100"
+                  3: {
+                    container: "border-orange-500/50 dark:border-orange-600/40 bg-gradient-to-r from-orange-500/10 to-transparent dark:from-orange-900/20",
+                  badge: "bg-orange-500 dark:bg-orange-600 text-white shadow-[0_0_10px_rgba(234,88,12,0.4)]",
+                  title: "text-orange-700 dark:text-orange-100"
         },
-        default: {
-            container: "border-slate-200 dark:border-gray-800 bg-white dark:bg-gray-800 hover:bg-slate-50 dark:hover:bg-gray-750",
-            badge: "bg-slate-200 dark:bg-gray-700 text-slate-500 dark:text-gray-400",
-            title: "text-slate-700 dark:text-gray-300"
+                  default: {
+                    container: "border-slate-200 dark:border-gray-800 bg-white dark:bg-gray-800 hover:bg-slate-50 dark:hover:bg-gray-750",
+                  badge: "bg-slate-200 dark:bg-gray-700 text-slate-500 dark:text-gray-400",
+                  title: "text-slate-700 dark:text-gray-300"
         }
     };
 
-    function getColorForTemp(temp) {
+                  function getColorForTemp(temp) {
         if (temp >= 35) return '#ef4444';
         if (temp >= 28) return '#f97316';
         if (temp >= 20) return '#eab308';
         if (temp >= 10) return '#10b981';
         if (temp >= 0) return '#06b6d4';
         if (temp >= -10) return '#3b82f6';
-        return '#6366f1';
+                  return '#6366f1';
     }
 
-    function toggleTheme() {
+                  function toggleTheme() {
         const html = document.documentElement;
-        const sunIcon = document.getElementById('icon-sun');
-        const moonIcon = document.getElementById('icon-moon');
+                  const sunIcon = document.getElementById('icon-sun');
+                  const moonIcon = document.getElementById('icon-moon');
 
-        if (html.classList.contains('dark')) {
-            html.classList.remove('dark');
-            currentTheme = 'light';
-            sunIcon.classList.add('hidden');
-            moonIcon.classList.remove('hidden');
+                  if (html.classList.contains('dark')) {
+                    html.classList.remove('dark');
+                  currentTheme = 'light';
+                  sunIcon.classList.add('hidden');
+                  moonIcon.classList.remove('hidden');
         } else {
-            html.classList.add('dark');
-            currentTheme = 'dark';
-            sunIcon.classList.remove('hidden');
-            moonIcon.classList.add('hidden');
+                    html.classList.add('dark');
+                  currentTheme = 'dark';
+                  sunIcon.classList.remove('hidden');
+                  moonIcon.classList.add('hidden');
         }
 
-        if(window.myMapChart) {
-            updateMapOption(window.myMapChart);
+                  if(window.myMapChart) {
+                    updateMapOption(window.myMapChart);
         }
     }
 
-    function applyRankStyle(element, rank) {
+                  function applyRankStyle(element, rank) {
         const badgeEl = element.querySelector('[data-role="badge"]');
-        const titleEl = element.querySelector('[data-role="title"]');
-        const tempEl = element.querySelector('[data-role="temp-val"]');
+                  const titleEl = element.querySelector('[data-role="title"]');
+                  const tempEl = element.querySelector('[data-role="temp-val"]');
 
-        if (!badgeEl || !titleEl || !tempEl) return;
+                  if (!badgeEl || !titleEl || !tempEl) return;
 
-        const style = RANK_STYLES[rank] || RANK_STYLES.default;
-        element.className = \`ranking-item group flex flex-col p-3 rounded-xl transition-all duration-300 border cursor-pointer select-none \${style.container}\`;
-        badgeEl.className = \`flex justify-center items-center w-7 h-7 rounded-lg text-sm font-bold shadow-sm \${style.badge}\`;
-        badgeEl.textContent = rank;
-        titleEl.className = \`font-semibold text-sm md:text-base \${style.title}\`;
+                  const style = RANK_STYLES[rank] || RANK_STYLES.default;
+                  element.className = \`ranking-item group flex flex-col p-3 rounded-xl transition-all duration-300 border cursor-pointer select-none \${style.container}\`;
+                  badgeEl.className = \`flex justify-center items-center w-7 h-7 rounded-lg text-sm font-bold shadow-sm \${style.badge}\`;
+                  badgeEl.textContent = rank;
+                  titleEl.className = \`font-semibold text-sm md:text-base \${style.title}\`;
 
-        const tempVal = parseFloat(element.dataset.temp);
-        tempEl.style.color = getColorForTemp(tempVal);
+                  const tempVal = parseFloat(element.dataset.temp);
+                  tempEl.style.color = getColorForTemp(tempVal);
     }
 
-    function updateMapOption(chart) {
+                  function updateMapOption(chart) {
         const isDark = document.documentElement.classList.contains('dark');
-        const borderColor = isDark ? '#111' : '#cbd5e1';
-        const hoverColor = isDark ? '#4b5563' : '#94a3b8';
-        const labelColor = isDark ? '#e5e7eb' : '#334155';
-        const emphasisLabelColor = isDark ? '#fff' : '#0f172a';
-        const shadowColor = isDark ? 'rgba(0, 0, 0, 0.5)' : 'rgba(0, 0, 0, 0.1)';
-        const tooltipBg = isDark ? 'rgba(23, 23, 26, 0.95)' : 'rgba(255, 255, 255, 0.95)';
-        const tooltipText = isDark ? '#e5e7eb' : '#1e293b';
-        const tooltipBorder = isDark ? '#374151' : '#e2e8f0';
+                  const borderColor = isDark ? '#111' : '#cbd5e1';
+                  const hoverColor = isDark ? '#4b5563' : '#94a3b8';
+                  const labelColor = isDark ? '#e5e7eb' : '#334155';
+                  const emphasisLabelColor = isDark ? '#fff' : '#0f172a';
+                  const shadowColor = isDark ? 'rgba(0, 0, 0, 0.5)' : 'rgba(0, 0, 0, 0.1)';
+                  const tooltipBg = isDark ? 'rgba(23, 23, 26, 0.95)' : 'rgba(255, 255, 255, 0.95)';
+                  const tooltipText = isDark ? '#e5e7eb' : '#1e293b';
+                  const tooltipBorder = isDark ? '#374151' : '#e2e8f0';
 
-        chart.setOption({
-            tooltip: {
-                backgroundColor: tooltipBg,
-                borderColor: tooltipBorder,
-                textStyle: { color: tooltipText },
+                  chart.setOption({
+                    tooltip: {
+                    backgroundColor: tooltipBg,
+                  borderColor: tooltipBorder,
+                  textStyle: {color: tooltipText },
                 formatter: (p) => {
                     // 从tempMapData获取温度值，支持多种后缀格式
                     let temp = tempMapData[p.name];
-                    if (temp === undefined) {
-                        temp = p.value;
+                  if (temp === undefined) {
+                    temp = p.value;
                     }
-                    const displayName = window.getCityName(p.name, currentLang);
-                    const tempLabel = currentLang === 'zh' ? '温度' : 'Temperature';
-                    if (temp === undefined || temp === null || isNaN(temp)) {
+                  const displayName = window.getCityName(p.name, currentLang);
+                  const tempLabel = currentLang === 'zh' ? '温度' : 'Temperature';
+                  if (temp === undefined || temp === null || isNaN(temp)) {
                         return \`<div class="font-bold text-sm mb-1">\${displayName}</div><div class="text-xs">\${tempLabel}: <span class="font-bold">-</span></div>\`;
                     }
-                    const color = getColorForTemp(temp);
-                    return \`<div class="font-bold text-sm mb-1">\${displayName}</div><div class="text-xs">\${tempLabel}: <span class="font-bold" style="color: \${color}">\${temp}°C</span></div>\`;
+                  const color = getColorForTemp(temp);
+                  return \`<div class="font-bold text-sm mb-1">\${displayName}</div><div class="text-xs">\${tempLabel}: <span class="font-bold" style="color: \${color}">\${temp}°C</span></div>\`;
                 }
             },
-            series: [{
-                itemStyle: {
+                  series: [{
+                    itemStyle: {
                     borderColor: borderColor
                 },
-                label: {
+                  label: {
                     color: labelColor,
-                    textBorderColor: isDark ? '#111827' : '#f8fafc'
+                  textBorderColor: isDark ? '#111827' : '#f8fafc'
                 },
-                emphasis: {
+                  emphasis: {
                     label: {
-                        color: emphasisLabelColor
+                    color: emphasisLabelColor
                     },
-                    itemStyle: {
-                        areaColor: hoverColor,
-                        shadowColor: shadowColor,
-                        shadowBlur: 10
+                  itemStyle: {
+                    areaColor: hoverColor,
+                  shadowColor: shadowColor,
+                  shadowBlur: 10
                     }
                 }
             }]
@@ -1901,177 +2042,223 @@ async function generateProvincePage(provinceName, provinceConfig, dayIndex = 0) 
 
     const initMap = async () => {
         const chartDom = document.getElementById('main-map');
-        window.myMapChart = echarts.init(chartDom);
+                  window.myMapChart = echarts.init(chartDom);
 
-        // 去重：如果有多个城市的fullName相同，只保留温度最高的一个
-        const uniqueDataMap = new Map();
-        ${JSON.stringify(cityData)}.forEach(item => {
+                  // 去重：如果有多个城市的fullName相同，只保留温度最高的一个
+                  const uniqueDataMap = new Map();
+                  ${JSON.stringify(cityData)}.forEach(item => {
           const name = item.fullName || item.city;
           if (!uniqueDataMap.has(name) || item.temperature > uniqueDataMap.get(name).value) {
-            uniqueDataMap.set(name, {
-              name: name,
-              shortName: item.city,
-              value: item.temperature
-            });
+                    uniqueDataMap.set(name, {
+                      name: name,
+                      shortName: item.city,
+                      value: item.temperature
+                    });
           }
         });
-        const data = Array.from(uniqueDataMap.values());
+                  const data = Array.from(uniqueDataMap.values());
 
-        try {
+                  try {
             // 加载省份地图
             const res = await fetch('/geo/${adcode}_full.json');
-            const geoJson = await res.json();
-            echarts.registerMap('province', geoJson);
+                  const geoJson = await res.json();
+                  echarts.registerMap('province', geoJson);
         } catch(e) {
-            console.error('Map Load Error', e);
-            return;
+                    console.error('Map Load Error', e);
+                  return;
         }
 
         data.forEach(item => {
-            tempMapData[item.name] = item.value;
-            tempMapData[item.shortName] = item.value;
+                    tempMapData[item.name] = item.value;
+                  tempMapData[item.shortName] = item.value;
         });
 
-        window.myMapChart.setOption({
-            backgroundColor: 'transparent',
-            tooltip: {
-                trigger: 'item',
-                borderWidth: 1,
-                textStyle: { fontSize: 12 }
+                  window.myMapChart.setOption({
+                    backgroundColor: 'transparent',
+                  tooltip: {
+                    trigger: 'item',
+                  borderWidth: 1,
+                  textStyle: {fontSize: 12 }
             },
-            visualMap: {
-                show: false,
-                type: 'piecewise',
-                seriesIndex: 0,
-                pieces: [
-                    { gte: 35, color: '#ef4444' },           // >= 35°C 红色
-                    { gte: 28, lt: 35, color: '#f97316' },   // 28-34.9°C 橙色
-                    { gte: 20, lt: 28, color: '#eab308' },   // 20-27.9°C 黄色
-                    { gte: 10, lt: 20, color: '#10b981' },   // 10-19.9°C 绿色
-                    { gte: 0, lt: 10, color: '#06b6d4' },    // 0-9.9°C 青色
-                    { gte: -10, lt: 0, color: '#3b82f6' },   // -10--0.1°C 蓝色
-                    { lt: -10, color: '#6366f1' }            // < -10°C 紫色
-                ],
-                calculable: false
+                  visualMap: {
+                    show: false,
+                  type: 'piecewise',
+                  seriesIndex: 0,
+                  pieces: [
+                  {gte: 35, color: '#ef4444' },           // >= 35°C 红色
+                  {gte: 28, lt: 35, color: '#f97316' },   // 28-34.9°C 橙色
+                  {gte: 20, lt: 28, color: '#eab308' },   // 20-27.9°C 黄色
+                  {gte: 10, lt: 20, color: '#10b981' },   // 10-19.9°C 绿色
+                  {gte: 0, lt: 10, color: '#06b6d4' },    // 0-9.9°C 青色
+                  {gte: -10, lt: 0, color: '#3b82f6' },   // -10--0.1°C 蓝色
+                  {lt: -10, color: '#6366f1' }            // < -10°C 紫色
+                  ],
+                  calculable: false
             },
-            series: [{
-                type: 'map',
-                map: 'province',
-                roam: true,
-                top: '6%',
-                zoom: 0.9,
-                label: {
+                  series: [{
+                    type: 'map',
+                  map: 'province',
+                  roam: true,
+                  top: '6%',
+                  zoom: 0.9,
+                  label: {
                     show: true,
-                    fontSize: 10,
-                    color: '#e5e7eb',
-                    textBorderColor: '#111827',
-                    textBorderWidth: 2,
+                  fontSize: 10,
+                  color: '#e5e7eb',
+                  textBorderColor: '#111827',
+                  textBorderWidth: 2,
                     formatter: (params) => {
                         const displayName = window.getCityName(params.name, currentLang);
-                        const temp = tempMapData[params.name];
-                        if (temp !== undefined && temp !== null && !isNaN(temp)) {
+                  const temp = tempMapData[params.name];
+                  if (temp !== undefined && temp !== null && !isNaN(temp)) {
                             return \`\${displayName}\\n\${temp}°\`;
                         }
-                        return \`\${displayName}\\n-\`;
+                  return \`\${displayName}\\n-\`;
                     }
                 },
-                itemStyle: {
+                  itemStyle: {
                     borderWidth: 1,
-                    borderColor: '#111'
+                  borderColor: '#111'
                 },
-                emphasis: {
+                  emphasis: {
                     label: {
-                        show: true,
-                        color: '#fff',
-                        fontSize: 12,
+                    show: true,
+                  color: '#fff',
+                  fontSize: 12,
                         formatter: (params) => {
                             const displayName = window.getCityName(params.name, currentLang);
-                            const temp = tempMapData[params.name];
-                            if (temp !== undefined && temp !== null && !isNaN(temp)) {
+                  const temp = tempMapData[params.name];
+                  if (temp !== undefined && temp !== null && !isNaN(temp)) {
                                 return \`\${displayName}\\n\${temp}°C\`;
                             }
-                            return \`\${displayName}\\n-\`;
+                  return \`\${displayName}\\n-\`;
                         }
                     },
-                    itemStyle: {
-                        areaColor: '#4b5563',
-                        shadowColor: 'rgba(0, 0, 0, 0.5)',
-                        shadowBlur: 10
+                  itemStyle: {
+                    areaColor: '#4b5563',
+                  shadowColor: 'rgba(0, 0, 0, 0.5)',
+                  shadowBlur: 10
                     }
                 },
-                data: data
+                  data: data
             }]
         });
 
-        updateMapOption(window.myMapChart);
+                  updateMapOption(window.myMapChart);
         window.addEventListener('resize', () => window.myMapChart.resize());
     };
 
-    function toggleExpand(el) {
+                  function toggleExpand(el) {
         const details = el.querySelector('.details-container');
-        const arrow = el.querySelector('.arrow-icon');
+                  const arrow = el.querySelector('.arrow-icon');
 
-        if (details.classList.contains('open')) {
-            details.classList.remove('open', 'fade-in');
-            arrow.classList.remove('rotate-180', 'bg-black/5', 'dark:bg-white/10');
-            el.classList.remove('ring-1', 'ring-slate-400', 'dark:ring-gray-500');
+                  if (details.classList.contains('open')) {
+                    details.classList.remove('open', 'fade-in');
+                  arrow.classList.remove('rotate-180', 'bg-black/5', 'dark:bg-white/10');
+                  el.classList.remove('ring-1', 'ring-slate-400', 'dark:ring-gray-500');
         } else {
-            details.classList.add('open', 'fade-in');
-            arrow.classList.add('rotate-180', 'bg-black/5', 'dark:bg-white/10');
-            el.classList.add('ring-1', 'ring-slate-400', 'dark:ring-gray-500');
+                    details.classList.add('open', 'fade-in');
+                  arrow.classList.add('rotate-180', 'bg-black/5', 'dark:bg-white/10');
+                  el.classList.add('ring-1', 'ring-slate-400', 'dark:ring-gray-500');
         }
     }
 
-    function sortList(order) {
-        const list = document.getElementById('ranking-list');
-        const items = Array.from(list.getElementsByClassName('ranking-item'));
-        const btnHot = document.getElementById('btn-hot');
-        const btnCold = document.getElementById('btn-cold');
+                  // 展开指定元素（不切换，只展开）
+                  function expandItem(el) {
+        const details = el.querySelector('.details-container');
+                  const arrow = el.querySelector('.arrow-icon');
 
-        const activeClass = "flex-1 flex items-center justify-center gap-2 py-1.5 text-xs font-medium rounded-md transition-all bg-blue-500/10 text-blue-600 dark:text-blue-400 shadow-sm ring-1 ring-blue-500/50";
-        const hotActiveClass = "flex-1 flex items-center justify-center gap-2 py-1.5 text-xs font-medium rounded-md transition-all bg-red-500/10 text-red-600 dark:text-red-400 shadow-sm ring-1 ring-red-500/50";
-        const inactiveClass = "flex-1 flex items-center justify-center gap-2 py-1.5 text-xs font-medium rounded-md transition-all text-slate-400 dark:text-gray-400 hover:text-slate-600 dark:hover:text-gray-200";
-
-        if(order === 'desc') {
-            btnHot.className = hotActiveClass;
-            btnCold.className = inactiveClass;
-        } else {
-            btnHot.className = inactiveClass;
-            btnCold.className = activeClass;
+                  if (!details.classList.contains('open')) {
+                    details.classList.add('open', 'fade-in');
+                  arrow.classList.add('rotate-180', 'bg-black/5', 'dark:bg-white/10');
+                  el.classList.add('ring-1', 'ring-slate-400', 'dark:ring-gray-500');
         }
+    }
+
+                  // 收起指定元素
+                  function collapseItem(el) {
+        const details = el.querySelector('.details-container');
+                  const arrow = el.querySelector('.arrow-icon');
+
+                  if (details.classList.contains('open')) {
+                    details.classList.remove('open', 'fade-in');
+                  arrow.classList.remove('rotate-180', 'bg-black/5', 'dark:bg-white/10');
+                  el.classList.remove('ring-1', 'ring-slate-400', 'dark:ring-gray-500');
+        }
+    }
+
+                  // 收起所有展开的项
+                  function collapseAll() {
+                    document.querySelectorAll('.ranking-item').forEach(item => {
+                      collapseItem(item);
+                    });
+    }
+
+                  function sortList(order) {
+        const list = document.getElementById('ranking-list');
+                  const items = Array.from(list.getElementsByClassName('ranking-item'));
+                  const btnHot = document.getElementById('btn-hot');
+                  const btnCold = document.getElementById('btn-cold');
+
+                  const activeClass = "flex-1 flex items-center justify-center gap-2 py-1.5 text-xs font-medium rounded-md transition-all bg-blue-500/10 text-blue-600 dark:text-blue-400 shadow-sm ring-1 ring-blue-500/50";
+                  const hotActiveClass = "flex-1 flex items-center justify-center gap-2 py-1.5 text-xs font-medium rounded-md transition-all bg-red-500/10 text-red-600 dark:text-red-400 shadow-sm ring-1 ring-red-500/50";
+                  const inactiveClass = "flex-1 flex items-center justify-center gap-2 py-1.5 text-xs font-medium rounded-md transition-all text-slate-400 dark:text-gray-400 hover:text-slate-600 dark:hover:text-gray-200";
+
+                  if(order === 'desc') {
+                    btnHot.className = hotActiveClass;
+                  btnCold.className = inactiveClass;
+        } else {
+                    btnHot.className = inactiveClass;
+                  btnCold.className = activeClass;
+        }
+
+                  // 先收起所有展开的项
+                  collapseAll();
 
         items.sort((a, b) => {
             const tA = parseFloat(a.dataset.temp);
-            const tB = parseFloat(b.dataset.temp);
-            return order === 'desc' ? tB - tA : tA - tB;
+                  const tB = parseFloat(b.dataset.temp);
+                  return order === 'desc' ? tB - tA : tA - tB;
         });
         items.forEach((item, index) => {
-            list.appendChild(item);
-            applyRankStyle(item, index + 1);
+                    list.appendChild(item);
+                  applyRankStyle(item, index + 1);
         });
+
+                  // 展开排序后的第一个项
+                  const firstItem = list.querySelector('.ranking-item');
+                  if (firstItem) {
+                    expandItem(firstItem);
+        }
     }
 
     document.addEventListener('DOMContentLoaded', () => {
-        initLanguage();
+                    initLanguage();
 
-        if(!document.documentElement.classList.contains('dark')) {
-            document.getElementById('icon-sun').classList.add('hidden');
-            document.getElementById('icon-moon').classList.remove('hidden');
+                  if(!document.documentElement.classList.contains('dark')) {
+                    document.getElementById('icon-sun').classList.add('hidden');
+                  document.getElementById('icon-moon').classList.remove('hidden');
         } else {
-            document.getElementById('icon-sun').classList.remove('hidden');
-            document.getElementById('icon-moon').classList.add('hidden');
+                    document.getElementById('icon-sun').classList.remove('hidden');
+                  document.getElementById('icon-moon').classList.add('hidden');
         }
 
-        const items = document.querySelectorAll('.ranking-item');
+                  const items = document.querySelectorAll('.ranking-item');
         items.forEach((item, index) => {
-            applyRankStyle(item, index + 1);
+                    applyRankStyle(item, index + 1);
         });
 
-        initMap();
+                  // 自动展开第一个项
+                  const firstItem = document.querySelector('.ranking-item');
+                  if (firstItem) {
+                    expandItem(firstItem);
+        }
+
+                  initMap();
     });
-</script>
-</body>
-</html>`;
+                </script>
+              </body>
+            </html>`;
 
   // 文件路径: 今天是 website/anhui.html, 其他天是 website/YYYYMMDD/anhui.html
   let fullPath;
@@ -2142,13 +2329,8 @@ async function main() {
     }
     console.log(`✅ 获取到7天数据\n`);
 
-    // 获取所有省份的7天预报数据（用于排行榜的7天趋势图）
-    console.log('📅 获取7天预报趋势数据...');
-    const forecastData = await getAllProvincesForecast();
-    console.log(`✅ 获取到 ${Object.keys(forecastData).length} 个省份的预报数据\n`);
-
-    // 生成所有日期的主页
-    await generateAllIndexPages(allForecastData, forecastData);
+    // 生成所有日期的主页（预报数据在函数内部生成）
+    await generateAllIndexPages(allForecastData);
 
     // 生成所有省份的详情页面
     await generateAllProvincePages();
@@ -2248,14 +2430,14 @@ async function generateSitemap() {
 
   // 生成 XML
   const xml = `<?xml version="1.0" encoding="UTF-8"?>
-<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-${urls.map(u => `  <url>
+            <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+              ${urls.map(u => `  <url>
     <loc>${u.loc}</loc>
     <lastmod>${today}</lastmod>
     <changefreq>${u.changefreq}</changefreq>
     <priority>${u.priority}</priority>
   </url>`).join('\n')}
-</urlset>`;
+            </urlset>`;
 
   fs.writeFileSync(path.join(OUTPUT_DIR, 'sitemap.xml'), xml);
   console.log(`✅ sitemap.xml 已生成，包含 ${urls.length} 个 URL`);
@@ -2337,23 +2519,23 @@ async function createChineseVersions() {
 
     // getProvinceName函数 - 为不同语言版本创建不同的实现
     const provinceNameMap = lang === 'en' ? `{
-        '北京市': 'Beijing', '天津市': 'Tianjin', '河北省': 'Hebei', '山西省': 'Shanxi',
-        '内蒙古自治区': 'Inner Mongolia', '辽宁省': 'Liaoning', '吉林省': 'Jilin', '黑龙江省': 'Heilongjiang',
-        '上海市': 'Shanghai', '江苏省': 'Jiangsu', '浙江省': 'Zhejiang', '安徽省': 'Anhui',
-        '福建省': 'Fujian', '江西省': 'Jiangxi', '山东省': 'Shandong', '河南省': 'Henan',
-        '湖北省': 'Hubei', '湖南省': 'Hunan', '广东省': 'Guangdong', '广西壮族自治区': 'Guangxi',
-        '海南省': 'Hainan', '重庆市': 'Chongqing', '四川省': 'Sichuan', '贵州省': 'Guizhou',
-        '云南省': 'Yunnan', '西藏自治区': 'Tibet', '陕西省': 'Shaanxi', '甘肃省': 'Gansu',
-        '青海省': 'Qinghai', '宁夏回族自治区': 'Ningxia', '新疆维吾尔自治区': 'Xinjiang',
-        '香港特别行政区': 'Hong Kong', '澳门特别行政区': 'Macau', '台湾省': 'Taiwan',
-        '南海诸岛': 'Nanhai Islands'
-    }` : `{}`;
+              '北京市': 'Beijing', '天津市': 'Tianjin', '河北省': 'Hebei', '山西省': 'Shanxi',
+            '内蒙古自治区': 'Inner Mongolia', '辽宁省': 'Liaoning', '吉林省': 'Jilin', '黑龙江省': 'Heilongjiang',
+            '上海市': 'Shanghai', '江苏省': 'Jiangsu', '浙江省': 'Zhejiang', '安徽省': 'Anhui',
+            '福建省': 'Fujian', '江西省': 'Jiangxi', '山东省': 'Shandong', '河南省': 'Henan',
+            '湖北省': 'Hubei', '湖南省': 'Hunan', '广东省': 'Guangdong', '广西壮族自治区': 'Guangxi',
+            '海南省': 'Hainan', '重庆市': 'Chongqing', '四川省': 'Sichuan', '贵州省': 'Guizhou',
+            '云南省': 'Yunnan', '西藏自治区': 'Tibet', '陕西省': 'Shaanxi', '甘肃省': 'Gansu',
+            '青海省': 'Qinghai', '宁夏回族自治区': 'Ningxia', '新疆维吾尔自治区': 'Xinjiang',
+            '香港特别行政区': 'Hong Kong', '澳门特别行政区': 'Macau', '台湾省': 'Taiwan',
+            '南海诸岛': 'Nanhai Islands'
+    }` : `{ }`;
 
     html = html.replace(
       /\/\/ 获取省份显示名称（支持模糊匹配）\s*window\.getProvinceName = function\(geoName, lang\) \{[\s\S]*?return geoName;\s*\};/,
       `// Province name translation for ${lang} version
-      const provinceNames = ${provinceNameMap};
-      window.getProvinceName = function(geoName, lang) {
+            const provinceNames = ${provinceNameMap};
+            window.getProvinceName = function(geoName, lang) {
         return provinceNames[geoName] || geoName;
       };`
     );
@@ -2408,9 +2590,9 @@ async function createChineseVersions() {
 
     // 10. 替换语言切换按钮为链接
     const langSwitcher = `<div class="flex bg-white/80 dark:bg-gray-800/80 backdrop-blur rounded-lg border border-slate-200 dark:border-gray-700 p-1">
-                                <a href="${enUrl}" class="px-2 py-0.5 text-xs font-bold rounded ${lang === 'en' ? 'bg-blue-600 text-white' : 'text-slate-500 dark:text-gray-400 hover:text-slate-900 dark:hover:text-white transition-colors'} cursor-pointer">EN</a>
-                                <a href="${zhUrl}" class="px-2 py-0.5 text-xs font-bold rounded ${lang === 'zh' ? 'bg-blue-600 text-white' : 'text-slate-500 dark:text-gray-400 hover:text-slate-900 dark:hover:text-white transition-colors'} cursor-pointer">CN</a>
-                            </div>`;
+              <a href="${enUrl}" class="px-2 py-0.5 text-xs font-bold rounded ${lang === 'en' ? 'bg-blue-600 text-white' : 'text-slate-500 dark:text-gray-400 hover:text-slate-900 dark:hover:text-white transition-colors'} cursor-pointer">EN</a>
+              <a href="${zhUrl}" class="px-2 py-0.5 text-xs font-bold rounded ${lang === 'zh' ? 'bg-blue-600 text-white' : 'text-slate-500 dark:text-gray-400 hover:text-slate-900 dark:hover:text-white transition-colors'} cursor-pointer">CN</a>
+            </div>`;
 
     html = html.replace(
       /<div class="flex bg-white\/80 dark:bg-gray-800\/80 backdrop-blur rounded-lg border border-slate-200 dark:border-gray-700 p-1">\s*<button onclick="switchLanguage\('en'\)"[^>]*>EN<\/button>\s*<button onclick="switchLanguage\('zh'\)"[^>]*>CN<\/button>\s*<\/div>/,
@@ -2440,8 +2622,8 @@ async function createChineseVersions() {
 
           // 在getCityName函数之前插入城市名称映射表
           const cityMapStr = `// City name mapping for en version
-      const cityNameMap = ${JSON.stringify(cityNameMap)};
-      `;
+              const cityNameMap = ${JSON.stringify(cityNameMap)};
+              `;
 
           html = html.replace(
             /\/\/ City names are already in the correct language\s*window\.getCityName/,
