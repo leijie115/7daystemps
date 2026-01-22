@@ -9,7 +9,7 @@
     <title>湖北省 温度 排行榜</title>
     <link rel="icon" type="image/x-icon" href="/favicon.ico">
     <script>
-      // Language: zh
+      // Language: en
 
       // Weather descriptions are pre-rendered in the correct language
 
@@ -17,9 +17,10 @@
 
       
 
-      // City names are already in the correct language
+      // City name mapping for en version
+      const cityNameMap = {"恩施土家族苗族自治州":"EnShi","神农架林区":"ShenNongJia","宜昌市":"YiChang","十堰市":"ShiYan","咸宁市":"XianNing","黄石市":"HuangShi","鄂州市":"EZhou","黄冈市":"HuangGang","荆州市":"JingZhou","潜江市":"QianJiang","武汉市":"WuHan","天门市":"TianMen","仙桃市":"XianTao","随州市":"SuiZhou","荆门市":"JingMen","孝感市":"XiaoGan","襄阳市":"XiangYang"};
       window.getCityName = function(cityName, lang) {
-        return cityName;
+        return cityNameMap[cityName] || cityName;
       };
     </script>
     <script src="https://cdn.tailwindcss.com"></script>
@@ -100,8 +101,8 @@
 
                         <!-- 语言切换 -->
                         <div class="flex bg-white/80 dark:bg-gray-800/80 backdrop-blur rounded-lg border border-slate-200 dark:border-gray-700 p-1">
-                                <a href="../../20260122/hubei.html" class="px-2 py-0.5 text-xs font-bold rounded text-slate-500 dark:text-gray-400 hover:text-slate-900 dark:hover:text-white transition-colors cursor-pointer">EN</a>
-                                <a href="#" class="px-2 py-0.5 text-xs font-bold rounded bg-blue-600 text-white cursor-pointer">CN</a>
+                                <a href="#" class="px-2 py-0.5 text-xs font-bold rounded bg-blue-600 text-white cursor-pointer">EN</a>
+                                <a href="../zh-cn/20260122/hubei.html" class="px-2 py-0.5 text-xs font-bold rounded text-slate-500 dark:text-gray-400 hover:text-slate-900 dark:hover:text-white transition-colors cursor-pointer">CN</a>
                             </div>
                     </div>
 
@@ -2153,7 +2154,7 @@
     let tempMapData = {};
 
     function initLanguage() {
-        currentLang = 'zh';
+        currentLang = 'en';
     }
 
     // Language switching is done via navigation
