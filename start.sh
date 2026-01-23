@@ -3,6 +3,32 @@
 # 获取今天的日期（格式：YYYYMMDD）
 TODAY=$(date +%Y%m%d)
 
+echo "🗑️  清理旧的日期文件夹..."
+
+# 删除 website 下今天以前的日期文件夹
+for dir in website/[0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9]; do
+    if [ -d "$dir" ]; then
+        dirname=$(basename "$dir")
+        if [ "$dirname" -lt "$TODAY" ]; then
+            echo "  删除: $dir"
+            rm -rf "$dir"
+        fi
+    fi
+done
+
+# 删除 website/zh-cn 下今天以前的日期文件夹
+for dir in website/zh-cn/[0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9]; do
+    if [ -d "$dir" ]; then
+        dirname=$(basename "$dir")
+        if [ "$dirname" -lt "$TODAY" ]; then
+            echo "  删除: $dir"
+            rm -rf "$dir"
+        fi
+    fi
+done
+
+echo "✅ 清理完成"
+echo ""
 
 # 运行生成脚本
 echo "🚀 开始生成静态页面..."

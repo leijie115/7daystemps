@@ -11,6 +11,29 @@ require('dotenv').config();
 
 const GEO_DIR = path.join(__dirname, '../website/geo');
 
+const FOOTER_HTML = `
+  <footer class="mt-8 py-8 border-t border-slate-200 dark:border-gray-700/50">
+      <div class="px-4">
+          <div class="flex flex-col md:flex-row justify-between items-center gap-4">
+              <div class="text-xs text-slate-400 dark:text-gray-500">
+                  &copy; ${new Date().getFullYear()} China Temp Rankings. Data provided for reference only.
+              </div>
+              <div class="flex gap-4 text-xs font-medium">
+                  <a href="/about.html" class="text-slate-400 dark:text-gray-500 hover:text-blue-500 dark:hover:text-blue-400 transition-colors">About</a>
+                  <a href="/privacy.html" class="text-slate-400 dark:text-gray-500 hover:text-blue-500 dark:hover:text-blue-400 transition-colors">Privacy</a>
+                  <a href="/terms.html" class="text-slate-400 dark:text-gray-500 hover:text-blue-500 dark:hover:text-blue-400 transition-colors">Terms</a>
+                  <a href="/sitemap.xml" class="text-slate-400 dark:text-gray-500 hover:text-blue-500 dark:hover:text-blue-400 transition-colors">Sitemap</a>
+              </div>
+          </div>
+          <div class="mt-4 text-[10px] text-slate-300 dark:text-gray-700 text-center md:text-left leading-relaxed max-w-2xl hidden md:block">
+              This site provides real-time temperature rankings and 7-day forecasts for cities across China. 
+              Data is sourced from public weather APIs and updated hourly. 
+              We aim to visualize temperature extremes and trends for meteorological enthusiasts.
+          </div>
+      </div>
+  </footer>
+  `;
+
 /**
  * 下载阿里云地理数据到本地
  * @param {number} adcode - 地区代码，如 100000（全国）或 110000（北京）
@@ -884,6 +907,7 @@ async function generateDayPage(dayIndex, allForecastData, forecastData) {
                       `;
     }).join('')}
             </div >
+            ${FOOTER_HTML}
             </div >
         </div >
     </div >
@@ -1834,6 +1858,7 @@ async function generateProvincePage(provinceName, provinceConfig, dayIndex = 0) 
               `;
     }).join('')}
                       </div>
+                      ${FOOTER_HTML}
                     </div>
                   </div>
                 </div>
@@ -2839,4 +2864,95 @@ async function createChineseVersions() {
   console.log(`✅ 完成！共处理 ${files.length} 个文件`);
 }
 
-main();
+async function generateStaticPages() {
+  const HEADER = `<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Policy - China Temp Rankings</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = { darkMode: 'class' };
+        if (localStorage.getItem('theme') === 'light') {
+            document.documentElement.classList.remove('dark');
+        } else {
+            document.documentElement.classList.add('dark');
+        }
+    </script>
+</head>
+<body class="bg-slate-50 dark:bg-[#0d1117] text-slate-900 dark:text-white font-sans min-h-screen flex flex-col">
+    <nav class="bg-white/80 dark:bg-gray-900/80 backdrop-blur-md border-b border-slate-200 dark:border-gray-800 sticky top-0 z-50">
+        <div class="max-w-4xl mx-auto px-6 py-4 flex justify-between items-center">
+            <a href="/" class="text-xl font-black text-transparent bg-clip-text bg-gradient-to-r from-blue-500 to-emerald-500">China Temp Rankings</a>
+            <a href="/" class="text-sm font-medium text-slate-500 dark:text-gray-400 hover:text-blue-500">Back to Home</a>
+        </div>
+    </nav>
+    <main class="flex-1 max-w-4xl mx-auto px-6 py-12 w-full prose dark:prose-invert">
+`;
+
+  const END = `
+    </main>
+    ${FOOTER_HTML}
+</body>
+</html>`;
+
+  // 1. Privacy Policy
+  const privacyContent = `
+    <h1>Privacy Policy</h1>
+    <p>Last updated: ${new Date().toLocaleDateString()}</p>
+    <p>At China Temp Rankings, we prioritize the privacy of our visitors. This Privacy Policy document contains types of information that is collected and recorded by China Temp Rankings and how we use it.</p>
+    
+    <h2>Log Files</h2>
+    <p>We use standard log files. These files log visitors when they visit websites. The information collected includes internet protocol (IP) addresses, browser type, Internet Service Provider (ISP), date and time stamp, referring/exit pages, and possibly the number of clicks.</p>
+    
+    <h2>Cookies and Web Beacons</h2>
+    <p>Like any other website, we use "cookies". These cookies are used to store information including visitors' preferences, and the pages on the website that the visitor accessed or visited.</p>
+    
+    <h2>Google DoubleClick DART Cookie</h2>
+    <p>Google is one of a third-party vendor on our site. It also uses cookies, known as DART cookies, to serve ads to our site visitors based upon their visit to www.website.com and other sites on the internet.</p>
+  `;
+  fs.writeFileSync(path.join(OUTPUT_DIR, 'privacy.html'), HEADER + privacyContent + END);
+
+  // 2. Terms of Service
+  const termsContent = `
+    <h1>Terms of Service</h1>
+    <p>By accessing this website, you agree to be bound by these website Terms and Conditions of Use.</p>
+    <h2>Disclaimer</h2>
+    <p>The materials on China Temp Rankings's website are provided "as is". We make no warranties, expressed or implied, and hereby disclaim and negate all other warranties. Further, we do not warrant or make any representations concerning the accuracy, likely results, or reliability of the use of the materials on our Internet web site or otherwise relating to such materials or on any sites linked to this site.</p>
+    <h2>Accuracy of Data</h2>
+    <p>The weather data presented on this site is sourced from third-party APIs and is for informational purposes only. Do not rely on this data for safety-critical decisions.</p>
+  `;
+  fs.writeFileSync(path.join(OUTPUT_DIR, 'terms.html'), HEADER + termsContent + END);
+
+  // 3. About Us
+  const aboutContent = `
+    <h1>About Us</h1>
+    <p>China Temp Rankings is a data visualization project dedicated to showing real-time temperature extremes across China.</p>
+    <h2>Our Data</h2>
+    <p>We aggregate temperature data from hundreds of cities to create a real-time ranking of the hottest and coldest places. Our system updates hourly to provide the most current snapshot of weather patterns.</p>
+    <h2>Contact</h2>
+    <p>For any inquiries, please contact us via email (if applicable).</p>
+  `;
+  fs.writeFileSync(path.join(OUTPUT_DIR, 'about.html'), HEADER + aboutContent + END);
+
+  console.log('✅ Static pages generated (Privacy, Terms, About)');
+}
+
+function generateRobotsTxt() {
+  const content = `User-agent: *
+Allow: /
+
+Sitemap: https://7daystemps.com/sitemap.xml
+`;
+  // 注意：需替换域名为实际域名
+  fs.writeFileSync(path.join(OUTPUT_DIR, 'robots.txt'), content);
+  console.log('✅ robots.txt generated');
+}
+
+
+(async () => {
+  await main();
+  await generateStaticPages();
+  generateRobotsTxt();
+})();
