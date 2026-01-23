@@ -12,11 +12,11 @@ require('dotenv').config();
 const GEO_DIR = path.join(__dirname, '../website/geo');
 
 const FOOTER_HTML = `
-  <footer class="mt-8 py-8 border-t border-slate-200 dark:border-gray-700/50">
+  <footer class="mt-4 py-4 border-t border-slate-200 dark:border-gray-700/50">
       <div class="px-4">
-          <div class="flex flex-col md:flex-row justify-between items-center gap-4">
+          <div class="flex flex-col md:flex-row justify-between items-center gap-2">
               <div class="text-xs text-slate-400 dark:text-gray-500">
-                  &copy; ${new Date().getFullYear()} China Temp Rankings. Data provided for reference only.
+                  &copy; ${new Date().getFullYear()} China Temp Rankings.
               </div>
               <div class="flex gap-4 text-xs font-medium">
                   <a href="/about.html" class="text-slate-400 dark:text-gray-500 hover:text-blue-500 dark:hover:text-blue-400 transition-colors">About</a>
@@ -25,10 +25,8 @@ const FOOTER_HTML = `
                   <a href="/sitemap.xml" class="text-slate-400 dark:text-gray-500 hover:text-blue-500 dark:hover:text-blue-400 transition-colors">Sitemap</a>
               </div>
           </div>
-          <div class="mt-4 text-[10px] text-slate-300 dark:text-gray-700 text-center md:text-left leading-relaxed max-w-2xl hidden md:block">
-              This site provides real-time temperature rankings and 7-day forecasts for cities across China. 
-              Data is sourced from public weather APIs and updated hourly. 
-              We aim to visualize temperature extremes and trends for meteorological enthusiasts.
+          <div class="mt-2 text-[10px] text-slate-300 dark:text-gray-700 text-center md:text-left leading-relaxed max-w-full hidden md:block">
+              Real-time temperature rankings and 7-day forecasts. Data sourced from public weather APIs for reference only.
           </div>
       </div>
   </footer>
@@ -665,7 +663,7 @@ async function generateDayPage(dayIndex, allForecastData, forecastData) {
 <body class="flex flex-col md:flex-row h-screen w-screen overflow-hidden bg-slate-50 dark:bg-[#0d1117] text-slate-900 dark:text-white font-sans transition-colors duration-300">
 
     <!-- 左侧：地图可视化区域 -->
-        <div class="relative flex-1 h-[50vh] md:h-full flex flex-col">
+        <div class="relative flex-1 h-[35vh] md:h-full flex flex-col">
             <!-- 顶部覆盖层：标题 & 图例 -->
             <div class="absolute top-0 left-0 w-full p-3 md:p-6 z-10 pointer-events-none">
                 <div class="flex justify-between items-start">
@@ -759,13 +757,13 @@ async function generateDayPage(dayIndex, allForecastData, forecastData) {
         </div>
 
         <!-- 右侧：排行榜面板 (RankingPanel) -->
-        <div class="w-full md:w-[400px] h-[50vh] md:h-full z-20">
+        <div class="w-full md:w-[400px] h-[65vh] md:h-full z-20">
             <div class="flex flex-col h-full bg-white dark:bg-gray-900 border-l border-slate-200 dark:border-gray-700 shadow-2xl relative transition-colors duration-300">
             <!-- 面板头部 -->
-            <div class="p-6 border-b border-slate-200 dark:border-gray-800 bg-white/95 dark:bg-gray-900/95 backdrop-blur z-10 sticky top-0 transition-colors duration-300">
-                <div class="flex items-center justify-between mb-4">
+            <div class="p-2 md:p-6 border-b border-slate-200 dark:border-gray-800 bg-white/95 dark:bg-gray-900/95 backdrop-blur z-10 sticky top-0 transition-colors duration-300">
+                <div class="flex items-center justify-between mb-2 md:mb-4">
                     <div class="flex flex-col">
-                        <h2 id="ranking-title" class="text-xl font-bold text-slate-900 dark:text-white tracking-tight">National Rankings</h2>
+                        <h2 id="ranking-title" class="text-base md:text-xl font-bold text-slate-900 dark:text-white tracking-tight">National Rankings</h2>
                         <div class="flex items-center gap-2 mt-1">
                             <span class="text-xs text-slate-500 dark:text-gray-500">${provinceData.length} <span id="regions-label">Regions</span></span>
                         </div>
@@ -774,10 +772,10 @@ async function generateDayPage(dayIndex, allForecastData, forecastData) {
 
                 <!-- 排序控制 -->
                 <div class="flex p-1 bg-slate-100 dark:bg-gray-800 rounded-lg border border-slate-200 dark:border-gray-700">
-                    <button onclick="sortList('desc')" id="btn-hot" class="flex-1 flex items-center justify-center gap-2 py-1.5 text-xs font-medium rounded-md transition-all bg-red-500/10 text-red-600 dark:text-red-400 shadow-sm ring-1 ring-red-500/50">
+                    <button onclick="sortList('desc')" id="btn-hot" class="flex-1 flex items-center justify-center gap-2 py-1 md:py-1.5 text-xs font-medium rounded-md transition-all bg-red-500/10 text-red-600 dark:text-red-400 shadow-sm ring-1 ring-red-500/50">
                         Hot
                     </button>
-                    <button onclick="sortList('asc')" id="btn-cold" class="flex-1 flex items-center justify-center gap-2 py-1.5 text-xs font-medium rounded-md transition-all text-slate-400 dark:text-gray-400 hover:text-slate-600 dark:hover:text-gray-200">
+                    <button onclick="sortList('asc')" id="btn-cold" class="flex-1 flex items-center justify-center gap-2 py-1 md:py-1.5 text-xs font-medium rounded-md transition-all text-slate-400 dark:text-gray-400 hover:text-slate-600 dark:hover:text-gray-200">
                         Cold
                     </button>
                 </div>
@@ -891,7 +889,7 @@ async function generateDayPage(dayIndex, allForecastData, forecastData) {
                                     <span class="forecast-day-label text-[9px] font-medium mb-1 ${isSelected ? 'text-blue-500' : 'text-slate-500 dark:text-gray-500'}" data-day-zh="${day.dayName}" data-day-en="${dayNameEn}">
                                         ${dayNameEn}
                                     </span>
-                                    <div class="w-full bg-slate-200 dark:bg-gray-800/50 rounded-full h-20 relative w-1.5 md:w-2 mx-auto ring-1 ring-black/5 dark:ring-white/5">
+                                    <div class="bg-slate-200 dark:bg-gray-800/50 rounded-full h-20 relative w-1.5 md:w-2 mx-auto ring-1 ring-black/5 dark:ring-white/5">
                                         <div class="absolute w-full rounded-full opacity-80" style="bottom: ${bottomPos}%; height: ${barHeight}%; background-color: ${barColor};"></div>
                                     </div>
                                     <div class="flex flex-col items-center mt-1.5 gap-0.5">
@@ -1618,7 +1616,7 @@ async function generateProvincePage(provinceName, provinceConfig, dayIndex = 0) 
                 <body class="flex flex-col md:flex-row h-screen w-screen overflow-hidden bg-slate-50 dark:bg-[#0d1117] text-slate-900 dark:text-white font-sans transition-colors duration-300">
 
                   <!-- 左侧：地图可视化区域 -->
-                  <div class="relative flex-1 h-[50vh] md:h-full flex flex-col">
+                  <div class="relative flex-1 h-[35vh] md:h-full flex flex-col">
                     <!-- 顶部覆盖层：标题 & 图例 & 返回按钮 -->
                     <div class="absolute top-0 left-0 w-full p-3 md:p-6 z-10 pointer-events-none">
                       <div class="flex justify-between items-start">
@@ -1729,13 +1727,13 @@ async function generateProvincePage(provinceName, provinceConfig, dayIndex = 0) 
                   </div>
 
                   <!-- 右侧：城市排行榜面板 -->
-                  <div class="w-full md:w-[400px] h-[50vh] md:h-full z-20">
+                  <div class="w-full md:w-[400px] h-[65vh] md:h-full z-20">
                     <div class="flex flex-col h-full bg-white dark:bg-gray-900 border-l border-slate-200 dark:border-gray-700 shadow-2xl relative transition-colors duration-300">
                       <!-- 面板头部 -->
-                      <div class="p-6 border-b border-slate-200 dark:border-gray-800 bg-white/95 dark:bg-gray-900/95 backdrop-blur z-10 sticky top-0 transition-colors duration-300">
-                        <div class="flex items-center justify-between mb-4">
+                      <div class="p-2 md:p-6 border-b border-slate-200 dark:border-gray-800 bg-white/95 dark:bg-gray-900/95 backdrop-blur z-10 sticky top-0 transition-colors duration-300">
+                        <div class="flex items-center justify-between mb-2 md:mb-4">
                           <div class="flex flex-col">
-                            <h2 id="ranking-title" class="text-xl font-bold text-slate-900 dark:text-white tracking-tight">City Rankings</h2>
+                            <h2 id="ranking-title" class="text-base md:text-xl font-bold text-slate-900 dark:text-white tracking-tight">City Rankings</h2>
                             <div class="flex items-center gap-2 mt-1">
                               <span class="text-xs text-slate-500 dark:text-gray-500">${cityData.length} <span id="regions-label">Cities</span></span>
                             </div>
@@ -1744,10 +1742,10 @@ async function generateProvincePage(provinceName, provinceConfig, dayIndex = 0) 
 
                         <!-- 排序控制 -->
                         <div class="flex p-1 bg-slate-100 dark:bg-gray-800 rounded-lg border border-slate-200 dark:border-gray-700">
-                          <button onclick="sortList('desc')" id="btn-hot" class="flex-1 flex items-center justify-center gap-2 py-1.5 text-xs font-medium rounded-md transition-all bg-red-500/10 text-red-600 dark:text-red-400 shadow-sm ring-1 ring-red-500/50">
+                          <button onclick="sortList('desc')" id="btn-hot" class="flex-1 flex items-center justify-center gap-2 py-1 md:py-1.5 text-xs font-medium rounded-md transition-all bg-red-500/10 text-red-600 dark:text-red-400 shadow-sm ring-1 ring-red-500/50">
                             Hot
                           </button>
-                          <button onclick="sortList('asc')" id="btn-cold" class="flex-1 flex items-center justify-center gap-2 py-1.5 text-xs font-medium rounded-md transition-all text-slate-400 dark:text-gray-400 hover:text-slate-600 dark:hover:text-gray-200">
+                          <button onclick="sortList('asc')" id="btn-cold" class="flex-1 flex items-center justify-center gap-2 py-1 md:py-1.5 text-xs font-medium rounded-md transition-all text-slate-400 dark:text-gray-400 hover:text-slate-600 dark:hover:text-gray-200">
                             Cold
                           </button>
                         </div>
@@ -1842,7 +1840,7 @@ async function generateProvincePage(provinceName, provinceConfig, dayIndex = 0) 
                             <span class="forecast-day-label text-[9px] font-medium mb-1 ${isSelected ? 'text-blue-500' : 'text-slate-500 dark:text-gray-500'}" data-day-zh="${day.dayName}" data-day-en="${dayNameEn}">
                                 ${dayNameEn}
                             </span>
-                            <div class="w-full bg-slate-200 dark:bg-gray-800/50 rounded-full h-20 relative w-1.5 md:w-2 mx-auto ring-1 ring-black/5 dark:ring-white/5">
+                            <div class="bg-slate-200 dark:bg-gray-800/50 rounded-full h-20 relative w-1.5 md:w-2 mx-auto ring-1 ring-black/5 dark:ring-white/5">
                                 <div class="absolute w-full rounded-full opacity-80" style="bottom: ${bottomPos}%; height: ${barHeight}%; background-color: ${barColor};"></div>
                             </div>
                             <div class="flex flex-col items-center mt-1.5 gap-0.5">
