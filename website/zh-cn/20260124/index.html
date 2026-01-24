@@ -9,16 +9,27 @@
     <title>中国气温排行榜 - 实时气温数据 - 2026年1月25日</title>
     <link rel="icon" type="image/x-icon" href="/favicon.ico">
     <script>
-      // Language: zh
+      // Language: en
 
-      // Province names are pre-rendered in zh
+      // Province names are pre-rendered in en
 
       // Weather descriptions are pre-rendered in the correct language
 
       
 
-      // Province name translation for zh version
-            const provinceNames = { };
+      // Province name translation for en version
+            const provinceNames = {
+              '北京市': 'Beijing', '天津市': 'Tianjin', '河北省': 'Hebei', '山西省': 'Shanxi',
+            '内蒙古自治区': 'Inner Mongolia', '辽宁省': 'Liaoning', '吉林省': 'Jilin', '黑龙江省': 'Heilongjiang',
+            '上海市': 'Shanghai', '江苏省': 'Jiangsu', '浙江省': 'Zhejiang', '安徽省': 'Anhui',
+            '福建省': 'Fujian', '江西省': 'Jiangxi', '山东省': 'Shandong', '河南省': 'Henan',
+            '湖北省': 'Hubei', '湖南省': 'Hunan', '广东省': 'Guangdong', '广西壮族自治区': 'Guangxi',
+            '海南省': 'Hainan', '重庆市': 'Chongqing', '四川省': 'Sichuan', '贵州省': 'Guizhou',
+            '云南省': '云南省', '西藏自治区': 'Tibet', '陕西省': 'Shaanxi', '甘肃省': 'Gansu',
+            '青海省': 'Qinghai', '宁夏回族自治区': 'Ningxia', '新疆维吾尔自治区': 'Xinjiang',
+            '香港特别行政区': 'Hong Kong', '澳门特别行政区': 'Macau', '台湾省': 'Taiwan',
+            '南海诸岛': 'Nanhai Islands'
+    };
             window.getProvinceName = function(geoName, lang) {
         return provinceNames[geoName] || geoName;
       };
@@ -101,8 +112,8 @@
 
                             <!-- 语言切换 -->
                             <div class="flex bg-white/80 dark:bg-gray-800/80 backdrop-blur rounded-lg border border-slate-200 dark:border-gray-700 p-1">
-              <a href="../../20260124/index.html" class="px-2 py-0.5 text-xs font-bold rounded text-slate-500 dark:text-gray-400 hover:text-slate-900 dark:hover:text-white transition-colors cursor-pointer">EN</a>
-              <a href="#" class="px-2 py-0.5 text-xs font-bold rounded bg-blue-600 text-white cursor-pointer">CN</a>
+              <a href="#" class="px-2 py-0.5 text-xs font-bold rounded bg-blue-600 text-white cursor-pointer">EN</a>
+              <a href="../zh-cn/20260124/index.html" class="px-2 py-0.5 text-xs font-bold rounded text-slate-500 dark:text-gray-400 hover:text-slate-900 dark:hover:text-white transition-colors cursor-pointer">CN</a>
             </div>
                         </div>
 
@@ -4131,7 +4142,7 @@
 
     // Language is fixed for this version
         function initLanguage() {
-            currentLang = 'zh';
+            currentLang = 'en';
         }
 
     // Language switching is done via navigation
