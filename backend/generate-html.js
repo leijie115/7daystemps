@@ -422,6 +422,7 @@ const weatherDescMap = {
   '未知': 'Unknown'
 };
 
+
 /**
  * 翻译天气描述
  * @param {string} weatherDesc - 中文天气描述
@@ -433,6 +434,115 @@ function translateWeatherDesc(weatherDesc, lang) {
     return weatherDesc;
   }
   return weatherDescMap[weatherDesc] || weatherDesc;
+}
+
+/**
+ * 生成全国天气摘要
+ * @param {Array} provincesData - 所有省份的今日数据
+ * @param {Date} date - 日期
+ */
+function generateNationalSummary(provincesData, date) {
+  if (!provincesData || provincesData.length === 0) return { zh: '暂无数据', en: 'No data available' };
+
+  // 按温度排序查找最值
+  const sortedByMax = [...provincesData].sort((a, b) => (b.maxTemp || -999) - (a.maxTemp || -999));
+  const sortedByMin = [...provincesData].sort((a, b) => (a.minTemp || 999) - (b.minTemp || 999));
+
+  // 过滤有效数据
+  const hottest = sortedByMax[0];
+  const coldest = sortedByMin[0];
+
+  // 计算平均气温
+  const validTemps = provincesData.map(p => p.temperature).filter(t => t !== null && t !== undefined);
+  const avgTemp = validTemps.length > 0 ? (validTemps.reduce((a, b) => a + b, 0) / validTemps.length).toFixed(1) : 0;
+
+  const dateStrZh = date.toLocaleDateString('zh-CN', { month: 'long', day: 'numeric' });
+  const dateStrEn = date.toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' });
+
+  return {
+    zh: `<p class="mb-4">
+               ${dateStrZh}，中国各地气温差异显著。全国平均气温约为 <strong>${avgTemp}°C</strong>。
+               今日最热的地区是 <strong>${hottest.province}</strong>，全省最高气温达到 <span class="text-orange-500 font-bold">${hottest.maxTemp}°C</span>。
+               与此同时，<strong>${coldest.province}</strong> 迎来了最冷的天气，部分地区夜间最低气温降至 <span class="text-blue-500 font-bold">${coldest.minTemp}°C</span>。
+             </p>
+             <p>
+               由于地理跨度巨大，从寒冷的北方到温暖的南方，通过我们的实时排行榜，您可以直观地感受到这种其后多样性。
+               无论是为了出行规划，还是单纯对气象数据感兴趣，这里的实时数据都能为您提供详尽的参考。
+             </p>`,
+    en: `<p class="mb-4">
+               On ${dateStrEn}, the weather across China shows a remarkable range of temperatures, reflecting the country's vast geography. The national average temperature is approximately <strong>${avgTemp}°C</strong>.
+             </p>
+             <p class="mb-4">
+               The hottest region today is <strong>${hottest.enName}</strong>, reaching a top temperature of <span class="text-orange-500 font-bold">${hottest.maxTemp}°C</span>.
+               On the other end of the spectrum, <strong>${coldest.enName}</strong> is experiencing the coldest conditions, with nighttime lows dropping to <span class="text-blue-500 font-bold">${coldest.minTemp}°C</span>.
+             </p>
+             <p>
+               From the freezing north to the tropical south, our real-time rankings provide a comprehensive snapshot of these extremes. Stay updated with the latest weather trends and plan your activities accordingly.
+             </p>`
+  };
+}
+
+/**
+ * 生成省份天气摘要
+ * @param {string} provinceName - 省份名称
+ * @param {Array} citiesData - 该省份城市数据
+ * @param {Date} date - 日期
+ */
+function generateProvinceSummary(provinceName, citiesData, date) {
+  if (!citiesData || citiesData.length === 0) return { zh: '暂无数据', en: 'No data available' };
+
+  const sortedByTemp = [...citiesData].sort((a, b) => (b.temperature || -999) - (a.temperature || -999));
+  const hottestCity = sortedByTemp[0];
+  const coldestCity = sortedByTemp[sortedByTemp.length - 1];
+
+  // 计算平均气温
+  const validTemps = citiesData.map(c => c.temperature).filter(t => t !== null && t !== undefined);
+  const avgTemp = validTemps.length > 0 ? (validTemps.reduce((a, b) => a + b, 0) / validTemps.length).toFixed(1) : 0;
+
+  // 获取天气状况分布 (例如: 5个晴天, 3个多云)
+  const weatherCounts = {};
+  citiesData.forEach(c => {
+    const desc = c.weatherDesc || 'Unknown';
+    weatherCounts[desc] = (weatherCounts[desc] || 0) + 1;
+  });
+  // 找出最多的天气
+  const mainWeather = Object.entries(weatherCounts).sort((a, b) => b[1] - a[1])[0][0];
+
+  // 省份各个不同名字
+  const provinceConfig = PROVINCES_DATA.find(p => p.name === provinceName || p.full_name === provinceName);
+  const provinceEn = provinceConfig ? provinceConfig.en_name : provinceName;
+
+  // 城市英文名
+  const hottestEn = getCityConfig(provinceConfig ? provinceConfig.code : '', hottestCity.cityCode)?.en_name || hottestCity.city;
+  const coldestEn = getCityConfig(provinceConfig ? provinceConfig.code : '', coldestCity.cityCode)?.en_name || coldestCity.city;
+
+  const dateStrZh = date.toLocaleDateString('zh-CN', { month: 'long', day: 'numeric' });
+  const dateStrEn = date.toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' });
+
+  const mainWeatherEn = translateWeatherDesc(mainWeather, 'en');
+
+  return {
+    zh: `<p class="mb-4">
+               ${dateStrZh}，<strong>${provinceName}</strong>各城市天气状况以<strong>${mainWeather}</strong>为主。全省平均气温为 <strong>${avgTemp}°C</strong>。
+             </p>
+             <p>
+               在省内各主要城市中，<strong>${hottestCity.city}</strong> 今日气温最高，达到了 <span class="text-orange-500 font-bold">${hottestCity.temperature}°C</span>。
+               相比之下，<strong>${coldestCity.city}</strong> 则相对较冷，气温低至 <span class="text-blue-500 font-bold">${coldestCity.temperature}°C</span>。
+             </p>
+             <p>
+               请根据所在城市的具体天气情况适时增减衣物。我们将持续为您更新${provinceName}各地的实时气象数据。
+             </p>`,
+    en: `<p class="mb-4">
+               This is the detailed temperature report for <strong>${provinceEn}</strong> on ${dateStrEn}. The dominant weather pattern across the province today is <strong>${mainWeatherEn}</strong>, with an average temperature of <strong>${avgTemp}°C</strong>.
+             </p>
+             <p class="mb-4">
+               Among the key cities, <strong>${hottestEn}</strong> stands out as the warmest location today, recording a temperature of <span class="text-orange-500 font-bold">${hottestCity.temperature}°C</span>.
+               Conversely, <strong>${coldestEn}</strong> is the coolest spot in the region, with temperatures sitting at <span class="text-blue-500 font-bold">${coldestCity.temperature}°C</span>.
+             </p>
+             <p>
+               Whether you are in ${hottestEn}, ${coldestEn}, or anywhere else in ${provinceEn}, stay prepared for the local conditions. Our data is updated regularly to provide you with the most accurate temperature rankings.
+             </p>`
+  };
 }
 
 /**
@@ -660,10 +770,13 @@ async function generateDayPage(dayIndex, allForecastData, forecastData) {
       }
     </style>
 </head>
-<body class="flex flex-col md:flex-row h-screen w-screen overflow-hidden bg-slate-50 dark:bg-[#0d1117] text-slate-900 dark:text-white font-sans transition-colors duration-300">
+<body class="bg-slate-50 dark:bg-[#0d1117] text-slate-900 dark:text-white font-sans transition-colors duration-300 min-h-screen overflow-x-hidden overflow-y-auto">
+
+    <!-- Dashboard Container -->
+    <div class="flex flex-col md:flex-row h-screen w-full relative">
 
     <!-- 左侧：地图可视化区域 -->
-        <div class="relative flex-1 h-[35vh] md:h-full flex flex-col">
+    <div class="relative flex-1 h-[35vh] md:h-full flex flex-col">
             <!-- 顶部覆盖层：标题 & 图例 -->
             <div class="absolute top-0 left-0 w-full p-3 md:p-6 z-10 pointer-events-none">
                 <div class="flex justify-between items-start">
@@ -905,10 +1018,34 @@ async function generateDayPage(dayIndex, allForecastData, forecastData) {
                       `;
     }).join('')}
             </div >
-            ${FOOTER_HTML}
-            </div >
+            
+            </div>
         </div >
-    </div >
+    </div > <!-- End Dashboard Container -->
+
+    <!-- Content Section (Below the Fold) -->
+    <div class="w-full bg-white dark:bg-gray-900 border-t border-slate-200 dark:border-gray-800">
+        <div class="max-w-4xl mx-auto px-6 py-12 prose dark:prose-invert">
+            ${(() => {
+      const summary = generateNationalSummary(provinceData, targetDate);
+      return `
+                <div class="mb-8 p-6 rounded-2xl bg-slate-50 dark:bg-gray-800/50 border border-slate-200 dark:border-gray-700">
+                    <h2 class="text-xl font-bold text-slate-900 dark:text-white mb-4 flex items-center gap-2 not-prose">
+                        <svg class="w-6 h-6 text-blue-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                        </svg>
+                        <span data-lang="zh" class="hidden">今日气象摘要</span>
+                        <span data-lang="en">Daily Weather Summary</span>
+                    </h2>
+                    <div class="text-base text-slate-600 dark:text-gray-300 leading-relaxed">
+                        <div data-lang="zh" class="hidden">${summary.zh}</div>
+                        <div data-lang="en">${summary.en}</div>
+                    </div>
+                </div>`;
+    })()}
+        </div>
+        ${FOOTER_HTML}
+    </div>
 
 
   <script>
@@ -994,6 +1131,15 @@ async function generateDayPage(dayIndex, allForecastData, forecastData) {
             // 更新风速标签
             document.querySelectorAll('.wind-label').forEach(el => {
       el.textContent = t.wind;
+            });
+
+            // Generic language toggle for elements with data-lang attribute
+            document.querySelectorAll('[data-lang]').forEach(el => {
+                if (el.dataset.lang === lang) {
+                    el.classList.remove('hidden');
+                } else {
+                    el.classList.add('hidden');
+                }
             });
 
     // 重绘地图（更新省份名称和主题）
@@ -1613,8 +1759,11 @@ async function generateProvincePage(provinceName, provinceConfig, dayIndex = 0) 
       }
                   </style>
                 </head>
-                <body class="flex flex-col md:flex-row h-screen w-screen overflow-hidden bg-slate-50 dark:bg-[#0d1117] text-slate-900 dark:text-white font-sans transition-colors duration-300">
-
+                <body class="bg-slate-50 dark:bg-[#0d1117] text-slate-900 dark:text-white font-sans transition-colors duration-300 min-h-screen overflow-x-hidden overflow-y-auto">
+                  
+                  <!-- Dashboard Container -->
+                  <div class="flex flex-col md:flex-row h-screen w-full relative">
+                  
                   <!-- 左侧：地图可视化区域 -->
                   <div class="relative flex-1 h-[35vh] md:h-full flex flex-col">
                     <!-- 顶部覆盖层：标题 & 图例 & 返回按钮 -->
@@ -1856,9 +2005,34 @@ async function generateProvincePage(provinceName, provinceConfig, dayIndex = 0) 
               `;
     }).join('')}
                       </div>
-                      ${FOOTER_HTML}
+
+                      </div>
                     </div>
                   </div>
+                </div> <!-- End Dashboard Container -->
+
+                <!-- Content Section (Below the Fold) -->
+                <div class="w-full bg-white dark:bg-gray-900 border-t border-slate-200 dark:border-gray-800">
+                    <div class="max-w-4xl mx-auto px-6 py-12 prose dark:prose-invert">
+                      ${(() => {
+      const summary = generateProvinceSummary(provinceName, cityData, targetDate);
+      return `
+                        <div class="mb-8 p-6 rounded-2xl bg-slate-50 dark:bg-gray-800/50 border border-slate-200 dark:border-gray-700">
+                            <h2 class="text-xl font-bold text-slate-900 dark:text-white mb-4 flex items-center gap-2 not-prose">
+                                <svg class="w-6 h-6 text-blue-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                </svg>
+                                <span data-lang="zh" class="hidden">今日气象摘要</span>
+                                <span data-lang="en">Daily Weather Summary</span>
+                            </h2>
+                            <div class="text-base text-slate-600 dark:text-gray-300 leading-relaxed">
+                                <div data-lang="zh" class="hidden">${summary.zh}</div>
+                                <div data-lang="en">${summary.en}</div>
+                            </div>
+                        </div>`;
+    })()}
+                    </div>
+                    ${FOOTER_HTML}
                 </div>
 
                 <script>
@@ -1913,13 +2087,23 @@ async function generateProvincePage(provinceName, provinceConfig, dayIndex = 0) 
                     el.textContent = lang === 'zh' ? el.dataset.weatherZh : el.dataset.weatherEn;
         });
 
-        document.querySelectorAll('.wind-label').forEach(el => {
-                    el.textContent = t.wind;
-        });
+            // 更新风速标签
+            document.querySelectorAll('.wind-label').forEach(el => {
+      el.textContent = t.wind;
+            });
 
-        document.querySelectorAll('.forecast-day-label').forEach(el => {
-                    el.textContent = lang === 'zh' ? el.dataset.dayZh : el.dataset.dayEn;
-        });
+            // Generic language toggle for elements with data-lang attribute
+            document.querySelectorAll('[data-lang]').forEach(el => {
+                if (el.dataset.lang === lang) {
+                    el.classList.remove('hidden');
+                } else {
+                    el.classList.add('hidden');
+                }
+            });
+
+            document.querySelectorAll('.forecast-day-label').forEach(el => {
+      el.textContent = lang === 'zh' ? el.dataset.dayZh : el.dataset.dayEn;
+            });
 
         // 更新日期选择器
         document.querySelectorAll('.day-label').forEach(el => {

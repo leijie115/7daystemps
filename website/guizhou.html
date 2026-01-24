@@ -72,8 +72,11 @@
       }
                   </style>
                 </head>
-                <body class="flex flex-col md:flex-row h-screen w-screen overflow-hidden bg-slate-50 dark:bg-[#0d1117] text-slate-900 dark:text-white font-sans transition-colors duration-300">
-
+                <body class="bg-slate-50 dark:bg-[#0d1117] text-slate-900 dark:text-white font-sans transition-colors duration-300 min-h-screen overflow-x-hidden overflow-y-auto">
+                  
+                  <!-- Dashboard Container -->
+                  <div class="flex flex-col md:flex-row h-screen w-full relative">
+                  
                   <!-- 左侧：地图可视化区域 -->
                   <div class="relative flex-1 h-[35vh] md:h-full flex flex-col">
                     <!-- 顶部覆盖层：标题 & 图例 & 返回按钮 -->
@@ -1499,7 +1502,49 @@
             </div>
               
                       </div>
+
+                      </div>
+                    </div>
+                  </div>
+                </div> <!-- End Dashboard Container -->
+
+                <!-- Content Section (Below the Fold) -->
+                <div class="w-full bg-white dark:bg-gray-900 border-t border-slate-200 dark:border-gray-800">
+                    <div class="max-w-4xl mx-auto px-6 py-12 prose dark:prose-invert">
                       
+                        <div class="mb-8 p-6 rounded-2xl bg-slate-50 dark:bg-gray-800/50 border border-slate-200 dark:border-gray-700">
+                            <h2 class="text-xl font-bold text-slate-900 dark:text-white mb-4 flex items-center gap-2 not-prose">
+                                <svg class="w-6 h-6 text-blue-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                </svg>
+                                <span data-lang="zh" class="hidden">今日气象摘要</span>
+                                <span data-lang="en">Daily Weather Summary</span>
+                            </h2>
+                            <div class="text-base text-slate-600 dark:text-gray-300 leading-relaxed">
+                                <div data-lang="zh" class="hidden"><p class="mb-4">
+               1月24日，<strong>贵州省</strong>各城市天气状况以<strong>阴</strong>为主。全省平均气温为 <strong>11.8°C</strong>。
+             </p>
+             <p>
+               在省内各主要城市中，<strong>铜仁</strong> 今日气温最高，达到了 <span class="text-orange-500 font-bold">13.3°C</span>。
+               相比之下，<strong>安顺</strong> 则相对较冷，气温低至 <span class="text-blue-500 font-bold">9.3°C</span>。
+             </p>
+             <p>
+               请根据所在城市的具体天气情况适时增减衣物。我们将持续为您更新贵州省各地的实时气象数据。
+             </p></div>
+                                <div data-lang="en"><p class="mb-4">
+               This is the detailed temperature report for <strong>Guizhou</strong> on January 24, 2026. The dominant weather pattern across the province today is <strong>Overcast</strong>, with an average temperature of <strong>11.8°C</strong>.
+             </p>
+             <p class="mb-4">
+               Among the key cities, <strong>TongRen</strong> stands out as the warmest location today, recording a temperature of <span class="text-orange-500 font-bold">13.3°C</span>.
+               Conversely, <strong>AnShun</strong> is the coolest spot in the region, with temperatures sitting at <span class="text-blue-500 font-bold">9.3°C</span>.
+             </p>
+             <p>
+               Whether you are in TongRen, AnShun, or anywhere else in Guizhou, stay prepared for the local conditions. Our data is updated regularly to provide you with the most accurate temperature rankings.
+             </p></div>
+                            </div>
+                        </div>
+                    </div>
+                    
   <footer class="mt-4 py-4 border-t border-slate-200 dark:border-gray-700/50">
       <div class="px-4">
           <div class="flex flex-col md:flex-row justify-between items-center gap-2">
@@ -1519,8 +1564,6 @@
       </div>
   </footer>
   
-                    </div>
-                  </div>
                 </div>
 
                 <script>
