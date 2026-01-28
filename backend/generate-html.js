@@ -2892,8 +2892,10 @@ async function createChineseVersions() {
       html = html.replace(/Temperature/g, '温度');
 
       // 替换排行榜中的省份名称（使用data-province-zh属性）
+      // 替换排行榜中的省份名称（使用data-province-zh属性）
+      // 匹配 h3, a, div 等标签
       html = html.replace(
-        /(<h3[^>]*data-province-zh="([^"]*)"[^>]*data-province-en="[^"]*"[^>]*>)[^<]*(.*?<\/h3>)/g,
+        /(<(?:h3|a|div)[^>]*data-province-zh="([^"]*)"[^>]*data-province-en="[^"]*"[^>]*>)\s*[^<]*\s*(<\/(?:h3|a|div)>)/g,
         '$1$2$3'
       );
 
@@ -2923,6 +2925,14 @@ async function createChineseVersions() {
       // 替换其他常见文本
       html = html.replace(/Rankings/g, '排行榜');
       html = html.replace(/Wind/g, '风速');
+
+      // 切换气象摘要的显示 (data-lang属性)
+      // 1. 显示中文内容 (移除hidden类)
+      html = html.replace(/(<[^>]*data-lang="zh"[^>]*)\bclass="[^"]*hidden[^"]*"([^>]*>)/g, '$1$2');
+      html = html.replace(/(<[^>]*data-lang="zh"[^>]*)\bhidden\b([^>]*>)/g, '$1$2');
+
+      // 2. 隐藏英文内容 (添加hidden类)
+      html = html.replace(/(<[^>]*data-lang="en"[^>]*)(>)/g, '$1 class="hidden"$2');
     }
 
     // 13. 移除initLanguage()调用中的updateLanguageUI
