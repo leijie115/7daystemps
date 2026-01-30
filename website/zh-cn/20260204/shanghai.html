@@ -766,11 +766,11 @@
                         <div  class="flex flex-col items-center group/day cursor-default">
                             <span class="forecast-day-label text-[9px] font-medium mb-1 text-blue-500" data-day-zh="周三" data-day-en="Wed">周三</span>
                             <div class="bg-slate-200 dark:bg-gray-800/50 rounded-full h-20 relative w-1.5 md:w-2 mx-auto ring-1 ring-black/5 dark:ring-white/5">
-                                <div class="absolute w-full rounded-full opacity-80" style="bottom: 27.6%; height: 25.4%; background-color: #10b981;"></div>
+                                <div class="absolute w-full rounded-full opacity-80" style="bottom: 25.8%; height: 27.2%; background-color: #10b981;"></div>
                             </div>
                             <div class="flex flex-col items-center mt-1.5 gap-0.5">
                                 <span class="text-[10px] font-bold text-slate-700 dark:text-gray-300 leading-none">16.5°</span>
-                                <span class="text-[9px] text-slate-500 dark:text-gray-600 leading-none">3.8°</span>
+                                <span class="text-[9px] text-slate-500 dark:text-gray-600 leading-none">2.9°</span>
                             </div>
                         </div>
                         
@@ -1450,7 +1450,7 @@
 
                   // 去重：如果有多个城市的fullName相同，只保留温度最高的一个
                   const uniqueDataMap = new Map();
-                  [{"city":"松江","cityCode":"FkyWg","temperature":17.7,"maxTemp":17.7,"minTemp":4,"windSpeed":3.3,"weatherDesc":"多云","fullName":"松江区","en_name":"SongJiang"},{"city":"青浦","cityCode":"xZqWL","temperature":17.3,"maxTemp":17.3,"minTemp":4.1,"windSpeed":3.3,"weatherDesc":"多云","fullName":"青浦区","en_name":"QingPu"},{"city":"闵行","cityCode":"ttcsH","temperature":16.8,"maxTemp":16.8,"minTemp":7,"windSpeed":3.3,"weatherDesc":"多云","fullName":"闵行区","en_name":"MinXing"},{"city":"宝山","cityCode":"QtPRO","temperature":16.5,"maxTemp":16.5,"minTemp":3,"windSpeed":3.3,"weatherDesc":"晴","fullName":"宝山区","en_name":"BaoShan"},{"city":"浦东","cityCode":"atcMf","temperature":16.5,"maxTemp":16.5,"minTemp":3.8,"windSpeed":3.3,"weatherDesc":"多云","fullName":"浦东新区","en_name":"PuDong"},{"city":"嘉定","cityCode":"HZYrL","temperature":16.3,"maxTemp":16.3,"minTemp":2.2,"windSpeed":3.3,"weatherDesc":"晴","fullName":"嘉定区","en_name":"JiaDing"},{"city":"金山","cityCode":"XJLoP","temperature":16.1,"maxTemp":16.1,"minTemp":3.3,"windSpeed":3.3,"weatherDesc":"多云","fullName":"金山区","en_name":"JinShan"},{"city":"奉贤","cityCode":"BOoen","temperature":15.6,"maxTemp":15.6,"minTemp":2.7,"windSpeed":3.3,"weatherDesc":"多云","fullName":"奉贤区","en_name":"FengXian"},{"city":"崇明","cityCode":"fndTJ","temperature":15.4,"maxTemp":15.4,"minTemp":1.2,"windSpeed":3.3,"weatherDesc":"晴","fullName":"崇明区","en_name":"ChongMing"}].forEach(item => {
+                  [{"city":"松江","cityCode":"FkyWg","temperature":17.7,"maxTemp":17.7,"minTemp":4,"windSpeed":3.3,"weatherDesc":"多云","fullName":"松江区","en_name":"SongJiang"},{"city":"青浦","cityCode":"xZqWL","temperature":17.3,"maxTemp":17.3,"minTemp":4.1,"windSpeed":3.3,"weatherDesc":"多云","fullName":"青浦区","en_name":"QingPu"},{"city":"闵行","cityCode":"ttcsH","temperature":16.8,"maxTemp":16.8,"minTemp":7,"windSpeed":3.3,"weatherDesc":"多云","fullName":"闵行区","en_name":"MinXing"},{"city":"宝山","cityCode":"QtPRO","temperature":16.5,"maxTemp":16.5,"minTemp":3,"windSpeed":3.3,"weatherDesc":"晴","fullName":"宝山区","en_name":"BaoShan"},{"city":"浦东","cityCode":"atcMf","temperature":16.5,"maxTemp":16.5,"minTemp":2.9,"windSpeed":3.3,"weatherDesc":"多云","fullName":"浦东新区","en_name":"PuDong"},{"city":"嘉定","cityCode":"HZYrL","temperature":16.3,"maxTemp":16.3,"minTemp":2.2,"windSpeed":3.3,"weatherDesc":"晴","fullName":"嘉定区","en_name":"JiaDing"},{"city":"金山","cityCode":"XJLoP","temperature":16.1,"maxTemp":16.1,"minTemp":3.3,"windSpeed":3.3,"weatherDesc":"多云","fullName":"金山区","en_name":"JinShan"},{"city":"奉贤","cityCode":"BOoen","temperature":15.6,"maxTemp":15.6,"minTemp":2.7,"windSpeed":3.3,"weatherDesc":"多云","fullName":"奉贤区","en_name":"FengXian"},{"city":"崇明","cityCode":"fndTJ","temperature":15.4,"maxTemp":15.4,"minTemp":1.2,"windSpeed":3.3,"weatherDesc":"晴","fullName":"崇明区","en_name":"ChongMing"}].forEach(item => {
           const name = item.fullName || item.city;
           if (!uniqueDataMap.has(name) || item.temperature > uniqueDataMap.get(name).value) {
                     uniqueDataMap.set(name, {

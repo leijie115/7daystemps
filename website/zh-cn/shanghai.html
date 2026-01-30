@@ -540,11 +540,11 @@
                         <a href="20260204/shanghai.html" class="flex flex-col items-center group/day cursor-pointer hover:opacity-80 transition-opacity">
                             <span class="forecast-day-label text-[9px] font-medium mb-1 text-slate-500 dark:text-gray-500" data-day-zh="周三" data-day-en="Wed">周三</span>
                             <div class="bg-slate-200 dark:bg-gray-800/50 rounded-full h-20 relative w-1.5 md:w-2 mx-auto ring-1 ring-black/5 dark:ring-white/5">
-                                <div class="absolute w-full rounded-full opacity-80" style="bottom: 27.6%; height: 25.4%; background-color: #10b981;"></div>
+                                <div class="absolute w-full rounded-full opacity-80" style="bottom: 25.8%; height: 27.2%; background-color: #10b981;"></div>
                             </div>
                             <div class="flex flex-col items-center mt-1.5 gap-0.5">
                                 <span class="text-[10px] font-bold text-slate-700 dark:text-gray-300 leading-none">16.5°</span>
-                                <span class="text-[9px] text-slate-500 dark:text-gray-600 leading-none">3.8°</span>
+                                <span class="text-[9px] text-slate-500 dark:text-gray-600 leading-none">2.9°</span>
                             </div>
                         </a>
                         
@@ -799,7 +799,7 @@
                         <div>
                             <h3 data-role="title" data-city-zh="奉贤区" data-city-en="FengXian" class="font-semibold text-slate-700 dark:text-gray-300 text-sm md:text-base">奉贤区</h3>
                             <div class="text-xs text-slate-500 dark:text-gray-500 flex gap-2 items-center mt-0.5">
-                                <span class="weather-desc" data-weather-zh="中雨" data-weather-en="Moderate Rain">中雨</span><span class="w-1 h-1 rounded-full bg-slate-400 dark:bg-gray-600"></span><span class="wind-label">风速</span>: 7.9 m/s</span>
+                                <span class="weather-desc" data-weather-zh="小雨" data-weather-en="Light Rain">小雨</span><span class="w-1 h-1 rounded-full bg-slate-400 dark:bg-gray-600"></span><span class="wind-label">风速</span>: 7.9 m/s</span>
                             </div>
                         </div>
                     </div>
@@ -1450,7 +1450,7 @@
 
                   // 去重：如果有多个城市的fullName相同，只保留温度最高的一个
                   const uniqueDataMap = new Map();
-                  [{"city":"青浦","cityCode":"xZqWL","temperature":6.9,"maxTemp":6.9,"minTemp":2.9,"windSpeed":7.9,"weatherDesc":"小雨","fullName":"青浦区","en_name":"QingPu"},{"city":"松江","cityCode":"FkyWg","temperature":6.8,"maxTemp":6.8,"minTemp":3.3,"windSpeed":7.9,"weatherDesc":"小雨","fullName":"松江区","en_name":"SongJiang"},{"city":"浦东","cityCode":"atcMf","temperature":6.8,"maxTemp":6.8,"minTemp":3.8,"windSpeed":7.9,"weatherDesc":"未知","fullName":"浦东新区","en_name":"PuDong"},{"city":"金山","cityCode":"XJLoP","temperature":6.7,"maxTemp":6.7,"minTemp":4.5,"windSpeed":7.9,"weatherDesc":"小雨","fullName":"金山区","en_name":"JinShan"},{"city":"闵行","cityCode":"ttcsH","temperature":6.5,"maxTemp":6.5,"minTemp":4.7,"windSpeed":7.9,"weatherDesc":"小雨","fullName":"闵行区","en_name":"MinXing"},{"city":"奉贤","cityCode":"BOoen","temperature":6.4,"maxTemp":6.4,"minTemp":3.7,"windSpeed":7.9,"weatherDesc":"中雨","fullName":"奉贤区","en_name":"FengXian"},{"city":"宝山","cityCode":"QtPRO","temperature":6.1,"maxTemp":6.1,"minTemp":2.8,"windSpeed":7.9,"weatherDesc":"小雨","fullName":"宝山区","en_name":"BaoShan"},{"city":"崇明","cityCode":"fndTJ","temperature":6,"maxTemp":6,"minTemp":3.1,"windSpeed":7.9,"weatherDesc":"小雨","fullName":"崇明区","en_name":"ChongMing"},{"city":"嘉定","cityCode":"HZYrL","temperature":5.9,"maxTemp":5.9,"minTemp":4.3,"windSpeed":7.9,"weatherDesc":"小雨","fullName":"嘉定区","en_name":"JiaDing"}].forEach(item => {
+                  [{"city":"青浦","cityCode":"xZqWL","temperature":6.9,"maxTemp":6.9,"minTemp":2.9,"windSpeed":7.9,"weatherDesc":"小雨","fullName":"青浦区","en_name":"QingPu"},{"city":"松江","cityCode":"FkyWg","temperature":6.8,"maxTemp":6.8,"minTemp":3.3,"windSpeed":7.9,"weatherDesc":"小雨","fullName":"松江区","en_name":"SongJiang"},{"city":"浦东","cityCode":"atcMf","temperature":6.8,"maxTemp":6.8,"minTemp":3.8,"windSpeed":7.9,"weatherDesc":"未知","fullName":"浦东新区","en_name":"PuDong"},{"city":"金山","cityCode":"XJLoP","temperature":6.7,"maxTemp":6.7,"minTemp":4.5,"windSpeed":7.9,"weatherDesc":"小雨","fullName":"金山区","en_name":"JinShan"},{"city":"闵行","cityCode":"ttcsH","temperature":6.5,"maxTemp":6.5,"minTemp":4.7,"windSpeed":7.9,"weatherDesc":"小雨","fullName":"闵行区","en_name":"MinXing"},{"city":"奉贤","cityCode":"BOoen","temperature":6.4,"maxTemp":6.4,"minTemp":3.7,"windSpeed":7.9,"weatherDesc":"小雨","fullName":"奉贤区","en_name":"FengXian"},{"city":"宝山","cityCode":"QtPRO","temperature":6.1,"maxTemp":6.1,"minTemp":2.8,"windSpeed":7.9,"weatherDesc":"小雨","fullName":"宝山区","en_name":"BaoShan"},{"city":"崇明","cityCode":"fndTJ","temperature":6,"maxTemp":6,"minTemp":3.1,"windSpeed":7.9,"weatherDesc":"小雨","fullName":"崇明区","en_name":"ChongMing"},{"city":"嘉定","cityCode":"HZYrL","temperature":5.9,"maxTemp":5.9,"minTemp":4.3,"windSpeed":7.9,"weatherDesc":"小雨","fullName":"嘉定区","en_name":"JiaDing"}].forEach(item => {
           const name = item.fullName || item.city;
           if (!uniqueDataMap.has(name) || item.temperature > uniqueDataMap.get(name).value) {
                     uniqueDataMap.set(name, {
