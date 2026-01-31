@@ -241,7 +241,7 @@
                         <div>
                             <h3 data-role="title" data-city-zh="高雄" data-city-en="GaoXiong" class="font-semibold text-slate-700 dark:text-gray-300 text-sm md:text-base">GaoXiong</h3>
                             <div class="text-xs text-slate-500 dark:text-gray-500 flex gap-2 items-center mt-0.5">
-                                <span class="weather-desc" data-weather-zh="多云" data-weather-en="Cloudy">Cloudy</span><span class="w-1 h-1 rounded-full bg-slate-400 dark:bg-gray-600"></span><span class="wind-label">Wind</span>: 3.3 m/s</span>
+                                <span class="weather-desc" data-weather-zh="多云" data-weather-en="Cloudy">Cloudy</span><span class="w-1 h-1 rounded-full bg-slate-400 dark:bg-gray-600"></span><span class="wind-label">Wind</span>: 7.9 m/s</span>
                             </div>
                         </div>
                     </div>
@@ -821,7 +821,7 @@
 
                   // 去重：如果有多个城市的fullName相同，只保留温度最高的一个
                   const uniqueDataMap = new Map();
-                  [{"city":"高雄","cityCode":"Urwjw","temperature":24.8,"maxTemp":24.8,"minTemp":17.2,"windSpeed":3.3,"weatherDesc":"多云","fullName":"高雄","en_name":"GaoXiong"},{"city":"台中","cityCode":"FYDSf","temperature":20.8,"maxTemp":20.8,"minTemp":14.2,"windSpeed":3.3,"weatherDesc":"多云","fullName":"台中","en_name":"TaiZhong"},{"city":"台北","cityCode":"VrMVF","temperature":14.1,"maxTemp":14.1,"minTemp":12.9,"windSpeed":3.3,"weatherDesc":"小雨","fullName":"台北","en_name":"TaiBei"}].forEach(item => {
+                  [{"city":"高雄","cityCode":"Urwjw","temperature":24.8,"maxTemp":24.8,"minTemp":17.2,"windSpeed":7.9,"weatherDesc":"多云","fullName":"高雄","en_name":"GaoXiong"},{"city":"台中","cityCode":"FYDSf","temperature":20.8,"maxTemp":20.8,"minTemp":14.2,"windSpeed":3.3,"weatherDesc":"多云","fullName":"台中","en_name":"TaiZhong"},{"city":"台北","cityCode":"VrMVF","temperature":14.1,"maxTemp":14.1,"minTemp":12.9,"windSpeed":3.3,"weatherDesc":"小雨","fullName":"台北","en_name":"TaiBei"}].forEach(item => {
           const name = item.fullName || item.city;
           if (!uniqueDataMap.has(name) || item.temperature > uniqueDataMap.get(name).value) {
                     uniqueDataMap.set(name, {
