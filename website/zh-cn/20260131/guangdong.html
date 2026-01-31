@@ -9,7 +9,7 @@
                 <title>广东省 温度 排行榜</title>
                 <link rel="icon" type="image/x-icon" href="/favicon.ico">
                   <script>
-      // Language: zh
+      // Language: en
 
                     // Weather descriptions are pre-rendered in the correct language
 
@@ -17,9 +17,10 @@
 
                     
 
-                    // City names are already in the correct language
-      window.getCityName = function(cityName, lang) {
-        return cityName;
+                    // City name mapping for en version
+              const cityNameMap = {"阳江市":"YangJiang","茂名市":"MaoMing","湛江市":"ZhanJiang","深圳市":"ShenZhen","肇庆市":"ZhaoQing","佛山市":"FoShan","汕头市":"ShanTou","汕尾市":"ShanWei","惠州市":"HuiZhou","珠海市":"ZhuHai","广州市":"GuangZhou","云浮市":"YunFu","清远市":"QingYuan","韶关市":"ShaoGuan","揭阳市":"JieYang","河源市":"HeYuan","江门市":"JiangMen","潮州市":"ChaoZhou","梅州市":"MeiZhou","东莞市":"DongGuan","中山市":"ZhongShan"};
+              window.getCityName = function(cityName, lang) {
+        return cityNameMap[cityName] || cityName;
       };
                   </script>
                   <script src="https://cdn.tailwindcss.com"></script>
@@ -103,8 +104,8 @@
 
                             <!-- 语言切换 -->
                             <div class="flex bg-white/80 dark:bg-gray-800/80 backdrop-blur rounded-lg border border-slate-200 dark:border-gray-700 p-1">
-              <a href="../../20260131/guangdong.html" class="px-2 py-0.5 text-xs font-bold rounded text-slate-500 dark:text-gray-400 hover:text-slate-900 dark:hover:text-white transition-colors cursor-pointer">EN</a>
-              <a href="#" class="px-2 py-0.5 text-xs font-bold rounded bg-blue-600 text-white cursor-pointer">CN</a>
+              <a href="#" class="px-2 py-0.5 text-xs font-bold rounded bg-blue-600 text-white cursor-pointer">EN</a>
+              <a href="../zh-cn/20260131/guangdong.html" class="px-2 py-0.5 text-xs font-bold rounded text-slate-500 dark:text-gray-400 hover:text-slate-900 dark:hover:text-white transition-colors cursor-pointer">CN</a>
             </div>
                           </div>
 
@@ -2668,7 +2669,7 @@
                   let tempMapData = { };
 
                   function initLanguage() {
-        currentLang = 'zh';
+        currentLang = 'en';
     }
 
                   // Language switching is done via navigation
