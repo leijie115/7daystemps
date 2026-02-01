@@ -496,11 +496,11 @@
                         <div  class="flex flex-col items-center group/day cursor-default">
                             <span class="forecast-day-label text-[9px] font-medium mb-1 text-blue-500" data-day-zh="周一" data-day-en="Mon">周一</span>
                             <div class="bg-slate-200 dark:bg-gray-800/50 rounded-full h-20 relative w-1.5 md:w-2 mx-auto ring-1 ring-black/5 dark:ring-white/5">
-                                <div class="absolute w-full rounded-full opacity-80" style="bottom: 4.800000000000001%; height: 27%; background-color: #06b6d4;"></div>
+                                <div class="absolute w-full rounded-full opacity-80" style="bottom: 3.6000000000000014%; height: 28.2%; background-color: #06b6d4;"></div>
                             </div>
                             <div class="flex flex-col items-center mt-1.5 gap-0.5">
                                 <span class="text-[10px] font-bold text-slate-700 dark:text-gray-300 leading-none">5.9°</span>
-                                <span class="text-[9px] text-slate-500 dark:text-gray-600 leading-none">-7.6°</span>
+                                <span class="text-[9px] text-slate-500 dark:text-gray-600 leading-none">-8.2°</span>
                             </div>
                         </div>
                         
@@ -998,7 +998,7 @@
 
                   // 去重：如果有多个城市的fullName相同，只保留温度最高的一个
                   const uniqueDataMap = new Map();
-                  [{"city":"中卫","cityCode":"mZrCd","temperature":8.4,"maxTemp":8.4,"minTemp":-10.3,"windSpeed":3.3,"weatherDesc":"多云","fullName":"中卫市","en_name":"ZhongWei"},{"city":"吴忠","cityCode":"VXPXK","temperature":8.1,"maxTemp":8.1,"minTemp":-10,"windSpeed":3.3,"weatherDesc":"多云","fullName":"吴忠市","en_name":"WuZhong"},{"city":"银川","cityCode":"LqTRN","temperature":5.9,"maxTemp":5.9,"minTemp":-7.6,"windSpeed":3.3,"weatherDesc":"多云","fullName":"银川市","en_name":"YinChuan"},{"city":"石嘴山","cityCode":"jNMZg","temperature":5.5,"maxTemp":5.5,"minTemp":-14.4,"windSpeed":3.3,"weatherDesc":"多云","fullName":"石嘴山市","en_name":"ShiZuiShan"},{"city":"固原","cityCode":"muLnq","temperature":4.5,"maxTemp":4.5,"minTemp":-7.9,"windSpeed":7.9,"weatherDesc":"多云","fullName":"固原市","en_name":"GuYuan"}].forEach(item => {
+                  [{"city":"中卫","cityCode":"mZrCd","temperature":8.4,"maxTemp":8.4,"minTemp":-10.3,"windSpeed":3.3,"weatherDesc":"多云","fullName":"中卫市","en_name":"ZhongWei"},{"city":"吴忠","cityCode":"VXPXK","temperature":8.1,"maxTemp":8.1,"minTemp":-10,"windSpeed":3.3,"weatherDesc":"多云","fullName":"吴忠市","en_name":"WuZhong"},{"city":"银川","cityCode":"LqTRN","temperature":5.9,"maxTemp":5.9,"minTemp":-8.2,"windSpeed":3.3,"weatherDesc":"多云","fullName":"银川市","en_name":"YinChuan"},{"city":"石嘴山","cityCode":"jNMZg","temperature":5.5,"maxTemp":5.5,"minTemp":-14.4,"windSpeed":3.3,"weatherDesc":"多云","fullName":"石嘴山市","en_name":"ShiZuiShan"},{"city":"固原","cityCode":"muLnq","temperature":4.5,"maxTemp":4.5,"minTemp":-7.9,"windSpeed":7.9,"weatherDesc":"多云","fullName":"固原市","en_name":"GuYuan"}].forEach(item => {
           const name = item.fullName || item.city;
           if (!uniqueDataMap.has(name) || item.temperature > uniqueDataMap.get(name).value) {
                     uniqueDataMap.set(name, {
