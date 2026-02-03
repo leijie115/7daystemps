@@ -916,11 +916,11 @@
                                 Wed
                             </span>
                             <div class="bg-slate-200 dark:bg-gray-800/50 rounded-full h-20 relative w-1.5 md:w-2 mx-auto ring-1 ring-black/5 dark:ring-white/5">
-                                <div class="absolute w-full rounded-full opacity-80" style="bottom: 0%; height: 28.8%; background-color: #06b6d4;"></div>
+                                <div class="absolute w-full rounded-full opacity-80" style="bottom: 0%; height: 34.2%; background-color: #06b6d4;"></div>
                             </div>
                             <div class="flex flex-col items-center mt-1.5 gap-0.5">
                                 <span class="text-[10px] font-bold text-slate-700 dark:text-gray-300 leading-none">0.5°</span>
-                                <span class="text-[9px] text-slate-500 dark:text-gray-600 leading-none">-13.9°</span>
+                                <span class="text-[9px] text-slate-500 dark:text-gray-600 leading-none">-16.6°</span>
                             </div>
                         </a>
                         
@@ -1003,7 +1003,7 @@
                         <div>
                             <h3 data-role="title" data-city-zh="阿里地区" data-city-en="ALi" class="font-semibold text-slate-700 dark:text-gray-300 text-sm md:text-base">ALi</h3>
                             <div class="text-xs text-slate-500 dark:text-gray-500 flex gap-2 items-center mt-0.5">
-                                <span class="weather-desc" data-weather-zh="多云" data-weather-en="Cloudy">Cloudy</span><span class="w-1 h-1 rounded-full bg-slate-400 dark:bg-gray-600"></span><span class="wind-label">Wind</span>: 7.9 m/s</span>
+                                <span class="weather-desc" data-weather-zh="阴" data-weather-en="Overcast">Overcast</span><span class="w-1 h-1 rounded-full bg-slate-400 dark:bg-gray-600"></span><span class="wind-label">Wind</span>: 7.9 m/s</span>
                             </div>
                         </div>
                     </div>
@@ -1329,7 +1329,7 @@
 
                   // 去重：如果有多个城市的fullName相同，只保留温度最高的一个
                   const uniqueDataMap = new Map();
-                  [{"city":"昌都","cityCode":"FKHOa","temperature":14.7,"maxTemp":14.7,"minTemp":-7,"windSpeed":3.3,"weatherDesc":"晴","fullName":"昌都市","en_name":"ChangDou"},{"city":"山南","cityCode":"uuiXc","temperature":11.1,"maxTemp":11.1,"minTemp":-4,"windSpeed":10.7,"weatherDesc":"多云","fullName":"山南市","en_name":"ShanNan"},{"city":"拉萨","cityCode":"utJQK","temperature":10.8,"maxTemp":10.8,"minTemp":-5.8,"windSpeed":10.7,"weatherDesc":"晴","fullName":"拉萨市","en_name":"LaSa"},{"city":"林芝","cityCode":"ulvCs","temperature":10.5,"maxTemp":10.5,"minTemp":2.2,"windSpeed":3.3,"weatherDesc":"未知","fullName":"林芝市","en_name":"LinZhi"},{"city":"日喀则","cityCode":"wcnpZ","temperature":8.4,"maxTemp":8.4,"minTemp":-11,"windSpeed":10.7,"weatherDesc":"晴","fullName":"日喀则市","en_name":"RiKaZe"},{"city":"那曲","cityCode":"aDeyn","temperature":1.4,"maxTemp":1.4,"minTemp":-16.7,"windSpeed":17.1,"weatherDesc":"多云","fullName":"那曲市","en_name":"NaQu"},{"city":"阿里","cityCode":"DDraR","temperature":-3.2,"maxTemp":-3.2,"minTemp":-13,"windSpeed":7.9,"weatherDesc":"多云","fullName":"阿里地区","en_name":"ALi"}].forEach(item => {
+                  [{"city":"昌都","cityCode":"FKHOa","temperature":14.7,"maxTemp":14.7,"minTemp":-7,"windSpeed":3.3,"weatherDesc":"晴","fullName":"昌都市","en_name":"ChangDou"},{"city":"山南","cityCode":"uuiXc","temperature":11.1,"maxTemp":11.1,"minTemp":-4,"windSpeed":10.7,"weatherDesc":"多云","fullName":"山南市","en_name":"ShanNan"},{"city":"拉萨","cityCode":"utJQK","temperature":10.8,"maxTemp":10.8,"minTemp":-5.8,"windSpeed":10.7,"weatherDesc":"晴","fullName":"拉萨市","en_name":"LaSa"},{"city":"林芝","cityCode":"ulvCs","temperature":10.5,"maxTemp":10.5,"minTemp":2.2,"windSpeed":3.3,"weatherDesc":"未知","fullName":"林芝市","en_name":"LinZhi"},{"city":"日喀则","cityCode":"wcnpZ","temperature":8.4,"maxTemp":8.4,"minTemp":-11,"windSpeed":10.7,"weatherDesc":"晴","fullName":"日喀则市","en_name":"RiKaZe"},{"city":"那曲","cityCode":"aDeyn","temperature":1.4,"maxTemp":1.4,"minTemp":-16.7,"windSpeed":17.1,"weatherDesc":"多云","fullName":"那曲市","en_name":"NaQu"},{"city":"阿里","cityCode":"DDraR","temperature":-3.2,"maxTemp":-3.2,"minTemp":-13,"windSpeed":7.9,"weatherDesc":"阴","fullName":"阿里地区","en_name":"ALi"}].forEach(item => {
           const name = item.fullName || item.city;
           if (!uniqueDataMap.has(name) || item.temperature > uniqueDataMap.get(name).value) {
                     uniqueDataMap.set(name, {

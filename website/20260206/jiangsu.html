@@ -18,7 +18,7 @@
                     
 
                     // City name mapping for en version
-              const cityNameMap = {"苏州市":"SuZhou","无锡市":"WuXi","南通市":"NanTong","常州市":"ChangZhou","扬州市":"YangZhou","泰州市":"TaiZhou","南京市":"NanJing","镇江市":"ZhenJiang","盐城市":"YanCheng","淮安市":"HuaiAn","宿迁市":"SuQian","连云港市":"LianYunGang","徐州市":"XuZhou"};
+              const cityNameMap = {"苏州市":"SuZhou","无锡市":"WuXi","南通市":"NanTong","常州市":"ChangZhou","扬州市":"YangZhou","南京市":"NanJing","泰州市":"TaiZhou","镇江市":"ZhenJiang","盐城市":"YanCheng","淮安市":"HuaiAn","宿迁市":"SuQian","连云港市":"LianYunGang","徐州市":"XuZhou"};
               window.getCityName = function(cityName, lang) {
         return cityNameMap[cityName] || cityName;
       };
@@ -622,7 +622,7 @@
                         <div>
                             <h3 data-role="title" data-city-zh="常州市" data-city-en="ChangZhou" class="font-semibold text-slate-700 dark:text-gray-300 text-sm md:text-base">ChangZhou</h3>
                             <div class="text-xs text-slate-500 dark:text-gray-500 flex gap-2 items-center mt-0.5">
-                                <span class="weather-desc" data-weather-zh="晴" data-weather-en="Sunny">Sunny</span><span class="w-1 h-1 rounded-full bg-slate-400 dark:bg-gray-600"></span><span class="wind-label">Wind</span>: 10.7 m/s</span>
+                                <span class="weather-desc" data-weather-zh="多云" data-weather-en="Cloudy">Cloudy</span><span class="w-1 h-1 rounded-full bg-slate-400 dark:bg-gray-600"></span><span class="wind-label">Wind</span>: 10.7 m/s</span>
                             </div>
                         </div>
                     </div>
@@ -688,11 +688,11 @@
                                 Fri
                             </span>
                             <div class="bg-slate-200 dark:bg-gray-800/50 rounded-full h-20 relative w-1.5 md:w-2 mx-auto ring-1 ring-black/5 dark:ring-white/5">
-                                <div class="absolute w-full rounded-full opacity-80" style="bottom: 20%; height: 16.6%; background-color: #06b6d4;"></div>
+                                <div class="absolute w-full rounded-full opacity-80" style="bottom: 20.2%; height: 16.400000000000002%; background-color: #06b6d4;"></div>
                             </div>
                             <div class="flex flex-col items-center mt-1.5 gap-0.5">
                                 <span class="text-[10px] font-bold text-slate-700 dark:text-gray-300 leading-none">8.3°</span>
-                                <span class="text-[9px] text-slate-500 dark:text-gray-600 leading-none">0°</span>
+                                <span class="text-[9px] text-slate-500 dark:text-gray-600 leading-none">0.1°</span>
                             </div>
                         </div>
                         
@@ -704,7 +704,7 @@
                                 <div class="absolute w-full rounded-full opacity-80" style="bottom: 13.8%; height: 10%; background-color: #3b82f6;"></div>
                             </div>
                             <div class="flex flex-col items-center mt-1.5 gap-0.5">
-                                <span class="text-[10px] font-bold text-slate-700 dark:text-gray-300 leading-none">-0.3°</span>
+                                <span class="text-[10px] font-bold text-slate-700 dark:text-gray-300 leading-none">-0.1°</span>
                                 <span class="text-[9px] text-slate-500 dark:text-gray-600 leading-none">-3.1°</span>
                             </div>
                         </a>
@@ -867,138 +867,11 @@
             </div>
               
             <div class="ranking-item group flex flex-col p-3 rounded-xl transition-all duration-300 border select-none border-slate-200 dark:border-gray-800 bg-white dark:bg-gray-800 hover:bg-slate-50 dark:hover:bg-gray-750"
-                 data-temp="7">
-                <div class="flex items-center justify-between">
-                    <div class="flex items-center gap-4">
-                        <span data-role="badge" class="flex justify-center items-center w-7 h-7 rounded-lg text-sm font-bold shadow-sm bg-slate-200 dark:bg-gray-700 text-slate-500 dark:text-gray-400">
-                            6
-                        </span>
-                        <div>
-                            <h3 data-role="title" data-city-zh="泰州市" data-city-en="TaiZhou" class="font-semibold text-slate-700 dark:text-gray-300 text-sm md:text-base">TaiZhou</h3>
-                            <div class="text-xs text-slate-500 dark:text-gray-500 flex gap-2 items-center mt-0.5">
-                                <span class="weather-desc" data-weather-zh="阴" data-weather-en="Overcast">Overcast</span><span class="w-1 h-1 rounded-full bg-slate-400 dark:bg-gray-600"></span><span class="wind-label">Wind</span>: 7.9 m/s</span>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="flex items-center gap-3">
-                        <div class="text-right">
-                            <div data-role="temp-val" class="text-lg font-bold tabular-nums tracking-tight" style="color: #06b6d4">
-                                7°
-                            </div>
-                        </div>
-                        <div class="arrow-icon p-1 rounded-full hover:bg-black/5 dark:hover:bg-white/5 transition-transform duration-300 cursor-pointer" onclick="toggleExpand(this.closest('.ranking-item'))">
-                            <svg class="w-4 h-4 text-slate-400 dark:text-gray-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
-                            </svg>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- 详情 (7天预报) -->
-                <div class="details-container mt-3 pt-3 border-t border-slate-200 dark:border-gray-700/50">
-                    <div class="grid grid-cols-7 gap-1">
-                        
-                        <a href="../jiangsu.html" class="flex flex-col items-center group/day cursor-pointer hover:opacity-80 transition-opacity">
-                            <span class="forecast-day-label text-[9px] font-medium mb-1 text-slate-500 dark:text-gray-500" data-day-zh="今天" data-day-en="Today">
-                                Today
-                            </span>
-                            <div class="bg-slate-200 dark:bg-gray-800/50 rounded-full h-20 relative w-1.5 md:w-2 mx-auto ring-1 ring-black/5 dark:ring-white/5">
-                                <div class="absolute w-full rounded-full opacity-80" style="bottom: 18.8%; height: 20.4%; background-color: #06b6d4;"></div>
-                            </div>
-                            <div class="flex flex-col items-center mt-1.5 gap-0.5">
-                                <span class="text-[10px] font-bold text-slate-700 dark:text-gray-300 leading-none">9.6°</span>
-                                <span class="text-[9px] text-slate-500 dark:text-gray-600 leading-none">-0.6°</span>
-                            </div>
-                        </a>
-                        
-                        <a href="../20260204/jiangsu.html" class="flex flex-col items-center group/day cursor-pointer hover:opacity-80 transition-opacity">
-                            <span class="forecast-day-label text-[9px] font-medium mb-1 text-slate-500 dark:text-gray-500" data-day-zh="周三" data-day-en="Wed">
-                                Wed
-                            </span>
-                            <div class="bg-slate-200 dark:bg-gray-800/50 rounded-full h-20 relative w-1.5 md:w-2 mx-auto ring-1 ring-black/5 dark:ring-white/5">
-                                <div class="absolute w-full rounded-full opacity-80" style="bottom: 22.4%; height: 26.6%; background-color: #10b981;"></div>
-                            </div>
-                            <div class="flex flex-col items-center mt-1.5 gap-0.5">
-                                <span class="text-[10px] font-bold text-slate-700 dark:text-gray-300 leading-none">14.5°</span>
-                                <span class="text-[9px] text-slate-500 dark:text-gray-600 leading-none">1.2°</span>
-                            </div>
-                        </a>
-                        
-                        <a href="../20260205/jiangsu.html" class="flex flex-col items-center group/day cursor-pointer hover:opacity-80 transition-opacity">
-                            <span class="forecast-day-label text-[9px] font-medium mb-1 text-slate-500 dark:text-gray-500" data-day-zh="周四" data-day-en="Thu">
-                                Thu
-                            </span>
-                            <div class="bg-slate-200 dark:bg-gray-800/50 rounded-full h-20 relative w-1.5 md:w-2 mx-auto ring-1 ring-black/5 dark:ring-white/5">
-                                <div class="absolute w-full rounded-full opacity-80" style="bottom: 26.4%; height: 25%; background-color: #10b981;"></div>
-                            </div>
-                            <div class="flex flex-col items-center mt-1.5 gap-0.5">
-                                <span class="text-[10px] font-bold text-slate-700 dark:text-gray-300 leading-none">15.7°</span>
-                                <span class="text-[9px] text-slate-500 dark:text-gray-600 leading-none">3.2°</span>
-                            </div>
-                        </a>
-                        
-                        <div  class="flex flex-col items-center group/day cursor-default">
-                            <span class="forecast-day-label text-[9px] font-medium mb-1 text-blue-500" data-day-zh="周五" data-day-en="Fri">
-                                Fri
-                            </span>
-                            <div class="bg-slate-200 dark:bg-gray-800/50 rounded-full h-20 relative w-1.5 md:w-2 mx-auto ring-1 ring-black/5 dark:ring-white/5">
-                                <div class="absolute w-full rounded-full opacity-80" style="bottom: 18.6%; height: 15.4%; background-color: #06b6d4;"></div>
-                            </div>
-                            <div class="flex flex-col items-center mt-1.5 gap-0.5">
-                                <span class="text-[10px] font-bold text-slate-700 dark:text-gray-300 leading-none">7°</span>
-                                <span class="text-[9px] text-slate-500 dark:text-gray-600 leading-none">-0.7°</span>
-                            </div>
-                        </div>
-                        
-                        <a href="../20260207/jiangsu.html" class="flex flex-col items-center group/day cursor-pointer hover:opacity-80 transition-opacity">
-                            <span class="forecast-day-label text-[9px] font-medium mb-1 text-slate-500 dark:text-gray-500" data-day-zh="周六" data-day-en="Sat">
-                                Sat
-                            </span>
-                            <div class="bg-slate-200 dark:bg-gray-800/50 rounded-full h-20 relative w-1.5 md:w-2 mx-auto ring-1 ring-black/5 dark:ring-white/5">
-                                <div class="absolute w-full rounded-full opacity-80" style="bottom: 12.2%; height: 10%; background-color: #06b6d4;"></div>
-                            </div>
-                            <div class="flex flex-col items-center mt-1.5 gap-0.5">
-                                <span class="text-[10px] font-bold text-slate-700 dark:text-gray-300 leading-none">0.4°</span>
-                                <span class="text-[9px] text-slate-500 dark:text-gray-600 leading-none">-3.9°</span>
-                            </div>
-                        </a>
-                        
-                        <a href="../20260208/jiangsu.html" class="flex flex-col items-center group/day cursor-pointer hover:opacity-80 transition-opacity">
-                            <span class="forecast-day-label text-[9px] font-medium mb-1 text-slate-500 dark:text-gray-500" data-day-zh="周日" data-day-en="Sun">
-                                Sun
-                            </span>
-                            <div class="bg-slate-200 dark:bg-gray-800/50 rounded-full h-20 relative w-1.5 md:w-2 mx-auto ring-1 ring-black/5 dark:ring-white/5">
-                                <div class="absolute w-full rounded-full opacity-80" style="bottom: 9.2%; height: 15.200000000000001%; background-color: #06b6d4;"></div>
-                            </div>
-                            <div class="flex flex-col items-center mt-1.5 gap-0.5">
-                                <span class="text-[10px] font-bold text-slate-700 dark:text-gray-300 leading-none">2.2°</span>
-                                <span class="text-[9px] text-slate-500 dark:text-gray-600 leading-none">-5.4°</span>
-                            </div>
-                        </a>
-                        
-                        <a href="../20260209/jiangsu.html" class="flex flex-col items-center group/day cursor-pointer hover:opacity-80 transition-opacity">
-                            <span class="forecast-day-label text-[9px] font-medium mb-1 text-slate-500 dark:text-gray-500" data-day-zh="周一" data-day-en="Mon">
-                                Mon
-                            </span>
-                            <div class="bg-slate-200 dark:bg-gray-800/50 rounded-full h-20 relative w-1.5 md:w-2 mx-auto ring-1 ring-black/5 dark:ring-white/5">
-                                <div class="absolute w-full rounded-full opacity-80" style="bottom: 10.8%; height: 19%; background-color: #06b6d4;"></div>
-                            </div>
-                            <div class="flex flex-col items-center mt-1.5 gap-0.5">
-                                <span class="text-[10px] font-bold text-slate-700 dark:text-gray-300 leading-none">4.9°</span>
-                                <span class="text-[9px] text-slate-500 dark:text-gray-600 leading-none">-4.6°</span>
-                            </div>
-                        </a>
-                        
-                    </div>
-                </div>
-            </div>
-              
-            <div class="ranking-item group flex flex-col p-3 rounded-xl transition-all duration-300 border select-none border-slate-200 dark:border-gray-800 bg-white dark:bg-gray-800 hover:bg-slate-50 dark:hover:bg-gray-750"
                  data-temp="6.9">
                 <div class="flex items-center justify-between">
                     <div class="flex items-center gap-4">
                         <span data-role="badge" class="flex justify-center items-center w-7 h-7 rounded-lg text-sm font-bold shadow-sm bg-slate-200 dark:bg-gray-700 text-slate-500 dark:text-gray-400">
-                            7
+                            6
                         </span>
                         <div>
                             <h3 data-role="title" data-city-zh="南京市" data-city-en="NanJing" class="font-semibold text-slate-700 dark:text-gray-300 text-sm md:text-base">NanJing</h3>
@@ -1121,6 +994,133 @@
             </div>
               
             <div class="ranking-item group flex flex-col p-3 rounded-xl transition-all duration-300 border select-none border-slate-200 dark:border-gray-800 bg-white dark:bg-gray-800 hover:bg-slate-50 dark:hover:bg-gray-750"
+                 data-temp="6.9">
+                <div class="flex items-center justify-between">
+                    <div class="flex items-center gap-4">
+                        <span data-role="badge" class="flex justify-center items-center w-7 h-7 rounded-lg text-sm font-bold shadow-sm bg-slate-200 dark:bg-gray-700 text-slate-500 dark:text-gray-400">
+                            7
+                        </span>
+                        <div>
+                            <h3 data-role="title" data-city-zh="泰州市" data-city-en="TaiZhou" class="font-semibold text-slate-700 dark:text-gray-300 text-sm md:text-base">TaiZhou</h3>
+                            <div class="text-xs text-slate-500 dark:text-gray-500 flex gap-2 items-center mt-0.5">
+                                <span class="weather-desc" data-weather-zh="阴" data-weather-en="Overcast">Overcast</span><span class="w-1 h-1 rounded-full bg-slate-400 dark:bg-gray-600"></span><span class="wind-label">Wind</span>: 7.9 m/s</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="flex items-center gap-3">
+                        <div class="text-right">
+                            <div data-role="temp-val" class="text-lg font-bold tabular-nums tracking-tight" style="color: #06b6d4">
+                                6.9°
+                            </div>
+                        </div>
+                        <div class="arrow-icon p-1 rounded-full hover:bg-black/5 dark:hover:bg-white/5 transition-transform duration-300 cursor-pointer" onclick="toggleExpand(this.closest('.ranking-item'))">
+                            <svg class="w-4 h-4 text-slate-400 dark:text-gray-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+                            </svg>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 详情 (7天预报) -->
+                <div class="details-container mt-3 pt-3 border-t border-slate-200 dark:border-gray-700/50">
+                    <div class="grid grid-cols-7 gap-1">
+                        
+                        <a href="../jiangsu.html" class="flex flex-col items-center group/day cursor-pointer hover:opacity-80 transition-opacity">
+                            <span class="forecast-day-label text-[9px] font-medium mb-1 text-slate-500 dark:text-gray-500" data-day-zh="今天" data-day-en="Today">
+                                Today
+                            </span>
+                            <div class="bg-slate-200 dark:bg-gray-800/50 rounded-full h-20 relative w-1.5 md:w-2 mx-auto ring-1 ring-black/5 dark:ring-white/5">
+                                <div class="absolute w-full rounded-full opacity-80" style="bottom: 18.8%; height: 20%; background-color: #06b6d4;"></div>
+                            </div>
+                            <div class="flex flex-col items-center mt-1.5 gap-0.5">
+                                <span class="text-[10px] font-bold text-slate-700 dark:text-gray-300 leading-none">9.4°</span>
+                                <span class="text-[9px] text-slate-500 dark:text-gray-600 leading-none">-0.6°</span>
+                            </div>
+                        </a>
+                        
+                        <a href="../20260204/jiangsu.html" class="flex flex-col items-center group/day cursor-pointer hover:opacity-80 transition-opacity">
+                            <span class="forecast-day-label text-[9px] font-medium mb-1 text-slate-500 dark:text-gray-500" data-day-zh="周三" data-day-en="Wed">
+                                Wed
+                            </span>
+                            <div class="bg-slate-200 dark:bg-gray-800/50 rounded-full h-20 relative w-1.5 md:w-2 mx-auto ring-1 ring-black/5 dark:ring-white/5">
+                                <div class="absolute w-full rounded-full opacity-80" style="bottom: 24.4%; height: 23%; background-color: #10b981;"></div>
+                            </div>
+                            <div class="flex flex-col items-center mt-1.5 gap-0.5">
+                                <span class="text-[10px] font-bold text-slate-700 dark:text-gray-300 leading-none">13.7°</span>
+                                <span class="text-[9px] text-slate-500 dark:text-gray-600 leading-none">2.2°</span>
+                            </div>
+                        </a>
+                        
+                        <a href="../20260205/jiangsu.html" class="flex flex-col items-center group/day cursor-pointer hover:opacity-80 transition-opacity">
+                            <span class="forecast-day-label text-[9px] font-medium mb-1 text-slate-500 dark:text-gray-500" data-day-zh="周四" data-day-en="Thu">
+                                Thu
+                            </span>
+                            <div class="bg-slate-200 dark:bg-gray-800/50 rounded-full h-20 relative w-1.5 md:w-2 mx-auto ring-1 ring-black/5 dark:ring-white/5">
+                                <div class="absolute w-full rounded-full opacity-80" style="bottom: 27.4%; height: 23.200000000000003%; background-color: #10b981;"></div>
+                            </div>
+                            <div class="flex flex-col items-center mt-1.5 gap-0.5">
+                                <span class="text-[10px] font-bold text-slate-700 dark:text-gray-300 leading-none">15.3°</span>
+                                <span class="text-[9px] text-slate-500 dark:text-gray-600 leading-none">3.7°</span>
+                            </div>
+                        </a>
+                        
+                        <div  class="flex flex-col items-center group/day cursor-default">
+                            <span class="forecast-day-label text-[9px] font-medium mb-1 text-blue-500" data-day-zh="周五" data-day-en="Fri">
+                                Fri
+                            </span>
+                            <div class="bg-slate-200 dark:bg-gray-800/50 rounded-full h-20 relative w-1.5 md:w-2 mx-auto ring-1 ring-black/5 dark:ring-white/5">
+                                <div class="absolute w-full rounded-full opacity-80" style="bottom: 18.6%; height: 15.200000000000001%; background-color: #06b6d4;"></div>
+                            </div>
+                            <div class="flex flex-col items-center mt-1.5 gap-0.5">
+                                <span class="text-[10px] font-bold text-slate-700 dark:text-gray-300 leading-none">6.9°</span>
+                                <span class="text-[9px] text-slate-500 dark:text-gray-600 leading-none">-0.7°</span>
+                            </div>
+                        </div>
+                        
+                        <a href="../20260207/jiangsu.html" class="flex flex-col items-center group/day cursor-pointer hover:opacity-80 transition-opacity">
+                            <span class="forecast-day-label text-[9px] font-medium mb-1 text-slate-500 dark:text-gray-500" data-day-zh="周六" data-day-en="Sat">
+                                Sat
+                            </span>
+                            <div class="bg-slate-200 dark:bg-gray-800/50 rounded-full h-20 relative w-1.5 md:w-2 mx-auto ring-1 ring-black/5 dark:ring-white/5">
+                                <div class="absolute w-full rounded-full opacity-80" style="bottom: 12.2%; height: 10%; background-color: #06b6d4;"></div>
+                            </div>
+                            <div class="flex flex-col items-center mt-1.5 gap-0.5">
+                                <span class="text-[10px] font-bold text-slate-700 dark:text-gray-300 leading-none">0.4°</span>
+                                <span class="text-[9px] text-slate-500 dark:text-gray-600 leading-none">-3.9°</span>
+                            </div>
+                        </a>
+                        
+                        <a href="../20260208/jiangsu.html" class="flex flex-col items-center group/day cursor-pointer hover:opacity-80 transition-opacity">
+                            <span class="forecast-day-label text-[9px] font-medium mb-1 text-slate-500 dark:text-gray-500" data-day-zh="周日" data-day-en="Sun">
+                                Sun
+                            </span>
+                            <div class="bg-slate-200 dark:bg-gray-800/50 rounded-full h-20 relative w-1.5 md:w-2 mx-auto ring-1 ring-black/5 dark:ring-white/5">
+                                <div class="absolute w-full rounded-full opacity-80" style="bottom: 9.2%; height: 15.200000000000001%; background-color: #06b6d4;"></div>
+                            </div>
+                            <div class="flex flex-col items-center mt-1.5 gap-0.5">
+                                <span class="text-[10px] font-bold text-slate-700 dark:text-gray-300 leading-none">2.2°</span>
+                                <span class="text-[9px] text-slate-500 dark:text-gray-600 leading-none">-5.4°</span>
+                            </div>
+                        </a>
+                        
+                        <a href="../20260209/jiangsu.html" class="flex flex-col items-center group/day cursor-pointer hover:opacity-80 transition-opacity">
+                            <span class="forecast-day-label text-[9px] font-medium mb-1 text-slate-500 dark:text-gray-500" data-day-zh="周一" data-day-en="Mon">
+                                Mon
+                            </span>
+                            <div class="bg-slate-200 dark:bg-gray-800/50 rounded-full h-20 relative w-1.5 md:w-2 mx-auto ring-1 ring-black/5 dark:ring-white/5">
+                                <div class="absolute w-full rounded-full opacity-80" style="bottom: 10.8%; height: 19%; background-color: #06b6d4;"></div>
+                            </div>
+                            <div class="flex flex-col items-center mt-1.5 gap-0.5">
+                                <span class="text-[10px] font-bold text-slate-700 dark:text-gray-300 leading-none">4.9°</span>
+                                <span class="text-[9px] text-slate-500 dark:text-gray-600 leading-none">-4.6°</span>
+                            </div>
+                        </a>
+                        
+                    </div>
+                </div>
+            </div>
+              
+            <div class="ranking-item group flex flex-col p-3 rounded-xl transition-all duration-300 border select-none border-slate-200 dark:border-gray-800 bg-white dark:bg-gray-800 hover:bg-slate-50 dark:hover:bg-gray-750"
                  data-temp="6.1">
                 <div class="flex items-center justify-between">
                     <div class="flex items-center gap-4">
@@ -1157,10 +1157,10 @@
                                 Today
                             </span>
                             <div class="bg-slate-200 dark:bg-gray-800/50 rounded-full h-20 relative w-1.5 md:w-2 mx-auto ring-1 ring-black/5 dark:ring-white/5">
-                                <div class="absolute w-full rounded-full opacity-80" style="bottom: 18.4%; height: 24.200000000000003%; background-color: #10b981;"></div>
+                                <div class="absolute w-full rounded-full opacity-80" style="bottom: 18.4%; height: 22.400000000000002%; background-color: #10b981;"></div>
                             </div>
                             <div class="flex flex-col items-center mt-1.5 gap-0.5">
-                                <span class="text-[10px] font-bold text-slate-700 dark:text-gray-300 leading-none">11.3°</span>
+                                <span class="text-[10px] font-bold text-slate-700 dark:text-gray-300 leading-none">10.4°</span>
                                 <span class="text-[9px] text-slate-500 dark:text-gray-600 leading-none">-0.8°</span>
                             </div>
                         </a>
@@ -1170,11 +1170,11 @@
                                 Wed
                             </span>
                             <div class="bg-slate-200 dark:bg-gray-800/50 rounded-full h-20 relative w-1.5 md:w-2 mx-auto ring-1 ring-black/5 dark:ring-white/5">
-                                <div class="absolute w-full rounded-full opacity-80" style="bottom: 22.4%; height: 28%; background-color: #10b981;"></div>
+                                <div class="absolute w-full rounded-full opacity-80" style="bottom: 26%; height: 24.4%; background-color: #10b981;"></div>
                             </div>
                             <div class="flex flex-col items-center mt-1.5 gap-0.5">
                                 <span class="text-[10px] font-bold text-slate-700 dark:text-gray-300 leading-none">15.2°</span>
-                                <span class="text-[9px] text-slate-500 dark:text-gray-600 leading-none">1.2°</span>
+                                <span class="text-[9px] text-slate-500 dark:text-gray-600 leading-none">3°</span>
                             </div>
                         </a>
                         
@@ -1248,7 +1248,7 @@
             </div>
               
             <div class="ranking-item group flex flex-col p-3 rounded-xl transition-all duration-300 border select-none border-slate-200 dark:border-gray-800 bg-white dark:bg-gray-800 hover:bg-slate-50 dark:hover:bg-gray-750"
-                 data-temp="5.5">
+                 data-temp="5.8">
                 <div class="flex items-center justify-between">
                     <div class="flex items-center gap-4">
                         <span data-role="badge" class="flex justify-center items-center w-7 h-7 rounded-lg text-sm font-bold shadow-sm bg-slate-200 dark:bg-gray-700 text-slate-500 dark:text-gray-400">
@@ -1264,7 +1264,7 @@
                     <div class="flex items-center gap-3">
                         <div class="text-right">
                             <div data-role="temp-val" class="text-lg font-bold tabular-nums tracking-tight" style="color: #06b6d4">
-                                5.5°
+                                5.8°
                             </div>
                         </div>
                         <div class="arrow-icon p-1 rounded-full hover:bg-black/5 dark:hover:bg-white/5 transition-transform duration-300 cursor-pointer" onclick="toggleExpand(this.closest('.ranking-item'))">
@@ -1284,10 +1284,10 @@
                                 Today
                             </span>
                             <div class="bg-slate-200 dark:bg-gray-800/50 rounded-full h-20 relative w-1.5 md:w-2 mx-auto ring-1 ring-black/5 dark:ring-white/5">
-                                <div class="absolute w-full rounded-full opacity-80" style="bottom: 15.2%; height: 23.8%; background-color: #06b6d4;"></div>
+                                <div class="absolute w-full rounded-full opacity-80" style="bottom: 15.2%; height: 23%; background-color: #06b6d4;"></div>
                             </div>
                             <div class="flex flex-col items-center mt-1.5 gap-0.5">
-                                <span class="text-[10px] font-bold text-slate-700 dark:text-gray-300 leading-none">9.5°</span>
+                                <span class="text-[10px] font-bold text-slate-700 dark:text-gray-300 leading-none">9.1°</span>
                                 <span class="text-[9px] text-slate-500 dark:text-gray-600 leading-none">-2.4°</span>
                             </div>
                         </a>
@@ -1297,11 +1297,11 @@
                                 Wed
                             </span>
                             <div class="bg-slate-200 dark:bg-gray-800/50 rounded-full h-20 relative w-1.5 md:w-2 mx-auto ring-1 ring-black/5 dark:ring-white/5">
-                                <div class="absolute w-full rounded-full opacity-80" style="bottom: 20.4%; height: 27.200000000000003%; background-color: #10b981;"></div>
+                                <div class="absolute w-full rounded-full opacity-80" style="bottom: 23.2%; height: 23%; background-color: #10b981;"></div>
                             </div>
                             <div class="flex flex-col items-center mt-1.5 gap-0.5">
-                                <span class="text-[10px] font-bold text-slate-700 dark:text-gray-300 leading-none">13.8°</span>
-                                <span class="text-[9px] text-slate-500 dark:text-gray-600 leading-none">0.2°</span>
+                                <span class="text-[10px] font-bold text-slate-700 dark:text-gray-300 leading-none">13.1°</span>
+                                <span class="text-[9px] text-slate-500 dark:text-gray-600 leading-none">1.6°</span>
                             </div>
                         </a>
                         
@@ -1310,11 +1310,11 @@
                                 Thu
                             </span>
                             <div class="bg-slate-200 dark:bg-gray-800/50 rounded-full h-20 relative w-1.5 md:w-2 mx-auto ring-1 ring-black/5 dark:ring-white/5">
-                                <div class="absolute w-full rounded-full opacity-80" style="bottom: 24%; height: 25.6%; background-color: #10b981;"></div>
+                                <div class="absolute w-full rounded-full opacity-80" style="bottom: 25%; height: 23.6%; background-color: #10b981;"></div>
                             </div>
                             <div class="flex flex-col items-center mt-1.5 gap-0.5">
-                                <span class="text-[10px] font-bold text-slate-700 dark:text-gray-300 leading-none">14.8°</span>
-                                <span class="text-[9px] text-slate-500 dark:text-gray-600 leading-none">2°</span>
+                                <span class="text-[10px] font-bold text-slate-700 dark:text-gray-300 leading-none">14.3°</span>
+                                <span class="text-[9px] text-slate-500 dark:text-gray-600 leading-none">2.5°</span>
                             </div>
                         </a>
                         
@@ -1323,10 +1323,10 @@
                                 Fri
                             </span>
                             <div class="bg-slate-200 dark:bg-gray-800/50 rounded-full h-20 relative w-1.5 md:w-2 mx-auto ring-1 ring-black/5 dark:ring-white/5">
-                                <div class="absolute w-full rounded-full opacity-80" style="bottom: 19.4%; height: 11.6%; background-color: #06b6d4;"></div>
+                                <div class="absolute w-full rounded-full opacity-80" style="bottom: 19.4%; height: 12.2%; background-color: #06b6d4;"></div>
                             </div>
                             <div class="flex flex-col items-center mt-1.5 gap-0.5">
-                                <span class="text-[10px] font-bold text-slate-700 dark:text-gray-300 leading-none">5.5°</span>
+                                <span class="text-[10px] font-bold text-slate-700 dark:text-gray-300 leading-none">5.8°</span>
                                 <span class="text-[9px] text-slate-500 dark:text-gray-600 leading-none">-0.3°</span>
                             </div>
                         </div>
@@ -1756,7 +1756,7 @@
             </div>
               
             <div class="ranking-item group flex flex-col p-3 rounded-xl transition-all duration-300 border select-none border-slate-200 dark:border-gray-800 bg-white dark:bg-gray-800 hover:bg-slate-50 dark:hover:bg-gray-750"
-                 data-temp="1.1">
+                 data-temp="1">
                 <div class="flex items-center justify-between">
                     <div class="flex items-center gap-4">
                         <span data-role="badge" class="flex justify-center items-center w-7 h-7 rounded-lg text-sm font-bold shadow-sm bg-slate-200 dark:bg-gray-700 text-slate-500 dark:text-gray-400">
@@ -1772,7 +1772,7 @@
                     <div class="flex items-center gap-3">
                         <div class="text-right">
                             <div data-role="temp-val" class="text-lg font-bold tabular-nums tracking-tight" style="color: #06b6d4">
-                                1.1°
+                                1°
                             </div>
                         </div>
                         <div class="arrow-icon p-1 rounded-full hover:bg-black/5 dark:hover:bg-white/5 transition-transform duration-300 cursor-pointer" onclick="toggleExpand(this.closest('.ranking-item'))">
@@ -1792,10 +1792,10 @@
                                 Today
                             </span>
                             <div class="bg-slate-200 dark:bg-gray-800/50 rounded-full h-20 relative w-1.5 md:w-2 mx-auto ring-1 ring-black/5 dark:ring-white/5">
-                                <div class="absolute w-full rounded-full opacity-80" style="bottom: 21.2%; height: 21.6%; background-color: #10b981;"></div>
+                                <div class="absolute w-full rounded-full opacity-80" style="bottom: 21.2%; height: 20.8%; background-color: #10b981;"></div>
                             </div>
                             <div class="flex flex-col items-center mt-1.5 gap-0.5">
-                                <span class="text-[10px] font-bold text-slate-700 dark:text-gray-300 leading-none">11.4°</span>
+                                <span class="text-[10px] font-bold text-slate-700 dark:text-gray-300 leading-none">11°</span>
                                 <span class="text-[9px] text-slate-500 dark:text-gray-600 leading-none">0.6°</span>
                             </div>
                         </a>
@@ -1805,11 +1805,11 @@
                                 Wed
                             </span>
                             <div class="bg-slate-200 dark:bg-gray-800/50 rounded-full h-20 relative w-1.5 md:w-2 mx-auto ring-1 ring-black/5 dark:ring-white/5">
-                                <div class="absolute w-full rounded-full opacity-80" style="bottom: 21.4%; height: 25.8%; background-color: #10b981;"></div>
+                                <div class="absolute w-full rounded-full opacity-80" style="bottom: 24.6%; height: 21.4%; background-color: #10b981;"></div>
                             </div>
                             <div class="flex flex-col items-center mt-1.5 gap-0.5">
-                                <span class="text-[10px] font-bold text-slate-700 dark:text-gray-300 leading-none">13.6°</span>
-                                <span class="text-[9px] text-slate-500 dark:text-gray-600 leading-none">0.7°</span>
+                                <span class="text-[10px] font-bold text-slate-700 dark:text-gray-300 leading-none">13°</span>
+                                <span class="text-[9px] text-slate-500 dark:text-gray-600 leading-none">2.3°</span>
                             </div>
                         </a>
                         
@@ -1818,10 +1818,10 @@
                                 Thu
                             </span>
                             <div class="bg-slate-200 dark:bg-gray-800/50 rounded-full h-20 relative w-1.5 md:w-2 mx-auto ring-1 ring-black/5 dark:ring-white/5">
-                                <div class="absolute w-full rounded-full opacity-80" style="bottom: 24.6%; height: 26%; background-color: #10b981;"></div>
+                                <div class="absolute w-full rounded-full opacity-80" style="bottom: 24.6%; height: 25.200000000000003%; background-color: #10b981;"></div>
                             </div>
                             <div class="flex flex-col items-center mt-1.5 gap-0.5">
-                                <span class="text-[10px] font-bold text-slate-700 dark:text-gray-300 leading-none">15.3°</span>
+                                <span class="text-[10px] font-bold text-slate-700 dark:text-gray-300 leading-none">14.9°</span>
                                 <span class="text-[9px] text-slate-500 dark:text-gray-600 leading-none">2.3°</span>
                             </div>
                         </a>
@@ -1834,7 +1834,7 @@
                                 <div class="absolute w-full rounded-full opacity-80" style="bottom: 14.6%; height: 10%; background-color: #06b6d4;"></div>
                             </div>
                             <div class="flex flex-col items-center mt-1.5 gap-0.5">
-                                <span class="text-[10px] font-bold text-slate-700 dark:text-gray-300 leading-none">1.1°</span>
+                                <span class="text-[10px] font-bold text-slate-700 dark:text-gray-300 leading-none">1°</span>
                                 <span class="text-[9px] text-slate-500 dark:text-gray-600 leading-none">-2.7°</span>
                             </div>
                         </div>
@@ -1907,7 +1907,7 @@
              </p>
              <p>
                在省内各主要城市中，<strong>苏州</strong> 今日气温最高，达到了 <span class="text-orange-500 font-bold">10.2°C</span>。
-               相比之下，<strong>徐州</strong> 则相对较冷，气温低至 <span class="text-blue-500 font-bold">1.1°C</span>。
+               相比之下，<strong>徐州</strong> 则相对较冷，气温低至 <span class="text-blue-500 font-bold">1°C</span>。
              </p>
              <p>
                请根据所在城市的具体天气情况适时增减衣物。我们将持续为您更新江苏省各地的实时气象数据。
@@ -1917,7 +1917,7 @@
              </p>
              <p class="mb-4">
                Among the key cities, <strong>SuZhou</strong> stands out as the warmest location today, recording a temperature of <span class="text-orange-500 font-bold">10.2°C</span>.
-               Conversely, <strong>XuZhou</strong> is the coolest spot in the region, with temperatures sitting at <span class="text-blue-500 font-bold">1.1°C</span>.
+               Conversely, <strong>XuZhou</strong> is the coolest spot in the region, with temperatures sitting at <span class="text-blue-500 font-bold">1°C</span>.
              </p>
              <p>
                Whether you are in SuZhou, XuZhou, or anywhere else in Jiangsu, stay prepared for the local conditions. Our data is updated regularly to provide you with the most accurate temperature rankings.
@@ -2091,7 +2091,7 @@
 
                   // 去重：如果有多个城市的fullName相同，只保留温度最高的一个
                   const uniqueDataMap = new Map();
-                  [{"city":"苏州","cityCode":"lqYjK","temperature":10.2,"maxTemp":10.2,"minTemp":1.6,"windSpeed":7.9,"weatherDesc":"阴","fullName":"苏州市","en_name":"SuZhou"},{"city":"无锡","cityCode":"fvlMy","temperature":9.2,"maxTemp":9.2,"minTemp":1.4,"windSpeed":7.9,"weatherDesc":"多云","fullName":"无锡市","en_name":"WuXi"},{"city":"南通","cityCode":"VHAmf","temperature":8.5,"maxTemp":8.5,"minTemp":0.2,"windSpeed":7.9,"weatherDesc":"雨夹雪","fullName":"南通市","en_name":"NanTong"},{"city":"常州","cityCode":"bmyrb","temperature":8.3,"maxTemp":8.3,"minTemp":0,"windSpeed":10.7,"weatherDesc":"晴","fullName":"常州市","en_name":"ChangZhou"},{"city":"扬州","cityCode":"lDhJo","temperature":7.3,"maxTemp":7.3,"minTemp":-0.9,"windSpeed":7.9,"weatherDesc":"多云","fullName":"扬州市","en_name":"YangZhou"},{"city":"泰州","cityCode":"kQswL","temperature":7,"maxTemp":7,"minTemp":-0.7,"windSpeed":7.9,"weatherDesc":"阴","fullName":"泰州市","en_name":"TaiZhou"},{"city":"南京","cityCode":"CxOWZ","temperature":6.9,"maxTemp":6.9,"minTemp":0.9,"windSpeed":10.7,"weatherDesc":"多云","fullName":"南京市","en_name":"NanJing"},{"city":"镇江","cityCode":"xKfDh","temperature":6.1,"maxTemp":6.1,"minTemp":-0.6,"windSpeed":7.9,"weatherDesc":"多云","fullName":"镇江市","en_name":"ZhenJiang"},{"city":"盐城","cityCode":"bUGRK","temperature":5.5,"maxTemp":5.5,"minTemp":-0.3,"windSpeed":7.9,"weatherDesc":"多云","fullName":"盐城市","en_name":"YanCheng"},{"city":"淮安","cityCode":"wVmjo","temperature":4.4,"maxTemp":4.4,"minTemp":-2.4,"windSpeed":7.9,"weatherDesc":"阴","fullName":"淮安市","en_name":"HuaiAn"},{"city":"宿迁","cityCode":"jVxXh","temperature":4.2,"maxTemp":4.2,"minTemp":-3.3,"windSpeed":7.9,"weatherDesc":"阴","fullName":"宿迁市","en_name":"SuQian"},{"city":"连云港","cityCode":"HPnPL","temperature":4,"maxTemp":4,"minTemp":-2.7,"windSpeed":7.9,"weatherDesc":"阴","fullName":"连云港市","en_name":"LianYunGang"},{"city":"徐州","cityCode":"bWGZQ","temperature":1.1,"maxTemp":1.1,"minTemp":-2.7,"windSpeed":7.9,"weatherDesc":"多云","fullName":"徐州市","en_name":"XuZhou"}].forEach(item => {
+                  [{"city":"苏州","cityCode":"lqYjK","temperature":10.2,"maxTemp":10.2,"minTemp":1.6,"windSpeed":7.9,"weatherDesc":"阴","fullName":"苏州市","en_name":"SuZhou"},{"city":"无锡","cityCode":"fvlMy","temperature":9.2,"maxTemp":9.2,"minTemp":1.4,"windSpeed":7.9,"weatherDesc":"多云","fullName":"无锡市","en_name":"WuXi"},{"city":"南通","cityCode":"VHAmf","temperature":8.5,"maxTemp":8.5,"minTemp":0.2,"windSpeed":7.9,"weatherDesc":"雨夹雪","fullName":"南通市","en_name":"NanTong"},{"city":"常州","cityCode":"bmyrb","temperature":8.3,"maxTemp":8.3,"minTemp":0.1,"windSpeed":10.7,"weatherDesc":"多云","fullName":"常州市","en_name":"ChangZhou"},{"city":"扬州","cityCode":"lDhJo","temperature":7.3,"maxTemp":7.3,"minTemp":-0.9,"windSpeed":7.9,"weatherDesc":"多云","fullName":"扬州市","en_name":"YangZhou"},{"city":"南京","cityCode":"CxOWZ","temperature":6.9,"maxTemp":6.9,"minTemp":0.9,"windSpeed":10.7,"weatherDesc":"多云","fullName":"南京市","en_name":"NanJing"},{"city":"泰州","cityCode":"kQswL","temperature":6.9,"maxTemp":6.9,"minTemp":-0.7,"windSpeed":7.9,"weatherDesc":"阴","fullName":"泰州市","en_name":"TaiZhou"},{"city":"镇江","cityCode":"xKfDh","temperature":6.1,"maxTemp":6.1,"minTemp":-0.6,"windSpeed":7.9,"weatherDesc":"多云","fullName":"镇江市","en_name":"ZhenJiang"},{"city":"盐城","cityCode":"bUGRK","temperature":5.8,"maxTemp":5.8,"minTemp":-0.3,"windSpeed":7.9,"weatherDesc":"多云","fullName":"盐城市","en_name":"YanCheng"},{"city":"淮安","cityCode":"wVmjo","temperature":4.4,"maxTemp":4.4,"minTemp":-2.4,"windSpeed":7.9,"weatherDesc":"阴","fullName":"淮安市","en_name":"HuaiAn"},{"city":"宿迁","cityCode":"jVxXh","temperature":4.2,"maxTemp":4.2,"minTemp":-3.3,"windSpeed":7.9,"weatherDesc":"阴","fullName":"宿迁市","en_name":"SuQian"},{"city":"连云港","cityCode":"HPnPL","temperature":4,"maxTemp":4,"minTemp":-2.7,"windSpeed":7.9,"weatherDesc":"阴","fullName":"连云港市","en_name":"LianYunGang"},{"city":"徐州","cityCode":"bWGZQ","temperature":1,"maxTemp":1,"minTemp":-2.7,"windSpeed":7.9,"weatherDesc":"多云","fullName":"徐州市","en_name":"XuZhou"}].forEach(item => {
           const name = item.fullName || item.city;
           if (!uniqueDataMap.has(name) || item.temperature > uniqueDataMap.get(name).value) {
                     uniqueDataMap.set(name, {
