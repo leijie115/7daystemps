@@ -9,7 +9,7 @@
                 <title>广西壮族自治区 温度 排行榜</title>
                 <link rel="icon" type="image/x-icon" href="/favicon.ico">
                   <script>
-      // Language: zh
+      // Language: en
 
                     // Weather descriptions are pre-rendered in the correct language
 
@@ -17,9 +17,10 @@
 
                     
 
-                    // City names are already in the correct language
-      window.getCityName = function(cityName, lang) {
-        return cityName;
+                    // City name mapping for en version
+              const cityNameMap = {"北海市":"BeiHai","梧州市":"WuZhou","贵港市":"GuiGang","钦州市":"QinZhou","防城港市":"FangChengGang","玉林市":"YuLin","百色市":"BaiSe","崇左市":"ChongZuo","南宁市":"NanNing","贺州市":"HeZhou","来宾市":"LaiBin","柳州市":"LiuZhou","河池市":"HeChi","桂林市":"GuiLin"};
+              window.getCityName = function(cityName, lang) {
+        return cityNameMap[cityName] || cityName;
       };
                   </script>
                   <script src="https://cdn.tailwindcss.com"></script>
@@ -103,8 +104,8 @@
 
                             <!-- 语言切换 -->
                             <div class="flex bg-white/80 dark:bg-gray-800/80 backdrop-blur rounded-lg border border-slate-200 dark:border-gray-700 p-1">
-              <a href="../../20260203/guangxi.html" class="px-2 py-0.5 text-xs font-bold rounded text-slate-500 dark:text-gray-400 hover:text-slate-900 dark:hover:text-white transition-colors cursor-pointer">EN</a>
-              <a href="#" class="px-2 py-0.5 text-xs font-bold rounded bg-blue-600 text-white cursor-pointer">CN</a>
+              <a href="#" class="px-2 py-0.5 text-xs font-bold rounded bg-blue-600 text-white cursor-pointer">EN</a>
+              <a href="../zh-cn/20260203/guangxi.html" class="px-2 py-0.5 text-xs font-bold rounded text-slate-500 dark:text-gray-400 hover:text-slate-900 dark:hover:text-white transition-colors cursor-pointer">CN</a>
             </div>
                           </div>
 
@@ -1877,7 +1878,7 @@
                   let tempMapData = { };
 
                   function initLanguage() {
-        currentLang = 'zh';
+        currentLang = 'en';
     }
 
                   // Language switching is done via navigation
