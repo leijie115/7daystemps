@@ -270,11 +270,11 @@
                         <div  class="flex flex-col items-center group/day cursor-default">
                             <span class="forecast-day-label text-[9px] font-medium mb-1 text-blue-500" data-day-zh="周四" data-day-en="Thu">周四</span>
                             <div class="bg-slate-200 dark:bg-gray-800/50 rounded-full h-20 relative w-1.5 md:w-2 mx-auto ring-1 ring-black/5 dark:ring-white/5">
-                                <div class="absolute w-full rounded-full opacity-80" style="bottom: 22.2%; height: 17%; background-color: #06b6d4;"></div>
+                                <div class="absolute w-full rounded-full opacity-80" style="bottom: 21.4%; height: 17.8%; background-color: #06b6d4;"></div>
                             </div>
                             <div class="flex flex-col items-center mt-1.5 gap-0.5">
                                 <span class="text-[10px] font-bold text-slate-700 dark:text-gray-300 leading-none">9.6°</span>
-                                <span class="text-[9px] text-slate-500 dark:text-gray-600 leading-none">1.1°</span>
+                                <span class="text-[9px] text-slate-500 dark:text-gray-600 leading-none">0.7°</span>
                             </div>
                         </div>
                         
@@ -1224,7 +1224,7 @@
 
                   // 去重：如果有多个城市的fullName相同，只保留温度最高的一个
                   const uniqueDataMap = new Map();
-                  [{"city":"林芝","cityCode":"ulvCs","temperature":9.6,"maxTemp":9.6,"minTemp":1.1,"windSpeed":3.3,"weatherDesc":"多云","fullName":"林芝市","en_name":"LinZhi"},{"city":"昌都","cityCode":"FKHOa","temperature":8.8,"maxTemp":8.8,"minTemp":-4.7,"windSpeed":10.7,"weatherDesc":"晴","fullName":"昌都市","en_name":"ChangDou"},{"city":"山南","cityCode":"uuiXc","temperature":8.6,"maxTemp":8.6,"minTemp":-4.4,"windSpeed":10.7,"weatherDesc":"晴","fullName":"山南市","en_name":"ShanNan"},{"city":"拉萨","cityCode":"utJQK","temperature":7.8,"maxTemp":7.8,"minTemp":-4.8,"windSpeed":10.7,"weatherDesc":"晴","fullName":"拉萨市","en_name":"LaSa"},{"city":"日喀则","cityCode":"wcnpZ","temperature":5.6,"maxTemp":5.6,"minTemp":-12.5,"windSpeed":3.3,"weatherDesc":"晴","fullName":"日喀则市","en_name":"RiKaZe"},{"city":"阿里","cityCode":"DDraR","temperature":-2.4,"maxTemp":-2.4,"minTemp":-18.1,"windSpeed":13.8,"weatherDesc":"晴","fullName":"阿里地区","en_name":"ALi"},{"city":"那曲","cityCode":"aDeyn","temperature":-3.2,"maxTemp":-3.2,"minTemp":-16.8,"windSpeed":17.1,"weatherDesc":"晴","fullName":"那曲市","en_name":"NaQu"}].forEach(item => {
+                  [{"city":"林芝","cityCode":"ulvCs","temperature":9.6,"maxTemp":9.6,"minTemp":0.7,"windSpeed":3.3,"weatherDesc":"多云","fullName":"林芝市","en_name":"LinZhi"},{"city":"昌都","cityCode":"FKHOa","temperature":8.8,"maxTemp":8.8,"minTemp":-4.7,"windSpeed":10.7,"weatherDesc":"晴","fullName":"昌都市","en_name":"ChangDou"},{"city":"山南","cityCode":"uuiXc","temperature":8.6,"maxTemp":8.6,"minTemp":-4.4,"windSpeed":10.7,"weatherDesc":"晴","fullName":"山南市","en_name":"ShanNan"},{"city":"拉萨","cityCode":"utJQK","temperature":7.8,"maxTemp":7.8,"minTemp":-4.8,"windSpeed":10.7,"weatherDesc":"晴","fullName":"拉萨市","en_name":"LaSa"},{"city":"日喀则","cityCode":"wcnpZ","temperature":5.6,"maxTemp":5.6,"minTemp":-12.5,"windSpeed":3.3,"weatherDesc":"晴","fullName":"日喀则市","en_name":"RiKaZe"},{"city":"阿里","cityCode":"DDraR","temperature":-2.4,"maxTemp":-2.4,"minTemp":-18.1,"windSpeed":13.8,"weatherDesc":"晴","fullName":"阿里地区","en_name":"ALi"},{"city":"那曲","cityCode":"aDeyn","temperature":-3.2,"maxTemp":-3.2,"minTemp":-16.8,"windSpeed":17.1,"weatherDesc":"晴","fullName":"那曲市","en_name":"NaQu"}].forEach(item => {
           const name = item.fullName || item.city;
           if (!uniqueDataMap.has(name) || item.temperature > uniqueDataMap.get(name).value) {
                     uniqueDataMap.set(name, {
