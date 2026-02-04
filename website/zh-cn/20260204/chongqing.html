@@ -9,7 +9,7 @@
                 <title>重庆市 温度 排行榜</title>
                 <link rel="icon" type="image/x-icon" href="/favicon.ico">
                   <script>
-      // Language: zh
+      // Language: en
 
                     // Weather descriptions are pre-rendered in the correct language
 
@@ -17,9 +17,10 @@
 
                     
 
-                    // City names are already in the correct language
-      window.getCityName = function(cityName, lang) {
-        return cityName;
+                    // City name mapping for en version
+              const cityNameMap = {"奉节县":"FengJie","江津区":"JiangJin","北碚区":"BeiBei","巫溪县":"WuXi","云阳县":"YunYang","璧山区":"BiShan","南川区":"NanChuan","潼南区":"TongNan","荣昌区":"RongChang","沙坪坝区":"ShaPingBa","永川区":"YongChuan","武隆区":"WuLong","铜梁区":"TongLiang","万州区":"WanZhou","綦江区":"QiJiang","巫山县":"WuShan","长寿区":"ChangShou","彭水苗族土家族自治县":"PengShui","涪陵区":"FuLing","丰都县":"FengDou","合川区":"HeChuan","渝北区":"YuBei","开州区":"KaiZhou","石柱土家族自治县":"ShiZhu","忠县":"ZhongXian","垫江县":"DianJiang","大足区":"DaZu","巴南区":"BaNan","梁平区":"LiangPing","秀山土家族苗族自治县":"XiuShan","城口县":"ChengKou","酉阳土家族苗族自治县":"YouYang","黔江区":"QianJiang"};
+              window.getCityName = function(cityName, lang) {
+        return cityNameMap[cityName] || cityName;
       };
                   </script>
                   <script src="https://cdn.tailwindcss.com"></script>
@@ -103,8 +104,8 @@
 
                             <!-- 语言切换 -->
                             <div class="flex bg-white/80 dark:bg-gray-800/80 backdrop-blur rounded-lg border border-slate-200 dark:border-gray-700 p-1">
-              <a href="../../20260204/chongqing.html" class="px-2 py-0.5 text-xs font-bold rounded text-slate-500 dark:text-gray-400 hover:text-slate-900 dark:hover:text-white transition-colors cursor-pointer">EN</a>
-              <a href="#" class="px-2 py-0.5 text-xs font-bold rounded bg-blue-600 text-white cursor-pointer">CN</a>
+              <a href="#" class="px-2 py-0.5 text-xs font-bold rounded bg-blue-600 text-white cursor-pointer">EN</a>
+              <a href="../zh-cn/20260204/chongqing.html" class="px-2 py-0.5 text-xs font-bold rounded text-slate-500 dark:text-gray-400 hover:text-slate-900 dark:hover:text-white transition-colors cursor-pointer">CN</a>
             </div>
                           </div>
 
@@ -4024,7 +4025,7 @@
                   let tempMapData = { };
 
                   function initLanguage() {
-        currentLang = 'zh';
+        currentLang = 'en';
     }
 
                   // Language switching is done via navigation
