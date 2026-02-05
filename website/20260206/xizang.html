@@ -662,11 +662,11 @@
                                 Fri
                             </span>
                             <div class="bg-slate-200 dark:bg-gray-800/50 rounded-full h-20 relative w-1.5 md:w-2 mx-auto ring-1 ring-black/5 dark:ring-white/5">
-                                <div class="absolute w-full rounded-full opacity-80" style="bottom: 8.4%; height: 30%; background-color: #06b6d4;"></div>
+                                <div class="absolute w-full rounded-full opacity-80" style="bottom: 12.4%; height: 26%; background-color: #06b6d4;"></div>
                             </div>
                             <div class="flex flex-col items-center mt-1.5 gap-0.5">
                                 <span class="text-[10px] font-bold text-slate-700 dark:text-gray-300 leading-none">9.2°</span>
-                                <span class="text-[9px] text-slate-500 dark:text-gray-600 leading-none">-5.8°</span>
+                                <span class="text-[9px] text-slate-500 dark:text-gray-600 leading-none">-3.8°</span>
                             </div>
                         </div>
                         
@@ -916,11 +916,11 @@
                                 Fri
                             </span>
                             <div class="bg-slate-200 dark:bg-gray-800/50 rounded-full h-20 relative w-1.5 md:w-2 mx-auto ring-1 ring-black/5 dark:ring-white/5">
-                                <div class="absolute w-full rounded-full opacity-80" style="bottom: 0%; height: 28.799999999999997%; background-color: #06b6d4;"></div>
+                                <div class="absolute w-full rounded-full opacity-80" style="bottom: 0%; height: 39.199999999999996%; background-color: #06b6d4;"></div>
                             </div>
                             <div class="flex flex-col items-center mt-1.5 gap-0.5">
                                 <span class="text-[10px] font-bold text-slate-700 dark:text-gray-300 leading-none">0.2°</span>
-                                <span class="text-[9px] text-slate-500 dark:text-gray-600 leading-none">-14.2°</span>
+                                <span class="text-[9px] text-slate-500 dark:text-gray-600 leading-none">-19.4°</span>
                             </div>
                         </div>
                         
@@ -1329,7 +1329,7 @@
 
                   // 去重：如果有多个城市的fullName相同，只保留温度最高的一个
                   const uniqueDataMap = new Map();
-                  [{"city":"林芝","cityCode":"ulvCs","temperature":11.9,"maxTemp":11.9,"minTemp":-6.7,"windSpeed":3.3,"weatherDesc":"晴","fullName":"林芝市","en_name":"LinZhi"},{"city":"山南","cityCode":"uuiXc","temperature":9.9,"maxTemp":9.9,"minTemp":-8.6,"windSpeed":3.3,"weatherDesc":"晴","fullName":"山南市","en_name":"ShanNan"},{"city":"昌都","cityCode":"FKHOa","temperature":9.4,"maxTemp":9.4,"minTemp":-10.5,"windSpeed":3.3,"weatherDesc":"晴","fullName":"昌都市","en_name":"ChangDou"},{"city":"拉萨","cityCode":"utJQK","temperature":9.2,"maxTemp":9.2,"minTemp":-5.8,"windSpeed":3.3,"weatherDesc":"晴","fullName":"拉萨市","en_name":"LaSa"},{"city":"日喀则","cityCode":"wcnpZ","temperature":8.8,"maxTemp":8.8,"minTemp":-15.8,"windSpeed":3.3,"weatherDesc":"晴","fullName":"日喀则市","en_name":"RiKaZe"},{"city":"阿里","cityCode":"DDraR","temperature":0.2,"maxTemp":0.2,"minTemp":-14.2,"windSpeed":7.9,"weatherDesc":"晴","fullName":"阿里地区","en_name":"ALi"},{"city":"那曲","cityCode":"aDeyn","temperature":-0.7,"maxTemp":-0.7,"minTemp":-22.4,"windSpeed":3.3,"weatherDesc":"晴","fullName":"那曲市","en_name":"NaQu"}].forEach(item => {
+                  [{"city":"林芝","cityCode":"ulvCs","temperature":11.9,"maxTemp":11.9,"minTemp":-6.7,"windSpeed":3.3,"weatherDesc":"晴","fullName":"林芝市","en_name":"LinZhi"},{"city":"山南","cityCode":"uuiXc","temperature":9.9,"maxTemp":9.9,"minTemp":-8.6,"windSpeed":3.3,"weatherDesc":"晴","fullName":"山南市","en_name":"ShanNan"},{"city":"昌都","cityCode":"FKHOa","temperature":9.4,"maxTemp":9.4,"minTemp":-10.5,"windSpeed":3.3,"weatherDesc":"晴","fullName":"昌都市","en_name":"ChangDou"},{"city":"拉萨","cityCode":"utJQK","temperature":9.2,"maxTemp":9.2,"minTemp":-3.8,"windSpeed":3.3,"weatherDesc":"晴","fullName":"拉萨市","en_name":"LaSa"},{"city":"日喀则","cityCode":"wcnpZ","temperature":8.8,"maxTemp":8.8,"minTemp":-15.8,"windSpeed":3.3,"weatherDesc":"晴","fullName":"日喀则市","en_name":"RiKaZe"},{"city":"阿里","cityCode":"DDraR","temperature":0.2,"maxTemp":0.2,"minTemp":-19.4,"windSpeed":7.9,"weatherDesc":"晴","fullName":"阿里地区","en_name":"ALi"},{"city":"那曲","cityCode":"aDeyn","temperature":-0.7,"maxTemp":-0.7,"minTemp":-22.4,"windSpeed":3.3,"weatherDesc":"晴","fullName":"那曲市","en_name":"NaQu"}].forEach(item => {
           const name = item.fullName || item.city;
           if (!uniqueDataMap.has(name) || item.temperature > uniqueDataMap.get(name).value) {
                     uniqueDataMap.set(name, {
