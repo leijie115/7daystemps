@@ -9,7 +9,7 @@
                 <title>辽宁省 温度 排行榜</title>
                 <link rel="icon" type="image/x-icon" href="/favicon.ico">
                   <script>
-      // Language: en
+      // Language: zh
 
                     // Weather descriptions are pre-rendered in the correct language
 
@@ -17,10 +17,9 @@
 
                     
 
-                    // City name mapping for en version
-              const cityNameMap = {"葫芦岛市":"HuLuDao","丹东市":"DanDong","锦州市":"JinZhou","朝阳市":"ZhaoYang","大连市":"DaLian","盘锦市":"PanJin","营口市":"YingKou","鞍山市":"AnShan","辽阳市":"LiaoYang","阜新市":"FuXin","沈阳市":"ShenYang","铁岭市":"TieLing","本溪市":"BenXi","抚顺市":"FuShun"};
-              window.getCityName = function(cityName, lang) {
-        return cityNameMap[cityName] || cityName;
+                    // City names are already in the correct language
+      window.getCityName = function(cityName, lang) {
+        return cityName;
       };
                   </script>
                   <script src="https://cdn.tailwindcss.com"></script>
@@ -104,8 +103,8 @@
 
                             <!-- 语言切换 -->
                             <div class="flex bg-white/80 dark:bg-gray-800/80 backdrop-blur rounded-lg border border-slate-200 dark:border-gray-700 p-1">
-              <a href="#" class="px-2 py-0.5 text-xs font-bold rounded bg-blue-600 text-white cursor-pointer">EN</a>
-              <a href="zh-cn/liaoning.html" class="px-2 py-0.5 text-xs font-bold rounded text-slate-500 dark:text-gray-400 hover:text-slate-900 dark:hover:text-white transition-colors cursor-pointer">CN</a>
+              <a href="../liaoning.html" class="px-2 py-0.5 text-xs font-bold rounded text-slate-500 dark:text-gray-400 hover:text-slate-900 dark:hover:text-white transition-colors cursor-pointer">EN</a>
+              <a href="#" class="px-2 py-0.5 text-xs font-bold rounded bg-blue-600 text-white cursor-pointer">CN</a>
             </div>
                           </div>
 
@@ -235,7 +234,7 @@
                         <div>
                             <h3 data-role="title" data-city-zh="葫芦岛市" data-city-en="HuLuDao" class="font-semibold text-slate-700 dark:text-gray-300 text-sm md:text-base">葫芦岛市</h3>
                             <div class="text-xs text-slate-500 dark:text-gray-500 flex gap-2 items-center mt-0.5">
-                                <span class="weather-desc" data-weather-zh="晴" data-weather-en="Sunny">晴</span><span class="w-1 h-1 rounded-full bg-slate-400 dark:bg-gray-600"></span><span class="wind-label">风速</span>: 13.8 m/s</span>
+                                <span class="weather-desc" data-weather-zh="晴" data-weather-en="Sunny">晴</span><span class="w-1 h-1 rounded-full bg-slate-400 dark:bg-gray-600"></span><span class="wind-label">风速</span>: 10.7 m/s</span>
                             </div>
                         </div>
                     </div>
@@ -260,11 +259,11 @@
                         <div  class="flex flex-col items-center group/day cursor-default">
                             <span class="forecast-day-label text-[9px] font-medium mb-1 text-blue-500" data-day-zh="今天" data-day-en="Today">今天</span>
                             <div class="bg-slate-200 dark:bg-gray-800/50 rounded-full h-20 relative w-1.5 md:w-2 mx-auto ring-1 ring-black/5 dark:ring-white/5">
-                                <div class="absolute w-full rounded-full opacity-80" style="bottom: 0%; height: 17.200000000000003%; background-color: #3b82f6;"></div>
+                                <div class="absolute w-full rounded-full opacity-80" style="bottom: 0%; height: 14%; background-color: #3b82f6;"></div>
                             </div>
                             <div class="flex flex-col items-center mt-1.5 gap-0.5">
                                 <span class="text-[10px] font-bold text-slate-700 dark:text-gray-300 leading-none">-8.2°</span>
-                                <span class="text-[9px] text-slate-500 dark:text-gray-600 leading-none">-16.8°</span>
+                                <span class="text-[9px] text-slate-500 dark:text-gray-600 leading-none">-15.2°</span>
                             </div>
                         </div>
                         
@@ -373,11 +372,11 @@
                         <div  class="flex flex-col items-center group/day cursor-default">
                             <span class="forecast-day-label text-[9px] font-medium mb-1 text-blue-500" data-day-zh="今天" data-day-en="Today">今天</span>
                             <div class="bg-slate-200 dark:bg-gray-800/50 rounded-full h-20 relative w-1.5 md:w-2 mx-auto ring-1 ring-black/5 dark:ring-white/5">
-                                <div class="absolute w-full rounded-full opacity-80" style="bottom: 0%; height: 13.200000000000003%; background-color: #3b82f6;"></div>
+                                <div class="absolute w-full rounded-full opacity-80" style="bottom: 0%; height: 11%; background-color: #3b82f6;"></div>
                             </div>
                             <div class="flex flex-col items-center mt-1.5 gap-0.5">
                                 <span class="text-[10px] font-bold text-slate-700 dark:text-gray-300 leading-none">-9.2°</span>
-                                <span class="text-[9px] text-slate-500 dark:text-gray-600 leading-none">-15.8°</span>
+                                <span class="text-[9px] text-slate-500 dark:text-gray-600 leading-none">-14.7°</span>
                             </div>
                         </div>
                         
@@ -461,7 +460,7 @@
                         <div>
                             <h3 data-role="title" data-city-zh="锦州市" data-city-en="JinZhou" class="font-semibold text-slate-700 dark:text-gray-300 text-sm md:text-base">锦州市</h3>
                             <div class="text-xs text-slate-500 dark:text-gray-500 flex gap-2 items-center mt-0.5">
-                                <span class="weather-desc" data-weather-zh="晴" data-weather-en="Sunny">晴</span><span class="w-1 h-1 rounded-full bg-slate-400 dark:bg-gray-600"></span><span class="wind-label">风速</span>: 10.7 m/s</span>
+                                <span class="weather-desc" data-weather-zh="晴" data-weather-en="Sunny">晴</span><span class="w-1 h-1 rounded-full bg-slate-400 dark:bg-gray-600"></span><span class="wind-label">风速</span>: 7.9 m/s</span>
                             </div>
                         </div>
                     </div>
@@ -486,11 +485,11 @@
                         <div  class="flex flex-col items-center group/day cursor-default">
                             <span class="forecast-day-label text-[9px] font-medium mb-1 text-blue-500" data-day-zh="今天" data-day-en="Today">今天</span>
                             <div class="bg-slate-200 dark:bg-gray-800/50 rounded-full h-20 relative w-1.5 md:w-2 mx-auto ring-1 ring-black/5 dark:ring-white/5">
-                                <div class="absolute w-full rounded-full opacity-80" style="bottom: 0%; height: 13.200000000000003%; background-color: #3b82f6;"></div>
+                                <div class="absolute w-full rounded-full opacity-80" style="bottom: 0%; height: 11.600000000000001%; background-color: #3b82f6;"></div>
                             </div>
                             <div class="flex flex-col items-center mt-1.5 gap-0.5">
                                 <span class="text-[10px] font-bold text-slate-700 dark:text-gray-300 leading-none">-9.2°</span>
-                                <span class="text-[9px] text-slate-500 dark:text-gray-600 leading-none">-15.8°</span>
+                                <span class="text-[9px] text-slate-500 dark:text-gray-600 leading-none">-15°</span>
                             </div>
                         </div>
                         
@@ -574,7 +573,7 @@
                         <div>
                             <h3 data-role="title" data-city-zh="朝阳市" data-city-en="ZhaoYang" class="font-semibold text-slate-700 dark:text-gray-300 text-sm md:text-base">朝阳市</h3>
                             <div class="text-xs text-slate-500 dark:text-gray-500 flex gap-2 items-center mt-0.5">
-                                <span class="weather-desc" data-weather-zh="晴" data-weather-en="Sunny">晴</span><span class="w-1 h-1 rounded-full bg-slate-400 dark:bg-gray-600"></span><span class="wind-label">风速</span>: 10.7 m/s</span>
+                                <span class="weather-desc" data-weather-zh="晴" data-weather-en="Sunny">晴</span><span class="w-1 h-1 rounded-full bg-slate-400 dark:bg-gray-600"></span><span class="wind-label">风速</span>: 7.9 m/s</span>
                             </div>
                         </div>
                     </div>
@@ -599,11 +598,11 @@
                         <div  class="flex flex-col items-center group/day cursor-default">
                             <span class="forecast-day-label text-[9px] font-medium mb-1 text-blue-500" data-day-zh="今天" data-day-en="Today">今天</span>
                             <div class="bg-slate-200 dark:bg-gray-800/50 rounded-full h-20 relative w-1.5 md:w-2 mx-auto ring-1 ring-black/5 dark:ring-white/5">
-                                <div class="absolute w-full rounded-full opacity-80" style="bottom: 0%; height: 17.200000000000003%; background-color: #3b82f6;"></div>
+                                <div class="absolute w-full rounded-full opacity-80" style="bottom: 0%; height: 16.4%; background-color: #3b82f6;"></div>
                             </div>
                             <div class="flex flex-col items-center mt-1.5 gap-0.5">
                                 <span class="text-[10px] font-bold text-slate-700 dark:text-gray-300 leading-none">-9.2°</span>
-                                <span class="text-[9px] text-slate-500 dark:text-gray-600 leading-none">-17.8°</span>
+                                <span class="text-[9px] text-slate-500 dark:text-gray-600 leading-none">-17.4°</span>
                             </div>
                         </div>
                         
@@ -825,11 +824,11 @@
                         <div  class="flex flex-col items-center group/day cursor-default">
                             <span class="forecast-day-label text-[9px] font-medium mb-1 text-blue-500" data-day-zh="今天" data-day-en="Today">今天</span>
                             <div class="bg-slate-200 dark:bg-gray-800/50 rounded-full h-20 relative w-1.5 md:w-2 mx-auto ring-1 ring-black/5 dark:ring-white/5">
-                                <div class="absolute w-full rounded-full opacity-80" style="bottom: 0%; height: 11.200000000000003%; background-color: #6366f1;"></div>
+                                <div class="absolute w-full rounded-full opacity-80" style="bottom: 0%; height: 10%; background-color: #6366f1;"></div>
                             </div>
                             <div class="flex flex-col items-center mt-1.5 gap-0.5">
                                 <span class="text-[10px] font-bold text-slate-700 dark:text-gray-300 leading-none">-10.2°</span>
-                                <span class="text-[9px] text-slate-500 dark:text-gray-600 leading-none">-15.8°</span>
+                                <span class="text-[9px] text-slate-500 dark:text-gray-600 leading-none">-14.7°</span>
                             </div>
                         </div>
                         
@@ -913,7 +912,7 @@
                         <div>
                             <h3 data-role="title" data-city-zh="营口市" data-city-en="YingKou" class="font-semibold text-slate-700 dark:text-gray-300 text-sm md:text-base">营口市</h3>
                             <div class="text-xs text-slate-500 dark:text-gray-500 flex gap-2 items-center mt-0.5">
-                                <span class="weather-desc" data-weather-zh="晴" data-weather-en="Sunny">晴</span><span class="w-1 h-1 rounded-full bg-slate-400 dark:bg-gray-600"></span><span class="wind-label">风速</span>: 13 m/s</span>
+                                <span class="weather-desc" data-weather-zh="晴" data-weather-en="Sunny">晴</span><span class="w-1 h-1 rounded-full bg-slate-400 dark:bg-gray-600"></span><span class="wind-label">风速</span>: 10.7 m/s</span>
                             </div>
                         </div>
                     </div>
@@ -1164,11 +1163,11 @@
                         <div  class="flex flex-col items-center group/day cursor-default">
                             <span class="forecast-day-label text-[9px] font-medium mb-1 text-blue-500" data-day-zh="今天" data-day-en="Today">今天</span>
                             <div class="bg-slate-200 dark:bg-gray-800/50 rounded-full h-20 relative w-1.5 md:w-2 mx-auto ring-1 ring-black/5 dark:ring-white/5">
-                                <div class="absolute w-full rounded-full opacity-80" style="bottom: 0%; height: 11.200000000000003%; background-color: #6366f1;"></div>
+                                <div class="absolute w-full rounded-full opacity-80" style="bottom: 0%; height: 10%; background-color: #6366f1;"></div>
                             </div>
                             <div class="flex flex-col items-center mt-1.5 gap-0.5">
                                 <span class="text-[10px] font-bold text-slate-700 dark:text-gray-300 leading-none">-12.2°</span>
-                                <span class="text-[9px] text-slate-500 dark:text-gray-600 leading-none">-17.8°</span>
+                                <span class="text-[9px] text-slate-500 dark:text-gray-600 leading-none">-15.1°</span>
                             </div>
                         </div>
                         
@@ -1365,7 +1364,7 @@
                         <div>
                             <h3 data-role="title" data-city-zh="沈阳市" data-city-en="ShenYang" class="font-semibold text-slate-700 dark:text-gray-300 text-sm md:text-base">沈阳市</h3>
                             <div class="text-xs text-slate-500 dark:text-gray-500 flex gap-2 items-center mt-0.5">
-                                <span class="weather-desc" data-weather-zh="晴" data-weather-en="Sunny">晴</span><span class="w-1 h-1 rounded-full bg-slate-400 dark:bg-gray-600"></span><span class="wind-label">风速</span>: 10.6 m/s</span>
+                                <span class="weather-desc" data-weather-zh="晴" data-weather-en="Sunny">晴</span><span class="w-1 h-1 rounded-full bg-slate-400 dark:bg-gray-600"></span><span class="wind-label">风速</span>: 7.9 m/s</span>
                             </div>
                         </div>
                     </div>
@@ -1503,11 +1502,11 @@
                         <div  class="flex flex-col items-center group/day cursor-default">
                             <span class="forecast-day-label text-[9px] font-medium mb-1 text-blue-500" data-day-zh="今天" data-day-en="Today">今天</span>
                             <div class="bg-slate-200 dark:bg-gray-800/50 rounded-full h-20 relative w-1.5 md:w-2 mx-auto ring-1 ring-black/5 dark:ring-white/5">
-                                <div class="absolute w-full rounded-full opacity-80" style="bottom: 0%; height: 19.200000000000003%; background-color: #6366f1;"></div>
+                                <div class="absolute w-full rounded-full opacity-80" style="bottom: 0%; height: 16.800000000000004%; background-color: #6366f1;"></div>
                             </div>
                             <div class="flex flex-col items-center mt-1.5 gap-0.5">
                                 <span class="text-[10px] font-bold text-slate-700 dark:text-gray-300 leading-none">-14.2°</span>
-                                <span class="text-[9px] text-slate-500 dark:text-gray-600 leading-none">-23.8°</span>
+                                <span class="text-[9px] text-slate-500 dark:text-gray-600 leading-none">-22.6°</span>
                             </div>
                         </div>
                         
@@ -1729,11 +1728,11 @@
                         <div  class="flex flex-col items-center group/day cursor-default">
                             <span class="forecast-day-label text-[9px] font-medium mb-1 text-blue-500" data-day-zh="今天" data-day-en="Today">今天</span>
                             <div class="bg-slate-200 dark:bg-gray-800/50 rounded-full h-20 relative w-1.5 md:w-2 mx-auto ring-1 ring-black/5 dark:ring-white/5">
-                                <div class="absolute w-full rounded-full opacity-80" style="bottom: 0%; height: 23.200000000000003%; background-color: #6366f1;"></div>
+                                <div class="absolute w-full rounded-full opacity-80" style="bottom: 0%; height: 16.800000000000004%; background-color: #6366f1;"></div>
                             </div>
                             <div class="flex flex-col items-center mt-1.5 gap-0.5">
                                 <span class="text-[10px] font-bold text-slate-700 dark:text-gray-300 leading-none">-14.2°</span>
-                                <span class="text-[9px] text-slate-500 dark:text-gray-600 leading-none">-25.8°</span>
+                                <span class="text-[9px] text-slate-500 dark:text-gray-600 leading-none">-22.6°</span>
                             </div>
                         </div>
                         
@@ -1878,7 +1877,7 @@
                   let tempMapData = { };
 
                   function initLanguage() {
-        currentLang = 'en';
+        currentLang = 'zh';
     }
 
                   // Language switching is done via navigation
@@ -2016,7 +2015,7 @@
 
                   // 去重：如果有多个城市的fullName相同，只保留温度最高的一个
                   const uniqueDataMap = new Map();
-                  [{"city":"葫芦岛","cityCode":"NIFaR","temperature":-8.2,"maxTemp":-8.2,"minTemp":-16.8,"windSpeed":13.8,"weatherDesc":"晴","fullName":"葫芦岛市","en_name":"HuLuDao"},{"city":"丹东","cityCode":"DlvsN","temperature":-9.2,"maxTemp":-9.2,"minTemp":-15.8,"windSpeed":13.8,"weatherDesc":"晴","fullName":"丹东市","en_name":"DanDong"},{"city":"锦州","cityCode":"LgDdn","temperature":-9.2,"maxTemp":-9.2,"minTemp":-15.8,"windSpeed":10.7,"weatherDesc":"晴","fullName":"锦州市","en_name":"JinZhou"},{"city":"朝阳","cityCode":"SSCPq","temperature":-9.2,"maxTemp":-9.2,"minTemp":-17.8,"windSpeed":10.7,"weatherDesc":"晴","fullName":"朝阳市","en_name":"ZhaoYang"},{"city":"大连","cityCode":"nGPyb","temperature":-10.2,"maxTemp":-10.2,"minTemp":-12.8,"windSpeed":13.8,"weatherDesc":"多云","fullName":"大连市","en_name":"DaLian"},{"city":"盘锦","cityCode":"ooWvQ","temperature":-10.2,"maxTemp":-10.2,"minTemp":-15.8,"windSpeed":10.7,"weatherDesc":"晴","fullName":"盘锦市","en_name":"PanJin"},{"city":"营口","cityCode":"veIOe","temperature":-11.2,"maxTemp":-11.2,"minTemp":-16.8,"windSpeed":13,"weatherDesc":"晴","fullName":"营口市","en_name":"YingKou"},{"city":"鞍山","cityCode":"TopGN","temperature":-12.2,"maxTemp":-12.2,"minTemp":-17.8,"windSpeed":3.3,"weatherDesc":"晴","fullName":"鞍山市","en_name":"AnShan"},{"city":"辽阳","cityCode":"kgqfX","temperature":-12.2,"maxTemp":-12.2,"minTemp":-17.8,"windSpeed":7.9,"weatherDesc":"晴","fullName":"辽阳市","en_name":"LiaoYang"},{"city":"阜新","cityCode":"uxzEA","temperature":-12.2,"maxTemp":-12.2,"minTemp":-21.1,"windSpeed":10.7,"weatherDesc":"晴","fullName":"阜新市","en_name":"FuXin"},{"city":"沈阳","cityCode":"xasvS","temperature":-13.2,"maxTemp":-13.2,"minTemp":-20.1,"windSpeed":10.6,"weatherDesc":"晴","fullName":"沈阳市","en_name":"ShenYang"},{"city":"铁岭","cityCode":"WDQHL","temperature":-14.2,"maxTemp":-14.2,"minTemp":-23.8,"windSpeed":7.9,"weatherDesc":"晴","fullName":"铁岭市","en_name":"TieLing"},{"city":"本溪","cityCode":"fZXDt","temperature":-14.2,"maxTemp":-14.2,"minTemp":-20.4,"windSpeed":7.9,"weatherDesc":"晴","fullName":"本溪市","en_name":"BenXi"},{"city":"抚顺","cityCode":"shhKE","temperature":-14.2,"maxTemp":-14.2,"minTemp":-25.8,"windSpeed":7.9,"weatherDesc":"晴","fullName":"抚顺市","en_name":"FuShun"}].forEach(item => {
+                  [{"city":"葫芦岛","cityCode":"NIFaR","temperature":-8.2,"maxTemp":-8.2,"minTemp":-15.2,"windSpeed":10.7,"weatherDesc":"晴","fullName":"葫芦岛市","en_name":"HuLuDao"},{"city":"丹东","cityCode":"DlvsN","temperature":-9.2,"maxTemp":-9.2,"minTemp":-14.7,"windSpeed":13.8,"weatherDesc":"晴","fullName":"丹东市","en_name":"DanDong"},{"city":"锦州","cityCode":"LgDdn","temperature":-9.2,"maxTemp":-9.2,"minTemp":-15,"windSpeed":7.9,"weatherDesc":"晴","fullName":"锦州市","en_name":"JinZhou"},{"city":"朝阳","cityCode":"SSCPq","temperature":-9.2,"maxTemp":-9.2,"minTemp":-17.4,"windSpeed":7.9,"weatherDesc":"晴","fullName":"朝阳市","en_name":"ZhaoYang"},{"city":"大连","cityCode":"nGPyb","temperature":-10.2,"maxTemp":-10.2,"minTemp":-12.8,"windSpeed":13.8,"weatherDesc":"多云","fullName":"大连市","en_name":"DaLian"},{"city":"盘锦","cityCode":"ooWvQ","temperature":-10.2,"maxTemp":-10.2,"minTemp":-14.7,"windSpeed":10.7,"weatherDesc":"晴","fullName":"盘锦市","en_name":"PanJin"},{"city":"营口","cityCode":"veIOe","temperature":-11.2,"maxTemp":-11.2,"minTemp":-16.8,"windSpeed":10.7,"weatherDesc":"晴","fullName":"营口市","en_name":"YingKou"},{"city":"鞍山","cityCode":"TopGN","temperature":-12.2,"maxTemp":-12.2,"minTemp":-17.8,"windSpeed":3.3,"weatherDesc":"晴","fullName":"鞍山市","en_name":"AnShan"},{"city":"辽阳","cityCode":"kgqfX","temperature":-12.2,"maxTemp":-12.2,"minTemp":-15.1,"windSpeed":7.9,"weatherDesc":"晴","fullName":"辽阳市","en_name":"LiaoYang"},{"city":"阜新","cityCode":"uxzEA","temperature":-12.2,"maxTemp":-12.2,"minTemp":-21.1,"windSpeed":10.7,"weatherDesc":"晴","fullName":"阜新市","en_name":"FuXin"},{"city":"沈阳","cityCode":"xasvS","temperature":-13.2,"maxTemp":-13.2,"minTemp":-20.1,"windSpeed":7.9,"weatherDesc":"晴","fullName":"沈阳市","en_name":"ShenYang"},{"city":"铁岭","cityCode":"WDQHL","temperature":-14.2,"maxTemp":-14.2,"minTemp":-22.6,"windSpeed":7.9,"weatherDesc":"晴","fullName":"铁岭市","en_name":"TieLing"},{"city":"本溪","cityCode":"fZXDt","temperature":-14.2,"maxTemp":-14.2,"minTemp":-20.4,"windSpeed":7.9,"weatherDesc":"晴","fullName":"本溪市","en_name":"BenXi"},{"city":"抚顺","cityCode":"shhKE","temperature":-14.2,"maxTemp":-14.2,"minTemp":-22.6,"windSpeed":7.9,"weatherDesc":"晴","fullName":"抚顺市","en_name":"FuShun"}].forEach(item => {
           const name = item.fullName || item.city;
           if (!uniqueDataMap.has(name) || item.temperature > uniqueDataMap.get(name).value) {
                     uniqueDataMap.set(name, {

@@ -1,26 +1,26 @@
 #!/bin/bash
 
-# 获取今天的日期（格式：YYYYMMDD）
-TODAY=$(date +%Y%m%d)
+# 获取10天前的日期（格式：YYYYMMDD）
+CUTOFF=$(date -v-10d +%Y%m%d 2>/dev/null || date -d '10 days ago' +%Y%m%d)
 
-echo "🗑️  清理旧的日期文件夹..."
+echo "🗑️  清理10天前的日期文件夹..."
 
-# 删除 website 下今天以前的日期文件夹
+# 删除 website 下10天前的日期文件夹
 for dir in website/[0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9]; do
     if [ -d "$dir" ]; then
         dirname=$(basename "$dir")
-        if [ "$dirname" -lt "$TODAY" ]; then
+        if [ "$dirname" -lt "$CUTOFF" ]; then
             echo "  删除: $dir"
             rm -rf "$dir"
         fi
     fi
 done
 
-# 删除 website/zh-cn 下今天以前的日期文件夹
+# 删除 website/zh-cn 下10天前的日期文件夹
 for dir in website/zh-cn/[0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9]; do
     if [ -d "$dir" ]; then
         dirname=$(basename "$dir")
-        if [ "$dirname" -lt "$TODAY" ]; then
+        if [ "$dirname" -lt "$CUTOFF" ]; then
             echo "  删除: $dir"
             rm -rf "$dir"
         fi

@@ -589,6 +589,7 @@ async function generateDayPage(dayIndex, allForecastData, forecastData) {
     <meta name="keywords" content="China temperature,temperature rankings,weather,temperature map,real-time temperature,${dateFormatted}">
     <title>China Temperature Rankings - Real-time Temperature Data${titleSuffix}</title>
     <link rel="icon" type="image/x-icon" href="/favicon.ico">
+    <script src="${dayIndex === 0 ? "search_index.js" : "../search_index.js"}"></script>
     <script>
       // 多语言配置
       window.i18n = ${JSON.stringify(i18n)};
@@ -787,7 +788,23 @@ async function generateDayPage(dayIndex, allForecastData, forecastData) {
                     </div>
 
                     <div class="pointer-events-auto flex flex-col items-end gap-2">
-                        <div class="flex gap-2">
+                        <div class="flex items-center gap-2">
+                            <!-- Search Component -->
+                            <div class="relative flex items-center">
+                                <div id="search-container" class="flex items-center bg-white/80 dark:bg-gray-800/80 backdrop-blur rounded-lg border border-slate-200 dark:border-gray-700 transition-all duration-300 w-8 overflow-hidden focus-within:w-48 md:focus-within:w-64">
+                                    <button id="search-btn" class="p-1.5 text-slate-600 dark:text-gray-300 hover:text-blue-500 dark:hover:text-blue-400 cursor-pointer shrink-0">
+                                        <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                                        </svg>
+                                    </button>
+                                    <input type="text" id="search-input" placeholder="Search city/province..." class="w-full bg-transparent border-none outline-none text-xs px-2 py-1.5 text-slate-900 dark:text-white placeholder-slate-400 dark:placeholder-gray-500 opacity-0 focus:opacity-100 transition-opacity duration-200" autocomplete="off">
+                                </div>
+
+                                <!-- Search Results Dropdown -->
+                                <div id="search-results" class="absolute top-full right-0 mt-2 w-64 max-h-80 overflow-y-auto bg-white dark:bg-gray-800 rounded-lg border border-slate-200 dark:border-gray-700 shadow-xl hidden z-50">
+                                    <!-- Results will be injected here -->
+                                </div>
+                            </div>
                             <!-- Theme Toggle -->
                             <button onclick="toggleTheme()" id="theme-btn" class="p-1.5 rounded-lg bg-white/80 dark:bg-gray-800/80 backdrop-blur border border-slate-200 dark:border-gray-700 text-slate-600 dark:text-gray-300 hover:text-blue-500 dark:hover:text-blue-400 transition-colors shadow-sm cursor-pointer">
                                 <!-- Icons are swapped by JS -->
@@ -1510,6 +1527,81 @@ async function generateDayPage(dayIndex, allForecastData, forecastData) {
 
         // 页面加载完成后初始化
         document.addEventListener('DOMContentLoaded', () => {
+            // Search Functionality
+            const searchInput = document.getElementById('search-input');
+            const searchResults = document.getElementById('search-results');
+            const searchContainer = document.getElementById('search-container');
+            
+            let searchIndex = [];
+            
+            // Load search index
+            // Load search index
+            if (typeof SEARCH_INDEX !== 'undefined') {
+                searchIndex = SEARCH_INDEX;
+            } else {
+                console.error('SEARCH_INDEX not found');
+            }
+                
+            // Toggle input visibility on focus
+            searchInput.addEventListener('focus', () => {
+                searchInput.style.opacity = '1';
+            });
+            
+            searchInput.addEventListener('blur', () => {
+                if (searchInput.value === '') {
+                    searchInput.style.opacity = '0';
+                }
+                // Delay hiding results to allow click
+                setTimeout(() => {
+                    searchResults.classList.add('hidden');
+                }, 200);
+            });
+            
+            // Handle input
+            searchInput.addEventListener('input', (e) => {
+                const query = e.target.value.toLowerCase().trim();
+                
+                if (query.length < 1) {
+                    searchResults.classList.add('hidden');
+                    return;
+                }
+                
+                const results = searchIndex.filter(item => {
+                    return item.name.toLowerCase().includes(query) || 
+                           item.en_name.toLowerCase().includes(query) ||
+                           (item.full_name && item.full_name.includes(query));
+                }).slice(0, 10); // Limit to 10 results
+                
+                renderResults(results);
+            });
+            
+            function renderResults(results) {
+                const searchI18n = { en: { noResults: 'No results found', province: 'province', city: 'city' }, zh: { noResults: '未找到结果', province: '省份', city: '城市' } };
+                const sl = searchI18n[currentLang] || searchI18n.en;
+                if (results.length === 0) {
+                    searchResults.innerHTML = '<div class="p-2 text-xs text-slate-500 dark:text-gray-400 text-center">' + sl.noResults + '</div>';
+                } else {
+                    searchResults.innerHTML = results.map(item => {
+                        const displayName = currentLang === 'zh' ? item.display_zh : item.display_en;
+                        const typeLabel = sl[item.type] || item.type;
+                        return \`
+                      <a href="\${item.url}" class="block p-2 hover:bg-slate-100 dark:hover:bg-gray-700 border-b border-slate-100 dark:border-gray-700 last:border-0 transition-colors">
+                          <div class="flex items-center justify-between">
+                              <div>
+                                  <div class="text-xs font-bold text-slate-700 dark:text-gray-200">\${displayName}</div>
+                              </div>
+                              <span class="text-[9px] px-1.5 py-0.5 rounded-full bg-slate-100 dark:bg-gray-600 text-slate-500 dark:text-gray-300 uppercase">\${typeLabel}</span>
+                          </div>
+                      </a>
+                  \`;
+                    }).join('');
+                }
+                searchResults.classList.remove('hidden');
+            }
+            
+            document.getElementById('search-btn').addEventListener('click', () => {
+                searchInput.focus();
+            });
       // 初始化语言
       initLanguage();
 
@@ -2545,6 +2637,9 @@ async function main() {
     // 创建中文版本
     await createChineseVersions();
 
+    // 生成搜索索引
+    generateSearchIndex();
+
     // 生成 sitemap.xml
     await generateSitemap();
 
@@ -2554,6 +2649,44 @@ async function main() {
     console.error('❌ 生成失败:', error);
     process.exit(1);
   }
+}
+
+/**
+ * 生成搜索索引 (search_index.js)
+ */
+function generateSearchIndex() {
+  const searchIndex = [];
+
+  PROVINCES_DATA.forEach(province => {
+    searchIndex.push({
+      name: province.name,
+      en_name: province.en_name,
+      type: 'province',
+      url: `${province.en_name.toLowerCase()}.html`,
+      display_zh: province.name,
+      display_en: province.en_name
+    });
+
+    if (province.cities) {
+      province.cities.forEach(city => {
+        searchIndex.push({
+          name: city.name,
+          full_name: city.full_name,
+          en_name: city.en_name,
+          type: 'city',
+          url: `${province.en_name.toLowerCase()}.html`,
+          parent_province: province.name,
+          display_zh: `${city.name}, ${province.name}`,
+          display_en: `${city.en_name}, ${province.en_name}`
+        });
+      });
+    }
+  });
+
+  const jsContent = `window.SEARCH_INDEX = ${JSON.stringify(searchIndex, null, 2)};`;
+  fs.writeFileSync(path.join(OUTPUT_DIR, 'search_index.js'), jsContent);
+  fs.writeFileSync(path.join(OUTPUT_DIR, 'zh-cn', 'search_index.js'), jsContent);
+  console.log(`\n🔍 搜索索引已生成，包含 ${searchIndex.length} 条记录`);
 }
 
 /**
@@ -2862,6 +2995,9 @@ async function createChineseVersions() {
           html = html.replace(new RegExp(provinceEnglish, 'g'), provinceChinese);
         }
       }
+
+      // 替换搜索框placeholder
+      html = html.replace(/placeholder="Search city\/province\.\.\."/g, 'placeholder="搜索城市/省份..."');
 
       // 替换标题和描述
       html = html.replace(/China Temperature Rankings/g, '中国气温排行榜');

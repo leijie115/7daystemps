@@ -9,7 +9,7 @@
                 <title>西藏自治区 温度 排行榜</title>
                 <link rel="icon" type="image/x-icon" href="/favicon.ico">
                   <script>
-      // Language: en
+      // Language: zh
 
                     // Weather descriptions are pre-rendered in the correct language
 
@@ -17,10 +17,9 @@
 
                     
 
-                    // City name mapping for en version
-              const cityNameMap = {"林芝市":"LinZhi","山南市":"ShanNan","拉萨市":"LaSa","昌都市":"ChangDou","日喀则市":"RiKaZe","那曲市":"NaQu","阿里地区":"ALi"};
-              window.getCityName = function(cityName, lang) {
-        return cityNameMap[cityName] || cityName;
+                    // City names are already in the correct language
+      window.getCityName = function(cityName, lang) {
+        return cityName;
       };
                   </script>
                   <script src="https://cdn.tailwindcss.com"></script>
@@ -104,8 +103,8 @@
 
                             <!-- 语言切换 -->
                             <div class="flex bg-white/80 dark:bg-gray-800/80 backdrop-blur rounded-lg border border-slate-200 dark:border-gray-700 p-1">
-              <a href="#" class="px-2 py-0.5 text-xs font-bold rounded bg-blue-600 text-white cursor-pointer">EN</a>
-              <a href="zh-cn/xizang.html" class="px-2 py-0.5 text-xs font-bold rounded text-slate-500 dark:text-gray-400 hover:text-slate-900 dark:hover:text-white transition-colors cursor-pointer">CN</a>
+              <a href="../xizang.html" class="px-2 py-0.5 text-xs font-bold rounded text-slate-500 dark:text-gray-400 hover:text-slate-900 dark:hover:text-white transition-colors cursor-pointer">EN</a>
+              <a href="#" class="px-2 py-0.5 text-xs font-bold rounded bg-blue-600 text-white cursor-pointer">CN</a>
             </div>
                           </div>
 
@@ -260,11 +259,11 @@
                         <div  class="flex flex-col items-center group/day cursor-default">
                             <span class="forecast-day-label text-[9px] font-medium mb-1 text-blue-500" data-day-zh="今天" data-day-en="Today">今天</span>
                             <div class="bg-slate-200 dark:bg-gray-800/50 rounded-full h-20 relative w-1.5 md:w-2 mx-auto ring-1 ring-black/5 dark:ring-white/5">
-                                <div class="absolute w-full rounded-full opacity-80" style="bottom: 20.4%; height: 25.8%; background-color: #10b981;"></div>
+                                <div class="absolute w-full rounded-full opacity-80" style="bottom: 28.2%; height: 18%; background-color: #10b981;"></div>
                             </div>
                             <div class="flex flex-col items-center mt-1.5 gap-0.5">
                                 <span class="text-[10px] font-bold text-slate-700 dark:text-gray-300 leading-none">13.1°</span>
-                                <span class="text-[9px] text-slate-500 dark:text-gray-600 leading-none">0.2°</span>
+                                <span class="text-[9px] text-slate-500 dark:text-gray-600 leading-none">4.1°</span>
                             </div>
                         </div>
                         
@@ -348,7 +347,7 @@
                         <div>
                             <h3 data-role="title" data-city-zh="山南市" data-city-en="ShanNan" class="font-semibold text-slate-700 dark:text-gray-300 text-sm md:text-base">山南市</h3>
                             <div class="text-xs text-slate-500 dark:text-gray-500 flex gap-2 items-center mt-0.5">
-                                <span class="weather-desc" data-weather-zh="晴" data-weather-en="Sunny">晴</span><span class="w-1 h-1 rounded-full bg-slate-400 dark:bg-gray-600"></span><span class="wind-label">风速</span>: 3.3 m/s</span>
+                                <span class="weather-desc" data-weather-zh="晴" data-weather-en="Sunny">晴</span><span class="w-1 h-1 rounded-full bg-slate-400 dark:bg-gray-600"></span><span class="wind-label">风速</span>: 10.7 m/s</span>
                             </div>
                         </div>
                     </div>
@@ -373,22 +372,22 @@
                         <div  class="flex flex-col items-center group/day cursor-default">
                             <span class="forecast-day-label text-[9px] font-medium mb-1 text-blue-500" data-day-zh="今天" data-day-en="Today">今天</span>
                             <div class="bg-slate-200 dark:bg-gray-800/50 rounded-full h-20 relative w-1.5 md:w-2 mx-auto ring-1 ring-black/5 dark:ring-white/5">
-                                <div class="absolute w-full rounded-full opacity-80" style="bottom: 4.4%; height: 34.6%; background-color: #06b6d4;"></div>
+                                <div class="absolute w-full rounded-full opacity-80" style="bottom: 14.2%; height: 24.8%; background-color: #06b6d4;"></div>
                             </div>
                             <div class="flex flex-col items-center mt-1.5 gap-0.5">
                                 <span class="text-[10px] font-bold text-slate-700 dark:text-gray-300 leading-none">9.5°</span>
-                                <span class="text-[9px] text-slate-500 dark:text-gray-600 leading-none">-7.8°</span>
+                                <span class="text-[9px] text-slate-500 dark:text-gray-600 leading-none">-2.9°</span>
                             </div>
                         </div>
                         
                         <a href="20260207/xizang.html" class="flex flex-col items-center group/day cursor-pointer hover:opacity-80 transition-opacity">
                             <span class="forecast-day-label text-[9px] font-medium mb-1 text-slate-500 dark:text-gray-500" data-day-zh="周六" data-day-en="Sat">周六</span>
                             <div class="bg-slate-200 dark:bg-gray-800/50 rounded-full h-20 relative w-1.5 md:w-2 mx-auto ring-1 ring-black/5 dark:ring-white/5">
-                                <div class="absolute w-full rounded-full opacity-80" style="bottom: 5.6%; height: 36.2%; background-color: #10b981;"></div>
+                                <div class="absolute w-full rounded-full opacity-80" style="bottom: 1.1999999999999993%; height: 40.6%; background-color: #10b981;"></div>
                             </div>
                             <div class="flex flex-col items-center mt-1.5 gap-0.5">
                                 <span class="text-[10px] font-bold text-slate-700 dark:text-gray-300 leading-none">10.9°</span>
-                                <span class="text-[9px] text-slate-500 dark:text-gray-600 leading-none">-7.2°</span>
+                                <span class="text-[9px] text-slate-500 dark:text-gray-600 leading-none">-9.4°</span>
                             </div>
                         </a>
                         
@@ -461,7 +460,7 @@
                         <div>
                             <h3 data-role="title" data-city-zh="拉萨市" data-city-en="LaSa" class="font-semibold text-slate-700 dark:text-gray-300 text-sm md:text-base">拉萨市</h3>
                             <div class="text-xs text-slate-500 dark:text-gray-500 flex gap-2 items-center mt-0.5">
-                                <span class="weather-desc" data-weather-zh="晴" data-weather-en="Sunny">晴</span><span class="w-1 h-1 rounded-full bg-slate-400 dark:bg-gray-600"></span><span class="wind-label">风速</span>: 3.3 m/s</span>
+                                <span class="weather-desc" data-weather-zh="晴" data-weather-en="Sunny">晴</span><span class="w-1 h-1 rounded-full bg-slate-400 dark:bg-gray-600"></span><span class="wind-label">风速</span>: 10.7 m/s</span>
                             </div>
                         </div>
                     </div>
@@ -486,22 +485,22 @@
                         <div  class="flex flex-col items-center group/day cursor-default">
                             <span class="forecast-day-label text-[9px] font-medium mb-1 text-blue-500" data-day-zh="今天" data-day-en="Today">今天</span>
                             <div class="bg-slate-200 dark:bg-gray-800/50 rounded-full h-20 relative w-1.5 md:w-2 mx-auto ring-1 ring-black/5 dark:ring-white/5">
-                                <div class="absolute w-full rounded-full opacity-80" style="bottom: 14.4%; height: 24.4%; background-color: #06b6d4;"></div>
+                                <div class="absolute w-full rounded-full opacity-80" style="bottom: 18%; height: 20.8%; background-color: #06b6d4;"></div>
                             </div>
                             <div class="flex flex-col items-center mt-1.5 gap-0.5">
                                 <span class="text-[10px] font-bold text-slate-700 dark:text-gray-300 leading-none">9.4°</span>
-                                <span class="text-[9px] text-slate-500 dark:text-gray-600 leading-none">-2.8°</span>
+                                <span class="text-[9px] text-slate-500 dark:text-gray-600 leading-none">-1°</span>
                             </div>
                         </div>
                         
                         <a href="20260207/xizang.html" class="flex flex-col items-center group/day cursor-pointer hover:opacity-80 transition-opacity">
                             <span class="forecast-day-label text-[9px] font-medium mb-1 text-slate-500 dark:text-gray-500" data-day-zh="周六" data-day-en="Sat">周六</span>
                             <div class="bg-slate-200 dark:bg-gray-800/50 rounded-full h-20 relative w-1.5 md:w-2 mx-auto ring-1 ring-black/5 dark:ring-white/5">
-                                <div class="absolute w-full rounded-full opacity-80" style="bottom: 6%; height: 33.6%; background-color: #06b6d4;"></div>
+                                <div class="absolute w-full rounded-full opacity-80" style="bottom: 7.199999999999999%; height: 32.400000000000006%; background-color: #06b6d4;"></div>
                             </div>
                             <div class="flex flex-col items-center mt-1.5 gap-0.5">
                                 <span class="text-[10px] font-bold text-slate-700 dark:text-gray-300 leading-none">9.8°</span>
-                                <span class="text-[9px] text-slate-500 dark:text-gray-600 leading-none">-7°</span>
+                                <span class="text-[9px] text-slate-500 dark:text-gray-600 leading-none">-6.4°</span>
                             </div>
                         </a>
                         
@@ -574,7 +573,7 @@
                         <div>
                             <h3 data-role="title" data-city-zh="昌都市" data-city-en="ChangDou" class="font-semibold text-slate-700 dark:text-gray-300 text-sm md:text-base">昌都市</h3>
                             <div class="text-xs text-slate-500 dark:text-gray-500 flex gap-2 items-center mt-0.5">
-                                <span class="weather-desc" data-weather-zh="晴" data-weather-en="Sunny">晴</span><span class="w-1 h-1 rounded-full bg-slate-400 dark:bg-gray-600"></span><span class="wind-label">风速</span>: 3.3 m/s</span>
+                                <span class="weather-desc" data-weather-zh="晴" data-weather-en="Sunny">晴</span><span class="w-1 h-1 rounded-full bg-slate-400 dark:bg-gray-600"></span><span class="wind-label">风速</span>: 10.7 m/s</span>
                             </div>
                         </div>
                     </div>
@@ -599,11 +598,11 @@
                         <div  class="flex flex-col items-center group/day cursor-default">
                             <span class="forecast-day-label text-[9px] font-medium mb-1 text-blue-500" data-day-zh="今天" data-day-en="Today">今天</span>
                             <div class="bg-slate-200 dark:bg-gray-800/50 rounded-full h-20 relative w-1.5 md:w-2 mx-auto ring-1 ring-black/5 dark:ring-white/5">
-                                <div class="absolute w-full rounded-full opacity-80" style="bottom: 0%; height: 40%; background-color: #06b6d4;"></div>
+                                <div class="absolute w-full rounded-full opacity-80" style="bottom: 11.8%; height: 26.599999999999998%; background-color: #06b6d4;"></div>
                             </div>
                             <div class="flex flex-col items-center mt-1.5 gap-0.5">
                                 <span class="text-[10px] font-bold text-slate-700 dark:text-gray-300 leading-none">9.2°</span>
-                                <span class="text-[9px] text-slate-500 dark:text-gray-600 leading-none">-10.8°</span>
+                                <span class="text-[9px] text-slate-500 dark:text-gray-600 leading-none">-4.1°</span>
                             </div>
                         </div>
                         
@@ -712,22 +711,22 @@
                         <div  class="flex flex-col items-center group/day cursor-default">
                             <span class="forecast-day-label text-[9px] font-medium mb-1 text-blue-500" data-day-zh="今天" data-day-en="Today">今天</span>
                             <div class="bg-slate-200 dark:bg-gray-800/50 rounded-full h-20 relative w-1.5 md:w-2 mx-auto ring-1 ring-black/5 dark:ring-white/5">
-                                <div class="absolute w-full rounded-full opacity-80" style="bottom: 0%; height: 41.2%; background-color: #06b6d4;"></div>
+                                <div class="absolute w-full rounded-full opacity-80" style="bottom: 13%; height: 24.6%; background-color: #06b6d4;"></div>
                             </div>
                             <div class="flex flex-col items-center mt-1.5 gap-0.5">
                                 <span class="text-[10px] font-bold text-slate-700 dark:text-gray-300 leading-none">8.8°</span>
-                                <span class="text-[9px] text-slate-500 dark:text-gray-600 leading-none">-11.8°</span>
+                                <span class="text-[9px] text-slate-500 dark:text-gray-600 leading-none">-3.5°</span>
                             </div>
                         </div>
                         
                         <a href="20260207/xizang.html" class="flex flex-col items-center group/day cursor-pointer hover:opacity-80 transition-opacity">
                             <span class="forecast-day-label text-[9px] font-medium mb-1 text-slate-500 dark:text-gray-500" data-day-zh="周六" data-day-en="Sat">周六</span>
                             <div class="bg-slate-200 dark:bg-gray-800/50 rounded-full h-20 relative w-1.5 md:w-2 mx-auto ring-1 ring-black/5 dark:ring-white/5">
-                                <div class="absolute w-full rounded-full opacity-80" style="bottom: 0%; height: 41.599999999999994%; background-color: #06b6d4;"></div>
+                                <div class="absolute w-full rounded-full opacity-80" style="bottom: 0%; height: 48.4%; background-color: #06b6d4;"></div>
                             </div>
                             <div class="flex flex-col items-center mt-1.5 gap-0.5">
                                 <span class="text-[10px] font-bold text-slate-700 dark:text-gray-300 leading-none">9.2°</span>
-                                <span class="text-[9px] text-slate-500 dark:text-gray-600 leading-none">-11.6°</span>
+                                <span class="text-[9px] text-slate-500 dark:text-gray-600 leading-none">-15°</span>
                             </div>
                         </a>
                         
@@ -800,7 +799,7 @@
                         <div>
                             <h3 data-role="title" data-city-zh="那曲市" data-city-en="NaQu" class="font-semibold text-slate-700 dark:text-gray-300 text-sm md:text-base">那曲市</h3>
                             <div class="text-xs text-slate-500 dark:text-gray-500 flex gap-2 items-center mt-0.5">
-                                <span class="weather-desc" data-weather-zh="晴" data-weather-en="Sunny">晴</span><span class="w-1 h-1 rounded-full bg-slate-400 dark:bg-gray-600"></span><span class="wind-label">风速</span>: 3.3 m/s</span>
+                                <span class="weather-desc" data-weather-zh="晴" data-weather-en="Sunny">晴</span><span class="w-1 h-1 rounded-full bg-slate-400 dark:bg-gray-600"></span><span class="wind-label">风速</span>: 13.8 m/s</span>
                             </div>
                         </div>
                     </div>
@@ -825,22 +824,22 @@
                         <div  class="flex flex-col items-center group/day cursor-default">
                             <span class="forecast-day-label text-[9px] font-medium mb-1 text-blue-500" data-day-zh="今天" data-day-en="Today">今天</span>
                             <div class="bg-slate-200 dark:bg-gray-800/50 rounded-full h-20 relative w-1.5 md:w-2 mx-auto ring-1 ring-black/5 dark:ring-white/5">
-                                <div class="absolute w-full rounded-full opacity-80" style="bottom: 0%; height: 45.4%; background-color: #06b6d4;"></div>
+                                <div class="absolute w-full rounded-full opacity-80" style="bottom: 0%; height: 32.8%; background-color: #06b6d4;"></div>
                             </div>
                             <div class="flex flex-col items-center mt-1.5 gap-0.5">
                                 <span class="text-[10px] font-bold text-slate-700 dark:text-gray-300 leading-none">0.8°</span>
-                                <span class="text-[9px] text-slate-500 dark:text-gray-600 leading-none">-21.9°</span>
+                                <span class="text-[9px] text-slate-500 dark:text-gray-600 leading-none">-15.6°</span>
                             </div>
                         </div>
                         
                         <a href="20260207/xizang.html" class="flex flex-col items-center group/day cursor-pointer hover:opacity-80 transition-opacity">
                             <span class="forecast-day-label text-[9px] font-medium mb-1 text-slate-500 dark:text-gray-500" data-day-zh="周六" data-day-en="Sat">周六</span>
                             <div class="bg-slate-200 dark:bg-gray-800/50 rounded-full h-20 relative w-1.5 md:w-2 mx-auto ring-1 ring-black/5 dark:ring-white/5">
-                                <div class="absolute w-full rounded-full opacity-80" style="bottom: 0%; height: 37.6%; background-color: #06b6d4;"></div>
+                                <div class="absolute w-full rounded-full opacity-80" style="bottom: 0%; height: 46%; background-color: #06b6d4;"></div>
                             </div>
                             <div class="flex flex-col items-center mt-1.5 gap-0.5">
                                 <span class="text-[10px] font-bold text-slate-700 dark:text-gray-300 leading-none">0.5°</span>
-                                <span class="text-[9px] text-slate-500 dark:text-gray-600 leading-none">-18.3°</span>
+                                <span class="text-[9px] text-slate-500 dark:text-gray-600 leading-none">-22.5°</span>
                             </div>
                         </a>
                         
@@ -938,22 +937,22 @@
                         <div  class="flex flex-col items-center group/day cursor-default">
                             <span class="forecast-day-label text-[9px] font-medium mb-1 text-blue-500" data-day-zh="今天" data-day-en="Today">今天</span>
                             <div class="bg-slate-200 dark:bg-gray-800/50 rounded-full h-20 relative w-1.5 md:w-2 mx-auto ring-1 ring-black/5 dark:ring-white/5">
-                                <div class="absolute w-full rounded-full opacity-80" style="bottom: 0%; height: 28.200000000000003%; background-color: #06b6d4;"></div>
+                                <div class="absolute w-full rounded-full opacity-80" style="bottom: 1.1999999999999993%; height: 19.400000000000002%; background-color: #06b6d4;"></div>
                             </div>
                             <div class="flex flex-col items-center mt-1.5 gap-0.5">
                                 <span class="text-[10px] font-bold text-slate-700 dark:text-gray-300 leading-none">0.3°</span>
-                                <span class="text-[9px] text-slate-500 dark:text-gray-600 leading-none">-13.8°</span>
+                                <span class="text-[9px] text-slate-500 dark:text-gray-600 leading-none">-9.4°</span>
                             </div>
                         </div>
                         
                         <a href="20260207/xizang.html" class="flex flex-col items-center group/day cursor-pointer hover:opacity-80 transition-opacity">
                             <span class="forecast-day-label text-[9px] font-medium mb-1 text-slate-500 dark:text-gray-500" data-day-zh="周六" data-day-en="Sat">周六</span>
                             <div class="bg-slate-200 dark:bg-gray-800/50 rounded-full h-20 relative w-1.5 md:w-2 mx-auto ring-1 ring-black/5 dark:ring-white/5">
-                                <div class="absolute w-full rounded-full opacity-80" style="bottom: 0%; height: 23.8%; background-color: #3b82f6;"></div>
+                                <div class="absolute w-full rounded-full opacity-80" style="bottom: 0%; height: 30.8%; background-color: #3b82f6;"></div>
                             </div>
                             <div class="flex flex-col items-center mt-1.5 gap-0.5">
                                 <span class="text-[10px] font-bold text-slate-700 dark:text-gray-300 leading-none">-0.5°</span>
-                                <span class="text-[9px] text-slate-500 dark:text-gray-600 leading-none">-12.4°</span>
+                                <span class="text-[9px] text-slate-500 dark:text-gray-600 leading-none">-15.9°</span>
                             </div>
                         </a>
                         
@@ -1087,7 +1086,7 @@
                   let tempMapData = { };
 
                   function initLanguage() {
-        currentLang = 'en';
+        currentLang = 'zh';
     }
 
                   // Language switching is done via navigation
@@ -1225,7 +1224,7 @@
 
                   // 去重：如果有多个城市的fullName相同，只保留温度最高的一个
                   const uniqueDataMap = new Map();
-                  [{"city":"林芝","cityCode":"ulvCs","temperature":13.1,"maxTemp":13.1,"minTemp":0.2,"windSpeed":3.3,"weatherDesc":"晴","fullName":"林芝市","en_name":"LinZhi"},{"city":"山南","cityCode":"uuiXc","temperature":9.5,"maxTemp":9.5,"minTemp":-7.8,"windSpeed":3.3,"weatherDesc":"晴","fullName":"山南市","en_name":"ShanNan"},{"city":"拉萨","cityCode":"utJQK","temperature":9.4,"maxTemp":9.4,"minTemp":-2.8,"windSpeed":3.3,"weatherDesc":"晴","fullName":"拉萨市","en_name":"LaSa"},{"city":"昌都","cityCode":"FKHOa","temperature":9.2,"maxTemp":9.2,"minTemp":-10.8,"windSpeed":3.3,"weatherDesc":"晴","fullName":"昌都市","en_name":"ChangDou"},{"city":"日喀则","cityCode":"wcnpZ","temperature":8.8,"maxTemp":8.8,"minTemp":-11.8,"windSpeed":3.3,"weatherDesc":"晴","fullName":"日喀则市","en_name":"RiKaZe"},{"city":"那曲","cityCode":"aDeyn","temperature":0.8,"maxTemp":0.8,"minTemp":-21.9,"windSpeed":3.3,"weatherDesc":"晴","fullName":"那曲市","en_name":"NaQu"},{"city":"阿里","cityCode":"DDraR","temperature":0.3,"maxTemp":0.3,"minTemp":-13.8,"windSpeed":3.3,"weatherDesc":"晴","fullName":"阿里地区","en_name":"ALi"}].forEach(item => {
+                  [{"city":"林芝","cityCode":"ulvCs","temperature":13.1,"maxTemp":13.1,"minTemp":4.1,"windSpeed":3.3,"weatherDesc":"晴","fullName":"林芝市","en_name":"LinZhi"},{"city":"山南","cityCode":"uuiXc","temperature":9.5,"maxTemp":9.5,"minTemp":-2.9,"windSpeed":10.7,"weatherDesc":"晴","fullName":"山南市","en_name":"ShanNan"},{"city":"拉萨","cityCode":"utJQK","temperature":9.4,"maxTemp":9.4,"minTemp":-1,"windSpeed":10.7,"weatherDesc":"晴","fullName":"拉萨市","en_name":"LaSa"},{"city":"昌都","cityCode":"FKHOa","temperature":9.2,"maxTemp":9.2,"minTemp":-4.1,"windSpeed":10.7,"weatherDesc":"晴","fullName":"昌都市","en_name":"ChangDou"},{"city":"日喀则","cityCode":"wcnpZ","temperature":8.8,"maxTemp":8.8,"minTemp":-3.5,"windSpeed":3.3,"weatherDesc":"晴","fullName":"日喀则市","en_name":"RiKaZe"},{"city":"那曲","cityCode":"aDeyn","temperature":0.8,"maxTemp":0.8,"minTemp":-15.6,"windSpeed":13.8,"weatherDesc":"晴","fullName":"那曲市","en_name":"NaQu"},{"city":"阿里","cityCode":"DDraR","temperature":0.3,"maxTemp":0.3,"minTemp":-9.4,"windSpeed":3.3,"weatherDesc":"晴","fullName":"阿里地区","en_name":"ALi"}].forEach(item => {
           const name = item.fullName || item.city;
           if (!uniqueDataMap.has(name) || item.temperature > uniqueDataMap.get(name).value) {
                     uniqueDataMap.set(name, {
