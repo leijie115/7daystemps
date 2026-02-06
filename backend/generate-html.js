@@ -584,7 +584,8 @@ async function generateDayPage(dayIndex, allForecastData, forecastData) {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="google-adsense-account" content="ca-pub-4059058909472641">
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-4059058909472641"
+     crossorigin="anonymous"></script>
     <meta name="description" content="China Temperature Rankings - ${descriptionDate} Temperature data across China">
     <meta name="keywords" content="China temperature,temperature rankings,weather,temperature map,real-time temperature,${dateFormatted}">
     <title>China Temperature Rankings - Real-time Temperature Data${titleSuffix}</title>
@@ -1737,7 +1738,8 @@ async function generateProvincePage(provinceName, provinceConfig, dayIndex = 0) 
     <head>
       <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-          <meta name="google-adsense-account" content="ca-pub-4059058909472641">
+          <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-4059058909472641"
+           crossorigin="anonymous"></script>
             <meta name="description" content="${enName} Temperature Rankings - City temperature data">
               <meta name="keywords" content="${enName},${provinceName},temperature,weather,cities">
                 <title>${enName} Temperature Rankings</title>
@@ -3198,6 +3200,8 @@ async function generateStaticPages() {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-4059058909472641"
+     crossorigin="anonymous"></script>
     <title>Policy - China Temp Rankings</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
