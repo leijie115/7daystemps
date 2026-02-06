@@ -9,7 +9,7 @@
                 <title>山东省 温度 排行榜</title>
                 <link rel="icon" type="image/x-icon" href="/favicon.ico">
                   <script>
-      // Language: zh
+      // Language: en
 
                     // Weather descriptions are pre-rendered in the correct language
 
@@ -17,9 +17,10 @@
 
                     
 
-                    // City names are already in the correct language
-      window.getCityName = function(cityName, lang) {
-        return cityName;
+                    // City name mapping for en version
+              const cityNameMap = {"菏泽市":"HeZe","济宁市":"JiNing","枣庄市":"ZaoZhuang","聊城市":"LiaoCheng","临沂市":"LinYi","日照市":"RiZhao","济南市":"JiNan","德州市":"DeZhou","泰安市":"TaiAn","淄博市":"ZiBo","青岛市":"QingDao","潍坊市":"WeiFang","滨州市":"BinZhou","东营市":"DongYing","威海市":"WeiHai","烟台市":"YanTai"};
+              window.getCityName = function(cityName, lang) {
+        return cityNameMap[cityName] || cityName;
       };
                   </script>
                   <script src="https://cdn.tailwindcss.com"></script>
@@ -103,8 +104,8 @@
 
                             <!-- 语言切换 -->
                             <div class="flex bg-white/80 dark:bg-gray-800/80 backdrop-blur rounded-lg border border-slate-200 dark:border-gray-700 p-1">
-              <a href="../../20260206/shandong.html" class="px-2 py-0.5 text-xs font-bold rounded text-slate-500 dark:text-gray-400 hover:text-slate-900 dark:hover:text-white transition-colors cursor-pointer">EN</a>
-              <a href="#" class="px-2 py-0.5 text-xs font-bold rounded bg-blue-600 text-white cursor-pointer">CN</a>
+              <a href="#" class="px-2 py-0.5 text-xs font-bold rounded bg-blue-600 text-white cursor-pointer">EN</a>
+              <a href="../zh-cn/20260206/shandong.html" class="px-2 py-0.5 text-xs font-bold rounded text-slate-500 dark:text-gray-400 hover:text-slate-900 dark:hover:text-white transition-colors cursor-pointer">CN</a>
             </div>
                           </div>
 
@@ -2103,7 +2104,7 @@
                   let tempMapData = { };
 
                   function initLanguage() {
-        currentLang = 'zh';
+        currentLang = 'en';
     }
 
                   // Language switching is done via navigation
