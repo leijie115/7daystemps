@@ -586,6 +586,9 @@ async function generateDayPage(dayIndex, allForecastData, forecastData) {
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-4059058909472641"
      crossorigin="anonymous"></script>
+    <script async custom-element="amp-auto-ads"
+        src="https://cdn.ampproject.org/v0/amp-auto-ads-0.1.js">
+    </script>
     <meta name="description" content="China Temperature Rankings - ${descriptionDate} Temperature data across China">
     <meta name="keywords" content="China temperature,temperature rankings,weather,temperature map,real-time temperature,${dateFormatted}">
     <title>China Temperature Rankings - Real-time Temperature Data${titleSuffix}</title>
@@ -773,6 +776,9 @@ async function generateDayPage(dayIndex, allForecastData, forecastData) {
     </style>
 </head>
 <body class="bg-slate-50 dark:bg-[#0d1117] text-slate-900 dark:text-white font-sans transition-colors duration-300 min-h-screen overflow-x-hidden overflow-y-auto">
+    <amp-auto-ads type="adsense"
+        data-ad-client="ca-pub-4059058909472641">
+    </amp-auto-ads>
 
     <!-- Dashboard Container -->
     <div class="flex flex-col md:flex-row h-screen w-full relative">
@@ -1740,6 +1746,9 @@ async function generateProvincePage(provinceName, provinceConfig, dayIndex = 0) 
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
           <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-4059058909472641"
            crossorigin="anonymous"></script>
+          <script async custom-element="amp-auto-ads"
+            src="https://cdn.ampproject.org/v0/amp-auto-ads-0.1.js">
+          </script>
             <meta name="description" content="${enName} Temperature Rankings - City temperature data">
               <meta name="keywords" content="${enName},${provinceName},temperature,weather,cities">
                 <title>${enName} Temperature Rankings</title>
@@ -1854,6 +1863,9 @@ async function generateProvincePage(provinceName, provinceConfig, dayIndex = 0) 
                   </style>
                 </head>
                 <body class="bg-slate-50 dark:bg-[#0d1117] text-slate-900 dark:text-white font-sans transition-colors duration-300 min-h-screen overflow-x-hidden overflow-y-auto">
+                  <amp-auto-ads type="adsense"
+                      data-ad-client="ca-pub-4059058909472641">
+                  </amp-auto-ads>
                   
                   <!-- Dashboard Container -->
                   <div class="flex flex-col md:flex-row h-screen w-full relative">
@@ -3202,6 +3214,9 @@ async function generateStaticPages() {
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-4059058909472641"
      crossorigin="anonymous"></script>
+    <script async custom-element="amp-auto-ads"
+        src="https://cdn.ampproject.org/v0/amp-auto-ads-0.1.js">
+    </script>
     <title>Policy - China Temp Rankings</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
@@ -3214,6 +3229,9 @@ async function generateStaticPages() {
     </script>
 </head>
 <body class="bg-slate-50 dark:bg-[#0d1117] text-slate-900 dark:text-white font-sans min-h-screen flex flex-col">
+    <amp-auto-ads type="adsense"
+        data-ad-client="ca-pub-4059058909472641">
+    </amp-auto-ads>
     <nav class="bg-white/80 dark:bg-gray-900/80 backdrop-blur-md border-b border-slate-200 dark:border-gray-800 sticky top-0 z-50">
         <div class="max-w-4xl mx-auto px-6 py-4 flex justify-between items-center">
             <a href="/" class="text-xl font-black text-transparent bg-clip-text bg-gradient-to-r from-blue-500 to-emerald-500">China Temp Rankings</a>
