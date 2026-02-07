@@ -589,6 +589,15 @@ async function generateDayPage(dayIndex, allForecastData, forecastData) {
     <script async custom-element="amp-auto-ads"
         src="https://cdn.ampproject.org/v0/amp-auto-ads-0.1.js">
     </script>
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-ZW66C8K27S"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+
+      gtag('config', 'G-ZW66C8K27S');
+    </script>
     <meta name="description" content="China Temperature Rankings - ${descriptionDate} Temperature data across China">
     <meta name="keywords" content="China temperature,temperature rankings,weather,temperature map,real-time temperature,${dateFormatted}">
     <title>China Temperature Rankings - Real-time Temperature Data${titleSuffix}</title>
@@ -1749,6 +1758,15 @@ async function generateProvincePage(provinceName, provinceConfig, dayIndex = 0) 
           <script async custom-element="amp-auto-ads"
             src="https://cdn.ampproject.org/v0/amp-auto-ads-0.1.js">
           </script>
+          <!-- Google tag (gtag.js) -->
+          <script async src="https://www.googletagmanager.com/gtag/js?id=G-ZW66C8K27S"></script>
+          <script>
+            window.dataLayer = window.dataLayer || [];
+            function gtag(){dataLayer.push(arguments);}
+            gtag('js', new Date());
+
+            gtag('config', 'G-ZW66C8K27S');
+          </script>
             <meta name="description" content="${enName} Temperature Rankings - City temperature data">
               <meta name="keywords" content="${enName},${provinceName},temperature,weather,cities">
                 <title>${enName} Temperature Rankings</title>
@@ -2570,6 +2588,15 @@ async function generateProvincePage(provinceName, provinceConfig, dayIndex = 0) 
                   initMap();
     });
                 </script>
+                <script>
+                  var _hmt = _hmt || [];
+                  (function() {
+                    var hm = document.createElement("script");
+                    hm.src = "https://hm.baidu.com/hm.js?3df16935562e608a288f9c848d4bfd33";
+                    var s = document.getElementsByTagName("script")[0]; 
+                    s.parentNode.insertBefore(hm, s);
+                  })();
+                </script>
               </body>
             </html>`;
 
@@ -3217,6 +3244,15 @@ async function generateStaticPages() {
     <script async custom-element="amp-auto-ads"
         src="https://cdn.ampproject.org/v0/amp-auto-ads-0.1.js">
     </script>
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-ZW66C8K27S"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+
+      gtag('config', 'G-ZW66C8K27S');
+    </script>
     <title>Policy - China Temp Rankings</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
@@ -3244,6 +3280,15 @@ async function generateStaticPages() {
   const END = `
     </main>
     ${FOOTER_HTML}
+    <script>
+      var _hmt = _hmt || [];
+      (function() {
+        var hm = document.createElement("script");
+        hm.src = "https://hm.baidu.com/hm.js?3df16935562e608a288f9c848d4bfd33";
+        var s = document.getElementsByTagName("script")[0]; 
+        s.parentNode.insertBefore(hm, s);
+      })();
+    </script>
 </body>
 </html>`;
 
