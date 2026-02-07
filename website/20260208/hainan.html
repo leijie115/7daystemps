@@ -31,7 +31,7 @@
                     
 
                     // City name mapping for en version
-              const cityNameMap = {"乐东黎族自治县":"LeDong","三亚市":"SanYa","保亭黎族苗族自治县":"BaoTing","东方市":"DongFang","五指山市":"WuZhiShan","三沙市":"SanSha","陵水黎族自治县":"LingShui","琼海市":"QiongHai","昌江黎族自治县":"ChangJiang","儋州市":"DanZhou","屯昌县":"TunChang","万宁市":"WanNing","文昌市":"WenChang","海口市":"HaiKou","定安县":"DingAn","琼中黎族苗族自治县":"QiongZhong","临高县":"LinGao","澄迈县":"ChengMai","白沙黎族自治县":"BaiSha"};
+              const cityNameMap = {"乐东黎族自治县":"LeDong","三亚市":"SanYa","保亭黎族苗族自治县":"BaoTing","东方市":"DongFang","五指山市":"WuZhiShan","三沙市":"SanSha","陵水黎族自治县":"LingShui","琼海市":"QiongHai","昌江黎族自治县":"ChangJiang","儋州市":"DanZhou","屯昌县":"TunChang","万宁市":"WanNing","文昌市":"WenChang","定安县":"DingAn","琼中黎族苗族自治县":"QiongZhong","临高县":"LinGao","澄迈县":"ChengMai","白沙黎族自治县":"BaiSha","海口市":"HaiKou"};
               window.getCityName = function(cityName, lang) {
         return cityNameMap[cityName] || cityName;
       };
@@ -1906,133 +1906,6 @@
                             14
                         </span>
                         <div>
-                            <h3 data-role="title" data-city-zh="海口市" data-city-en="HaiKou" class="font-semibold text-slate-700 dark:text-gray-300 text-sm md:text-base">HaiKou</h3>
-                            <div class="text-xs text-slate-500 dark:text-gray-500 flex gap-2 items-center mt-0.5">
-                                <span class="weather-desc" data-weather-zh="多云" data-weather-en="Cloudy">Cloudy</span><span class="w-1 h-1 rounded-full bg-slate-400 dark:bg-gray-600"></span><span class="wind-label">Wind</span>: 10.7 m/s</span>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="flex items-center gap-3">
-                        <div class="text-right">
-                            <div data-role="temp-val" class="text-lg font-bold tabular-nums tracking-tight" style="color: #eab308">
-                                20.6°
-                            </div>
-                        </div>
-                        <div class="arrow-icon p-1 rounded-full hover:bg-black/5 dark:hover:bg-white/5 transition-transform duration-300 cursor-pointer" onclick="toggleExpand(this.closest('.ranking-item'))">
-                            <svg class="w-4 h-4 text-slate-400 dark:text-gray-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
-                            </svg>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- 详情 (7天预报) -->
-                <div class="details-container mt-3 pt-3 border-t border-slate-200 dark:border-gray-700/50">
-                    <div class="grid grid-cols-7 gap-1">
-                        
-                        <a href="../hainan.html" class="flex flex-col items-center group/day cursor-pointer hover:opacity-80 transition-opacity">
-                            <span class="forecast-day-label text-[9px] font-medium mb-1 text-slate-500 dark:text-gray-500" data-day-zh="今天" data-day-en="Today">
-                                Today
-                            </span>
-                            <div class="bg-slate-200 dark:bg-gray-800/50 rounded-full h-20 relative w-1.5 md:w-2 mx-auto ring-1 ring-black/5 dark:ring-white/5">
-                                <div class="absolute w-full rounded-full opacity-80" style="bottom: 58%; height: 11.399999999999999%; background-color: #eab308;"></div>
-                            </div>
-                            <div class="flex flex-col items-center mt-1.5 gap-0.5">
-                                <span class="text-[10px] font-bold text-slate-700 dark:text-gray-300 leading-none">24.7°</span>
-                                <span class="text-[9px] text-slate-500 dark:text-gray-600 leading-none">19°</span>
-                            </div>
-                        </a>
-                        
-                        <div  class="flex flex-col items-center group/day cursor-default">
-                            <span class="forecast-day-label text-[9px] font-medium mb-1 text-blue-500" data-day-zh="周日" data-day-en="Sun">
-                                Sun
-                            </span>
-                            <div class="bg-slate-200 dark:bg-gray-800/50 rounded-full h-20 relative w-1.5 md:w-2 mx-auto ring-1 ring-black/5 dark:ring-white/5">
-                                <div class="absolute w-full rounded-full opacity-80" style="bottom: 55.8%; height: 10%; background-color: #eab308;"></div>
-                            </div>
-                            <div class="flex flex-col items-center mt-1.5 gap-0.5">
-                                <span class="text-[10px] font-bold text-slate-700 dark:text-gray-300 leading-none">20.6°</span>
-                                <span class="text-[9px] text-slate-500 dark:text-gray-600 leading-none">17.9°</span>
-                            </div>
-                        </div>
-                        
-                        <a href="../20260209/hainan.html" class="flex flex-col items-center group/day cursor-pointer hover:opacity-80 transition-opacity">
-                            <span class="forecast-day-label text-[9px] font-medium mb-1 text-slate-500 dark:text-gray-500" data-day-zh="周一" data-day-en="Mon">
-                                Mon
-                            </span>
-                            <div class="bg-slate-200 dark:bg-gray-800/50 rounded-full h-20 relative w-1.5 md:w-2 mx-auto ring-1 ring-black/5 dark:ring-white/5">
-                                <div class="absolute w-full rounded-full opacity-80" style="bottom: 55%; height: 10%; background-color: #eab308;"></div>
-                            </div>
-                            <div class="flex flex-col items-center mt-1.5 gap-0.5">
-                                <span class="text-[10px] font-bold text-slate-700 dark:text-gray-300 leading-none">21.7°</span>
-                                <span class="text-[9px] text-slate-500 dark:text-gray-600 leading-none">17.5°</span>
-                            </div>
-                        </a>
-                        
-                        <a href="../20260210/hainan.html" class="flex flex-col items-center group/day cursor-pointer hover:opacity-80 transition-opacity">
-                            <span class="forecast-day-label text-[9px] font-medium mb-1 text-slate-500 dark:text-gray-500" data-day-zh="周二" data-day-en="Tue">
-                                Tue
-                            </span>
-                            <div class="bg-slate-200 dark:bg-gray-800/50 rounded-full h-20 relative w-1.5 md:w-2 mx-auto ring-1 ring-black/5 dark:ring-white/5">
-                                <div class="absolute w-full rounded-full opacity-80" style="bottom: 58%; height: 12.600000000000001%; background-color: #eab308;"></div>
-                            </div>
-                            <div class="flex flex-col items-center mt-1.5 gap-0.5">
-                                <span class="text-[10px] font-bold text-slate-700 dark:text-gray-300 leading-none">25.3°</span>
-                                <span class="text-[9px] text-slate-500 dark:text-gray-600 leading-none">19°</span>
-                            </div>
-                        </a>
-                        
-                        <a href="../20260211/hainan.html" class="flex flex-col items-center group/day cursor-pointer hover:opacity-80 transition-opacity">
-                            <span class="forecast-day-label text-[9px] font-medium mb-1 text-slate-500 dark:text-gray-500" data-day-zh="周三" data-day-en="Wed">
-                                Wed
-                            </span>
-                            <div class="bg-slate-200 dark:bg-gray-800/50 rounded-full h-20 relative w-1.5 md:w-2 mx-auto ring-1 ring-black/5 dark:ring-white/5">
-                                <div class="absolute w-full rounded-full opacity-80" style="bottom: 58.2%; height: 12.799999999999997%; background-color: #eab308;"></div>
-                            </div>
-                            <div class="flex flex-col items-center mt-1.5 gap-0.5">
-                                <span class="text-[10px] font-bold text-slate-700 dark:text-gray-300 leading-none">25.5°</span>
-                                <span class="text-[9px] text-slate-500 dark:text-gray-600 leading-none">19.1°</span>
-                            </div>
-                        </a>
-                        
-                        <a href="../20260212/hainan.html" class="flex flex-col items-center group/day cursor-pointer hover:opacity-80 transition-opacity">
-                            <span class="forecast-day-label text-[9px] font-medium mb-1 text-slate-500 dark:text-gray-500" data-day-zh="周四" data-day-en="Thu">
-                                Thu
-                            </span>
-                            <div class="bg-slate-200 dark:bg-gray-800/50 rounded-full h-20 relative w-1.5 md:w-2 mx-auto ring-1 ring-black/5 dark:ring-white/5">
-                                <div class="absolute w-full rounded-full opacity-80" style="bottom: 58.4%; height: 10%; background-color: #eab308;"></div>
-                            </div>
-                            <div class="flex flex-col items-center mt-1.5 gap-0.5">
-                                <span class="text-[10px] font-bold text-slate-700 dark:text-gray-300 leading-none">24.2°</span>
-                                <span class="text-[9px] text-slate-500 dark:text-gray-600 leading-none">19.2°</span>
-                            </div>
-                        </a>
-                        
-                        <a href="../20260213/hainan.html" class="flex flex-col items-center group/day cursor-pointer hover:opacity-80 transition-opacity">
-                            <span class="forecast-day-label text-[9px] font-medium mb-1 text-slate-500 dark:text-gray-500" data-day-zh="周五" data-day-en="Fri">
-                                Fri
-                            </span>
-                            <div class="bg-slate-200 dark:bg-gray-800/50 rounded-full h-20 relative w-1.5 md:w-2 mx-auto ring-1 ring-black/5 dark:ring-white/5">
-                                <div class="absolute w-full rounded-full opacity-80" style="bottom: 58.2%; height: 11.399999999999999%; background-color: #eab308;"></div>
-                            </div>
-                            <div class="flex flex-col items-center mt-1.5 gap-0.5">
-                                <span class="text-[10px] font-bold text-slate-700 dark:text-gray-300 leading-none">24.8°</span>
-                                <span class="text-[9px] text-slate-500 dark:text-gray-600 leading-none">19.1°</span>
-                            </div>
-                        </a>
-                        
-                    </div>
-                </div>
-            </div>
-              
-            <div class="ranking-item group flex flex-col p-3 rounded-xl transition-all duration-300 border select-none border-slate-200 dark:border-gray-800 bg-white dark:bg-gray-800 hover:bg-slate-50 dark:hover:bg-gray-750"
-                 data-temp="20.6">
-                <div class="flex items-center justify-between">
-                    <div class="flex items-center gap-4">
-                        <span data-role="badge" class="flex justify-center items-center w-7 h-7 rounded-lg text-sm font-bold shadow-sm bg-slate-200 dark:bg-gray-700 text-slate-500 dark:text-gray-400">
-                            15
-                        </span>
-                        <div>
                             <h3 data-role="title" data-city-zh="定安县" data-city-en="DingAn" class="font-semibold text-slate-700 dark:text-gray-300 text-sm md:text-base">DingAn</h3>
                             <div class="text-xs text-slate-500 dark:text-gray-500 flex gap-2 items-center mt-0.5">
                                 <span class="weather-desc" data-weather-zh="多云" data-weather-en="Cloudy">Cloudy</span><span class="w-1 h-1 rounded-full bg-slate-400 dark:bg-gray-600"></span><span class="wind-label">Wind</span>: 7.9 m/s</span>
@@ -2157,7 +2030,7 @@
                 <div class="flex items-center justify-between">
                     <div class="flex items-center gap-4">
                         <span data-role="badge" class="flex justify-center items-center w-7 h-7 rounded-lg text-sm font-bold shadow-sm bg-slate-200 dark:bg-gray-700 text-slate-500 dark:text-gray-400">
-                            16
+                            15
                         </span>
                         <div>
                             <h3 data-role="title" data-city-zh="琼中黎族苗族自治县" data-city-en="QiongZhong" class="font-semibold text-slate-700 dark:text-gray-300 text-sm md:text-base">QiongZhong</h3>
@@ -2284,7 +2157,7 @@
                 <div class="flex items-center justify-between">
                     <div class="flex items-center gap-4">
                         <span data-role="badge" class="flex justify-center items-center w-7 h-7 rounded-lg text-sm font-bold shadow-sm bg-slate-200 dark:bg-gray-700 text-slate-500 dark:text-gray-400">
-                            17
+                            16
                         </span>
                         <div>
                             <h3 data-role="title" data-city-zh="临高县" data-city-en="LinGao" class="font-semibold text-slate-700 dark:text-gray-300 text-sm md:text-base">LinGao</h3>
@@ -2411,7 +2284,7 @@
                 <div class="flex items-center justify-between">
                     <div class="flex items-center gap-4">
                         <span data-role="badge" class="flex justify-center items-center w-7 h-7 rounded-lg text-sm font-bold shadow-sm bg-slate-200 dark:bg-gray-700 text-slate-500 dark:text-gray-400">
-                            18
+                            17
                         </span>
                         <div>
                             <h3 data-role="title" data-city-zh="澄迈县" data-city-en="ChengMai" class="font-semibold text-slate-700 dark:text-gray-300 text-sm md:text-base">ChengMai</h3>
@@ -2538,7 +2411,7 @@
                 <div class="flex items-center justify-between">
                     <div class="flex items-center gap-4">
                         <span data-role="badge" class="flex justify-center items-center w-7 h-7 rounded-lg text-sm font-bold shadow-sm bg-slate-200 dark:bg-gray-700 text-slate-500 dark:text-gray-400">
-                            19
+                            18
                         </span>
                         <div>
                             <h3 data-role="title" data-city-zh="白沙黎族自治县" data-city-en="BaiSha" class="font-semibold text-slate-700 dark:text-gray-300 text-sm md:text-base">BaiSha</h3>
@@ -2660,6 +2533,133 @@
                 </div>
             </div>
               
+            <div class="ranking-item group flex flex-col p-3 rounded-xl transition-all duration-300 border select-none border-slate-200 dark:border-gray-800 bg-white dark:bg-gray-800 hover:bg-slate-50 dark:hover:bg-gray-750"
+                 data-temp="20">
+                <div class="flex items-center justify-between">
+                    <div class="flex items-center gap-4">
+                        <span data-role="badge" class="flex justify-center items-center w-7 h-7 rounded-lg text-sm font-bold shadow-sm bg-slate-200 dark:bg-gray-700 text-slate-500 dark:text-gray-400">
+                            19
+                        </span>
+                        <div>
+                            <h3 data-role="title" data-city-zh="海口市" data-city-en="HaiKou" class="font-semibold text-slate-700 dark:text-gray-300 text-sm md:text-base">HaiKou</h3>
+                            <div class="text-xs text-slate-500 dark:text-gray-500 flex gap-2 items-center mt-0.5">
+                                <span class="weather-desc" data-weather-zh="多云" data-weather-en="Cloudy">Cloudy</span><span class="w-1 h-1 rounded-full bg-slate-400 dark:bg-gray-600"></span><span class="wind-label">Wind</span>: 10.7 m/s</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="flex items-center gap-3">
+                        <div class="text-right">
+                            <div data-role="temp-val" class="text-lg font-bold tabular-nums tracking-tight" style="color: #eab308">
+                                20°
+                            </div>
+                        </div>
+                        <div class="arrow-icon p-1 rounded-full hover:bg-black/5 dark:hover:bg-white/5 transition-transform duration-300 cursor-pointer" onclick="toggleExpand(this.closest('.ranking-item'))">
+                            <svg class="w-4 h-4 text-slate-400 dark:text-gray-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+                            </svg>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 详情 (7天预报) -->
+                <div class="details-container mt-3 pt-3 border-t border-slate-200 dark:border-gray-700/50">
+                    <div class="grid grid-cols-7 gap-1">
+                        
+                        <a href="../hainan.html" class="flex flex-col items-center group/day cursor-pointer hover:opacity-80 transition-opacity">
+                            <span class="forecast-day-label text-[9px] font-medium mb-1 text-slate-500 dark:text-gray-500" data-day-zh="今天" data-day-en="Today">
+                                Today
+                            </span>
+                            <div class="bg-slate-200 dark:bg-gray-800/50 rounded-full h-20 relative w-1.5 md:w-2 mx-auto ring-1 ring-black/5 dark:ring-white/5">
+                                <div class="absolute w-full rounded-full opacity-80" style="bottom: 58%; height: 11.399999999999999%; background-color: #eab308;"></div>
+                            </div>
+                            <div class="flex flex-col items-center mt-1.5 gap-0.5">
+                                <span class="text-[10px] font-bold text-slate-700 dark:text-gray-300 leading-none">24.7°</span>
+                                <span class="text-[9px] text-slate-500 dark:text-gray-600 leading-none">19°</span>
+                            </div>
+                        </a>
+                        
+                        <div  class="flex flex-col items-center group/day cursor-default">
+                            <span class="forecast-day-label text-[9px] font-medium mb-1 text-blue-500" data-day-zh="周日" data-day-en="Sun">
+                                Sun
+                            </span>
+                            <div class="bg-slate-200 dark:bg-gray-800/50 rounded-full h-20 relative w-1.5 md:w-2 mx-auto ring-1 ring-black/5 dark:ring-white/5">
+                                <div class="absolute w-full rounded-full opacity-80" style="bottom: 55.8%; height: 10%; background-color: #eab308;"></div>
+                            </div>
+                            <div class="flex flex-col items-center mt-1.5 gap-0.5">
+                                <span class="text-[10px] font-bold text-slate-700 dark:text-gray-300 leading-none">20°</span>
+                                <span class="text-[9px] text-slate-500 dark:text-gray-600 leading-none">17.9°</span>
+                            </div>
+                        </div>
+                        
+                        <a href="../20260209/hainan.html" class="flex flex-col items-center group/day cursor-pointer hover:opacity-80 transition-opacity">
+                            <span class="forecast-day-label text-[9px] font-medium mb-1 text-slate-500 dark:text-gray-500" data-day-zh="周一" data-day-en="Mon">
+                                Mon
+                            </span>
+                            <div class="bg-slate-200 dark:bg-gray-800/50 rounded-full h-20 relative w-1.5 md:w-2 mx-auto ring-1 ring-black/5 dark:ring-white/5">
+                                <div class="absolute w-full rounded-full opacity-80" style="bottom: 55%; height: 10%; background-color: #eab308;"></div>
+                            </div>
+                            <div class="flex flex-col items-center mt-1.5 gap-0.5">
+                                <span class="text-[10px] font-bold text-slate-700 dark:text-gray-300 leading-none">21.7°</span>
+                                <span class="text-[9px] text-slate-500 dark:text-gray-600 leading-none">17.5°</span>
+                            </div>
+                        </a>
+                        
+                        <a href="../20260210/hainan.html" class="flex flex-col items-center group/day cursor-pointer hover:opacity-80 transition-opacity">
+                            <span class="forecast-day-label text-[9px] font-medium mb-1 text-slate-500 dark:text-gray-500" data-day-zh="周二" data-day-en="Tue">
+                                Tue
+                            </span>
+                            <div class="bg-slate-200 dark:bg-gray-800/50 rounded-full h-20 relative w-1.5 md:w-2 mx-auto ring-1 ring-black/5 dark:ring-white/5">
+                                <div class="absolute w-full rounded-full opacity-80" style="bottom: 58%; height: 12.600000000000001%; background-color: #eab308;"></div>
+                            </div>
+                            <div class="flex flex-col items-center mt-1.5 gap-0.5">
+                                <span class="text-[10px] font-bold text-slate-700 dark:text-gray-300 leading-none">25.3°</span>
+                                <span class="text-[9px] text-slate-500 dark:text-gray-600 leading-none">19°</span>
+                            </div>
+                        </a>
+                        
+                        <a href="../20260211/hainan.html" class="flex flex-col items-center group/day cursor-pointer hover:opacity-80 transition-opacity">
+                            <span class="forecast-day-label text-[9px] font-medium mb-1 text-slate-500 dark:text-gray-500" data-day-zh="周三" data-day-en="Wed">
+                                Wed
+                            </span>
+                            <div class="bg-slate-200 dark:bg-gray-800/50 rounded-full h-20 relative w-1.5 md:w-2 mx-auto ring-1 ring-black/5 dark:ring-white/5">
+                                <div class="absolute w-full rounded-full opacity-80" style="bottom: 58.2%; height: 12.799999999999997%; background-color: #eab308;"></div>
+                            </div>
+                            <div class="flex flex-col items-center mt-1.5 gap-0.5">
+                                <span class="text-[10px] font-bold text-slate-700 dark:text-gray-300 leading-none">25.5°</span>
+                                <span class="text-[9px] text-slate-500 dark:text-gray-600 leading-none">19.1°</span>
+                            </div>
+                        </a>
+                        
+                        <a href="../20260212/hainan.html" class="flex flex-col items-center group/day cursor-pointer hover:opacity-80 transition-opacity">
+                            <span class="forecast-day-label text-[9px] font-medium mb-1 text-slate-500 dark:text-gray-500" data-day-zh="周四" data-day-en="Thu">
+                                Thu
+                            </span>
+                            <div class="bg-slate-200 dark:bg-gray-800/50 rounded-full h-20 relative w-1.5 md:w-2 mx-auto ring-1 ring-black/5 dark:ring-white/5">
+                                <div class="absolute w-full rounded-full opacity-80" style="bottom: 58.4%; height: 10%; background-color: #eab308;"></div>
+                            </div>
+                            <div class="flex flex-col items-center mt-1.5 gap-0.5">
+                                <span class="text-[10px] font-bold text-slate-700 dark:text-gray-300 leading-none">24.2°</span>
+                                <span class="text-[9px] text-slate-500 dark:text-gray-600 leading-none">19.2°</span>
+                            </div>
+                        </a>
+                        
+                        <a href="../20260213/hainan.html" class="flex flex-col items-center group/day cursor-pointer hover:opacity-80 transition-opacity">
+                            <span class="forecast-day-label text-[9px] font-medium mb-1 text-slate-500 dark:text-gray-500" data-day-zh="周五" data-day-en="Fri">
+                                Fri
+                            </span>
+                            <div class="bg-slate-200 dark:bg-gray-800/50 rounded-full h-20 relative w-1.5 md:w-2 mx-auto ring-1 ring-black/5 dark:ring-white/5">
+                                <div class="absolute w-full rounded-full opacity-80" style="bottom: 58.2%; height: 11.399999999999999%; background-color: #eab308;"></div>
+                            </div>
+                            <div class="flex flex-col items-center mt-1.5 gap-0.5">
+                                <span class="text-[10px] font-bold text-slate-700 dark:text-gray-300 leading-none">24.8°</span>
+                                <span class="text-[9px] text-slate-500 dark:text-gray-600 leading-none">19.1°</span>
+                            </div>
+                        </a>
+                        
+                    </div>
+                </div>
+            </div>
+              
                       </div>
 
                       </div>
@@ -2685,7 +2685,7 @@
              </p>
              <p>
                在省内各主要城市中，<strong>乐东</strong> 今日气温最高，达到了 <span class="text-orange-500 font-bold">27.3°C</span>。
-               相比之下，<strong>白沙</strong> 则相对较冷，气温低至 <span class="text-blue-500 font-bold">20.1°C</span>。
+               相比之下，<strong>海口</strong> 则相对较冷，气温低至 <span class="text-blue-500 font-bold">20°C</span>。
              </p>
              <p>
                请根据所在城市的具体天气情况适时增减衣物。我们将持续为您更新海南省各地的实时气象数据。
@@ -2695,10 +2695,10 @@
              </p>
              <p class="mb-4">
                Among the key cities, <strong>LeDong</strong> stands out as the warmest location today, recording a temperature of <span class="text-orange-500 font-bold">27.3°C</span>.
-               Conversely, <strong>BaiSha</strong> is the coolest spot in the region, with temperatures sitting at <span class="text-blue-500 font-bold">20.1°C</span>.
+               Conversely, <strong>HaiKou</strong> is the coolest spot in the region, with temperatures sitting at <span class="text-blue-500 font-bold">20°C</span>.
              </p>
              <p>
-               Whether you are in LeDong, BaiSha, or anywhere else in Hainan, stay prepared for the local conditions. Our data is updated regularly to provide you with the most accurate temperature rankings.
+               Whether you are in LeDong, HaiKou, or anywhere else in Hainan, stay prepared for the local conditions. Our data is updated regularly to provide you with the most accurate temperature rankings.
              </p></div>
                             </div>
                         </div>
@@ -2869,7 +2869,7 @@
 
                   // 去重：如果有多个城市的fullName相同，只保留温度最高的一个
                   const uniqueDataMap = new Map();
-                  [{"city":"乐东","cityCode":"joRTe","temperature":27.3,"maxTemp":27.3,"minTemp":16.8,"windSpeed":3.3,"weatherDesc":"多云","fullName":"乐东黎族自治县","en_name":"LeDong"},{"city":"三亚","cityCode":"PtnWb","temperature":26.1,"maxTemp":26.1,"minTemp":19.7,"windSpeed":10.7,"weatherDesc":"多云","fullName":"三亚市","en_name":"SanYa"},{"city":"保亭","cityCode":"YoUoQ","temperature":26.1,"maxTemp":26.1,"minTemp":18.2,"windSpeed":3.3,"weatherDesc":"多云","fullName":"保亭黎族苗族自治县","en_name":"BaoTing"},{"city":"东方","cityCode":"wAOgT","temperature":26,"maxTemp":26,"minTemp":18.9,"windSpeed":10.7,"weatherDesc":"多云","fullName":"东方市","en_name":"DongFang"},{"city":"五指山","cityCode":"jtadI","temperature":25.8,"maxTemp":25.8,"minTemp":17.5,"windSpeed":3.3,"weatherDesc":"多云","fullName":"五指山市","en_name":"WuZhiShan"},{"city":"三沙","cityCode":"iIkAm","temperature":25.3,"maxTemp":25.3,"minTemp":22.4,"windSpeed":17.1,"weatherDesc":"小雨","fullName":"三沙市","en_name":"SanSha"},{"city":"陵水","cityCode":"IDWIl","temperature":23,"maxTemp":23,"minTemp":18.8,"windSpeed":7.9,"weatherDesc":"多云","fullName":"陵水黎族自治县","en_name":"LingShui"},{"city":"琼海","cityCode":"tOlIq","temperature":22.4,"maxTemp":22.4,"minTemp":18.7,"windSpeed":7.9,"weatherDesc":"多云","fullName":"琼海市","en_name":"QiongHai"},{"city":"昌江","cityCode":"vHJCh","temperature":22.3,"maxTemp":22.3,"minTemp":17.8,"windSpeed":7.9,"weatherDesc":"多云","fullName":"昌江黎族自治县","en_name":"ChangJiang"},{"city":"儋州","cityCode":"pFFlS","temperature":21.7,"maxTemp":21.7,"minTemp":16.6,"windSpeed":7.9,"weatherDesc":"多云","fullName":"儋州市","en_name":"DanZhou"},{"city":"屯昌","cityCode":"VXTVN","temperature":21.2,"maxTemp":21.2,"minTemp":17.3,"windSpeed":7.9,"weatherDesc":"多云","fullName":"屯昌县","en_name":"TunChang"},{"city":"万宁","cityCode":"TtrxS","temperature":21,"maxTemp":21,"minTemp":17.8,"windSpeed":7.9,"weatherDesc":"小雨","fullName":"万宁市","en_name":"WanNing"},{"city":"文昌","cityCode":"YdxTG","temperature":20.8,"maxTemp":20.8,"minTemp":16.2,"windSpeed":10.7,"weatherDesc":"多云","fullName":"文昌市","en_name":"WenChang"},{"city":"海口","cityCode":"vmEKa","temperature":20.6,"maxTemp":20.6,"minTemp":17.9,"windSpeed":10.7,"weatherDesc":"多云","fullName":"海口市","en_name":"HaiKou"},{"city":"定安","cityCode":"yartD","temperature":20.6,"maxTemp":20.6,"minTemp":17.3,"windSpeed":7.9,"weatherDesc":"多云","fullName":"定安县","en_name":"DingAn"},{"city":"琼中","cityCode":"HgARP","temperature":20.3,"maxTemp":20.3,"minTemp":16.3,"windSpeed":3.3,"weatherDesc":"小雨","fullName":"琼中黎族苗族自治县","en_name":"QiongZhong"},{"city":"临高","cityCode":"nqaYV","temperature":20.3,"maxTemp":20.3,"minTemp":16.9,"windSpeed":10.7,"weatherDesc":"多云","fullName":"临高县","en_name":"LinGao"},{"city":"澄迈","cityCode":"tjGqH","temperature":20.2,"maxTemp":20.2,"minTemp":16.5,"windSpeed":7.9,"weatherDesc":"多云","fullName":"澄迈县","en_name":"ChengMai"},{"city":"白沙","cityCode":"AXpuY","temperature":20.1,"maxTemp":20.1,"minTemp":16,"windSpeed":3.3,"weatherDesc":"多云","fullName":"白沙黎族自治县","en_name":"BaiSha"}].forEach(item => {
+                  [{"city":"乐东","cityCode":"joRTe","temperature":27.3,"maxTemp":27.3,"minTemp":16.8,"windSpeed":3.3,"weatherDesc":"多云","fullName":"乐东黎族自治县","en_name":"LeDong"},{"city":"三亚","cityCode":"PtnWb","temperature":26.1,"maxTemp":26.1,"minTemp":19.7,"windSpeed":10.7,"weatherDesc":"多云","fullName":"三亚市","en_name":"SanYa"},{"city":"保亭","cityCode":"YoUoQ","temperature":26.1,"maxTemp":26.1,"minTemp":18.2,"windSpeed":3.3,"weatherDesc":"多云","fullName":"保亭黎族苗族自治县","en_name":"BaoTing"},{"city":"东方","cityCode":"wAOgT","temperature":26,"maxTemp":26,"minTemp":18.9,"windSpeed":10.7,"weatherDesc":"多云","fullName":"东方市","en_name":"DongFang"},{"city":"五指山","cityCode":"jtadI","temperature":25.8,"maxTemp":25.8,"minTemp":17.5,"windSpeed":3.3,"weatherDesc":"多云","fullName":"五指山市","en_name":"WuZhiShan"},{"city":"三沙","cityCode":"iIkAm","temperature":25.3,"maxTemp":25.3,"minTemp":22.4,"windSpeed":17.1,"weatherDesc":"小雨","fullName":"三沙市","en_name":"SanSha"},{"city":"陵水","cityCode":"IDWIl","temperature":23,"maxTemp":23,"minTemp":18.8,"windSpeed":7.9,"weatherDesc":"多云","fullName":"陵水黎族自治县","en_name":"LingShui"},{"city":"琼海","cityCode":"tOlIq","temperature":22.4,"maxTemp":22.4,"minTemp":18.7,"windSpeed":7.9,"weatherDesc":"多云","fullName":"琼海市","en_name":"QiongHai"},{"city":"昌江","cityCode":"vHJCh","temperature":22.3,"maxTemp":22.3,"minTemp":17.8,"windSpeed":7.9,"weatherDesc":"多云","fullName":"昌江黎族自治县","en_name":"ChangJiang"},{"city":"儋州","cityCode":"pFFlS","temperature":21.7,"maxTemp":21.7,"minTemp":16.6,"windSpeed":7.9,"weatherDesc":"多云","fullName":"儋州市","en_name":"DanZhou"},{"city":"屯昌","cityCode":"VXTVN","temperature":21.2,"maxTemp":21.2,"minTemp":17.3,"windSpeed":7.9,"weatherDesc":"多云","fullName":"屯昌县","en_name":"TunChang"},{"city":"万宁","cityCode":"TtrxS","temperature":21,"maxTemp":21,"minTemp":17.8,"windSpeed":7.9,"weatherDesc":"小雨","fullName":"万宁市","en_name":"WanNing"},{"city":"文昌","cityCode":"YdxTG","temperature":20.8,"maxTemp":20.8,"minTemp":16.2,"windSpeed":10.7,"weatherDesc":"多云","fullName":"文昌市","en_name":"WenChang"},{"city":"定安","cityCode":"yartD","temperature":20.6,"maxTemp":20.6,"minTemp":17.3,"windSpeed":7.9,"weatherDesc":"多云","fullName":"定安县","en_name":"DingAn"},{"city":"琼中","cityCode":"HgARP","temperature":20.3,"maxTemp":20.3,"minTemp":16.3,"windSpeed":3.3,"weatherDesc":"小雨","fullName":"琼中黎族苗族自治县","en_name":"QiongZhong"},{"city":"临高","cityCode":"nqaYV","temperature":20.3,"maxTemp":20.3,"minTemp":16.9,"windSpeed":10.7,"weatherDesc":"多云","fullName":"临高县","en_name":"LinGao"},{"city":"澄迈","cityCode":"tjGqH","temperature":20.2,"maxTemp":20.2,"minTemp":16.5,"windSpeed":7.9,"weatherDesc":"多云","fullName":"澄迈县","en_name":"ChengMai"},{"city":"白沙","cityCode":"AXpuY","temperature":20.1,"maxTemp":20.1,"minTemp":16,"windSpeed":3.3,"weatherDesc":"多云","fullName":"白沙黎族自治县","en_name":"BaiSha"},{"city":"海口","cityCode":"vmEKa","temperature":20,"maxTemp":20,"minTemp":17.9,"windSpeed":10.7,"weatherDesc":"多云","fullName":"海口市","en_name":"HaiKou"}].forEach(item => {
           const name = item.fullName || item.city;
           if (!uniqueDataMap.has(name) || item.temperature > uniqueDataMap.get(name).value) {
                     uniqueDataMap.set(name, {
