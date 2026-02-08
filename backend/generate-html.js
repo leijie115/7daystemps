@@ -19,9 +19,9 @@ const FOOTER_HTML = `
                   &copy; ${new Date().getFullYear()} China Temp Rankings.
               </div>
               <div class="flex gap-4 text-xs font-medium">
-                  <a href="/about.html" class="text-slate-400 dark:text-gray-500 hover:text-blue-500 dark:hover:text-blue-400 transition-colors">About</a>
-                  <a href="/privacy.html" class="text-slate-400 dark:text-gray-500 hover:text-blue-500 dark:hover:text-blue-400 transition-colors">Privacy</a>
-                  <a href="/terms.html" class="text-slate-400 dark:text-gray-500 hover:text-blue-500 dark:hover:text-blue-400 transition-colors">Terms</a>
+                  <a href="/about" class="text-slate-400 dark:text-gray-500 hover:text-blue-500 dark:hover:text-blue-400 transition-colors">About</a>
+                  <a href="/privacy" class="text-slate-400 dark:text-gray-500 hover:text-blue-500 dark:hover:text-blue-400 transition-colors">Privacy</a>
+                  <a href="/terms" class="text-slate-400 dark:text-gray-500 hover:text-blue-500 dark:hover:text-blue-400 transition-colors">Terms</a>
                   <a href="/sitemap.xml" class="text-slate-400 dark:text-gray-500 hover:text-blue-500 dark:hover:text-blue-400 transition-colors">Sitemap</a>
               </div>
           </div>
@@ -882,10 +882,10 @@ async function generateDayPage(dayIndex, allForecastData, forecastData) {
         href = '#';
       } else if (i === 0) {
         // 如果当前不是首页,链接回首页需要根据当前位置调整
-        href = dayIndex === 0 ? 'index.html' : '../index.html';
+        href = dayIndex === 0 ? './' : '../';
       } else {
         // 链接到其他日期页面
-        href = dayIndex === 0 ? dateStr + '/index.html' : '../' + dateStr + '/index.html';
+        href = dayIndex === 0 ? dateStr + '/' : '../' + dateStr + '/';
       }
 
       const targetAttr = isActive ? '' : 'target="_blank"';
@@ -958,7 +958,7 @@ async function generateDayPage(dayIndex, allForecastData, forecastData) {
                                     ${index + 1}
                                 </span>
                                 <div>
-                                    <a href="${item.no_aliyun_data ? '#' : provinceFileName + '.html'}" data-role="title" data-province-zh="${item.province}" data-province-en="${item.enName || item.province}" class="font-semibold text-slate-700 dark:text-gray-300 text-sm md:text-base hover:text-blue-500 dark:hover:text-blue-400 transition-colors ${item.no_aliyun_data ? 'pointer-events-none' : ''}" ${item.no_aliyun_data ? '' : ''}>${item.enName || item.province}</a>
+                                    <a href="${item.no_aliyun_data ? '#' : provinceFileName}" data-role="title" data-province-zh="${item.province}" data-province-en="${item.enName || item.province}" class="font-semibold text-slate-700 dark:text-gray-300 text-sm md:text-base hover:text-blue-500 dark:hover:text-blue-400 transition-colors ${item.no_aliyun_data ? 'pointer-events-none' : ''}" ${item.no_aliyun_data ? '' : ''}>${item.enName || item.province}</a>
                                     <div class="text-xs text-slate-500 dark:text-gray-500 flex gap-2 items-center mt-0.5">
                                         <span class="weather-desc" data-weather-zh="${item.weatherDesc || '未知'}" data-weather-en="${translateWeatherDesc(item.weatherDesc || '未知', 'en')}">${translateWeatherDesc(item.weatherDesc || '未知', 'en')}</span><span class="w-1 h-1 rounded-full bg-slate-400 dark:bg-gray-600"></span><span class="wind-label">Wind</span>: ${item.windSpeed || '0'} m/s</span>
                                     </div>
@@ -1013,12 +1013,12 @@ async function generateDayPage(dayIndex, allForecastData, forecastData) {
           targetUrl = '#'; // 当前页面
         } else if (idx === 0) {
           // 目标是今天(第一天)
-          targetUrl = dayIndex === 0 ? '#' : `../${provinceFileName}.html`;
+          targetUrl = dayIndex === 0 ? '#' : `../${provinceFileName}`;
         } else {
           // 目标是未来某天
           targetUrl = dayIndex === 0
-            ? `${targetDateStr}/${provinceFileName}.html`
-            : `../${targetDateStr}/${provinceFileName}.html`;
+            ? `${targetDateStr}/${provinceFileName}`
+            : `../${targetDateStr}/${provinceFileName}`;
         }
 
         const isSelected = idx === dayIndex;
@@ -1422,7 +1422,7 @@ async function generateDayPage(dayIndex, allForecastData, forecastData) {
                 }
 
     // 使用英文名称小写作为文件名
-    const fileName = enName.toLowerCase().replace(/\\s+/g, '') + '.html';
+    const fileName = enName.toLowerCase().replace(/\\s+/g, '');
     window.location.href = fileName;
             });
 
@@ -1483,7 +1483,7 @@ async function generateDayPage(dayIndex, allForecastData, forecastData) {
       console.log('Province has no aliyun data:', provinceFileName);
     return;
             }
-    window.location.href = provinceFileName + '.html';
+    window.location.href = provinceFileName;
         }
 
     // 导航到省份页面的特定日期
@@ -1495,10 +1495,10 @@ async function generateDayPage(dayIndex, allForecastData, forecastData) {
             }
     // 如果是今天（dayIndex === 0），跳转到省份主页
     if (dayIndex === 0) {
-      window.location.href = provinceFileName + '.html';
+      window.location.href = provinceFileName;
             } else {
-      // 其他日期，跳转到 YYYYMMDD/provincename.html
-      window.location.href = dateStr + '/' + provinceFileName + '.html';
+      // 其他日期，跳转到 YYYYMMDD/provincename
+      window.location.href = dateStr + '/' + provinceFileName;
             }
         }
 
@@ -1895,7 +1895,7 @@ async function generateProvincePage(provinceName, provinceConfig, dayIndex = 0) 
                       <div class="flex justify-between items-start">
                         <div class="flex items-center gap-3">
                           <!-- 返回按钮 -->
-                          <a href="index.html" class="pointer-events-auto p-2 rounded-lg bg-white/80 dark:bg-gray-800/80 backdrop-blur border border-slate-200 dark:border-gray-700 text-slate-600 dark:text-gray-300 hover:text-blue-500 dark:hover:text-blue-400 transition-colors shadow-sm">
+                          <a href="./" class="pointer-events-auto p-2 rounded-lg bg-white/80 dark:bg-gray-800/80 backdrop-blur border border-slate-200 dark:border-gray-700 text-slate-600 dark:text-gray-300 hover:text-blue-500 dark:hover:text-blue-400 transition-colors shadow-sm">
                             <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
                             </svg>
@@ -2703,7 +2703,7 @@ function generateSearchIndex() {
       name: province.name,
       en_name: province.en_name,
       type: 'province',
-      url: `${province.en_name.toLowerCase()}.html`,
+      url: `${province.en_name.toLowerCase()}`,
       display_zh: province.name,
       display_en: province.en_name
     });
@@ -2715,7 +2715,7 @@ function generateSearchIndex() {
           full_name: city.full_name,
           en_name: city.en_name,
           type: 'city',
-          url: `${province.en_name.toLowerCase()}.html`,
+          url: `${province.en_name.toLowerCase()}`,
           parent_province: province.name,
           display_zh: `${city.name}, ${province.name}`,
           display_en: `${city.en_name}, ${province.en_name}`
@@ -2845,20 +2845,22 @@ async function createChineseVersions() {
 
     // 计算语言切换链接
     const depth = (relativePath.match(/\//g) || []).length;
+    // 将文件路径转为URL路径：去掉.html，index变为目录路径
+    const urlPath = relativePath.replace(/\.html$/, '').replace(/(^|\/)index$/, '$1');
     let enUrl, zhUrl;
 
     if (lang === 'zh') {
       // 在zh-cn目录下，回到英文版
-      enUrl = '../'.repeat(depth + 1) + relativePath;
+      enUrl = '../'.repeat(depth + 1) + urlPath;
       zhUrl = '#';
     } else {
       // 在根目录，进入zh-cn目录
       enUrl = '#';
-      // 如果在子目录中（如20260121/sichuan.html），需要先回到根目录
+      // 如果在子目录中（如20260121/sichuan），需要先回到根目录
       if (depth > 0) {
-        zhUrl = '../'.repeat(depth) + 'zh-cn/' + relativePath;
+        zhUrl = '../'.repeat(depth) + 'zh-cn/' + urlPath;
       } else {
-        zhUrl = 'zh-cn/' + relativePath;
+        zhUrl = 'zh-cn/' + urlPath;
       }
     }
 
@@ -3161,7 +3163,7 @@ async function createChineseVersions() {
                 };
 
                 const fileNameBase = provinceFileNames[provinceName] || provinceName.toLowerCase();
-                window.location.href = fileNameBase + '.html';`
+                window.location.href = fileNameBase;`
     );
 
     return html;
