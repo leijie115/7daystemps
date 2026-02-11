@@ -5,19 +5,23 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-4059058909472641"
      crossorigin="anonymous"></script>
-    <script async custom-element="amp-auto-ads"
-        src="https://cdn.ampproject.org/v0/amp-auto-ads-0.1.js">
-    </script>
     <!-- Google tag (gtag.js) -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-ZW66C8K27S"></script>
     <script>
       window.dataLayer = window.dataLayer || [];
       function gtag(){dataLayer.push(arguments);}
       gtag('js', new Date());
-
       gtag('config', 'G-ZW66C8K27S');
     </script>
-    <title>Policy - China Temp Rankings</title>
+    <title>About Us - China Temp Rankings | 7DaysTemps</title>
+    <meta name="description" content="About China Temp Rankings (7DaysTemps.com) - Real-time temperature rankings, 7-day forecasts, and interactive weather maps for all provinces and cities across China.">
+    <link rel="canonical" href="https://7daystemps.com/about">
+    <link rel="icon" type="image/x-icon" href="/favicon.ico">
+    <meta property="og:title" content="About Us - China Temp Rankings">
+    <meta property="og:description" content="About China Temp Rankings (7DaysTemps.com) - Real-time temperature rankings, 7-day forecasts, and interactive weather maps for all provinces and cities across China.">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://7daystemps.com/about">
+    <meta property="og:site_name" content="China Temp Rankings">
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
         tailwind.config = { darkMode: 'class' };
@@ -29,23 +33,54 @@
     </script>
 </head>
 <body class="bg-slate-50 dark:bg-[#0d1117] text-slate-900 dark:text-white font-sans min-h-screen flex flex-col">
-    <amp-auto-ads type="adsense"
-        data-ad-client="ca-pub-4059058909472641">
-    </amp-auto-ads>
     <nav class="bg-white/80 dark:bg-gray-900/80 backdrop-blur-md border-b border-slate-200 dark:border-gray-800 sticky top-0 z-50">
         <div class="max-w-4xl mx-auto px-6 py-4 flex justify-between items-center">
             <a href="/" class="text-xl font-black text-transparent bg-clip-text bg-gradient-to-r from-blue-500 to-emerald-500">China Temp Rankings</a>
-            <a href="/" class="text-sm font-medium text-slate-500 dark:text-gray-400 hover:text-blue-500">Back to Home</a>
+            <div class="flex items-center gap-4">
+                <a href="/about" class="text-sm font-medium text-slate-500 dark:text-gray-400 hover:text-blue-500 transition-colors">About</a>
+                <a href="/" class="text-sm font-medium text-slate-500 dark:text-gray-400 hover:text-blue-500 transition-colors">Home</a>
+            </div>
         </div>
     </nav>
     <main class="flex-1 max-w-4xl mx-auto px-6 py-12 w-full prose dark:prose-invert">
 
-    <h1>About Us</h1>
-    <p>China Temp Rankings is a data visualization project dedicated to showing real-time temperature extremes across China.</p>
-    <h2>Our Data</h2>
-    <p>We aggregate temperature data from hundreds of cities to create a real-time ranking of the hottest and coldest places. Our system updates hourly to provide the most current snapshot of weather patterns.</p>
-    <h2>Contact</h2>
-    <p>For any inquiries, please contact us via email (if applicable).</p>
+    <h1>About China Temp Rankings</h1>
+    <p>China Temp Rankings is a weather data visualization platform that provides real-time temperature rankings, 7-day forecasts, and interactive maps for all 34 provinces and regions across China.</p>
+
+    <h2>Our Mission</h2>
+    <p>We aim to make weather data across China accessible, visual, and easy to understand. Whether you're planning travel, tracking seasonal patterns, or simply curious about temperature extremes across the country, our platform provides a clear, at-a-glance view of current conditions.</p>
+
+    <h2>What We Offer</h2>
+    <ul>
+      <li><strong>Real-Time Temperature Rankings:</strong> See which provinces and cities are the hottest and coldest right now, updated every hour.</li>
+      <li><strong>7-Day Forecasts:</strong> View temperature predictions for the upcoming week for every province and city.</li>
+      <li><strong>Interactive Maps:</strong> Explore temperature data through color-coded geographic maps powered by ECharts.</li>
+      <li><strong>Province & City Detail Pages:</strong> Drill down into specific regions for detailed city-level temperature breakdowns.</li>
+      <li><strong>Bilingual Support:</strong> Full English and Chinese (simplified) language support.</li>
+      <li><strong>Historical Data:</strong> Browse past temperature data organized by date.</li>
+    </ul>
+
+    <h2>Our Data Sources</h2>
+    <p>We aggregate temperature data from public weather APIs covering hundreds of cities across China. Our automated system collects data regularly and processes it to generate comprehensive temperature rankings and forecasts. The data includes current temperatures, daily highs and lows, wind speeds, and weather conditions.</p>
+
+    <h2>How It Works</h2>
+    <p>Our system operates on a fully automated pipeline:</p>
+    <ol>
+      <li>Weather data is collected from public APIs for over 300 cities across all Chinese provinces.</li>
+      <li>Data is stored and processed in a time-series database (InfluxDB).</li>
+      <li>Static HTML pages are generated with the latest data and deployed to a global CDN.</li>
+      <li>Pages are regenerated regularly to ensure data freshness.</li>
+    </ol>
+
+    <h2>Technology</h2>
+    <p>China Temp Rankings is built with performance and reliability in mind. We use static site generation for fast page loads, ECharts for interactive map visualizations, and Tailwind CSS for a clean, responsive design. The site is deployed on Cloudflare Pages for global CDN delivery and fast access worldwide.</p>
+
+    <h2>Contact Us</h2>
+    <p>We welcome feedback, suggestions, and inquiries. You can reach us at:</p>
+    <ul>
+      <li>Email: <strong>leijie115@gmail.com</strong></li>
+    </ul>
+    <p>For bug reports or feature requests, we appreciate your feedback as it helps us improve the platform.</p>
   
     </main>
     
@@ -73,7 +108,7 @@
       (function() {
         var hm = document.createElement("script");
         hm.src = "https://hm.baidu.com/hm.js?3df16935562e608a288f9c848d4bfd33";
-        var s = document.getElementsByTagName("script")[0]; 
+        var s = document.getElementsByTagName("script")[0];
         s.parentNode.insertBefore(hm, s);
       })();
     </script>
