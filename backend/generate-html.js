@@ -586,9 +586,6 @@ async function generateDayPage(dayIndex, allForecastData, forecastData) {
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-4059058909472641"
      crossorigin="anonymous"></script>
-    <script async custom-element="amp-auto-ads"
-        src="https://cdn.ampproject.org/v0/amp-auto-ads-0.1.js">
-    </script>
     <!-- Google tag (gtag.js) -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-ZW66C8K27S"></script>
     <script>
@@ -598,10 +595,16 @@ async function generateDayPage(dayIndex, allForecastData, forecastData) {
 
       gtag('config', 'G-ZW66C8K27S');
     </script>
-    <meta name="description" content="China Temperature Rankings - ${descriptionDate} Temperature data across China">
-    <meta name="keywords" content="China temperature,temperature rankings,weather,temperature map,real-time temperature,${dateFormatted}">
+    <meta name="description" content="China Temperature Rankings - ${descriptionDate} Temperature data across China. Real-time temperature map, rankings, and 7-day forecasts for all 34 provinces.">
+    <meta name="keywords" content="China temperature,temperature rankings,weather,temperature map,real-time temperature,China weather forecast,province temperature,${dateFormatted}">
     <title>China Temperature Rankings - Real-time Temperature Data${titleSuffix}</title>
     <link rel="icon" type="image/x-icon" href="/favicon.ico">
+    <link rel="canonical" href="https://7daystemps.com/${dayIndex === 0 ? '' : dateStr + '/'}">
+    <meta property="og:title" content="China Temperature Rankings - Real-time Temperature Data${titleSuffix}">
+    <meta property="og:description" content="China Temperature Rankings - ${descriptionDate} Temperature data across China. Real-time rankings and 7-day forecasts.">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://7daystemps.com/${dayIndex === 0 ? '' : dateStr + '/'}">
+    <meta property="og:site_name" content="China Temp Rankings">
     <script src="${dayIndex === 0 ? "search_index.js" : "../search_index.js"}"></script>
     <script>
       // 多语言配置
@@ -785,9 +788,6 @@ async function generateDayPage(dayIndex, allForecastData, forecastData) {
     </style>
 </head>
 <body class="bg-slate-50 dark:bg-[#0d1117] text-slate-900 dark:text-white font-sans transition-colors duration-300 min-h-screen overflow-x-hidden overflow-y-auto">
-    <amp-auto-ads type="adsense"
-        data-ad-client="ca-pub-4059058909472641">
-    </amp-auto-ads>
 
     <!-- Dashboard Container -->
     <div class="flex flex-col md:flex-row h-screen w-full relative">
@@ -1061,6 +1061,10 @@ async function generateDayPage(dayIndex, allForecastData, forecastData) {
         <div class="max-w-4xl mx-auto px-6 py-12 prose dark:prose-invert">
             ${(() => {
       const summary = generateNationalSummary(provinceData, targetDate);
+      const dateStrEn = targetDate.toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' });
+      const dateStrZh = targetDate.toLocaleDateString('zh-CN', { month: 'long', day: 'numeric' });
+      const topN = provinceData.slice(0, 5);
+      const bottomN = [...provinceData].sort((a, b) => (a.temperature || 999) - (b.temperature || 999)).slice(0, 5);
       return `
                 <div class="mb-8 p-6 rounded-2xl bg-slate-50 dark:bg-gray-800/50 border border-slate-200 dark:border-gray-700">
                     <h2 class="text-xl font-bold text-slate-900 dark:text-white mb-4 flex items-center gap-2 not-prose">
@@ -1074,6 +1078,65 @@ async function generateDayPage(dayIndex, allForecastData, forecastData) {
                         <div data-lang="zh" class="hidden">${summary.zh}</div>
                         <div data-lang="en">${summary.en}</div>
                     </div>
+                </div>
+
+                <h2 data-lang="en" class="text-xl font-bold mt-8 mb-4">Top 5 Hottest Provinces - ${dateStrEn}</h2>
+                <h2 data-lang="zh" class="hidden text-xl font-bold mt-8 mb-4">${dateStrZh} 最热省份 Top 5</h2>
+                <div class="overflow-x-auto mb-8">
+                    <table class="min-w-full text-sm">
+                        <thead>
+                            <tr>
+                                <th data-lang="en" class="text-left py-2 px-3">Rank</th><th data-lang="en" class="text-left py-2 px-3">Province</th><th data-lang="en" class="text-left py-2 px-3">Max Temp</th><th data-lang="en" class="text-left py-2 px-3">Min Temp</th><th data-lang="en" class="text-left py-2 px-3">Weather</th>
+                                <th data-lang="zh" class="hidden text-left py-2 px-3">排名</th><th data-lang="zh" class="hidden text-left py-2 px-3">省份</th><th data-lang="zh" class="hidden text-left py-2 px-3">最高温</th><th data-lang="zh" class="hidden text-left py-2 px-3">最低温</th><th data-lang="zh" class="hidden text-left py-2 px-3">天气</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            ${topN.map((p, i) => `<tr class="border-t border-slate-200 dark:border-gray-700">
+                                <td class="py-2 px-3 font-bold">${i + 1}</td>
+                                <td class="py-2 px-3"><a href="${p.enName ? p.enName.toLowerCase().replace(/\\s+/g, '') : ''}" class="text-blue-500 hover:underline"><span data-lang="en">${p.enName || p.province}</span><span data-lang="zh" class="hidden">${p.province}</span></a></td>
+                                <td class="py-2 px-3 text-orange-500 font-bold">${p.maxTemp !== null ? p.maxTemp + '°C' : '--'}</td>
+                                <td class="py-2 px-3 text-blue-500">${p.minTemp !== null ? p.minTemp + '°C' : '--'}</td>
+                                <td class="py-2 px-3">${p.weatherDesc || '--'}</td>
+                            </tr>`).join('')}
+                        </tbody>
+                    </table>
+                </div>
+
+                <h2 data-lang="en" class="text-xl font-bold mt-8 mb-4">Top 5 Coldest Provinces - ${dateStrEn}</h2>
+                <h2 data-lang="zh" class="hidden text-xl font-bold mt-8 mb-4">${dateStrZh} 最冷省份 Top 5</h2>
+                <div class="overflow-x-auto mb-8">
+                    <table class="min-w-full text-sm">
+                        <thead>
+                            <tr>
+                                <th data-lang="en" class="text-left py-2 px-3">Rank</th><th data-lang="en" class="text-left py-2 px-3">Province</th><th data-lang="en" class="text-left py-2 px-3">Max Temp</th><th data-lang="en" class="text-left py-2 px-3">Min Temp</th><th data-lang="en" class="text-left py-2 px-3">Weather</th>
+                                <th data-lang="zh" class="hidden text-left py-2 px-3">排名</th><th data-lang="zh" class="hidden text-left py-2 px-3">省份</th><th data-lang="zh" class="hidden text-left py-2 px-3">最高温</th><th data-lang="zh" class="hidden text-left py-2 px-3">最低温</th><th data-lang="zh" class="hidden text-left py-2 px-3">天气</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            ${bottomN.map((p, i) => `<tr class="border-t border-slate-200 dark:border-gray-700">
+                                <td class="py-2 px-3 font-bold">${i + 1}</td>
+                                <td class="py-2 px-3"><a href="${p.enName ? p.enName.toLowerCase().replace(/\\s+/g, '') : ''}" class="text-blue-500 hover:underline"><span data-lang="en">${p.enName || p.province}</span><span data-lang="zh" class="hidden">${p.province}</span></a></td>
+                                <td class="py-2 px-3 text-orange-500">${p.maxTemp !== null ? p.maxTemp + '°C' : '--'}</td>
+                                <td class="py-2 px-3 text-blue-500 font-bold">${p.minTemp !== null ? p.minTemp + '°C' : '--'}</td>
+                                <td class="py-2 px-3">${p.weatherDesc || '--'}</td>
+                            </tr>`).join('')}
+                        </tbody>
+                    </table>
+                </div>
+
+                <div data-lang="en">
+                    <h2>About China Temperature Rankings</h2>
+                    <p>China Temp Rankings provides comprehensive real-time temperature data for all 34 provinces and regions in China. Our interactive temperature map and ranking system helps you quickly identify the hottest and coldest locations across the country.</p>
+                    <p>With 7-day forecasts available for every province and detailed city-level breakdowns, our platform serves as a valuable resource for travelers, researchers, and anyone interested in China's diverse climate patterns. Data is updated hourly from public weather APIs to ensure accuracy and freshness.</p>
+                    <h3>How to Use This Page</h3>
+                    <p>The interactive map above shows temperature data color-coded by region. Click on any province to see detailed city-level data. Use the ranking panel on the right to sort provinces by temperature. The day selector at the bottom lets you browse 7-day forecast data.</p>
+                </div>
+                <div data-lang="zh" class="hidden">
+                    <h2>关于中国气温排行榜</h2>
+                    <p>中国气温排行榜提供全国34个省级行政区的实时气温数据。我们的交互式温度地图和排行系统帮助您快速识别全国最热和最冷的地区。</p>
+                    <p>我们为每个省份提供7天天气预报和详细的城市级数据，是旅行者、研究人员以及所有对中国多样气候感兴趣的人的宝贵资源。数据每小时从公开天气API更新，确保准确性和时效性。</p>
+                    <h3>使用说明</h3>
+                    <p>上方交互式地图按区域显示温度数据，不同颜色代表不同温度区间。点击任意省份可查看该省详细的城市级数据。右侧排行面板可按温度排序。底部日期选择器可浏览7天预报数据。</p>
                 </div>`;
     })()}
         </div>
@@ -1755,9 +1818,6 @@ async function generateProvincePage(provinceName, provinceConfig, dayIndex = 0) 
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
           <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-4059058909472641"
            crossorigin="anonymous"></script>
-          <script async custom-element="amp-auto-ads"
-            src="https://cdn.ampproject.org/v0/amp-auto-ads-0.1.js">
-          </script>
           <!-- Google tag (gtag.js) -->
           <script async src="https://www.googletagmanager.com/gtag/js?id=G-ZW66C8K27S"></script>
           <script>
@@ -1767,10 +1827,16 @@ async function generateProvincePage(provinceName, provinceConfig, dayIndex = 0) 
 
             gtag('config', 'G-ZW66C8K27S');
           </script>
-            <meta name="description" content="${enName} Temperature Rankings - City temperature data">
-              <meta name="keywords" content="${enName},${provinceName},temperature,weather,cities">
-                <title>${enName} Temperature Rankings</title>
+            <meta name="description" content="${enName} (${provinceName}) Temperature Rankings - Real-time city temperature data, weather conditions, and 7-day forecast for all cities in ${enName}.">
+              <meta name="keywords" content="${enName},${provinceName},temperature,weather,cities,${enName} weather,${enName} forecast,China weather">
+                <title>${enName} Temperature Rankings - City Weather Data | China Temp Rankings</title>
                 <link rel="icon" type="image/x-icon" href="/favicon.ico">
+                <link rel="canonical" href="https://7daystemps.com/${dayIndex === 0 ? '' : dateStr + '/'}${fileName.replace('.html', '')}">
+                <meta property="og:title" content="${enName} Temperature Rankings - City Weather Data">
+                <meta property="og:description" content="Real-time city temperature data, weather conditions, and 7-day forecast for all cities in ${enName}.">
+                <meta property="og:type" content="website">
+                <meta property="og:url" content="https://7daystemps.com/${dayIndex === 0 ? '' : dateStr + '/'}${fileName.replace('.html', '')}">
+                <meta property="og:site_name" content="China Temp Rankings">
                   <script>
       // 多语言配置
                     window.i18n = ${JSON.stringify(i18n)};
@@ -1881,9 +1947,6 @@ async function generateProvincePage(provinceName, provinceConfig, dayIndex = 0) 
                   </style>
                 </head>
                 <body class="bg-slate-50 dark:bg-[#0d1117] text-slate-900 dark:text-white font-sans transition-colors duration-300 min-h-screen overflow-x-hidden overflow-y-auto">
-                  <amp-auto-ads type="adsense"
-                      data-ad-client="ca-pub-4059058909472641">
-                  </amp-auto-ads>
                   
                   <!-- Dashboard Container -->
                   <div class="flex flex-col md:flex-row h-screen w-full relative">
@@ -2140,6 +2203,9 @@ async function generateProvincePage(provinceName, provinceConfig, dayIndex = 0) 
                     <div class="max-w-4xl mx-auto px-6 py-12 prose dark:prose-invert">
                       ${(() => {
       const summary = generateProvinceSummary(provinceName, cityData, targetDate);
+      const dateStrEn = targetDate.toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' });
+      const dateStrZh = targetDate.toLocaleDateString('zh-CN', { month: 'long', day: 'numeric' });
+      const sortedCities = [...cityData].sort((a, b) => (b.temperature || -999) - (a.temperature || -999));
       return `
                         <div class="mb-8 p-6 rounded-2xl bg-slate-50 dark:bg-gray-800/50 border border-slate-200 dark:border-gray-700">
                             <h2 class="text-xl font-bold text-slate-900 dark:text-white mb-4 flex items-center gap-2 not-prose">
@@ -2153,6 +2219,46 @@ async function generateProvincePage(provinceName, provinceConfig, dayIndex = 0) 
                                 <div data-lang="zh" class="hidden">${summary.zh}</div>
                                 <div data-lang="en">${summary.en}</div>
                             </div>
+                        </div>
+
+                        <h2 data-lang="en" class="text-xl font-bold mt-8 mb-4">${enName} City Temperature Table - ${dateStrEn}</h2>
+                        <h2 data-lang="zh" class="hidden text-xl font-bold mt-8 mb-4">${provinceName}各城市气温一览 - ${dateStrZh}</h2>
+                        <div class="overflow-x-auto mb-8">
+                            <table class="min-w-full text-sm">
+                                <thead>
+                                    <tr>
+                                        <th data-lang="en" class="text-left py-2 px-3">City</th><th data-lang="en" class="text-left py-2 px-3">Temperature</th><th data-lang="en" class="text-left py-2 px-3">Weather</th><th data-lang="en" class="text-left py-2 px-3">Wind</th>
+                                        <th data-lang="zh" class="hidden text-left py-2 px-3">城市</th><th data-lang="zh" class="hidden text-left py-2 px-3">温度</th><th data-lang="zh" class="hidden text-left py-2 px-3">天气</th><th data-lang="zh" class="hidden text-left py-2 px-3">风速</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    ${sortedCities.map(c => {
+        const cConfig = getCityConfig(provinceConfig ? provinceConfig.code : '', c.cityCode);
+        const cEn = cConfig ? cConfig.en_name : (c.city || '');
+        const tempColor = c.temperature > 28 ? '#f97316' : c.temperature < 0 ? '#3b82f6' : '#10b981';
+        const tempStr = c.temperature !== null ? c.temperature + '°C' : '--';
+        return '<tr class="border-t border-slate-200 dark:border-gray-700">'
+          + '<td class="py-2 px-3 font-medium"><span data-lang="en">' + cEn + '</span><span data-lang="zh" class="hidden">' + (c.city || '') + '</span></td>'
+          + '<td class="py-2 px-3 font-bold" style="color: ' + tempColor + '">' + tempStr + '</td>'
+          + '<td class="py-2 px-3">' + (c.weatherDesc || '--') + '</td>'
+          + '<td class="py-2 px-3">' + (c.windSpeed || '--') + ' m/s</td>'
+          + '</tr>';
+      }).join('')}
+                                </tbody>
+                            </table>
+                        </div>
+
+                        <div data-lang="en">
+                            <h2>${enName} Weather Overview</h2>
+                            <p>This page provides detailed temperature data for all cities in ${enName} (${provinceName}), China. The interactive map above shows temperature distribution across the province, with color coding to indicate temperature ranges. The ranking panel lists all monitored cities sorted by current temperature.</p>
+                            <p>Use the 7-day forecast feature to plan ahead. Each city card can be expanded to reveal a visual bar chart showing the upcoming week's temperature trends, including daily high and low temperatures.</p>
+                            <p><a href="/">Back to National Temperature Rankings</a> to compare ${enName} with other provinces.</p>
+                        </div>
+                        <div data-lang="zh" class="hidden">
+                            <h2>${provinceName}天气概览</h2>
+                            <p>本页面提供${provinceName}所有城市的详细气温数据。上方交互式地图展示了全省温度分布，不同颜色代表不同的温度区间。排行面板列出了所有监测城市，按当前温度排序。</p>
+                            <p>使用7天预报功能提前规划。展开每个城市卡片可查看未来一周的温度趋势柱状图，包括每日最高温和最低温。</p>
+                            <p><a href="/">返回全国气温排行榜</a>，与其他省份进行比较。</p>
                         </div>`;
     })()}
                     </div>
@@ -3236,26 +3342,31 @@ async function createChineseVersions() {
 }
 
 async function generateStaticPages() {
-  const HEADER = `<!DOCTYPE html>
+  function staticPageHeader(title, description, canonicalPath) {
+    return `<!DOCTYPE html>
 <html lang="en" class="dark">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-4059058909472641"
      crossorigin="anonymous"></script>
-    <script async custom-element="amp-auto-ads"
-        src="https://cdn.ampproject.org/v0/amp-auto-ads-0.1.js">
-    </script>
     <!-- Google tag (gtag.js) -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-ZW66C8K27S"></script>
     <script>
       window.dataLayer = window.dataLayer || [];
       function gtag(){dataLayer.push(arguments);}
       gtag('js', new Date());
-
       gtag('config', 'G-ZW66C8K27S');
     </script>
-    <title>Policy - China Temp Rankings</title>
+    <title>${title} - China Temp Rankings | 7DaysTemps</title>
+    <meta name="description" content="${description}">
+    <link rel="canonical" href="https://7daystemps.com${canonicalPath}">
+    <link rel="icon" type="image/x-icon" href="/favicon.ico">
+    <meta property="og:title" content="${title} - China Temp Rankings">
+    <meta property="og:description" content="${description}">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://7daystemps.com${canonicalPath}">
+    <meta property="og:site_name" content="China Temp Rankings">
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
         tailwind.config = { darkMode: 'class' };
@@ -3267,17 +3378,18 @@ async function generateStaticPages() {
     </script>
 </head>
 <body class="bg-slate-50 dark:bg-[#0d1117] text-slate-900 dark:text-white font-sans min-h-screen flex flex-col">
-    <amp-auto-ads type="adsense"
-        data-ad-client="ca-pub-4059058909472641">
-    </amp-auto-ads>
     <nav class="bg-white/80 dark:bg-gray-900/80 backdrop-blur-md border-b border-slate-200 dark:border-gray-800 sticky top-0 z-50">
         <div class="max-w-4xl mx-auto px-6 py-4 flex justify-between items-center">
             <a href="/" class="text-xl font-black text-transparent bg-clip-text bg-gradient-to-r from-blue-500 to-emerald-500">China Temp Rankings</a>
-            <a href="/" class="text-sm font-medium text-slate-500 dark:text-gray-400 hover:text-blue-500">Back to Home</a>
+            <div class="flex items-center gap-4">
+                <a href="/about" class="text-sm font-medium text-slate-500 dark:text-gray-400 hover:text-blue-500 transition-colors">About</a>
+                <a href="/" class="text-sm font-medium text-slate-500 dark:text-gray-400 hover:text-blue-500 transition-colors">Home</a>
+            </div>
         </div>
     </nav>
     <main class="flex-1 max-w-4xl mx-auto px-6 py-12 w-full prose dark:prose-invert">
 `;
+  }
 
   const END = `
     </main>
@@ -3287,7 +3399,7 @@ async function generateStaticPages() {
       (function() {
         var hm = document.createElement("script");
         hm.src = "https://hm.baidu.com/hm.js?3df16935562e608a288f9c848d4bfd33";
-        var s = document.getElementsByTagName("script")[0]; 
+        var s = document.getElementsByTagName("script")[0];
         s.parentNode.insertBefore(hm, s);
       })();
     </script>
@@ -3295,43 +3407,160 @@ async function generateStaticPages() {
 </html>`;
 
   // 1. Privacy Policy
+  const privacyHeader = staticPageHeader(
+    'Privacy Policy',
+    'Privacy Policy for China Temp Rankings (7DaysTemps.com). Learn how we collect, use, and protect your data when you visit our weather data website.',
+    '/privacy'
+  );
   const privacyContent = `
     <h1>Privacy Policy</h1>
-    <p>Last updated: ${new Date().toLocaleDateString()}</p>
-    <p>At China Temp Rankings, we prioritize the privacy of our visitors. This Privacy Policy document contains types of information that is collected and recorded by China Temp Rankings and how we use it.</p>
-    
-    <h2>Log Files</h2>
-    <p>We use standard log files. These files log visitors when they visit websites. The information collected includes internet protocol (IP) addresses, browser type, Internet Service Provider (ISP), date and time stamp, referring/exit pages, and possibly the number of clicks.</p>
-    
-    <h2>Cookies and Web Beacons</h2>
-    <p>Like any other website, we use "cookies". These cookies are used to store information including visitors' preferences, and the pages on the website that the visitor accessed or visited.</p>
-    
-    <h2>Google DoubleClick DART Cookie</h2>
-    <p>Google is one of a third-party vendor on our site. It also uses cookies, known as DART cookies, to serve ads to our site visitors based upon their visit to www.website.com and other sites on the internet.</p>
+    <p>Last updated: ${new Date().toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })}</p>
+    <p>At China Temp Rankings ("we", "us", or "our"), operated at <strong>7daystemps.com</strong>, we are committed to protecting the privacy of our visitors. This Privacy Policy explains what information we collect when you visit our website and how we use it.</p>
+
+    <h2>Information We Collect</h2>
+    <p>We do not require you to create an account or provide any personal information to use our service. The weather data displayed on our site is publicly available and does not contain any personal information.</p>
+
+    <h3>Automatically Collected Information</h3>
+    <p>When you visit our website, our servers and third-party services may automatically collect certain technical information, including:</p>
+    <ul>
+      <li>Your IP address (anonymized where possible)</li>
+      <li>Browser type and version</li>
+      <li>Operating system</li>
+      <li>Referring/exit pages and URLs</li>
+      <li>Date and time of your visit</li>
+      <li>Pages viewed and time spent on pages</li>
+    </ul>
+
+    <h2>Cookies and Tracking Technologies</h2>
+    <p>Our website uses cookies and similar technologies for the following purposes:</p>
+    <ul>
+      <li><strong>Essential Cookies:</strong> To remember your preferences such as theme (dark/light mode) and language settings.</li>
+      <li><strong>Analytics Cookies:</strong> We use Google Analytics to understand how visitors interact with our website. Google Analytics uses cookies to collect information about your use of our site, which is transmitted to and stored by Google.</li>
+      <li><strong>Advertising Cookies:</strong> We use Google AdSense to display advertisements. Google may use cookies to serve ads based on your prior visits to our website or other websites. You can opt out of personalized advertising by visiting <a href="https://www.google.com/settings/ads" rel="nofollow noopener" target="_blank">Google's Ads Settings</a>.</li>
+    </ul>
+
+    <h2>Third-Party Services</h2>
+    <p>We use the following third-party services:</p>
+    <ul>
+      <li><strong>Google Analytics</strong> - for website traffic analysis. <a href="https://policies.google.com/privacy" rel="nofollow noopener" target="_blank">Google Privacy Policy</a></li>
+      <li><strong>Google AdSense</strong> - for displaying advertisements. <a href="https://policies.google.com/technologies/ads" rel="nofollow noopener" target="_blank">How Google uses data</a></li>
+      <li><strong>Baidu Analytics</strong> - for website traffic analysis from Chinese visitors.</li>
+      <li><strong>Cloudflare</strong> - for content delivery and security. <a href="https://www.cloudflare.com/privacypolicy/" rel="nofollow noopener" target="_blank">Cloudflare Privacy Policy</a></li>
+    </ul>
+
+    <h2>Data Retention</h2>
+    <p>We retain server log data for up to 90 days. Analytics data is retained according to the default retention settings of each analytics provider. Cookie data persists according to each cookie's expiration period as described above.</p>
+
+    <h2>Children's Privacy</h2>
+    <p>Our website is not directed at children under the age of 13. We do not knowingly collect personal information from children. If you believe we have inadvertently collected such information, please contact us so we can promptly remove it.</p>
+
+    <h2>Your Rights</h2>
+    <p>Depending on your location, you may have the right to:</p>
+    <ul>
+      <li>Access the personal data we hold about you</li>
+      <li>Request correction or deletion of your data</li>
+      <li>Opt out of analytics tracking by using browser extensions like <a href="https://tools.google.com/dlpage/gaoptout" rel="nofollow noopener" target="_blank">Google Analytics Opt-out</a></li>
+      <li>Disable cookies through your browser settings</li>
+    </ul>
+
+    <h2>Changes to This Policy</h2>
+    <p>We may update this Privacy Policy from time to time. Any changes will be posted on this page with an updated "Last updated" date. We encourage you to review this page periodically.</p>
+
+    <h2>Contact Us</h2>
+    <p>If you have any questions about this Privacy Policy, please contact us at <strong>leijie115@gmail.com</strong>.</p>
   `;
-  fs.writeFileSync(path.join(OUTPUT_DIR, 'privacy.html'), HEADER + privacyContent + END);
+  fs.writeFileSync(path.join(OUTPUT_DIR, 'privacy.html'), privacyHeader + privacyContent + END);
 
   // 2. Terms of Service
+  const termsHeader = staticPageHeader(
+    'Terms of Service',
+    'Terms of Service for China Temp Rankings (7DaysTemps.com). Read the terms and conditions governing your use of our weather data service.',
+    '/terms'
+  );
   const termsContent = `
     <h1>Terms of Service</h1>
-    <p>By accessing this website, you agree to be bound by these website Terms and Conditions of Use.</p>
-    <h2>Disclaimer</h2>
-    <p>The materials on China Temp Rankings's website are provided "as is". We make no warranties, expressed or implied, and hereby disclaim and negate all other warranties. Further, we do not warrant or make any representations concerning the accuracy, likely results, or reliability of the use of the materials on our Internet web site or otherwise relating to such materials or on any sites linked to this site.</p>
-    <h2>Accuracy of Data</h2>
-    <p>The weather data presented on this site is sourced from third-party APIs and is for informational purposes only. Do not rely on this data for safety-critical decisions.</p>
+    <p>Last updated: ${new Date().toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })}</p>
+    <p>Welcome to China Temp Rankings, operated at <strong>7daystemps.com</strong>. By accessing or using our website, you agree to be bound by these Terms of Service. If you do not agree, please do not use our website.</p>
+
+    <h2>1. Description of Service</h2>
+    <p>China Temp Rankings provides real-time and forecast temperature data, rankings, and visualizations for provinces and cities across China. Our service includes interactive temperature maps, 7-day forecasts, and historical temperature comparisons. The data is updated regularly and presented in both English and Chinese.</p>
+
+    <h2>2. Accuracy and Disclaimer</h2>
+    <p>The weather data presented on this website is sourced from third-party public weather APIs and is provided for <strong>informational and reference purposes only</strong>. While we strive to ensure accuracy, we make no warranties or guarantees regarding the completeness, reliability, or timeliness of the data.</p>
+    <p><strong>Do not rely on this data for safety-critical decisions</strong>, including but not limited to emergency planning, aviation, maritime navigation, or any situation where inaccurate weather information could lead to harm.</p>
+
+    <h2>3. Intellectual Property</h2>
+    <p>The website design, code, layout, and original content are the property of China Temp Rankings. The underlying weather data is sourced from public APIs and remains the property of their respective providers. You may not reproduce, distribute, or create derivative works from our website without prior written permission.</p>
+
+    <h2>4. Acceptable Use</h2>
+    <p>You agree not to:</p>
+    <ul>
+      <li>Use automated tools to scrape or bulk-download data from our website</li>
+      <li>Attempt to disrupt or overload our servers</li>
+      <li>Use our service for any unlawful purpose</li>
+      <li>Misrepresent our data as your own or remove attribution</li>
+    </ul>
+
+    <h2>5. Third-Party Links and Services</h2>
+    <p>Our website may contain links to third-party websites or integrate third-party services (such as Google Analytics and Google AdSense). We are not responsible for the content, privacy practices, or terms of these third-party services.</p>
+
+    <h2>6. Limitation of Liability</h2>
+    <p>To the fullest extent permitted by law, China Temp Rankings shall not be liable for any direct, indirect, incidental, special, or consequential damages arising from your use of or inability to use this website. This includes, but is not limited to, damages from reliance on weather data presented on the site.</p>
+
+    <h2>7. Modifications</h2>
+    <p>We reserve the right to modify these Terms of Service at any time. Changes will be effective immediately upon posting to this page. Your continued use of the website after changes constitutes acceptance of the updated terms.</p>
+
+    <h2>8. Contact</h2>
+    <p>If you have questions about these Terms of Service, please contact us at <strong>leijie115@gmail.com</strong>.</p>
   `;
-  fs.writeFileSync(path.join(OUTPUT_DIR, 'terms.html'), HEADER + termsContent + END);
+  fs.writeFileSync(path.join(OUTPUT_DIR, 'terms.html'), termsHeader + termsContent + END);
 
   // 3. About Us
+  const aboutHeader = staticPageHeader(
+    'About Us',
+    'About China Temp Rankings (7DaysTemps.com) - Real-time temperature rankings, 7-day forecasts, and interactive weather maps for all provinces and cities across China.',
+    '/about'
+  );
   const aboutContent = `
-    <h1>About Us</h1>
-    <p>China Temp Rankings is a data visualization project dedicated to showing real-time temperature extremes across China.</p>
-    <h2>Our Data</h2>
-    <p>We aggregate temperature data from hundreds of cities to create a real-time ranking of the hottest and coldest places. Our system updates hourly to provide the most current snapshot of weather patterns.</p>
-    <h2>Contact</h2>
-    <p>For any inquiries, please contact us via email (if applicable).</p>
+    <h1>About China Temp Rankings</h1>
+    <p>China Temp Rankings is a weather data visualization platform that provides real-time temperature rankings, 7-day forecasts, and interactive maps for all 34 provinces and regions across China.</p>
+
+    <h2>Our Mission</h2>
+    <p>We aim to make weather data across China accessible, visual, and easy to understand. Whether you're planning travel, tracking seasonal patterns, or simply curious about temperature extremes across the country, our platform provides a clear, at-a-glance view of current conditions.</p>
+
+    <h2>What We Offer</h2>
+    <ul>
+      <li><strong>Real-Time Temperature Rankings:</strong> See which provinces and cities are the hottest and coldest right now, updated every hour.</li>
+      <li><strong>7-Day Forecasts:</strong> View temperature predictions for the upcoming week for every province and city.</li>
+      <li><strong>Interactive Maps:</strong> Explore temperature data through color-coded geographic maps powered by ECharts.</li>
+      <li><strong>Province & City Detail Pages:</strong> Drill down into specific regions for detailed city-level temperature breakdowns.</li>
+      <li><strong>Bilingual Support:</strong> Full English and Chinese (simplified) language support.</li>
+      <li><strong>Historical Data:</strong> Browse past temperature data organized by date.</li>
+    </ul>
+
+    <h2>Our Data Sources</h2>
+    <p>We aggregate temperature data from public weather APIs covering hundreds of cities across China. Our automated system collects data regularly and processes it to generate comprehensive temperature rankings and forecasts. The data includes current temperatures, daily highs and lows, wind speeds, and weather conditions.</p>
+
+    <h2>How It Works</h2>
+    <p>Our system operates on a fully automated pipeline:</p>
+    <ol>
+      <li>Weather data is collected from public APIs for over 300 cities across all Chinese provinces.</li>
+      <li>Data is stored and processed in a time-series database (InfluxDB).</li>
+      <li>Static HTML pages are generated with the latest data and deployed to a global CDN.</li>
+      <li>Pages are regenerated regularly to ensure data freshness.</li>
+    </ol>
+
+    <h2>Technology</h2>
+    <p>China Temp Rankings is built with performance and reliability in mind. We use static site generation for fast page loads, ECharts for interactive map visualizations, and Tailwind CSS for a clean, responsive design. The site is deployed on Cloudflare Pages for global CDN delivery and fast access worldwide.</p>
+
+    <h2>Contact Us</h2>
+    <p>We welcome feedback, suggestions, and inquiries. You can reach us at:</p>
+    <ul>
+      <li>Email: <strong>leijie115@gmail.com</strong></li>
+    </ul>
+    <p>For bug reports or feature requests, we appreciate your feedback as it helps us improve the platform.</p>
   `;
-  fs.writeFileSync(path.join(OUTPUT_DIR, 'about.html'), HEADER + aboutContent + END);
+  fs.writeFileSync(path.join(OUTPUT_DIR, 'about.html'), aboutHeader + aboutContent + END);
 
   console.log('✅ Static pages generated (Privacy, Terms, About)');
 }
