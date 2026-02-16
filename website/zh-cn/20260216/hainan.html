@@ -25,7 +25,7 @@
                 <meta property="og:url" content="https://7daystemps.com/20260216/hainan">
                 <meta property="og:site_name" content="中国气温排行">
                   <script>
-      // Language: zh
+      // Language: en
 
                     // Weather descriptions are pre-rendered in the correct language
 
@@ -33,9 +33,10 @@
 
                     
 
-                    // City names are already in the correct language
-      window.getCityName = function(cityName, lang) {
-        return cityName;
+                    // City name mapping for en version
+              const cityNameMap = {"乐东黎族自治县":"LeDong","保亭黎族苗族自治县":"BaoTing","白沙黎族自治县":"BaiSha","儋州市":"DanZhou","昌江黎族自治县":"ChangJiang","澄迈县":"ChengMai","定安县":"DingAn","三亚市":"SanYa","琼中黎族苗族自治县":"QiongZhong","五指山市":"WuZhiShan","屯昌县":"TunChang","文昌市":"WenChang","陵水黎族自治县":"LingShui","万宁市":"WanNing","临高县":"LinGao","琼海市":"QiongHai","三沙市":"SanSha","海口市":"HaiKou","东方市":"DongFang"};
+              window.getCityName = function(cityName, lang) {
+        return cityNameMap[cityName] || cityName;
       };
                   </script>
                   <script src="https://cdn.tailwindcss.com"></script>
@@ -119,8 +120,8 @@
 
                             <!-- 语言切换 -->
                             <div class="flex bg-white/80 dark:bg-gray-800/80 backdrop-blur rounded-lg border border-slate-200 dark:border-gray-700 p-1">
-              <a href="../../20260216/hainan" class="px-2 py-0.5 text-xs font-bold rounded text-slate-500 dark:text-gray-400 hover:text-slate-900 dark:hover:text-white transition-colors cursor-pointer">EN</a>
-              <a href="#" class="px-2 py-0.5 text-xs font-bold rounded bg-blue-600 text-white cursor-pointer">CN</a>
+              <a href="#" class="px-2 py-0.5 text-xs font-bold rounded bg-blue-600 text-white cursor-pointer">EN</a>
+              <a href="../zh-cn/20260216/hainan" class="px-2 py-0.5 text-xs font-bold rounded text-slate-500 dark:text-gray-400 hover:text-slate-900 dark:hover:text-white transition-colors cursor-pointer">CN</a>
             </div>
                           </div>
 
@@ -2487,7 +2488,7 @@
                   let tempMapData = { };
 
                   function initLanguage() {
-        currentLang = 'zh';
+        currentLang = 'en';
     }
 
                   // Language switching is done via navigation

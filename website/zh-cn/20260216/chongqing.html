@@ -25,7 +25,7 @@
                 <meta property="og:url" content="https://7daystemps.com/20260216/chongqing">
                 <meta property="og:site_name" content="中国气温排行">
                   <script>
-      // Language: zh
+      // Language: en
 
                     // Weather descriptions are pre-rendered in the correct language
 
@@ -33,9 +33,10 @@
 
                     
 
-                    // City names are already in the correct language
-      window.getCityName = function(cityName, lang) {
-        return cityName;
+                    // City name mapping for en version
+              const cityNameMap = {"綦江区":"QiJiang","江津区":"JiangJin","荣昌区":"RongChang","永川区":"YongChuan","潼南区":"TongNan","北碚区":"BeiBei","丰都县":"FengDou","沙坪坝区":"ShaPingBa","璧山区":"BiShan","渝北区":"YuBei","铜梁区":"TongLiang","武隆区":"WuLong","大足区":"DaZu","巴南区":"BaNan","石柱土家族自治县":"ShiZhu","长寿区":"ChangShou","合川区":"HeChuan","彭水苗族土家族自治县":"PengShui","忠县":"ZhongXian","涪陵区":"FuLing","南川区":"NanChuan","奉节县":"FengJie","垫江县":"DianJiang","黔江区":"QianJiang","云阳县":"YunYang","开州区":"KaiZhou","万州区":"WanZhou","酉阳土家族苗族自治县":"YouYang","巫山县":"WuShan","秀山土家族苗族自治县":"XiuShan","梁平区":"LiangPing","巫溪县":"WuXi","城口县":"ChengKou"};
+              window.getCityName = function(cityName, lang) {
+        return cityNameMap[cityName] || cityName;
       };
                   </script>
                   <script src="https://cdn.tailwindcss.com"></script>
@@ -119,8 +120,8 @@
 
                             <!-- 语言切换 -->
                             <div class="flex bg-white/80 dark:bg-gray-800/80 backdrop-blur rounded-lg border border-slate-200 dark:border-gray-700 p-1">
-              <a href="../../20260216/chongqing" class="px-2 py-0.5 text-xs font-bold rounded text-slate-500 dark:text-gray-400 hover:text-slate-900 dark:hover:text-white transition-colors cursor-pointer">EN</a>
-              <a href="#" class="px-2 py-0.5 text-xs font-bold rounded bg-blue-600 text-white cursor-pointer">CN</a>
+              <a href="#" class="px-2 py-0.5 text-xs font-bold rounded bg-blue-600 text-white cursor-pointer">EN</a>
+              <a href="../zh-cn/20260216/chongqing" class="px-2 py-0.5 text-xs font-bold rounded text-slate-500 dark:text-gray-400 hover:text-slate-900 dark:hover:text-white transition-colors cursor-pointer">CN</a>
             </div>
                           </div>
 
@@ -4069,7 +4070,7 @@
                   let tempMapData = { };
 
                   function initLanguage() {
-        currentLang = 'zh';
+        currentLang = 'en';
     }
 
                   // Language switching is done via navigation
