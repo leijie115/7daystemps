@@ -1039,6 +1039,119 @@
                             8
                         </span>
                         <div>
+                            <h3 data-role="title" data-city-zh="杭州市" data-city-en="HangZhou" class="font-semibold text-slate-700 dark:text-gray-300 text-sm md:text-base">杭州市</h3>
+                            <div class="text-xs text-slate-500 dark:text-gray-500 flex gap-2 items-center mt-0.5">
+                                <span class="weather-desc" data-weather-zh="晴" data-weather-en="Sunny">晴</span><span class="w-1 h-1 rounded-full bg-slate-400 dark:bg-gray-600"></span><span class="wind-label">风速</span>: 3.3 m/s</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="flex items-center gap-3">
+                        <div class="text-right">
+                            <div data-role="temp-val" class="text-lg font-bold tabular-nums tracking-tight" style="color: #06b6d4">
+                                9.6°
+                            </div>
+                        </div>
+                        <div class="arrow-icon p-1 rounded-full hover:bg-black/5 dark:hover:bg-white/5 transition-transform duration-300 cursor-pointer" onclick="toggleExpand(this.closest('.ranking-item'))">
+                            <svg class="w-4 h-4 text-slate-400 dark:text-gray-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+                            </svg>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 详情 (7天预报) -->
+                <div class="details-container mt-3 pt-3 border-t border-slate-200 dark:border-gray-700/50">
+                    <div class="grid grid-cols-7 gap-1">
+                        
+                        <div  class="flex flex-col items-center group/day cursor-default">
+                            <span class="forecast-day-label text-[9px] font-medium mb-1 text-blue-500" data-day-zh="今天" data-day-en="Today">今天</span>
+                            <div class="bg-slate-200 dark:bg-gray-800/50 rounded-full h-20 relative w-1.5 md:w-2 mx-auto ring-1 ring-black/5 dark:ring-white/5">
+                                <div class="absolute w-full rounded-full opacity-80" style="bottom: 28%; height: 11.2%; background-color: #06b6d4;"></div>
+                            </div>
+                            <div class="flex flex-col items-center mt-1.5 gap-0.5">
+                                <span class="text-[10px] font-bold text-slate-700 dark:text-gray-300 leading-none">9.6°</span>
+                                <span class="text-[9px] text-slate-500 dark:text-gray-600 leading-none">4°</span>
+                            </div>
+                        </div>
+                        
+                        <a href="20260218/zhejiang.html" class="flex flex-col items-center group/day cursor-pointer hover:opacity-80 transition-opacity">
+                            <span class="forecast-day-label text-[9px] font-medium mb-1 text-slate-500 dark:text-gray-500" data-day-zh="周三" data-day-en="Wed">周三</span>
+                            <div class="bg-slate-200 dark:bg-gray-800/50 rounded-full h-20 relative w-1.5 md:w-2 mx-auto ring-1 ring-black/5 dark:ring-white/5">
+                                <div class="absolute w-full rounded-full opacity-80" style="bottom: 27.8%; height: 19.4%; background-color: #10b981;"></div>
+                            </div>
+                            <div class="flex flex-col items-center mt-1.5 gap-0.5">
+                                <span class="text-[10px] font-bold text-slate-700 dark:text-gray-300 leading-none">13.6°</span>
+                                <span class="text-[9px] text-slate-500 dark:text-gray-600 leading-none">3.9°</span>
+                            </div>
+                        </a>
+                        
+                        <a href="20260219/zhejiang.html" class="flex flex-col items-center group/day cursor-pointer hover:opacity-80 transition-opacity">
+                            <span class="forecast-day-label text-[9px] font-medium mb-1 text-slate-500 dark:text-gray-500" data-day-zh="周四" data-day-en="Thu">周四</span>
+                            <div class="bg-slate-200 dark:bg-gray-800/50 rounded-full h-20 relative w-1.5 md:w-2 mx-auto ring-1 ring-black/5 dark:ring-white/5">
+                                <div class="absolute w-full rounded-full opacity-80" style="bottom: 27%; height: 25.200000000000003%; background-color: #10b981;"></div>
+                            </div>
+                            <div class="flex flex-col items-center mt-1.5 gap-0.5">
+                                <span class="text-[10px] font-bold text-slate-700 dark:text-gray-300 leading-none">16.1°</span>
+                                <span class="text-[9px] text-slate-500 dark:text-gray-600 leading-none">3.5°</span>
+                            </div>
+                        </a>
+                        
+                        <a href="20260220/zhejiang.html" class="flex flex-col items-center group/day cursor-pointer hover:opacity-80 transition-opacity">
+                            <span class="forecast-day-label text-[9px] font-medium mb-1 text-slate-500 dark:text-gray-500" data-day-zh="周五" data-day-en="Fri">周五</span>
+                            <div class="bg-slate-200 dark:bg-gray-800/50 rounded-full h-20 relative w-1.5 md:w-2 mx-auto ring-1 ring-black/5 dark:ring-white/5">
+                                <div class="absolute w-full rounded-full opacity-80" style="bottom: 30.6%; height: 29.4%; background-color: #eab308;"></div>
+                            </div>
+                            <div class="flex flex-col items-center mt-1.5 gap-0.5">
+                                <span class="text-[10px] font-bold text-slate-700 dark:text-gray-300 leading-none">20°</span>
+                                <span class="text-[9px] text-slate-500 dark:text-gray-600 leading-none">5.3°</span>
+                            </div>
+                        </a>
+                        
+                        <a href="20260221/zhejiang.html" class="flex flex-col items-center group/day cursor-pointer hover:opacity-80 transition-opacity">
+                            <span class="forecast-day-label text-[9px] font-medium mb-1 text-slate-500 dark:text-gray-500" data-day-zh="周六" data-day-en="Sat">周六</span>
+                            <div class="bg-slate-200 dark:bg-gray-800/50 rounded-full h-20 relative w-1.5 md:w-2 mx-auto ring-1 ring-black/5 dark:ring-white/5">
+                                <div class="absolute w-full rounded-full opacity-80" style="bottom: 35.8%; height: 32.2%; background-color: #eab308;"></div>
+                            </div>
+                            <div class="flex flex-col items-center mt-1.5 gap-0.5">
+                                <span class="text-[10px] font-bold text-slate-700 dark:text-gray-300 leading-none">24°</span>
+                                <span class="text-[9px] text-slate-500 dark:text-gray-600 leading-none">7.9°</span>
+                            </div>
+                        </a>
+                        
+                        <a href="20260222/zhejiang.html" class="flex flex-col items-center group/day cursor-pointer hover:opacity-80 transition-opacity">
+                            <span class="forecast-day-label text-[9px] font-medium mb-1 text-slate-500 dark:text-gray-500" data-day-zh="周日" data-day-en="Sun">周日</span>
+                            <div class="bg-slate-200 dark:bg-gray-800/50 rounded-full h-20 relative w-1.5 md:w-2 mx-auto ring-1 ring-black/5 dark:ring-white/5">
+                                <div class="absolute w-full rounded-full opacity-80" style="bottom: 41.6%; height: 25.4%; background-color: #eab308;"></div>
+                            </div>
+                            <div class="flex flex-col items-center mt-1.5 gap-0.5">
+                                <span class="text-[10px] font-bold text-slate-700 dark:text-gray-300 leading-none">23.5°</span>
+                                <span class="text-[9px] text-slate-500 dark:text-gray-600 leading-none">10.8°</span>
+                            </div>
+                        </a>
+                        
+                        <a href="20260223/zhejiang.html" class="flex flex-col items-center group/day cursor-pointer hover:opacity-80 transition-opacity">
+                            <span class="forecast-day-label text-[9px] font-medium mb-1 text-slate-500 dark:text-gray-500" data-day-zh="周一" data-day-en="Mon">周一</span>
+                            <div class="bg-slate-200 dark:bg-gray-800/50 rounded-full h-20 relative w-1.5 md:w-2 mx-auto ring-1 ring-black/5 dark:ring-white/5">
+                                <div class="absolute w-full rounded-full opacity-80" style="bottom: 36%; height: 21.6%; background-color: #10b981;"></div>
+                            </div>
+                            <div class="flex flex-col items-center mt-1.5 gap-0.5">
+                                <span class="text-[10px] font-bold text-slate-700 dark:text-gray-300 leading-none">18.8°</span>
+                                <span class="text-[9px] text-slate-500 dark:text-gray-600 leading-none">8°</span>
+                            </div>
+                        </a>
+                        
+                    </div>
+                </div>
+            </div>
+              
+            <div class="ranking-item group flex flex-col p-3 rounded-xl transition-all duration-300 border select-none border-slate-200 dark:border-gray-800 bg-white dark:bg-gray-800 hover:bg-slate-50 dark:hover:bg-gray-750"
+                 data-temp="9.6">
+                <div class="flex items-center justify-between">
+                    <div class="flex items-center gap-4">
+                        <span data-role="badge" class="flex justify-center items-center w-7 h-7 rounded-lg text-sm font-bold shadow-sm bg-slate-200 dark:bg-gray-700 text-slate-500 dark:text-gray-400">
+                            9
+                        </span>
+                        <div>
                             <h3 data-role="title" data-city-zh="宁波市" data-city-en="NingBo" class="font-semibold text-slate-700 dark:text-gray-300 text-sm md:text-base">宁波市</h3>
                             <div class="text-xs text-slate-500 dark:text-gray-500 flex gap-2 items-center mt-0.5">
                                 <span class="weather-desc" data-weather-zh="晴" data-weather-en="Sunny">晴</span><span class="w-1 h-1 rounded-full bg-slate-400 dark:bg-gray-600"></span><span class="wind-label">风速</span>: 3.3 m/s</span>
@@ -1137,119 +1250,6 @@
                             <div class="flex flex-col items-center mt-1.5 gap-0.5">
                                 <span class="text-[10px] font-bold text-slate-700 dark:text-gray-300 leading-none">19.6°</span>
                                 <span class="text-[9px] text-slate-500 dark:text-gray-600 leading-none">12.5°</span>
-                            </div>
-                        </a>
-                        
-                    </div>
-                </div>
-            </div>
-              
-            <div class="ranking-item group flex flex-col p-3 rounded-xl transition-all duration-300 border select-none border-slate-200 dark:border-gray-800 bg-white dark:bg-gray-800 hover:bg-slate-50 dark:hover:bg-gray-750"
-                 data-temp="9.5">
-                <div class="flex items-center justify-between">
-                    <div class="flex items-center gap-4">
-                        <span data-role="badge" class="flex justify-center items-center w-7 h-7 rounded-lg text-sm font-bold shadow-sm bg-slate-200 dark:bg-gray-700 text-slate-500 dark:text-gray-400">
-                            9
-                        </span>
-                        <div>
-                            <h3 data-role="title" data-city-zh="杭州市" data-city-en="HangZhou" class="font-semibold text-slate-700 dark:text-gray-300 text-sm md:text-base">杭州市</h3>
-                            <div class="text-xs text-slate-500 dark:text-gray-500 flex gap-2 items-center mt-0.5">
-                                <span class="weather-desc" data-weather-zh="晴" data-weather-en="Sunny">晴</span><span class="w-1 h-1 rounded-full bg-slate-400 dark:bg-gray-600"></span><span class="wind-label">风速</span>: 3.3 m/s</span>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="flex items-center gap-3">
-                        <div class="text-right">
-                            <div data-role="temp-val" class="text-lg font-bold tabular-nums tracking-tight" style="color: #06b6d4">
-                                9.5°
-                            </div>
-                        </div>
-                        <div class="arrow-icon p-1 rounded-full hover:bg-black/5 dark:hover:bg-white/5 transition-transform duration-300 cursor-pointer" onclick="toggleExpand(this.closest('.ranking-item'))">
-                            <svg class="w-4 h-4 text-slate-400 dark:text-gray-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
-                            </svg>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- 详情 (7天预报) -->
-                <div class="details-container mt-3 pt-3 border-t border-slate-200 dark:border-gray-700/50">
-                    <div class="grid grid-cols-7 gap-1">
-                        
-                        <div  class="flex flex-col items-center group/day cursor-default">
-                            <span class="forecast-day-label text-[9px] font-medium mb-1 text-blue-500" data-day-zh="今天" data-day-en="Today">今天</span>
-                            <div class="bg-slate-200 dark:bg-gray-800/50 rounded-full h-20 relative w-1.5 md:w-2 mx-auto ring-1 ring-black/5 dark:ring-white/5">
-                                <div class="absolute w-full rounded-full opacity-80" style="bottom: 28%; height: 11%; background-color: #06b6d4;"></div>
-                            </div>
-                            <div class="flex flex-col items-center mt-1.5 gap-0.5">
-                                <span class="text-[10px] font-bold text-slate-700 dark:text-gray-300 leading-none">9.5°</span>
-                                <span class="text-[9px] text-slate-500 dark:text-gray-600 leading-none">4°</span>
-                            </div>
-                        </div>
-                        
-                        <a href="20260218/zhejiang.html" class="flex flex-col items-center group/day cursor-pointer hover:opacity-80 transition-opacity">
-                            <span class="forecast-day-label text-[9px] font-medium mb-1 text-slate-500 dark:text-gray-500" data-day-zh="周三" data-day-en="Wed">周三</span>
-                            <div class="bg-slate-200 dark:bg-gray-800/50 rounded-full h-20 relative w-1.5 md:w-2 mx-auto ring-1 ring-black/5 dark:ring-white/5">
-                                <div class="absolute w-full rounded-full opacity-80" style="bottom: 27.8%; height: 19.4%; background-color: #10b981;"></div>
-                            </div>
-                            <div class="flex flex-col items-center mt-1.5 gap-0.5">
-                                <span class="text-[10px] font-bold text-slate-700 dark:text-gray-300 leading-none">13.6°</span>
-                                <span class="text-[9px] text-slate-500 dark:text-gray-600 leading-none">3.9°</span>
-                            </div>
-                        </a>
-                        
-                        <a href="20260219/zhejiang.html" class="flex flex-col items-center group/day cursor-pointer hover:opacity-80 transition-opacity">
-                            <span class="forecast-day-label text-[9px] font-medium mb-1 text-slate-500 dark:text-gray-500" data-day-zh="周四" data-day-en="Thu">周四</span>
-                            <div class="bg-slate-200 dark:bg-gray-800/50 rounded-full h-20 relative w-1.5 md:w-2 mx-auto ring-1 ring-black/5 dark:ring-white/5">
-                                <div class="absolute w-full rounded-full opacity-80" style="bottom: 27%; height: 25.200000000000003%; background-color: #10b981;"></div>
-                            </div>
-                            <div class="flex flex-col items-center mt-1.5 gap-0.5">
-                                <span class="text-[10px] font-bold text-slate-700 dark:text-gray-300 leading-none">16.1°</span>
-                                <span class="text-[9px] text-slate-500 dark:text-gray-600 leading-none">3.5°</span>
-                            </div>
-                        </a>
-                        
-                        <a href="20260220/zhejiang.html" class="flex flex-col items-center group/day cursor-pointer hover:opacity-80 transition-opacity">
-                            <span class="forecast-day-label text-[9px] font-medium mb-1 text-slate-500 dark:text-gray-500" data-day-zh="周五" data-day-en="Fri">周五</span>
-                            <div class="bg-slate-200 dark:bg-gray-800/50 rounded-full h-20 relative w-1.5 md:w-2 mx-auto ring-1 ring-black/5 dark:ring-white/5">
-                                <div class="absolute w-full rounded-full opacity-80" style="bottom: 30.6%; height: 29.4%; background-color: #eab308;"></div>
-                            </div>
-                            <div class="flex flex-col items-center mt-1.5 gap-0.5">
-                                <span class="text-[10px] font-bold text-slate-700 dark:text-gray-300 leading-none">20°</span>
-                                <span class="text-[9px] text-slate-500 dark:text-gray-600 leading-none">5.3°</span>
-                            </div>
-                        </a>
-                        
-                        <a href="20260221/zhejiang.html" class="flex flex-col items-center group/day cursor-pointer hover:opacity-80 transition-opacity">
-                            <span class="forecast-day-label text-[9px] font-medium mb-1 text-slate-500 dark:text-gray-500" data-day-zh="周六" data-day-en="Sat">周六</span>
-                            <div class="bg-slate-200 dark:bg-gray-800/50 rounded-full h-20 relative w-1.5 md:w-2 mx-auto ring-1 ring-black/5 dark:ring-white/5">
-                                <div class="absolute w-full rounded-full opacity-80" style="bottom: 35.8%; height: 32.2%; background-color: #eab308;"></div>
-                            </div>
-                            <div class="flex flex-col items-center mt-1.5 gap-0.5">
-                                <span class="text-[10px] font-bold text-slate-700 dark:text-gray-300 leading-none">24°</span>
-                                <span class="text-[9px] text-slate-500 dark:text-gray-600 leading-none">7.9°</span>
-                            </div>
-                        </a>
-                        
-                        <a href="20260222/zhejiang.html" class="flex flex-col items-center group/day cursor-pointer hover:opacity-80 transition-opacity">
-                            <span class="forecast-day-label text-[9px] font-medium mb-1 text-slate-500 dark:text-gray-500" data-day-zh="周日" data-day-en="Sun">周日</span>
-                            <div class="bg-slate-200 dark:bg-gray-800/50 rounded-full h-20 relative w-1.5 md:w-2 mx-auto ring-1 ring-black/5 dark:ring-white/5">
-                                <div class="absolute w-full rounded-full opacity-80" style="bottom: 41.6%; height: 25.4%; background-color: #eab308;"></div>
-                            </div>
-                            <div class="flex flex-col items-center mt-1.5 gap-0.5">
-                                <span class="text-[10px] font-bold text-slate-700 dark:text-gray-300 leading-none">23.5°</span>
-                                <span class="text-[9px] text-slate-500 dark:text-gray-600 leading-none">10.8°</span>
-                            </div>
-                        </a>
-                        
-                        <a href="20260223/zhejiang.html" class="flex flex-col items-center group/day cursor-pointer hover:opacity-80 transition-opacity">
-                            <span class="forecast-day-label text-[9px] font-medium mb-1 text-slate-500 dark:text-gray-500" data-day-zh="周一" data-day-en="Mon">周一</span>
-                            <div class="bg-slate-200 dark:bg-gray-800/50 rounded-full h-20 relative w-1.5 md:w-2 mx-auto ring-1 ring-black/5 dark:ring-white/5">
-                                <div class="absolute w-full rounded-full opacity-80" style="bottom: 36%; height: 21.6%; background-color: #10b981;"></div>
-                            </div>
-                            <div class="flex flex-col items-center mt-1.5 gap-0.5">
-                                <span class="text-[10px] font-bold text-slate-700 dark:text-gray-300 leading-none">18.8°</span>
-                                <span class="text-[9px] text-slate-500 dark:text-gray-600 leading-none">8°</span>
                             </div>
                         </a>
                         
@@ -1537,7 +1537,7 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    <tr class="border-t border-slate-200 dark:border-gray-700"><td class="py-2 px-3 font-medium"><span data-lang="en" class="hidden">WenZhou</span><span data-lang="zh" >温州</span></td><td class="py-2 px-3 font-bold" style="color: #10b981">13.6°C</td><td class="py-2 px-3">晴</td><td class="py-2 px-3">3.3 m/s</td></tr><tr class="border-t border-slate-200 dark:border-gray-700"><td class="py-2 px-3 font-medium"><span data-lang="en" class="hidden">LiShui</span><span data-lang="zh" >丽水</span></td><td class="py-2 px-3 font-bold" style="color: #10b981">11.7°C</td><td class="py-2 px-3">晴</td><td class="py-2 px-3">3.3 m/s</td></tr><tr class="border-t border-slate-200 dark:border-gray-700"><td class="py-2 px-3 font-medium"><span data-lang="en" class="hidden">TaiZhou</span><span data-lang="zh" >台州</span></td><td class="py-2 px-3 font-bold" style="color: #10b981">11.7°C</td><td class="py-2 px-3">晴</td><td class="py-2 px-3">3.3 m/s</td></tr><tr class="border-t border-slate-200 dark:border-gray-700"><td class="py-2 px-3 font-medium"><span data-lang="en" class="hidden">QuZhou</span><span data-lang="zh" >衢州</span></td><td class="py-2 px-3 font-bold" style="color: #10b981">11.2°C</td><td class="py-2 px-3">晴</td><td class="py-2 px-3">3.3 m/s</td></tr><tr class="border-t border-slate-200 dark:border-gray-700"><td class="py-2 px-3 font-medium"><span data-lang="en" class="hidden">ShaoXing</span><span data-lang="zh" >绍兴</span></td><td class="py-2 px-3 font-bold" style="color: #10b981">10.7°C</td><td class="py-2 px-3">晴</td><td class="py-2 px-3">3.3 m/s</td></tr><tr class="border-t border-slate-200 dark:border-gray-700"><td class="py-2 px-3 font-medium"><span data-lang="en" class="hidden">JiaXing</span><span data-lang="zh" >嘉兴</span></td><td class="py-2 px-3 font-bold" style="color: #10b981">10.2°C</td><td class="py-2 px-3">晴</td><td class="py-2 px-3">3.3 m/s</td></tr><tr class="border-t border-slate-200 dark:border-gray-700"><td class="py-2 px-3 font-medium"><span data-lang="en" class="hidden">JinHua</span><span data-lang="zh" >金华</span></td><td class="py-2 px-3 font-bold" style="color: #10b981">9.9°C</td><td class="py-2 px-3">晴</td><td class="py-2 px-3">3.3 m/s</td></tr><tr class="border-t border-slate-200 dark:border-gray-700"><td class="py-2 px-3 font-medium"><span data-lang="en" class="hidden">NingBo</span><span data-lang="zh" >宁波</span></td><td class="py-2 px-3 font-bold" style="color: #10b981">9.6°C</td><td class="py-2 px-3">晴</td><td class="py-2 px-3">3.3 m/s</td></tr><tr class="border-t border-slate-200 dark:border-gray-700"><td class="py-2 px-3 font-medium"><span data-lang="en" class="hidden">HangZhou</span><span data-lang="zh" >杭州</span></td><td class="py-2 px-3 font-bold" style="color: #10b981">9.5°C</td><td class="py-2 px-3">晴</td><td class="py-2 px-3">3.3 m/s</td></tr><tr class="border-t border-slate-200 dark:border-gray-700"><td class="py-2 px-3 font-medium"><span data-lang="en" class="hidden">ZhouShan</span><span data-lang="zh" >舟山</span></td><td class="py-2 px-3 font-bold" style="color: #10b981">9.4°C</td><td class="py-2 px-3">多云</td><td class="py-2 px-3">3.3 m/s</td></tr><tr class="border-t border-slate-200 dark:border-gray-700"><td class="py-2 px-3 font-medium"><span data-lang="en" class="hidden">HuZhou</span><span data-lang="zh" >湖州</span></td><td class="py-2 px-3 font-bold" style="color: #10b981">9°C</td><td class="py-2 px-3">晴</td><td class="py-2 px-3">3.3 m/s</td></tr>
+                                    <tr class="border-t border-slate-200 dark:border-gray-700"><td class="py-2 px-3 font-medium"><span data-lang="en" class="hidden">WenZhou</span><span data-lang="zh" >温州</span></td><td class="py-2 px-3 font-bold" style="color: #10b981">13.6°C</td><td class="py-2 px-3">晴</td><td class="py-2 px-3">3.3 m/s</td></tr><tr class="border-t border-slate-200 dark:border-gray-700"><td class="py-2 px-3 font-medium"><span data-lang="en" class="hidden">LiShui</span><span data-lang="zh" >丽水</span></td><td class="py-2 px-3 font-bold" style="color: #10b981">11.7°C</td><td class="py-2 px-3">晴</td><td class="py-2 px-3">3.3 m/s</td></tr><tr class="border-t border-slate-200 dark:border-gray-700"><td class="py-2 px-3 font-medium"><span data-lang="en" class="hidden">TaiZhou</span><span data-lang="zh" >台州</span></td><td class="py-2 px-3 font-bold" style="color: #10b981">11.7°C</td><td class="py-2 px-3">晴</td><td class="py-2 px-3">3.3 m/s</td></tr><tr class="border-t border-slate-200 dark:border-gray-700"><td class="py-2 px-3 font-medium"><span data-lang="en" class="hidden">QuZhou</span><span data-lang="zh" >衢州</span></td><td class="py-2 px-3 font-bold" style="color: #10b981">11.2°C</td><td class="py-2 px-3">晴</td><td class="py-2 px-3">3.3 m/s</td></tr><tr class="border-t border-slate-200 dark:border-gray-700"><td class="py-2 px-3 font-medium"><span data-lang="en" class="hidden">ShaoXing</span><span data-lang="zh" >绍兴</span></td><td class="py-2 px-3 font-bold" style="color: #10b981">10.7°C</td><td class="py-2 px-3">晴</td><td class="py-2 px-3">3.3 m/s</td></tr><tr class="border-t border-slate-200 dark:border-gray-700"><td class="py-2 px-3 font-medium"><span data-lang="en" class="hidden">JiaXing</span><span data-lang="zh" >嘉兴</span></td><td class="py-2 px-3 font-bold" style="color: #10b981">10.2°C</td><td class="py-2 px-3">晴</td><td class="py-2 px-3">3.3 m/s</td></tr><tr class="border-t border-slate-200 dark:border-gray-700"><td class="py-2 px-3 font-medium"><span data-lang="en" class="hidden">JinHua</span><span data-lang="zh" >金华</span></td><td class="py-2 px-3 font-bold" style="color: #10b981">9.9°C</td><td class="py-2 px-3">晴</td><td class="py-2 px-3">3.3 m/s</td></tr><tr class="border-t border-slate-200 dark:border-gray-700"><td class="py-2 px-3 font-medium"><span data-lang="en" class="hidden">HangZhou</span><span data-lang="zh" >杭州</span></td><td class="py-2 px-3 font-bold" style="color: #10b981">9.6°C</td><td class="py-2 px-3">晴</td><td class="py-2 px-3">3.3 m/s</td></tr><tr class="border-t border-slate-200 dark:border-gray-700"><td class="py-2 px-3 font-medium"><span data-lang="en" class="hidden">NingBo</span><span data-lang="zh" >宁波</span></td><td class="py-2 px-3 font-bold" style="color: #10b981">9.6°C</td><td class="py-2 px-3">晴</td><td class="py-2 px-3">3.3 m/s</td></tr><tr class="border-t border-slate-200 dark:border-gray-700"><td class="py-2 px-3 font-medium"><span data-lang="en" class="hidden">ZhouShan</span><span data-lang="zh" >舟山</span></td><td class="py-2 px-3 font-bold" style="color: #10b981">9.4°C</td><td class="py-2 px-3">多云</td><td class="py-2 px-3">3.3 m/s</td></tr><tr class="border-t border-slate-200 dark:border-gray-700"><td class="py-2 px-3 font-medium"><span data-lang="en" class="hidden">HuZhou</span><span data-lang="zh" >湖州</span></td><td class="py-2 px-3 font-bold" style="color: #10b981">9°C</td><td class="py-2 px-3">晴</td><td class="py-2 px-3">3.3 m/s</td></tr>
                                 </tbody>
                             </table>
                         </div>
@@ -1721,7 +1721,7 @@
 
                   // 去重：如果有多个城市的fullName相同，只保留温度最高的一个
                   const uniqueDataMap = new Map();
-                  [{"city":"温州","cityCode":"qgMmM","temperature":13.6,"maxTemp":13.6,"minTemp":8.3,"windSpeed":3.3,"weatherDesc":"晴","fullName":"温州市","en_name":"WenZhou"},{"city":"丽水","cityCode":"nEoHv","temperature":11.7,"maxTemp":11.7,"minTemp":5.4,"windSpeed":3.3,"weatherDesc":"晴","fullName":"丽水市","en_name":"LiShui"},{"city":"台州","cityCode":"zWIte","temperature":11.7,"maxTemp":11.7,"minTemp":6,"windSpeed":3.3,"weatherDesc":"晴","fullName":"台州市","en_name":"TaiZhou"},{"city":"衢州","cityCode":"ydEbu","temperature":11.2,"maxTemp":11.2,"minTemp":4.7,"windSpeed":3.3,"weatherDesc":"晴","fullName":"衢州市","en_name":"QuZhou"},{"city":"绍兴","cityCode":"gxbHp","temperature":10.7,"maxTemp":10.7,"minTemp":4.5,"windSpeed":3.3,"weatherDesc":"晴","fullName":"绍兴市","en_name":"ShaoXing"},{"city":"嘉兴","cityCode":"pxfeS","temperature":10.2,"maxTemp":10.2,"minTemp":3.4,"windSpeed":3.3,"weatherDesc":"晴","fullName":"嘉兴市","en_name":"JiaXing"},{"city":"金华","cityCode":"QMNma","temperature":9.9,"maxTemp":9.9,"minTemp":4.6,"windSpeed":3.3,"weatherDesc":"晴","fullName":"金华市","en_name":"JinHua"},{"city":"宁波","cityCode":"XjZpe","temperature":9.6,"maxTemp":9.6,"minTemp":4.6,"windSpeed":3.3,"weatherDesc":"晴","fullName":"宁波市","en_name":"NingBo"},{"city":"杭州","cityCode":"HIieJ","temperature":9.5,"maxTemp":9.5,"minTemp":4,"windSpeed":3.3,"weatherDesc":"晴","fullName":"杭州市","en_name":"HangZhou"},{"city":"舟山","cityCode":"KElec","temperature":9.4,"maxTemp":9.4,"minTemp":2.7,"windSpeed":3.3,"weatherDesc":"多云","fullName":"舟山市","en_name":"ZhouShan"},{"city":"湖州","cityCode":"quMLV","temperature":9,"maxTemp":9,"minTemp":4,"windSpeed":3.3,"weatherDesc":"晴","fullName":"湖州市","en_name":"HuZhou"}].forEach(item => {
+                  [{"city":"温州","cityCode":"qgMmM","temperature":13.6,"maxTemp":13.6,"minTemp":8.3,"windSpeed":3.3,"weatherDesc":"晴","fullName":"温州市","en_name":"WenZhou"},{"city":"丽水","cityCode":"nEoHv","temperature":11.7,"maxTemp":11.7,"minTemp":5.4,"windSpeed":3.3,"weatherDesc":"晴","fullName":"丽水市","en_name":"LiShui"},{"city":"台州","cityCode":"zWIte","temperature":11.7,"maxTemp":11.7,"minTemp":6,"windSpeed":3.3,"weatherDesc":"晴","fullName":"台州市","en_name":"TaiZhou"},{"city":"衢州","cityCode":"ydEbu","temperature":11.2,"maxTemp":11.2,"minTemp":4.7,"windSpeed":3.3,"weatherDesc":"晴","fullName":"衢州市","en_name":"QuZhou"},{"city":"绍兴","cityCode":"gxbHp","temperature":10.7,"maxTemp":10.7,"minTemp":4.5,"windSpeed":3.3,"weatherDesc":"晴","fullName":"绍兴市","en_name":"ShaoXing"},{"city":"嘉兴","cityCode":"pxfeS","temperature":10.2,"maxTemp":10.2,"minTemp":3.4,"windSpeed":3.3,"weatherDesc":"晴","fullName":"嘉兴市","en_name":"JiaXing"},{"city":"金华","cityCode":"QMNma","temperature":9.9,"maxTemp":9.9,"minTemp":4.6,"windSpeed":3.3,"weatherDesc":"晴","fullName":"金华市","en_name":"JinHua"},{"city":"杭州","cityCode":"HIieJ","temperature":9.6,"maxTemp":9.6,"minTemp":4,"windSpeed":3.3,"weatherDesc":"晴","fullName":"杭州市","en_name":"HangZhou"},{"city":"宁波","cityCode":"XjZpe","temperature":9.6,"maxTemp":9.6,"minTemp":4.6,"windSpeed":3.3,"weatherDesc":"晴","fullName":"宁波市","en_name":"NingBo"},{"city":"舟山","cityCode":"KElec","temperature":9.4,"maxTemp":9.4,"minTemp":2.7,"windSpeed":3.3,"weatherDesc":"多云","fullName":"舟山市","en_name":"ZhouShan"},{"city":"湖州","cityCode":"quMLV","temperature":9,"maxTemp":9,"minTemp":4,"windSpeed":3.3,"weatherDesc":"晴","fullName":"湖州市","en_name":"HuZhou"}].forEach(item => {
           const name = item.fullName || item.city;
           if (!uniqueDataMap.has(name) || item.temperature > uniqueDataMap.get(name).value) {
                     uniqueDataMap.set(name, {
