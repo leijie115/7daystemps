@@ -323,11 +323,11 @@
                                 Mon
                             </span>
                             <div class="bg-slate-200 dark:bg-gray-800/50 rounded-full h-20 relative w-1.5 md:w-2 mx-auto ring-1 ring-black/5 dark:ring-white/5">
-                                <div class="absolute w-full rounded-full opacity-80" style="bottom: 15%; height: 26.6%; background-color: #10b981;"></div>
+                                <div class="absolute w-full rounded-full opacity-80" style="bottom: 13%; height: 28.6%; background-color: #10b981;"></div>
                             </div>
                             <div class="flex flex-col items-center mt-1.5 gap-0.5">
                                 <span class="text-[10px] font-bold text-slate-700 dark:text-gray-300 leading-none">10.8°</span>
-                                <span class="text-[9px] text-slate-500 dark:text-gray-600 leading-none">-2.5°</span>
+                                <span class="text-[9px] text-slate-500 dark:text-gray-600 leading-none">-3.5°</span>
                             </div>
                         </div>
                         
@@ -551,11 +551,11 @@
                                 Sat
                             </span>
                             <div class="bg-slate-200 dark:bg-gray-800/50 rounded-full h-20 relative w-1.5 md:w-2 mx-auto ring-1 ring-black/5 dark:ring-white/5">
-                                <div class="absolute w-full rounded-full opacity-80" style="bottom: 20.2%; height: 25.8%; background-color: #10b981;"></div>
+                                <div class="absolute w-full rounded-full opacity-80" style="bottom: 19.8%; height: 26.2%; background-color: #10b981;"></div>
                             </div>
                             <div class="flex flex-col items-center mt-1.5 gap-0.5">
                                 <span class="text-[10px] font-bold text-slate-700 dark:text-gray-300 leading-none">13°</span>
-                                <span class="text-[9px] text-slate-500 dark:text-gray-600 leading-none">0.1°</span>
+                                <span class="text-[9px] text-slate-500 dark:text-gray-600 leading-none">-0.1°</span>
                             </div>
                         </a>
                         
@@ -678,11 +678,11 @@
                                 Sat
                             </span>
                             <div class="bg-slate-200 dark:bg-gray-800/50 rounded-full h-20 relative w-1.5 md:w-2 mx-auto ring-1 ring-black/5 dark:ring-white/5">
-                                <div class="absolute w-full rounded-full opacity-80" style="bottom: 25.6%; height: 10.799999999999999%; background-color: #06b6d4;"></div>
+                                <div class="absolute w-full rounded-full opacity-80" style="bottom: 23.6%; height: 12.799999999999999%; background-color: #06b6d4;"></div>
                             </div>
                             <div class="flex flex-col items-center mt-1.5 gap-0.5">
                                 <span class="text-[10px] font-bold text-slate-700 dark:text-gray-300 leading-none">8.2°</span>
-                                <span class="text-[9px] text-slate-500 dark:text-gray-600 leading-none">2.8°</span>
+                                <span class="text-[9px] text-slate-500 dark:text-gray-600 leading-none">1.8°</span>
                             </div>
                         </a>
                         
@@ -1120,7 +1120,7 @@
 
                   // 去重：如果有多个城市的fullName相同，只保留温度最高的一个
                   const uniqueDataMap = new Map();
-                  [{"city":"银川","cityCode":"LqTRN","temperature":10.8,"maxTemp":10.8,"minTemp":-2.5,"windSpeed":3.3,"weatherDesc":"多云","fullName":"银川市","en_name":"YinChuan"},{"city":"吴忠","cityCode":"VXPXK","temperature":10.7,"maxTemp":10.7,"minTemp":-2.4,"windSpeed":7.9,"weatherDesc":"多云","fullName":"吴忠市","en_name":"WuZhong"},{"city":"中卫","cityCode":"mZrCd","temperature":7.5,"maxTemp":7.5,"minTemp":-2.5,"windSpeed":3.3,"weatherDesc":"多云","fullName":"中卫市","en_name":"ZhongWei"},{"city":"石嘴山","cityCode":"jNMZg","temperature":7.4,"maxTemp":7.4,"minTemp":-6.5,"windSpeed":3.3,"weatherDesc":"多云","fullName":"石嘴山市","en_name":"ShiZuiShan"},{"city":"固原","cityCode":"muLnq","temperature":6.9,"maxTemp":6.9,"minTemp":-1.6,"windSpeed":7.9,"weatherDesc":"多云","fullName":"固原市","en_name":"GuYuan"}].forEach(item => {
+                  [{"city":"银川","cityCode":"LqTRN","temperature":10.8,"maxTemp":10.8,"minTemp":-3.5,"windSpeed":3.3,"weatherDesc":"多云","fullName":"银川市","en_name":"YinChuan"},{"city":"吴忠","cityCode":"VXPXK","temperature":10.7,"maxTemp":10.7,"minTemp":-2.4,"windSpeed":7.9,"weatherDesc":"多云","fullName":"吴忠市","en_name":"WuZhong"},{"city":"中卫","cityCode":"mZrCd","temperature":7.5,"maxTemp":7.5,"minTemp":-2.5,"windSpeed":3.3,"weatherDesc":"多云","fullName":"中卫市","en_name":"ZhongWei"},{"city":"石嘴山","cityCode":"jNMZg","temperature":7.4,"maxTemp":7.4,"minTemp":-6.5,"windSpeed":3.3,"weatherDesc":"多云","fullName":"石嘴山市","en_name":"ShiZuiShan"},{"city":"固原","cityCode":"muLnq","temperature":6.9,"maxTemp":6.9,"minTemp":-1.6,"windSpeed":7.9,"weatherDesc":"多云","fullName":"固原市","en_name":"GuYuan"}].forEach(item => {
           const name = item.fullName || item.city;
           if (!uniqueDataMap.has(name) || item.temperature > uniqueDataMap.get(name).value) {
                     uniqueDataMap.set(name, {
