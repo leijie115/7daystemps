@@ -805,11 +805,11 @@
                                 Wed
                             </span>
                             <div class="bg-slate-200 dark:bg-gray-800/50 rounded-full h-20 relative w-1.5 md:w-2 mx-auto ring-1 ring-black/5 dark:ring-white/5">
-                                <div class="absolute w-full rounded-full opacity-80" style="bottom: 52.4%; height: 10%; background-color: #eab308;"></div>
+                                <div class="absolute w-full rounded-full opacity-80" style="bottom: 51.4%; height: 10.200000000000003%; background-color: #eab308;"></div>
                             </div>
                             <div class="flex flex-col items-center mt-1.5 gap-0.5">
                                 <span class="text-[10px] font-bold text-slate-700 dark:text-gray-300 leading-none">20.8°</span>
-                                <span class="text-[9px] text-slate-500 dark:text-gray-600 leading-none">16.2°</span>
+                                <span class="text-[9px] text-slate-500 dark:text-gray-600 leading-none">15.7°</span>
                             </div>
                         </div>
                         
@@ -1628,7 +1628,7 @@
 
                   // 去重：如果有多个城市的fullName相同，只保留温度最高的一个
                   const uniqueDataMap = new Map();
-                  [{"city":"龙岩","cityCode":"AVWuS","temperature":23.8,"maxTemp":23.8,"minTemp":16.4,"windSpeed":3.3,"weatherDesc":"小雨","fullName":"龙岩市","en_name":"LongYan"},{"city":"三明","cityCode":"CZiRH","temperature":22.8,"maxTemp":22.8,"minTemp":15.2,"windSpeed":3.3,"weatherDesc":"小雨","fullName":"三明市","en_name":"SanMing"},{"city":"漳州","cityCode":"SCyJf","temperature":22.8,"maxTemp":22.8,"minTemp":15.7,"windSpeed":3.3,"weatherDesc":"阴","fullName":"漳州市","en_name":"ZhangZhou"},{"city":"莆田","cityCode":"XbBQN","temperature":20.8,"maxTemp":20.8,"minTemp":15.2,"windSpeed":3.3,"weatherDesc":"阴","fullName":"莆田市","en_name":"PuTian"},{"city":"厦门","cityCode":"gDCDS","temperature":20.8,"maxTemp":20.8,"minTemp":16.2,"windSpeed":7.9,"weatherDesc":"阴","fullName":"厦门市","en_name":"XiaMen"},{"city":"南平","cityCode":"CGyTI","temperature":19.8,"maxTemp":19.8,"minTemp":13.2,"windSpeed":3.3,"weatherDesc":"阴","fullName":"南平市","en_name":"NanPing"},{"city":"泉州","cityCode":"MGECZ","temperature":19.8,"maxTemp":19.8,"minTemp":14.2,"windSpeed":7.9,"weatherDesc":"阴","fullName":"泉州市","en_name":"QuanZhou"},{"city":"福州","cityCode":"djeOy","temperature":16.8,"maxTemp":16.8,"minTemp":14.5,"windSpeed":3.3,"weatherDesc":"未知","fullName":"福州市","en_name":"FuZhou"},{"city":"宁德","cityCode":"uKfig","temperature":15.8,"maxTemp":15.8,"minTemp":13.2,"windSpeed":3.3,"weatherDesc":"小雨","fullName":"宁德市","en_name":"NingDe"}].forEach(item => {
+                  [{"city":"龙岩","cityCode":"AVWuS","temperature":23.8,"maxTemp":23.8,"minTemp":16.4,"windSpeed":3.3,"weatherDesc":"小雨","fullName":"龙岩市","en_name":"LongYan"},{"city":"三明","cityCode":"CZiRH","temperature":22.8,"maxTemp":22.8,"minTemp":15.2,"windSpeed":3.3,"weatherDesc":"小雨","fullName":"三明市","en_name":"SanMing"},{"city":"漳州","cityCode":"SCyJf","temperature":22.8,"maxTemp":22.8,"minTemp":15.7,"windSpeed":3.3,"weatherDesc":"阴","fullName":"漳州市","en_name":"ZhangZhou"},{"city":"莆田","cityCode":"XbBQN","temperature":20.8,"maxTemp":20.8,"minTemp":15.2,"windSpeed":3.3,"weatherDesc":"阴","fullName":"莆田市","en_name":"PuTian"},{"city":"厦门","cityCode":"gDCDS","temperature":20.8,"maxTemp":20.8,"minTemp":15.7,"windSpeed":7.9,"weatherDesc":"阴","fullName":"厦门市","en_name":"XiaMen"},{"city":"南平","cityCode":"CGyTI","temperature":19.8,"maxTemp":19.8,"minTemp":13.2,"windSpeed":3.3,"weatherDesc":"阴","fullName":"南平市","en_name":"NanPing"},{"city":"泉州","cityCode":"MGECZ","temperature":19.8,"maxTemp":19.8,"minTemp":14.2,"windSpeed":7.9,"weatherDesc":"阴","fullName":"泉州市","en_name":"QuanZhou"},{"city":"福州","cityCode":"djeOy","temperature":16.8,"maxTemp":16.8,"minTemp":14.5,"windSpeed":3.3,"weatherDesc":"未知","fullName":"福州市","en_name":"FuZhou"},{"city":"宁德","cityCode":"uKfig","temperature":15.8,"maxTemp":15.8,"minTemp":13.2,"windSpeed":3.3,"weatherDesc":"小雨","fullName":"宁德市","en_name":"NingDe"}].forEach(item => {
           const name = item.fullName || item.city;
           if (!uniqueDataMap.has(name) || item.temperature > uniqueDataMap.get(name).value) {
                     uniqueDataMap.set(name, {
