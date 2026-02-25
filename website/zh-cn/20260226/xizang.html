@@ -512,11 +512,11 @@
                         <div  class="flex flex-col items-center group/day cursor-default">
                             <span class="forecast-day-label text-[9px] font-medium mb-1 text-blue-500" data-day-zh="周四" data-day-en="Thu">周四</span>
                             <div class="bg-slate-200 dark:bg-gray-800/50 rounded-full h-20 relative w-1.5 md:w-2 mx-auto ring-1 ring-black/5 dark:ring-white/5">
-                                <div class="absolute w-full rounded-full opacity-80" style="bottom: 16.4%; height: 28.200000000000003%; background-color: #10b981;"></div>
+                                <div class="absolute w-full rounded-full opacity-80" style="bottom: 14.6%; height: 30%; background-color: #10b981;"></div>
                             </div>
                             <div class="flex flex-col items-center mt-1.5 gap-0.5">
                                 <span class="text-[10px] font-bold text-slate-700 dark:text-gray-300 leading-none">12.3°</span>
-                                <span class="text-[9px] text-slate-500 dark:text-gray-600 leading-none">-1.8°</span>
+                                <span class="text-[9px] text-slate-500 dark:text-gray-600 leading-none">-2.7°</span>
                             </div>
                         </div>
                         
@@ -851,11 +851,11 @@
                         <div  class="flex flex-col items-center group/day cursor-default">
                             <span class="forecast-day-label text-[9px] font-medium mb-1 text-blue-500" data-day-zh="周四" data-day-en="Thu">周四</span>
                             <div class="bg-slate-200 dark:bg-gray-800/50 rounded-full h-20 relative w-1.5 md:w-2 mx-auto ring-1 ring-black/5 dark:ring-white/5">
-                                <div class="absolute w-full rounded-full opacity-80" style="bottom: 0%; height: 37%; background-color: #06b6d4;"></div>
+                                <div class="absolute w-full rounded-full opacity-80" style="bottom: 0%; height: 43.6%; background-color: #06b6d4;"></div>
                             </div>
                             <div class="flex flex-col items-center mt-1.5 gap-0.5">
                                 <span class="text-[10px] font-bold text-slate-700 dark:text-gray-300 leading-none">6.9°</span>
-                                <span class="text-[9px] text-slate-500 dark:text-gray-600 leading-none">-11.6°</span>
+                                <span class="text-[9px] text-slate-500 dark:text-gray-600 leading-none">-14.9°</span>
                             </div>
                         </div>
                         
@@ -1269,7 +1269,7 @@
 
                   // 去重：如果有多个城市的fullName相同，只保留温度最高的一个
                   const uniqueDataMap = new Map();
-                  [{"city":"山南","cityCode":"uuiXc","temperature":13.5,"maxTemp":13.5,"minTemp":-2,"windSpeed":3.3,"weatherDesc":"多云","fullName":"山南市","en_name":"ShanNan"},{"city":"日喀则","cityCode":"wcnpZ","temperature":12.9,"maxTemp":12.9,"minTemp":-10.1,"windSpeed":3.3,"weatherDesc":"晴","fullName":"日喀则市","en_name":"RiKaZe"},{"city":"拉萨","cityCode":"utJQK","temperature":12.3,"maxTemp":12.3,"minTemp":-1.8,"windSpeed":3.3,"weatherDesc":"多云","fullName":"拉萨市","en_name":"LaSa"},{"city":"林芝","cityCode":"ulvCs","temperature":12.1,"maxTemp":12.1,"minTemp":1.2,"windSpeed":3.3,"weatherDesc":"小雨","fullName":"林芝市","en_name":"LinZhi"},{"city":"昌都","cityCode":"FKHOa","temperature":11.4,"maxTemp":11.4,"minTemp":-5.8,"windSpeed":3.3,"weatherDesc":"多云","fullName":"昌都市","en_name":"ChangDou"},{"city":"阿里","cityCode":"DDraR","temperature":6.9,"maxTemp":6.9,"minTemp":-11.6,"windSpeed":7.9,"weatherDesc":"晴","fullName":"阿里地区","en_name":"ALi"},{"city":"那曲","cityCode":"aDeyn","temperature":2.9,"maxTemp":2.9,"minTemp":-14,"windSpeed":3.3,"weatherDesc":"晴","fullName":"那曲市","en_name":"NaQu"}].forEach(item => {
+                  [{"city":"山南","cityCode":"uuiXc","temperature":13.5,"maxTemp":13.5,"minTemp":-2,"windSpeed":3.3,"weatherDesc":"多云","fullName":"山南市","en_name":"ShanNan"},{"city":"日喀则","cityCode":"wcnpZ","temperature":12.9,"maxTemp":12.9,"minTemp":-10.1,"windSpeed":3.3,"weatherDesc":"晴","fullName":"日喀则市","en_name":"RiKaZe"},{"city":"拉萨","cityCode":"utJQK","temperature":12.3,"maxTemp":12.3,"minTemp":-2.7,"windSpeed":3.3,"weatherDesc":"多云","fullName":"拉萨市","en_name":"LaSa"},{"city":"林芝","cityCode":"ulvCs","temperature":12.1,"maxTemp":12.1,"minTemp":1.2,"windSpeed":3.3,"weatherDesc":"小雨","fullName":"林芝市","en_name":"LinZhi"},{"city":"昌都","cityCode":"FKHOa","temperature":11.4,"maxTemp":11.4,"minTemp":-5.8,"windSpeed":3.3,"weatherDesc":"多云","fullName":"昌都市","en_name":"ChangDou"},{"city":"阿里","cityCode":"DDraR","temperature":6.9,"maxTemp":6.9,"minTemp":-14.9,"windSpeed":7.9,"weatherDesc":"晴","fullName":"阿里地区","en_name":"ALi"},{"city":"那曲","cityCode":"aDeyn","temperature":2.9,"maxTemp":2.9,"minTemp":-14,"windSpeed":3.3,"weatherDesc":"晴","fullName":"那曲市","en_name":"NaQu"}].forEach(item => {
           const name = item.fullName || item.city;
           if (!uniqueDataMap.has(name) || item.temperature > uniqueDataMap.get(name).value) {
                     uniqueDataMap.set(name, {

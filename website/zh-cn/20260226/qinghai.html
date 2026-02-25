@@ -286,11 +286,11 @@
                         <div  class="flex flex-col items-center group/day cursor-default">
                             <span class="forecast-day-label text-[9px] font-medium mb-1 text-blue-500" data-day-zh="周四" data-day-en="Thu">周四</span>
                             <div class="bg-slate-200 dark:bg-gray-800/50 rounded-full h-20 relative w-1.5 md:w-2 mx-auto ring-1 ring-black/5 dark:ring-white/5">
-                                <div class="absolute w-full rounded-full opacity-80" style="bottom: 8.8%; height: 41%; background-color: #10b981;"></div>
+                                <div class="absolute w-full rounded-full opacity-80" style="bottom: 7.6%; height: 42.2%; background-color: #10b981;"></div>
                             </div>
                             <div class="flex flex-col items-center mt-1.5 gap-0.5">
                                 <span class="text-[10px] font-bold text-slate-700 dark:text-gray-300 leading-none">14.9°</span>
-                                <span class="text-[9px] text-slate-500 dark:text-gray-600 leading-none">-5.6°</span>
+                                <span class="text-[9px] text-slate-500 dark:text-gray-600 leading-none">-6.2°</span>
                             </div>
                         </div>
                         
@@ -851,11 +851,11 @@
                         <div  class="flex flex-col items-center group/day cursor-default">
                             <span class="forecast-day-label text-[9px] font-medium mb-1 text-blue-500" data-day-zh="周四" data-day-en="Thu">周四</span>
                             <div class="bg-slate-200 dark:bg-gray-800/50 rounded-full h-20 relative w-1.5 md:w-2 mx-auto ring-1 ring-black/5 dark:ring-white/5">
-                                <div class="absolute w-full rounded-full opacity-80" style="bottom: 0%; height: 40%; background-color: #06b6d4;"></div>
+                                <div class="absolute w-full rounded-full opacity-80" style="bottom: 0%; height: 44%; background-color: #06b6d4;"></div>
                             </div>
                             <div class="flex flex-col items-center mt-1.5 gap-0.5">
                                 <span class="text-[10px] font-bold text-slate-700 dark:text-gray-300 leading-none">8°</span>
-                                <span class="text-[9px] text-slate-500 dark:text-gray-600 leading-none">-12°</span>
+                                <span class="text-[9px] text-slate-500 dark:text-gray-600 leading-none">-14°</span>
                             </div>
                         </div>
                         
@@ -1382,7 +1382,7 @@
 
                   // 去重：如果有多个城市的fullName相同，只保留温度最高的一个
                   const uniqueDataMap = new Map();
-                  [{"city":"海东","cityCode":"CrGat","temperature":14.9,"maxTemp":14.9,"minTemp":-5.6,"windSpeed":7.9,"weatherDesc":"晴","fullName":"海东市","en_name":"HaiDong"},{"city":"西宁","cityCode":"SHRvr","temperature":14.2,"maxTemp":14.2,"minTemp":-5.3,"windSpeed":7.9,"weatherDesc":"晴","fullName":"西宁市","en_name":"XiNing"},{"city":"黄南","cityCode":"pVcUC","temperature":11.7,"maxTemp":11.7,"minTemp":-3.7,"windSpeed":3.3,"weatherDesc":"晴","fullName":"黄南藏族自治州","en_name":"HuangNan"},{"city":"海南","cityCode":"bwKfK","temperature":10.9,"maxTemp":10.9,"minTemp":-7.9,"windSpeed":7.9,"weatherDesc":"晴","fullName":"海南藏族自治州","en_name":"HaiNan"},{"city":"海北","cityCode":"biGag","temperature":8.2,"maxTemp":8.2,"minTemp":-15.8,"windSpeed":10.7,"weatherDesc":"晴","fullName":"海北藏族自治州","en_name":"HaiBei"},{"city":"玉树","cityCode":"MDlNL","temperature":8,"maxTemp":8,"minTemp":-12,"windSpeed":3.3,"weatherDesc":"晴","fullName":"玉树藏族自治州","en_name":"YuShu"},{"city":"海西","cityCode":"UpIIn","temperature":5.7,"maxTemp":5.7,"minTemp":-8.9,"windSpeed":3.3,"weatherDesc":"晴","fullName":"海西蒙古族藏族自治州","en_name":"HaiXi"},{"city":"果洛","cityCode":"ycCXH","temperature":4.5,"maxTemp":4.5,"minTemp":-15.3,"windSpeed":3.3,"weatherDesc":"晴","fullName":"果洛藏族自治州","en_name":"GuoLuo"}].forEach(item => {
+                  [{"city":"海东","cityCode":"CrGat","temperature":14.9,"maxTemp":14.9,"minTemp":-6.2,"windSpeed":7.9,"weatherDesc":"晴","fullName":"海东市","en_name":"HaiDong"},{"city":"西宁","cityCode":"SHRvr","temperature":14.2,"maxTemp":14.2,"minTemp":-5.3,"windSpeed":7.9,"weatherDesc":"晴","fullName":"西宁市","en_name":"XiNing"},{"city":"黄南","cityCode":"pVcUC","temperature":11.7,"maxTemp":11.7,"minTemp":-3.7,"windSpeed":3.3,"weatherDesc":"晴","fullName":"黄南藏族自治州","en_name":"HuangNan"},{"city":"海南","cityCode":"bwKfK","temperature":10.9,"maxTemp":10.9,"minTemp":-7.9,"windSpeed":7.9,"weatherDesc":"晴","fullName":"海南藏族自治州","en_name":"HaiNan"},{"city":"海北","cityCode":"biGag","temperature":8.2,"maxTemp":8.2,"minTemp":-15.8,"windSpeed":10.7,"weatherDesc":"晴","fullName":"海北藏族自治州","en_name":"HaiBei"},{"city":"玉树","cityCode":"MDlNL","temperature":8,"maxTemp":8,"minTemp":-14,"windSpeed":3.3,"weatherDesc":"晴","fullName":"玉树藏族自治州","en_name":"YuShu"},{"city":"海西","cityCode":"UpIIn","temperature":5.7,"maxTemp":5.7,"minTemp":-8.9,"windSpeed":3.3,"weatherDesc":"晴","fullName":"海西蒙古族藏族自治州","en_name":"HaiXi"},{"city":"果洛","cityCode":"ycCXH","temperature":4.5,"maxTemp":4.5,"minTemp":-15.3,"windSpeed":3.3,"weatherDesc":"晴","fullName":"果洛藏族自治州","en_name":"GuoLuo"}].forEach(item => {
           const name = item.fullName || item.city;
           if (!uniqueDataMap.has(name) || item.temperature > uniqueDataMap.get(name).value) {
                     uniqueDataMap.set(name, {
