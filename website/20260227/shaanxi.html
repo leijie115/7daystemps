@@ -1059,11 +1059,11 @@
                                 Fri
                             </span>
                             <div class="bg-slate-200 dark:bg-gray-800/50 rounded-full h-20 relative w-1.5 md:w-2 mx-auto ring-1 ring-black/5 dark:ring-white/5">
-                                <div class="absolute w-full rounded-full opacity-80" style="bottom: 14.8%; height: 25.4%; background-color: #10b981;"></div>
+                                <div class="absolute w-full rounded-full opacity-80" style="bottom: 12.2%; height: 28%; background-color: #10b981;"></div>
                             </div>
                             <div class="flex flex-col items-center mt-1.5 gap-0.5">
                                 <span class="text-[10px] font-bold text-slate-700 dark:text-gray-300 leading-none">10.1°</span>
-                                <span class="text-[9px] text-slate-500 dark:text-gray-600 leading-none">-2.6°</span>
+                                <span class="text-[9px] text-slate-500 dark:text-gray-600 leading-none">-3.9°</span>
                             </div>
                         </div>
                         
@@ -1755,7 +1755,7 @@
 
                   // 去重：如果有多个城市的fullName相同，只保留温度最高的一个
                   const uniqueDataMap = new Map();
-                  [{"city":"西安","cityCode":"RfjCI","temperature":17.2,"maxTemp":17.2,"minTemp":4.1,"windSpeed":3.3,"weatherDesc":"多云","fullName":"西安市","en_name":"XiAn"},{"city":"渭南","cityCode":"fXkRh","temperature":16,"maxTemp":16,"minTemp":3.2,"windSpeed":3.3,"weatherDesc":"晴","fullName":"渭南市","en_name":"WeiNan"},{"city":"咸阳","cityCode":"FXoMd","temperature":15.8,"maxTemp":15.8,"minTemp":4.5,"windSpeed":3.3,"weatherDesc":"多云","fullName":"咸阳市","en_name":"XianYang"},{"city":"汉中","cityCode":"cASRq","temperature":14.5,"maxTemp":14.5,"minTemp":6.5,"windSpeed":3.3,"weatherDesc":"小雨","fullName":"汉中市","en_name":"HanZhong"},{"city":"安康","cityCode":"RprEI","temperature":14.3,"maxTemp":14.3,"minTemp":6.6,"windSpeed":3.3,"weatherDesc":"多云","fullName":"安康市","en_name":"AnKang"},{"city":"延安","cityCode":"gtpZu","temperature":12.4,"maxTemp":12.4,"minTemp":-1.7,"windSpeed":3.3,"weatherDesc":"晴","fullName":"延安市","en_name":"YanAn"},{"city":"榆林","cityCode":"eEPbq","temperature":10.1,"maxTemp":10.1,"minTemp":-2.6,"windSpeed":3.3,"weatherDesc":"晴","fullName":"榆林市","en_name":"YuLin"},{"city":"铜川","cityCode":"lZvra","temperature":10,"maxTemp":10,"minTemp":1.9,"windSpeed":3.3,"weatherDesc":"晴","fullName":"铜川市","en_name":"TongChuan"},{"city":"宝鸡","cityCode":"jrjXm","temperature":9.4,"maxTemp":9.4,"minTemp":1.5,"windSpeed":3.3,"weatherDesc":"小雨","fullName":"宝鸡市","en_name":"BaoJi"},{"city":"商洛","cityCode":"qbDbK","temperature":9.4,"maxTemp":9.4,"minTemp":2.8,"windSpeed":3.3,"weatherDesc":"阴","fullName":"商洛市","en_name":"ShangLuo"}].forEach(item => {
+                  [{"city":"西安","cityCode":"RfjCI","temperature":17.2,"maxTemp":17.2,"minTemp":4.1,"windSpeed":3.3,"weatherDesc":"多云","fullName":"西安市","en_name":"XiAn"},{"city":"渭南","cityCode":"fXkRh","temperature":16,"maxTemp":16,"minTemp":3.2,"windSpeed":3.3,"weatherDesc":"晴","fullName":"渭南市","en_name":"WeiNan"},{"city":"咸阳","cityCode":"FXoMd","temperature":15.8,"maxTemp":15.8,"minTemp":4.5,"windSpeed":3.3,"weatherDesc":"多云","fullName":"咸阳市","en_name":"XianYang"},{"city":"汉中","cityCode":"cASRq","temperature":14.5,"maxTemp":14.5,"minTemp":6.5,"windSpeed":3.3,"weatherDesc":"小雨","fullName":"汉中市","en_name":"HanZhong"},{"city":"安康","cityCode":"RprEI","temperature":14.3,"maxTemp":14.3,"minTemp":6.6,"windSpeed":3.3,"weatherDesc":"多云","fullName":"安康市","en_name":"AnKang"},{"city":"延安","cityCode":"gtpZu","temperature":12.4,"maxTemp":12.4,"minTemp":-1.7,"windSpeed":3.3,"weatherDesc":"晴","fullName":"延安市","en_name":"YanAn"},{"city":"榆林","cityCode":"eEPbq","temperature":10.1,"maxTemp":10.1,"minTemp":-3.9,"windSpeed":3.3,"weatherDesc":"晴","fullName":"榆林市","en_name":"YuLin"},{"city":"铜川","cityCode":"lZvra","temperature":10,"maxTemp":10,"minTemp":1.9,"windSpeed":3.3,"weatherDesc":"晴","fullName":"铜川市","en_name":"TongChuan"},{"city":"宝鸡","cityCode":"jrjXm","temperature":9.4,"maxTemp":9.4,"minTemp":1.5,"windSpeed":3.3,"weatherDesc":"小雨","fullName":"宝鸡市","en_name":"BaoJi"},{"city":"商洛","cityCode":"qbDbK","temperature":9.4,"maxTemp":9.4,"minTemp":2.8,"windSpeed":3.3,"weatherDesc":"阴","fullName":"商洛市","en_name":"ShangLuo"}].forEach(item => {
           const name = item.fullName || item.city;
           if (!uniqueDataMap.has(name) || item.temperature > uniqueDataMap.get(name).value) {
                     uniqueDataMap.set(name, {
